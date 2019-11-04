@@ -24,7 +24,7 @@
     <!-- 操作按钮区域 -->
     <div class="table-operator"  style="margin-top: 5px">
       <a-button  @click="handleEdit(null)" type="primary" icon="plus">新增</a-button>
-      <a-button type="danger" icon="delete" @click="handleDelete" :disabled="selectedRowKeys.length < 1">删除</a-button>
+      <a-button type="danger" icon="delete" @click="handleDelete('')" :disabled="selectedRowKeys.length < 1">删除</a-button>
     </div>
 
     <!-- table区域-begin -->
@@ -162,11 +162,13 @@
       },
       handleDelete (id) {
         const that = this
+        let ids = [];
         if(id){
-          let ids = [id]
+          ids.push(id)
         }else{
-          let ids = that.selectedRowKeys
+          ids = that.selectedRowKeys
         }
+
         that.$confirm({
           title: '删除',
           content: '确定删除勾选的记录？',

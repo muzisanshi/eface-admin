@@ -1,7 +1,7 @@
 <!--
  * @name List.vue
- * @author wg
- * @date 2019.6.24
+ * @author lw
+ * @date 2019.11.1
  * @desc 用户管理
 -->
 <template>
@@ -75,30 +75,16 @@
 import {STable} from '@/components'
 import EditForm from './modules/EditForm'
 import {mapState} from 'vuex';
-
-const statusMap = {
-  'true': {
-    status: 'success',
-    text: '是'
-  },
-  'false': {
-    status: 'default',
-    text: '否'
-  }
-}
+import {mixin} from '@/mixins/mixin'
 export default {
   components: {
     STable,
     EditForm
   },
+  mixins: [mixin],
   data() {
     return {
-      queryParam: {},
       columns: [
-        {
-          title: '#',
-          scopedSlots: {customRender: 'serial'}
-        },
         {
           title: '用户名',
           dataIndex: 'username'
@@ -146,7 +132,6 @@ export default {
       loadData: parameter => {
         return this.$api.manager.getPage(Object.assign(parameter, this.queryParam))
           .then(res => {
-            console.log(res.records)
             res.records.forEach(item => {
               item.managerType = this.constants.data.managerType ? this.constants.data.managerType[item.managerType]['name'] : ''
               item.sexual = this.constants.data.sexual ? this.constants.data.sexual[item.sexual]['name'] : ''
@@ -155,41 +140,12 @@ export default {
             return res
           })
       },
-      selectedRowKeys: [],
-      selectedRows: [],
-      isTrue: true,
-      isFalse: false
-    }
-  },
-  filters: {
-    statusFilter(type) {
-      return statusMap[type].text
-    },
-    statusTypeFilter(type) {
-      return statusMap[type].status
-    },
-    resourceFullAddressFilter(record) {
-      return record.resourceFullAddress
     }
   },
   computed: {
     ...mapState(['constants'])
   },
   methods: {
-    handleEdit(record) {
-      this.$refs.editModal.add(record)
-    },
-    handleOk() {
-      this.$refs.table.refresh()
-    },
-    onSelectChange(selectedRowKeys, selectedRows) {
-      this.selectedRowKeys = selectedRowKeys
-      this.selectedRows = selectedRows
-    },
-    resetSearchForm() {
-      this.queryParam = {}
-    },
-
     resetPassword(id) {
         const that = this
         that.$confirm({

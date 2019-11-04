@@ -62,17 +62,6 @@
   import PermissionModal from './modules/EditForm'
   import {mixin} from '@/mixins/mixin'
 
-  const statusMap = {
-    'true': {
-      status: 'success',
-      text: '是'
-    },
-    'false': {
-      status: 'default',
-      text: '否'
-    }
-  }
-
   export default {
     name: 'menuList',
     mixins:[mixin],
@@ -146,14 +135,6 @@
         data: [],
         pageElements:0,
         expandedRowKeys: []
-      }
-    },
-    filters: {
-      statusFilter(type) {
-        return statusMap[type].text
-      },
-      statusTypeFilter(type) {
-        return statusMap[type].status
       }
     },
     created() {

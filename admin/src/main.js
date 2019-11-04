@@ -16,6 +16,12 @@ import hasPermission from '@/utils/hasPermission'
 import './utils/filter'
 import Api from './api/index'
 
+import * as filters from '@/filters/index'
+
+Object.keys(filters).forEach(key => {
+  Vue.filter(key, filters[key])
+})
+
 Vue.config.productionTip = false
 Vue.prototype.$api = Api
 Vue.prototype.$store = store
