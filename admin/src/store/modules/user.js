@@ -28,7 +28,6 @@ const user = {
       state.roles = roles
     },
     SET_INFO: (state, info) => {
-      debugger
       state.info = info
     },
     SET_PERMISSIONLIST: (state, permissionList) => {
@@ -56,7 +55,7 @@ const user = {
     // 获取权限
     GetPermissionList({ commit }) {
       return new Promise((resolve, reject) => {
-        api.user.queryPermissionsByUser().then(response => {
+        api.permission.getPermissionByToken().then(response => {
           const initMenu = [
             {
               path: '/dashboard',
@@ -78,9 +77,9 @@ const user = {
               ]
             }
           ]
-          const menuData = [...initMenu,...response.result.menus]
-          const authData = response.result.managerAuth;
-          const allAuthData = response.result.allAuth;
+          const menuData = [...initMenu,...response.menus]
+          const authData = response.managerAuth;
+          const allAuthData = response.allAuth;
           sessionStorage.setItem(USER_AUTH,JSON.stringify(authData));
           sessionStorage.setItem(SYS_BUTTON_AUTH,JSON.stringify(allAuthData));
           if (menuData && menuData.length > 0) {
@@ -96,18 +95,18 @@ const user = {
     },
 
     // 登出
-    Logout({commit, state}) {
+    Logout ({ commit, state }) {
       return new Promise((resolve) => {
         commit('SET_TOKEN', '')
         Vue.ls.remove(ACCESS_TOKEN)
 
-        api.user.logout(state.token).then(() => {
+        api.manager.logout(state.token).then(() => {
           resolve()
         }).catch(() => {
           resolve()
         })
       })
-    },
+    }
 
   }
 }

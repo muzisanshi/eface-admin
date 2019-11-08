@@ -6,7 +6,8 @@ const URI = {
   info: '/mock/user/info',
   getUserInfo: '/manager/getInfo',
   updateInfo:'/manager/update',
-  queryPermissionsByUser:'/mock/user/queryPermissionsByUser'
+  queryPermissionsByUser:'/mock/user/queryPermissionsByUser',
+  genVerifyCode:'/manager/genVerifyCode'
 }
 
 function login (parameter) {
@@ -48,11 +49,19 @@ function queryPermissionsByUser (parameter) {
   })
 }
 
+function genVerifyCode (parameter) {
+  return axios({
+    url: URI.genVerifyCode,
+    params: parameter
+  })
+}
+
 export default {
   login,
   logout,
   getInfo,
   getUserInfo,
   updateInfo,
-  queryPermissionsByUser
+  queryPermissionsByUser,
+  genVerifyCode
 }

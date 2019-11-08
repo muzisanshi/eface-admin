@@ -47,7 +47,7 @@ router.beforeEach((to, from, next) => {
                 ]
               }
             ]
-            const menuData = [...initMenu, ...res.result.menus]
+            const menuData = [...initMenu, ...res.menus]
             if (menuData === null || menuData === '' || menuData === undefined) {
               return
             }

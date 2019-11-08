@@ -1,8 +1,8 @@
 <!--
  * @name List.vue
  * @author lw
- * @date 2019.11.1
- * @desc 用户管理
+ * @date 2019.11.6
+ * @desc 组织管理
 -->
 <template>
   <a-card :bordered="false" class="content">
@@ -10,13 +10,8 @@
       <a-form layout="inline">
         <a-row :gutter="48">
           <a-col :md="6" :sm="24">
-            <a-form-item label="用户名">
-              <a-input v-model="queryParam.username"/>
-            </a-form-item>
-          </a-col>
-          <a-col :md="6" :sm="24">
-            <a-form-item label="电话号码">
-              <a-input v-model="queryParam.phoneNo"/>
+            <a-form-item label="组织名称">
+              <a-input v-model="queryParam.name"/>
             </a-form-item>
           </a-col>
           <a-col :md="6" :sm="24">
@@ -54,20 +49,10 @@
 
       <span slot="action" slot-scope="text, record">
         <a @click="handleEdit(record)">修改</a>
-        <a-divider type="vertical" />
-          <a-dropdown>
-            <a class="ant-dropdown-link">
-              更多 <a-icon type="down" />
-            </a>
-            <a-menu slot="overlay">
-              <a-menu-item>
-                <a @click="resetPassword(record.id)">重置密码</a>
-              </a-menu-item>
-            </a-menu>
-          </a-dropdown>
       </span>
     </s-table>
     <edit-form ref="editModal" @ok="handleOk"/>
+    <div id='allmap' style="width:100%;height:350px;display: none"></div>
   </a-card>
 </template>
 
@@ -86,37 +71,30 @@ export default {
     return {
       columns: [
         {
-          title: '用户名',
-          dataIndex: 'username'
+          title: '组织名称',
+          dataIndex: 'name',
         },
         {
-          title: '电话号码',
-          dataIndex: 'phoneNo'
+          title: '地区名称',
+          dataIndex: 'areaName'
         },
         {
-          title: '姓名',
-          dataIndex: 'realName'
+          title: '详细地址',
+          dataIndex: 'address'
         },
         {
-          title: '管理员类型',
-          dataIndex: 'managerType',
+          title: '文件类型',
+          dataIndex: 'fileTypeName'
         },
         {
-          title: '性别',
-          dataIndex: 'sexual'
+          title: '纬度',
+          dataIndex: 'lat'
         },
         {
-          title: '邮件',
-          dataIndex: 'email'
+          title: '经度',
+          dataIndex: 'lng'
         },
-        {
-          title: '账户状态',
-          dataIndex: 'accountState'
-        },
-        {
-          title: '上次登录时间',
-          dataIndex: 'lastLoginDatetime',
-        },
+
         {
           title: '备注',
           dataIndex: 'remark',
@@ -130,12 +108,10 @@ export default {
       ],
       enableChecked: false,
       loadData: parameter => {
-        return this.$api.manager.getPage(Object.assign(parameter, this.queryParam))
+        return this.$api.org.getPage(Object.assign(parameter, this.queryParam))
           .then(res => {
             res.records.forEach(item => {
-              item.managerType = this.constants.data.managerType ? this.constants.data.managerType[item.managerType]['name'] : ''
-              item.sexual = this.constants.data.sexual ? this.constants.data.sexual[item.sexual]['name'] : ''
-              item.accountState = this.constants.data.accountState ? this.constants.data.accountState[item.accountState]['name'] : ''
+              item.fileTypeName = this.constants.data.fileType ? this.constants.data.fileType[item.fileType]['name'] : ''
             });
             return res
           })
@@ -146,25 +122,6 @@ export default {
     ...mapState(['constants'])
   },
   methods: {
-    resetPassword(id) {
-        const that = this
-        that.$confirm({
-          title: '操作',
-          content: '确定要重置密码吗？',
-          onOk() {
-            that.$api.manager.resetPassword({id: id})
-              .then(res => {
-                that.$notification.success({
-                  message: '成功',
-                  description: `重置密码成功！`
-                })
-                that.handleOk()
-              })
-          },
-          onCancel() {
-          }
-        })
-      },
 
     handleDelete() {
       const that = this
@@ -172,7 +129,7 @@ export default {
         title: '删除',
         content: '确定删除勾选的记录？',
         onOk() {
-          that.$api.manager.del({ids: that.selectedRowKeys})
+          that.$api.org.del({ids: that.selectedRowKeys})
             .then(res => {
               that.$notification.success({
                 message: '成功',

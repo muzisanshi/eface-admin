@@ -5,8 +5,10 @@ const URI = {
   page: '/manager/getPage',
   saveOrUpdate: '/manager/saveOrUpdate',
   del: '/manager/delete',
-  resetPassword: '/manager/resetPassword',
-  updatePassword: '/manager/updatePassword'
+  getInfo: '/manager/getInfo',
+  update: '/manager/update',
+  updatePassword: '/manager/updatePassword',
+  logout: '/manager/logout'
 }
 
 // 用户管理---wg-2019/6/24
@@ -39,17 +41,30 @@ function del(parameter) {
   })
 }
 
-function resetPassword (parameter) {
+function getInfo (parameter) {
   return axios({
-    url: URI.resetPassword,
+    url: URI.getInfo,
     params: parameter
   })
 }
 
+function update (parameter) {
+  return axios({
+    url: URI.update,
+    params: parameter
+  })
+}
 
 function updatePassword(parameter) {
   return axios({
     url: URI.updatePassword,
+    params: parameter
+  })
+}
+
+function logout(parameter) {
+  return axios({
+    url: URI.logout,
     params: parameter
   })
 }
@@ -59,6 +74,8 @@ export default {
   getPage,
   del,
   saveOrUpdate,
-  resetPassword,
-  updatePassword
+  getInfo,
+  update,
+  updatePassword,
+  logout
 }

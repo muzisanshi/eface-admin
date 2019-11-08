@@ -22,6 +22,9 @@ module.exports = {
   },
   */
   configureWebpack: {
+    externals: {
+      'BMap': 'BMap'
+    },
     plugins: [
       // Ignore all locale files of moment.js
       new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)

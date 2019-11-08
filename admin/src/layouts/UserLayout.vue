@@ -16,7 +16,7 @@
 
       <div class="footer">
         <div class="copyright">
-          Copyright &copy; 2019 成都俊介科技有限公司
+          Copyright &copy; 2019 成都翼飞视有限公司
         </div>
       </div>
     </div>

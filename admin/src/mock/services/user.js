@@ -404,34 +404,40 @@ const queryPermissionsByUser = (options) => {
 
   const menus = [
     {
-      'path': '/manager',
-      'name': 'manager',
-      'redirect': '/manager/manager/list',
+      'path': '/system',
+      'name': 'system',
+      'redirect': '/system/manager/list',
       'component': 'layouts/PageView',
-      'meta': { 'title': '权限管理', 'keepAlive': true, 'icon': 'setting' },
+      'meta': { 'title': '系统管理', 'keepAlive': true, 'icon': 'setting' },
       'children': [
         {
-          'path': '/manager/manager/list',
-          'name': 'managerManagerList',
-          'component': 'manager/manager/List',
+          'path': '/system/manager/list',
+          'name': 'systemManagerList',
+          'component': 'system/manager/List',
           'meta': { 'title': '用户管理', 'keepAlive': true, 'icon': 'profile' }
         },
         {
-          'path': '/manager/menu/list',
-          'name': 'managerMenuList',
-          'component': 'manager/menu/List',
+          'path': '/system/org/list',
+          'name': 'systemOrgList',
+          'component': 'system/org/List',
+          'meta': { 'title': '组织管理', 'keepAlive': true, 'icon': 'profile' }
+        },
+        {
+          'path': '/system/menu/list',
+          'name': 'systemMenuList',
+          'component': 'system/menu/List',
           'meta': { 'title': '菜单管理', 'keepAlive': true, 'icon': 'profile' }
         },
         {
-          'path': '/manager/role/list',
-          'name': 'managerRoleList',
-          'component': 'manager/role/List',
+          'path': '/system/role/list',
+          'name': 'systemRoleList',
+          'component': 'system/role/List',
           'meta': { 'title': '角色管理', 'keepAlive': true, 'icon': 'profile' }
         },
         {
-          'path': '/manager/permission/list',
-          'name': 'managerPermissionList',
-          'component': 'manager/permission/List',
+          'path': '/system/permission/list',
+          'name': 'systemPermissionList',
+          'component': 'system/permission/List',
           'meta': { 'title': '权限管理', 'keepAlive': true, 'icon': 'profile' }
         }
       ]

@@ -12,7 +12,6 @@ import { timeFix } from '@/utils/util'
 import { mapGetters,mapMutations } from 'vuex';
 import { PageView } from '@/layouts'
 import HeadInfo from '@/components/tools/HeadInfo'
-
 export default {
   name: 'Workplace',
   components: {
@@ -23,7 +22,7 @@ export default {
     return {
       timeFix: timeFix(),
       avatar: '',
-      user: {}
+      user: {},
     }
   },
   computed: {
@@ -44,7 +43,7 @@ export default {
     this.avatar = this.userInfo.avatar
   },
   methods: {
-    ...mapGetters(['nickname'])
-  }
+    ...mapGetters(['nickname']),
+  },
 }
 </script>
