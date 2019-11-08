@@ -1,3 +1,9 @@
+<!--
+ * @name List.vue
+ * @author lw
+ * @date 2019.11.8
+ * @desc 地区管理list
+-->
 <template>
   <a-card :bordered="false" class="content">
     <div class="table-page-search-wrapper">
@@ -40,7 +46,8 @@
     <div class="table-operator">
       <a-button type="primary" icon="plus" @click="handleEdit(null)">新增</a-button>
       <a-button type="danger" icon="delete" @click="handleDelete" :disabled="selectedRowKeys.length < 1">删除</a-button>
-      <a-button type="danger" icon="delete" @click="handleDeleteLogic" :disabled="selectedRowKeys.length < 1">逻辑删除</a-button>
+      <a-button type="danger" icon="delete" @click="handleDeleteLogic" :disabled="selectedRowKeys.length < 1">逻辑删除
+      </a-button>
     </div>
 
     <a-table
@@ -64,17 +71,6 @@
 
       <span slot="action" slot-scope="text, record">
         <template>
-          <!-- <a-dropdown :trigger="['click']">
-            <a class="ant-dropdown-link">编辑<a-icon type="down"/></a>
-            <a-menu slot="overlay">
-              <a-menu-item key="0">
-                <a @click="handleEdit(record)"><a-icon type="profile"/>编辑分类</a>
-              </a-menu-item>
-              <a-menu-item key="1">
-                <a @click="handleEdit(record)"><a-icon type="block"/>编辑属性</a>
-              </a-menu-item>
-            </a-menu>
-          </a-dropdown> -->
           <a @click="handleEdit(record)">修改</a>
           <a-divider v-if="record.level<3" type="vertical"/>
           <a v-if="record.level<3" @click="handleEdit(record,'addChild')">新增下级</a>
@@ -82,7 +78,8 @@
       </span>
 
     </a-table>
-    <a-pagination class="ant-table-pagination ant-pagination" :showTotal="total => `总共 ${total} 条`" showSizeChanger :pageSize.sync="queryParam.page.pageSize"
+    <a-pagination class="ant-table-pagination ant-pagination" :showTotal="total => `总共 ${total} 条`" showSizeChanger
+                  :pageSize.sync="queryParam.page.pageSize"
                   @change="onChange" @showSizeChange="onShowSizeChange" :total="pageElements"
                   v-model="queryParam.page.pageNumber"/>
     <edit-form ref="editModal" @ok="handleLoadOk"/>
@@ -92,22 +89,11 @@
 <script>
   import EditForm from './modules/EditForm'
   import {mixin} from '@/mixins/mixin'
-  const statusMap = {
-    'true': {
-      status: 'success',
-      text: '是'
-    },
-    'false': {
-      status: 'default',
-      text: '否'
-    }
-  }
-
   export default {
     components: {
       EditForm
     },
-    mixins:[mixin],
+    mixins: [mixin],
     data() {
       return {
         queryParam: {
@@ -168,14 +154,6 @@
         expandedRowKeys: [],
       }
     },
-    filters: {
-      statusFilter(type) {
-        return statusMap[type].text
-      },
-      statusTypeFilter(type) {
-        return statusMap[type].status
-      }
-    },
     created() {
       this.loadData()
     },
@@ -210,27 +188,27 @@
           }
         })
       },
-      handleDeleteLogic(){
+      handleDeleteLogic() {
         const that = this
-          that.$confirm({
-            title: '逻辑删除',
-            content: '确定逻辑删除勾选的记录？',
-            onOk() {
-              that.$api.area.delLog({ids: that.selectedRowKeys})
-                .then(res => {
-                  that.$notification.success({
-                    message: '成功',
-                    description: `逻辑删除成功！`
-                  })
-                  that.handleLoadOk()
+        that.$confirm({
+          title: '逻辑删除',
+          content: '确定逻辑删除勾选的记录？',
+          onOk() {
+            that.$api.area.delLog({ids: that.selectedRowKeys})
+              .then(res => {
+                that.$notification.success({
+                  message: '成功',
+                  description: `逻辑删除成功！`
                 })
-            },
-            onCancel() {
-            }
-          })
+                that.handleLoadOk()
+              })
+          },
+          onCancel() {
+          }
+        })
       },
-      handleEdit(record,addChild) {
-        this.$refs.editModal.add(record,addChild)
+      handleEdit(record, addChild) {
+        this.$refs.editModal.add(record, addChild)
       },
 
       onSelectChange(selectedRowKeys, selectedRows) {

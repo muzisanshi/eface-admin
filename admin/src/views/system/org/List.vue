@@ -41,7 +41,8 @@
         {{ index + 1 }}
       </span>
 
-      <a-avatar size="large" shape="square" :src="record | resourceFullAddressFilter" slot="resourceFullAddress" slot-scope="record"/>
+      <a-avatar size="large" shape="square" :src="record | resourceFullAddressFilter" slot="resourceFullAddress"
+                slot-scope="record"/>
 
       <span slot="status" slot-scope="text">
         <a-badge :status="text | statusTypeFilter" :text="text | statusFilter"/>
@@ -57,91 +58,91 @@
 </template>
 
 <script>
-import {STable} from '@/components'
-import EditForm from './modules/EditForm'
-import {mapState} from 'vuex';
-import {mixin} from '@/mixins/mixin'
-export default {
-  components: {
-    STable,
-    EditForm
-  },
-  mixins: [mixin],
-  data() {
-    return {
-      columns: [
-        {
-          title: '组织名称',
-          dataIndex: 'name',
-        },
-        {
-          title: '地区名称',
-          dataIndex: 'areaName'
-        },
-        {
-          title: '详细地址',
-          dataIndex: 'address'
-        },
-        {
-          title: '文件类型',
-          dataIndex: 'fileTypeName'
-        },
-        {
-          title: '纬度',
-          dataIndex: 'lat'
-        },
-        {
-          title: '经度',
-          dataIndex: 'lng'
-        },
+  import {STable} from '@/components'
+  import EditForm from './modules/EditForm'
+  import {mapState} from 'vuex';
+  import {mixin} from '@/mixins/mixin'
 
-        {
-          title: '备注',
-          dataIndex: 'remark',
-        },
-        {
-          title: '操作',
-          dataIndex: 'action',
-          width: '150px',
-          scopedSlots: {customRender: 'action'}
-        }
-      ],
-      enableChecked: false,
-      loadData: parameter => {
-        return this.$api.org.getPage(Object.assign(parameter, this.queryParam))
-          .then(res => {
-            res.records.forEach(item => {
-              item.fileTypeName = this.constants.data.fileType ? this.constants.data.fileType[item.fileType]['name'] : ''
-            });
-            return res
-          })
-      },
-    }
-  },
-  computed: {
-    ...mapState(['constants'])
-  },
-  methods: {
+  export default {
+    components: {
+      STable,
+      EditForm
+    },
+    mixins: [mixin],
+    data() {
+      return {
+        columns: [
+          {
+            title: '组织名称',
+            dataIndex: 'name',
+          },
+          {
+            title: '地区名称',
+            dataIndex: 'areaName'
+          },
+          {
+            title: '详细地址',
+            dataIndex: 'address'
+          },
+          {
+            title: '文件类型',
+            dataIndex: 'fileTypeName'
+          },
+          {
+            title: '纬度',
+            dataIndex: 'lat'
+          },
+          {
+            title: '经度',
+            dataIndex: 'lng'
+          },
 
-    handleDelete() {
-      const that = this
-      that.$confirm({
-        title: '删除',
-        content: '确定删除勾选的记录？',
-        onOk() {
-          that.$api.org.del({ids: that.selectedRowKeys})
+          {
+            title: '备注',
+            dataIndex: 'remark',
+          },
+          {
+            title: '操作',
+            dataIndex: 'action',
+            width: '150px',
+            scopedSlots: {customRender: 'action'}
+          }
+        ],
+        enableChecked: false,
+        loadData: parameter => {
+          return this.$api.org.getPage(Object.assign(parameter, this.queryParam))
             .then(res => {
-              that.$notification.success({
-                message: '成功',
-                description: `删除成功！`
-              })
-              that.handleOk()
+              res.records.forEach(item => {
+                item.fileTypeName = this.constants.data.fileType ? this.constants.data.fileType[item.fileType]['name'] : ''
+              });
+              return res
             })
         },
-        onCancel() {
-        }
-      })
+      }
     },
+    computed: {
+      ...mapState(['constants'])
+    },
+    methods: {
+      handleDelete() {
+        const that = this
+        that.$confirm({
+          title: '删除',
+          content: '确定删除勾选的记录？',
+          onOk() {
+            that.$api.org.del({ids: that.selectedRowKeys})
+              .then(res => {
+                that.$notification.success({
+                  message: '成功',
+                  description: `删除成功！`
+                })
+                that.handleOk()
+              })
+          },
+          onCancel() {
+          }
+        })
+      },
+    }
   }
-}
 </script>
