@@ -8,6 +8,10 @@ import manager from './manager'
 
 import area from './area'
 import org from './org'
+import estate from './estate'
+import subject from './subject'
+import storey from './storey'
+import room from './room'
 
 export default {
   constants,
@@ -18,5 +22,9 @@ export default {
   role,
   manager,
   area,
-  org
+  org,
+  estate,
+  subject,
+  storey,
+  room
 }

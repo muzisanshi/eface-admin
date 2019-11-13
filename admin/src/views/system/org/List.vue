@@ -53,7 +53,6 @@
       </span>
     </s-table>
     <edit-form ref="editModal" @ok="handleOk"/>
-    <div id='allmap' style="width:100%;height:350px;display: none"></div>
   </a-card>
 </template>
 
@@ -89,6 +88,10 @@
             dataIndex: 'fileTypeName'
           },
           {
+            title: '编码',
+            dataIndex: 'code'
+          },
+          {
             title: '纬度',
             dataIndex: 'lat'
           },
@@ -96,7 +99,6 @@
             title: '经度',
             dataIndex: 'lng'
           },
-
           {
             title: '备注',
             dataIndex: 'remark',
@@ -124,6 +126,7 @@
       ...mapState(['constants'])
     },
     methods: {
+
       handleDelete() {
         const that = this
         that.$confirm({

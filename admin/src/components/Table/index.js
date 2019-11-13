@@ -109,7 +109,7 @@ export default {
       current: localPageNum,
       pageSize: this.pageSize,
       showSizeChanger: this.showSizeChanger
-    })   
+    })
     this.needTotalList = this.initTotalList(this.columns)
     this.loadData()
   },

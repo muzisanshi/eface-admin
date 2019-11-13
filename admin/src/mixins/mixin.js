@@ -61,7 +61,7 @@ export const mixin = {
     },
 
     //是否删除赋值
-    changeDeleted(checked) {
+    changeDeleted (checked) {
       this.deleted = checked
     },
 
@@ -79,6 +79,11 @@ export const mixin = {
     onSelectChange(selectedRowKeys, selectedRows) {
       this.selectedRowKeys = selectedRowKeys
       this.selectedRows = selectedRows
+    },
+
+    //选择地产、楼栋信息
+    selectDataCon (num) {
+      this.$refs.selectSuccess.selectData(num)
     },
 
   }
