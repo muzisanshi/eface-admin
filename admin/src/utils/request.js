@@ -60,7 +60,11 @@ service.interceptors.request.use(config => {
   }
   config.baseURL = process.env.VUE_APP_BASE_API
   config.method = 'post'
-  config.headers['Content-Type'] = 'application/json;charset=utf-8'
+  if (config.enctype) {
+    config.headers['Content-Type'] = config.enctype
+  } else {
+    config.headers['Content-Type'] = 'application/json;charset=utf-8'
+  }
   const data = config.params
   if (data && data.pageNo) {
     data.page = {
@@ -78,7 +82,6 @@ service.interceptors.request.use(config => {
 // response interceptor
 service.interceptors.response.use((response) => {
   const data = response.data
-  //console.log('response', data)
   if (data.respCode !== '00') {
     if (response.config['onFail']) {
       response.config['onFail'].call(data)
@@ -92,13 +95,16 @@ service.interceptors.response.use((response) => {
             }, 1500)
           })
         }
-      }else{
-        notification.error({
-          message: '错误',
-          description: data.errDesc
-        })
+      } else {
+        if (data.size) {
+          return data
+        } else {
+          notification.error({
+            message: '错误',
+            description: data.errDesc
+          })
+        }
       }
-      
     }
     return Promise.reject(data)
   } else {
@@ -118,7 +124,7 @@ service.interceptors.response.use((response) => {
         ret.data = ret.records
       }
     }
-    
+
     return ret
   }
 }, err)

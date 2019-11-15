@@ -5,7 +5,7 @@
  * @desc 选择地区（公用）
 -->
 <template>
-  <a-cascader :options="options" @change="onChangeAddress" :loadData="loadData" :value='initCascader'  placeholder="选择地区" changeOnSelect/>
+  <a-cascader :options="options" @change="onChangeAddress" :loadData="loadData" :value='initCascader'  placeholder="选择地区"/>
 </template>
 
 <script>
@@ -112,62 +112,56 @@
           })
       },
       loadData(selectedOptions) {
-        let that = this;
-        let cloneData = selectedOptions.map(item => ({ ...item}))
-        cloneData.map((item)=>{
-          if(item.level == 1){
-            that.initCascaderName[0] = item.label
-          }else if(item.level == 2){
-            that.initCascaderName[1] = item.label
-          }else if(item.level == 3){
-            that.initCascaderName[2] = item.label
-          }
-        })
-        this.$emit('selectedAreaName',this.initCascaderName)
         let thiz = this;
         this.popupVisible =true;
         const targetOption = selectedOptions[selectedOptions.length - 1];
-        if(targetOption.level<3){
-          targetOption.loading = true;
+        targetOption.loading = true;
 
-          this.$api.area.getAll({
-            parentId:targetOption.value
-          })
-            .then(res => {
-              targetOption.loading = false;
-              const l = []
-              if(res.length>0){
+        this.$api.area.getAll({
+          parentId:targetOption.value
+        })
+          .then(res => {
+            targetOption.loading = false;
+            const l = []
+            if(res.length>0){
+              if(!res[0].hasLeaf){
                 for (let i = 0; i < res.length; i++) {
 
-                  if(targetOption.level == 1 || targetOption.level == 2){
-                    l.push({
-                      value: res[i].id,
-                      label: res[i].shortName,
-                      level: res[i].level,
-                      isLeaf: false
-                    })
-                  }else{
-                    l.push({
-                      value: res[i].id,
-                      label: res[i].shortName,
-                      level: res[i].level,
-                      isLeaf: true
-                    })
-                  }
+                  l.push({
+                    value: res[i].id,
+                    label: res[i].shortName,
+                    level: res[i].level,
+                    isLeaf: true
+                  })
                 }
-                targetOption.children = l
-                thiz.options = [...thiz.options]
-
+              }else{
+                for (let i = 0; i < res.length; i++) {
+                  l.push({
+                    value: res[i].id,
+                    label: res[i].shortName,
+                    level: res[i].level,
+                    isLeaf: false
+                  })
+                }
               }
+              targetOption.children = l
+              thiz.options = [...thiz.options]
 
-            })
-        }else{
+            }
 
-        }
+          })
       },
-      onChangeAddress(value){
+      onChangeAddress(value, selectedOptions){
+        let areaNameArr = [];
         this.initCascader = value;
-        this.$emit('selectedArea',this.initCascader)
+        selectedOptions.map((item)=>{
+          areaNameArr.push(item.label)
+        })
+        this.initCascaderName = areaNameArr
+        this.$emit('selectedArea',{
+          value:this.initCascader,
+          name:this.initCascaderName
+        })
       },
     }
   }

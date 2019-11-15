@@ -25,8 +25,7 @@
               :wrapperCol="wrapperCol"
             >
               <select-area ref="selectArea" :initArea="initCascader"
-                           @selectedArea="selectedArea($event)"
-                           @selectedAreaName="selectedAreaName($event)"></select-area>
+                           @selectedArea="selectedArea"></select-area>
             </a-form-item>
           </a-col>
           <a-col :span="12">
@@ -56,7 +55,7 @@
             </a-form-item>
           </a-col>
           <a-col :span="12">
-            <a-form-item label="详细地址" :labelCol="labelCol" :wrapperCol="wrapperCol">
+            <a-form-item label="详细地址" :labelCol="labelCol" :wrapperCol="wrapperCol" :required="true">
               <input class="ant-input" id="detailAddress" v-model="inputChange" />
             </a-form-item>
           </a-col>
@@ -204,13 +203,9 @@ export default {
         }
     },
 
-
-    selectedArea(area, key) {
-      this.initCascader = area;
-    },
-    selectedAreaName(area, key) {
-      // console.log(area, key)
-      this.inputChange = area.join('')
+    selectedArea(area) {
+      this.initCascader = area.value;
+      this.inputChange = area.name.join('')
     },
 
     addressChange(val) {
@@ -227,10 +222,7 @@ export default {
           if (point) {
             map.clearOverlays()
             map.centerAndZoom(point, 12);
-            // map.centerAndZoom("成都", 12);
             map.addOverlay(new BMap.Marker(point));
-            // that.$set(that.applicantForm, 'lgtVal', String(point.lng))
-            // that.$set(that.applicantForm, 'lttVal', String(point.lat))
 
           }
         })

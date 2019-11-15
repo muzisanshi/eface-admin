@@ -21,7 +21,7 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
         >
-          <a-input @click="selectDataCon(3)" :readonly="true" v-decorator="['storeyName', {initialValue: this.formData.storeyName,rules: [{required: true, message: '请选择楼层！'}]}]"/>
+          <a-input @click="selectDataCon(3)" :read-only="true" v-decorator="['storeyName', {initialValue: this.formData.storeyName,rules: [{required: true, message: '请选择楼层！'}]}]"/>
         </a-form-item>
 
 

@@ -6,7 +6,7 @@
 -->
 <template>
   <a-modal
-    title="编辑"
+    title="选择"
     :width="840"
     :visible="visible"
     :confirmLoading="confirmLoading"
@@ -22,8 +22,16 @@
           :wrapperCol="wrapperCol"
         >
           <select-area ref="selectAreaAll" :initArea="initCascader"
-                       @selectedArea="selectedArea($event)"
-                       @selectedAreaName="selectedAreaName($event)"></select-area>
+                       @selectedArea="selectedArea"></select-area>
+        </a-form-item>
+
+        <a-form-item
+          label="名称"
+          :labelCol="labelCol"
+          :wrapperCol="wrapperCol"
+        >
+          <a-input
+            v-decorator="['name']" @blur="searchName($event)" placeholder="请输入地产名称搜索"/>
         </a-form-item>
 
         <a-form-item
@@ -135,7 +143,9 @@
         visible:false,
         curItem:'',
         currentData:'',
-        currentDataName:''
+        currentDataName:'',
+        areaId:'',
+        name:''
       }
     },
     created(){
@@ -159,23 +169,43 @@
         this.buildList = [];
         this.unitList = [];
         this.storeyList = [];
+        this.areaId = ''
+        this.name = ''
       },
       selectedArea(area) {
-        this.initCascader = area;
-        this.$api.estate.getAll({
-          name:'',
-          areaId:this.initCascader[this.initCascader.length-1]
-        })
-          .then(res => {
-            const l = []
-            for (let i = 0, j = res.length; i < j; i++) {
-              l.push({
-                value: res[i].id,
-                label: res[i].name
-              })
-            }
-            this.estateList = l
+        this.initCascader = area.value;
+        this.areaId = area.value[area.value.length-1]
+        this.getEstateList()
+      },
+
+      searchName(name){
+        this.name = name?name.srcElement.value:'';
+        this.getEstateList()
+      },
+      getEstateList(){
+        let that = this;
+        if(!that.area && !that.name){
+          this.$notification.error({
+            message: '提示',
+            description:'请选择地区或者输入名称来获取地产信息'
           })
+        }else{
+          this.$api.estate.getLimitPage({
+            name:that.name,
+            areaId:that.areaId
+          })
+            .then(res => {
+              const l = []
+              for (let i = 0, j = res.length; i < j; i++) {
+                l.push({
+                  value: res[i].id,
+                  label: res[i].name
+                })
+              }
+              this.estateList = l
+            })
+        }
+
       },
 
       estateChange(value,option){
@@ -215,7 +245,6 @@
               this.unitList = l
             })
         }
-
       },
 
       unitChange(value,option){
@@ -243,10 +272,6 @@
       storeyChange(value,option){
         this.currentData = value
         this.currentDataName = option.componentOptions.children[0].text
-      },
-
-      selectedAreaName(area) {
-        this.inputChange = area.join('')
       },
 
       handleSubmit(){

@@ -1,22 +1,53 @@
+<!--
+ * @name List.vue
+ * @author lw
+ * @date 2019.11.11
+ * @desc 楼层管理
+-->
 <template>
   <a-card :bordered="false" class="content">
     <div class="table-page-search-wrapper">
-      <!--<a-form layout="inline">-->
-        <!--<a-row :gutter="48">-->
-          <!--<a-col :md="6" :sm="24">-->
-            <!--<a-form-item label="编码">-->
-              <!--<a-input v-model="queryParam.code" placeholder=""/>-->
-            <!--</a-form-item>-->
-          <!--</a-col>-->
+      <a-form layout="inline">
+        <a-row :gutter="48">
+          <a-col :md="4" :sm="24">
+            <a-form-item label="地区">
+              <select-area ref="selectAreaAll" :initArea="initCascader"
+                           @selectedArea="selectedArea($event)"></select-area>
+            </a-form-item>
+          </a-col>
 
-          <!--<a-col :md="6" :sm="24">-->
-            <!--<span class="table-page-search-submitButtons">-->
-              <!--<a-button type="primary" @click="$refs.table.refresh(true)">查询</a-button>-->
-              <!--<a-button style="margin-left: 8px" @click="resetSearchForm">重置</a-button>-->
-            <!--</span>-->
-          <!--</a-col>-->
-        <!--</a-row>-->
-      <!--</a-form>-->
+          <a-col :md="4" :sm="24">
+            <a-form-item label="地产名称">
+              <a-input v-model="queryParam.estateName" placeholder=""/>
+            </a-form-item>
+          </a-col>
+
+          <a-col :md="4" :sm="24">
+            <a-form-item label="楼栋名称">
+              <a-input v-model="queryParam.buildingName" placeholder=""/>
+            </a-form-item>
+          </a-col>
+
+          <a-col :md="4" :sm="24">
+            <a-form-item label="单元名称">
+              <a-input v-model="queryParam.unitName" placeholder=""/>
+            </a-form-item>
+          </a-col>
+
+          <a-col :md="4" :sm="24">
+            <a-form-item label="楼层名称">
+              <a-input v-model="queryParam.name" placeholder=""/>
+            </a-form-item>
+          </a-col>
+
+          <a-col :md="4" :sm="24">
+            <span class="table-page-search-submitButtons">
+              <a-button type="primary" @click="$refs.table.refresh(true)">查询</a-button>
+              <a-button style="margin-left: 8px" @click="resetSearchForm">重置</a-button>
+            </span>
+          </a-col>
+        </a-row>
+      </a-form>
     </div>
 
     <div class="table-operator" v-if="!selectGoodsStatus">
@@ -61,14 +92,15 @@ import createForm from './modules/createForm'
 import EditForm from './modules/EditForm'
 import {mapState} from 'vuex';
 import {mixin} from '@/mixins/mixin'
+import selectArea from '@/components/Common/selectArea'
 
 export default {
   mixins:[mixin],
   components: {
     STable,
     createForm,
-    EditForm
-
+    EditForm,
+    selectArea
   },
   props:{
     selectGoodsStatus:{
@@ -90,12 +122,16 @@ export default {
     return {
       columns: [
         {
+          title: '地产名称',
+          dataIndex: 'estateName'
+        },
+        {
           title: '楼栋名称',
           dataIndex: 'buildingName'
         },
         {
-          title: '地产名称',
-          dataIndex: 'estateName'
+          title: '楼栋单元',
+          dataIndex: 'unitName'
         },
         {
           title: '楼层',
@@ -106,11 +142,7 @@ export default {
           dataIndex: 'roomNum'
         },
         {
-          title: '楼栋单元',
-          dataIndex: 'unitName'
-        },
-        {
-          title: '楼栋备注',
+          title: '备注',
           dataIndex: 'remark'
         },
         {
@@ -130,6 +162,7 @@ export default {
       goodsGroups: [],
       allBrand: [],
       uploadFileId: '',
+      initCascader:[]
     }
   },
   methods: {
@@ -153,6 +186,11 @@ export default {
         }
       })
     },
+
+    selectedArea(area) {
+      this.queryParam.areaId = area[area.length-1];
+    },
+
     handleGoodsRecord(record){
       this.$refs.editRecordModal.add(this.selectedRows[0])
     },

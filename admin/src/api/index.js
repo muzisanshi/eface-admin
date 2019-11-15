@@ -12,6 +12,7 @@ import estate from './estate'
 import subject from './subject'
 import storey from './storey'
 import room from './room'
+import location from './location'
 
 export default {
   constants,
@@ -26,5 +27,6 @@ export default {
   estate,
   subject,
   storey,
-  room
+  room,
+  location
 }

@@ -22,16 +22,7 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
             >
-              <a-input @click="selectDataCon(2)" :readonly="true" v-decorator="['unitName', {initialValue: this.formData.unitName,rules: [{required: true, message: '请选择楼栋单元！'}]}]"/>
-            </a-form-item>
-          </a-col>
-          <a-col :span="12">
-            <a-form-item
-              label="备注"
-              :labelCol="labelCol"
-              :wrapperCol="wrapperCol"
-            >
-              <a-input v-decorator="['remark',{initialValue: this.formData.remark}]" />
+              <a-input @click="selectDataCon(2)" :read-only="true" v-decorator="['unitName', {initialValue: this.formData.unitName,rules: [{required: true, message: '请选择楼栋单元！'}]}]"/>
             </a-form-item>
           </a-col>
         </a-row>
@@ -39,8 +30,8 @@
           <div class="keys">
             <a-row :gutter="24">
 
-              <a-col :span="10">
-                <a-form-item :key="k.name" v-bind="formLayout" label="楼层" :required="false">
+              <a-col :span="7">
+                <a-form-item :key="k.name" v-bind="formLayout" label="楼层">
                   <a-input v-decorator="[
                         `nameVal[${k.name}]`,
                         {
@@ -57,8 +48,8 @@
 
               </a-col>
 
-              <a-col :span="10" >
-                <a-form-item :key="k.roomNum" v-bind="formLayout" label="房间数量" :required="false">
+              <a-col :span="7" >
+                <a-form-item :key="k.roomNum" v-bind="formLayout" label="房间数量">
                   <a-input v-decorator="[
                           `roomNumVal[${k.roomNum}]`,
                           {
@@ -73,7 +64,15 @@
                 </a-form-item>
               </a-col>
 
-              <a-col :span="4" style="padding-top: 10px">
+              <a-col :span="7" >
+                <a-form-item :key="k.remark" v-bind="formLayout" label="备注" :required="false">
+                  <a-input v-decorator="[
+                          `remarkVal[${k.remark}]`]" placeholder="请输入备注" style="margin-right: 8px" >
+                  </a-input>
+                </a-form-item>
+              </a-col>
+
+              <a-col :span="3" style="padding-top: 10px">
                 <a-icon v-if="form.getFieldValue('keys').length > 1" class="dynamic-delete-button" type="minus-circle-o" :disabled="form.getFieldValue('keys').length === 1" @click="() => remove(k)" />
               </a-col>
 
@@ -82,7 +81,7 @@
           </div>
         </template>
         <a-form-item v-bind="formItemLayoutWithOutLabel" style="margin-top: 10px;">
-          <a-button type="dashed" style="width: 60%" @click="addBuildingAttr">
+          <a-button type="dashed" style="width: 100%" @click="addBuildingAttr">
             <a-icon type="plus" /> 增加楼层
           </a-button>
         </a-form-item>
@@ -97,8 +96,8 @@
   import selectDataCon from '@/components/Common/selectDataCon'
   import {mixin} from '@/mixins/mixin'
   let nameNum = 0,
-    roomNum = 0;
-
+    roomNum = 0,
+  remarkNum =0;
 
   export default {
     mixins:[mixin],
@@ -139,7 +138,7 @@
         formItemLayoutWithOutLabel: {
           wrapperCol: {
             xs: { span: 24, offset: 0 },
-            sm: { span: 20, offset: 4 },
+            sm: { span: 10, offset: 7 },
           },
         },
         visible: false,
@@ -148,14 +147,18 @@
         parentGoodsGroupId: '',
         goodsAttrAndOptParams:[],
         goodsId:'',
-        attrOpt:[[]],
+        attrOpt:[[{roomNum:0}]],
         cloneAttrOpt:[[{name:''}]],
       }
     },
     beforeCreate () {
       this.form = this.$form.createForm(this);
       this.form.getFieldDecorator('keys', {
-        initialValue: [],
+        initialValue: [{
+          name:0,
+          roomNum:0,
+          remark:0
+        }],
         preserve: true
       });
     },
@@ -184,7 +187,6 @@
             let parmas = {};
             parmas.storeys = this.goodsAttrAndOptParams;
             parmas.unitId = this.formData.unitId;
-            parmas.remark = values.remark;
             console.log(parmas)
 
             this.$api.storey.saveOrUpdate(parmas)
@@ -225,6 +227,7 @@
           if(data.nameVal[i]){
             obj.name = data.nameVal[i];
             obj.roomNum = data.roomNumVal[i];
+            obj.remark = data.remarkVal[i];
             this.goodsAttrAndOptParams.push(obj)
           }
         }
@@ -245,10 +248,12 @@
         const keys = form.getFieldValue('keys');
         var arr = [{
           name: 0,
-          roomNum : 0
+          roomNum : 0,
+          remark:0
         }]
         arr[0].name = ++nameNum
         arr[0].roomNum = ++roomNum
+        arr[0].remark = ++remarkNum
         const nextKeys = keys.concat(arr);
         form.setFieldsValue({
           keys: nextKeys,

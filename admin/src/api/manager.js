@@ -69,6 +69,14 @@ function logout(parameter) {
   })
 }
 
+function downFile (url, parameter) {
+  return axios({
+    url: url,
+    params: parameter,
+    responseType: 'blob'
+  })
+}
+
 export default {
   getById,
   getPage,
@@ -77,5 +85,6 @@ export default {
   getInfo,
   update,
   updatePassword,
-  logout
+  logout,
+  downFile
 }

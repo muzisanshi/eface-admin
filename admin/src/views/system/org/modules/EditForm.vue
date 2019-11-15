@@ -60,12 +60,11 @@
               :wrapperCol="wrapperCol"
             >
               <select-area ref="selectArea" :initArea="initCascader"
-                           @selectedArea="selectedArea($event)"
-                           @selectedAreaName="selectedAreaName($event)"></select-area>
+                           @selectedArea="selectedArea"></select-area>
             </a-form-item>
           </a-col>
           <a-col :span="12">
-            <a-form-item label="详细地址" :labelCol="labelCol" :wrapperCol="wrapperCol">
+            <a-form-item label="详细地址" :labelCol="labelCol" :wrapperCol="wrapperCol" :required="true">
               <input class="ant-input" id="detailAddress" v-model="inputChange"/>
             </a-form-item>
           </a-col>
@@ -159,10 +158,8 @@
       },
 
       selectedArea(area) {
-        this.initCascader = area;
-      },
-      selectedAreaName(area) {
-        this.inputChange = area.join('')
+        this.initCascader = area.value;
+        this.inputChange = area.name.join('')
       },
 
       loadData(selectedOptions) {

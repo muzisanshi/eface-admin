@@ -5,6 +5,8 @@ const URI = {
   page: '/unit/getPage',
   del: '/unit/delete',
   getById: '/unit/getById',
+  exportExcel: '/unit/exportExcel',
+  importExcel: '/unit/importExcel',
   getBuildAll: '/building/getAll',
   saveOrUpdate: '/building/saveOrUpdate'
 }
@@ -51,11 +53,28 @@ function getBuildAll (parameter) {
   })
 }
 
+function exportExcel (parameter) {
+  return axios({
+    url: URI.exportExcel,
+    params: parameter,
+    responseType: 'blob'
+  })
+}
+
+function importExcel (parameter) {
+  return axios({
+    url: URI.importExcel,
+    params: parameter,
+  })
+}
+
 export default {
   getById,
   getUnitAll,
   getBuildAll,
   getPage,
   del,
-  saveOrUpdate
+  saveOrUpdate,
+  exportExcel,
+  importExcel
 }

@@ -1,26 +1,77 @@
+<!--
+ * @name List.vue
+ * @author lw
+ * @date 2019.11.11
+ * @desc 房间管理
+-->
 <template>
   <a-card :bordered="false" class="content">
     <div class="table-page-search-wrapper">
-      <!--<a-form layout="inline">-->
-        <!--<a-row :gutter="48">-->
-          <!--<a-col :md="6" :sm="24">-->
-            <!--<a-form-item label="编码">-->
-              <!--<a-input v-model="queryParam.code" placeholder=""/>-->
-            <!--</a-form-item>-->
-          <!--</a-col>-->
+      <a-form layout="inline">
+        <a-row :gutter="48">
+          <a-col :md="4" :sm="24">
+            <a-form-item label="地区">
+              <select-area ref="selectAreaAll" :initArea="initCascader"
+                           @selectedArea="selectedArea($event)"></select-area>
+            </a-form-item>
+          </a-col>
 
-          <!--<a-col :md="6" :sm="24">-->
-            <!--<span class="table-page-search-submitButtons">-->
-              <!--<a-button type="primary" @click="$refs.table.refresh(true)">查询</a-button>-->
-              <!--<a-button style="margin-left: 8px" @click="resetSearchForm">重置</a-button>-->
-            <!--</span>-->
-          <!--</a-col>-->
-        <!--</a-row>-->
-      <!--</a-form>-->
+          <a-col :md="4" :sm="24">
+            <a-form-item label="地产名称">
+              <a-input v-model="queryParam.estateName" placeholder=""/>
+            </a-form-item>
+          </a-col>
+
+          <a-col :md="3" :sm="24">
+            <a-form-item label="楼栋名称">
+              <a-input v-model="queryParam.buildingName" placeholder=""/>
+            </a-form-item>
+          </a-col>
+
+          <a-col :md="3" :sm="24">
+            <a-form-item label="单元名称">
+              <a-input v-model="queryParam.unitName" placeholder=""/>
+            </a-form-item>
+          </a-col>
+
+          <a-col :md="3" :sm="24">
+            <a-form-item label="楼层名称">
+              <a-input v-model="queryParam.storeyName" placeholder=""/>
+            </a-form-item>
+          </a-col>
+
+          <a-col :md="3" :sm="24">
+            <a-form-item label="房间名称">
+              <a-input v-model="queryParam.name" placeholder=""/>
+            </a-form-item>
+          </a-col>
+
+          <a-col :md="3" :sm="24">
+            <span class="table-page-search-submitButtons">
+              <a-button type="primary" @click="$refs.table.refresh(true)">查询</a-button>
+              <a-button style="margin-left: 8px" @click="resetSearchForm">重置</a-button>
+            </span>
+          </a-col>
+        </a-row>
+      </a-form>
     </div>
 
     <div class="table-operator" v-if="!selectGoodsStatus">
       <a-button type="primary" icon="plus" @click="$refs.createModal.add()">新增</a-button>
+
+      <a-upload
+        name="file"
+        :showUploadList="false"
+        :multiple="false"
+        :action="importUrl"
+        @change="handleImportExcel"
+        :headers="tokenHeader"
+      >
+        <a-button type="primary" icon="import">导入</a-button>
+      </a-upload>
+
+      <a-button type="primary" icon="export" @click="handleExportXls('/room/exportExcel','楼栋单元信息')">导出</a-button>
+
       <a-button type="danger" icon="delete" @click="handleDelete" :disabled="selectedRowKeys.length < 1">删除</a-button>
 
     </div>
@@ -61,13 +112,15 @@ import createForm from './modules/createForm'
 import EditForm from './modules/EditForm'
 import {mapState} from 'vuex';
 import {mixin} from '@/mixins/mixin'
+import selectArea from '@/components/Common/selectArea'
 
 export default {
   mixins:[mixin],
   components: {
     STable,
     createForm,
-    EditForm
+    EditForm,
+    selectArea
 
   },
   props:{
@@ -90,12 +143,16 @@ export default {
     return {
       columns: [
         {
+          title: '地产名称',
+          dataIndex: 'estateName'
+        },
+        {
           title: '楼栋名称',
           dataIndex: 'buildingName'
         },
         {
-          title: '地产名称',
-          dataIndex: 'estateName'
+          title: '楼栋单元',
+          dataIndex: 'unitName'
         },
         {
           title: '楼层',
@@ -108,10 +165,6 @@ export default {
         {
           title: '房间编码',
           dataIndex: 'no'
-        },
-        {
-          title: '楼栋单元',
-          dataIndex: 'unitName'
         },
         {
           title: '备注',
@@ -134,6 +187,8 @@ export default {
       goodsGroups: [],
       allBrand: [],
       uploadFileId: '',
+      initCascader:[],
+      importUrl:process.env.VUE_APP_BASE_API+'/room/importExcel'
     }
   },
   methods: {
@@ -157,6 +212,12 @@ export default {
         }
       })
     },
+
+    selectedArea(area) {
+      this.queryParam.areaId = area[area.length-1];
+    },
+
+
     handleGoodsRecord(record){
       this.$refs.editRecordModal.add(this.selectedRows[0])
     },
@@ -171,11 +232,14 @@ export default {
   }
 }
 </script>
-<style>
+<style scoped>
 .hasBack{
   background-color:#b75757;
 }
 .hasBack td {
   color:#fff;
 }
+  .table-page-search-wrapper .ant-col-sm-24{
+    padding: 0 10px!important;
+  }
 </style>

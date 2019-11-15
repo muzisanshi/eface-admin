@@ -1,11 +1,10 @@
   import { axios } from '@/utils/request'
 
 const URI = {
-  getById: '/room/getById',
-  page: '/room/getPage',
-  getAll: '/room/getAll',
-  saveOrUpdate: '/room/saveOrUpdate',
-  del: '/room/delete'
+  getById: '/location/getById',
+  page: '/location/getPage',
+  saveOrUpdate: '/location/saveOrUpdate',
+  del: '/location/delete'
 }
 
 function getPage (parameter) {
@@ -36,17 +35,9 @@ function del (parameter) {
   })
 }
 
-function getAll (parameter) {
-  return axios({
-    url: URI.getAll,
-    params: parameter
-  })
-}
-
 export default {
   getById,
   getPage,
   del,
-  saveOrUpdate,
-  getAll
+  saveOrUpdate
 }

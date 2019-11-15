@@ -7,7 +7,7 @@
 <template>
   <a-modal
     title="编辑"
-    :width="840"
+    :width="940"
     :visible="visible"
     :confirmLoading="confirmLoading"
     @ok="handleSubmit"
@@ -22,16 +22,7 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
             >
-              <a-input @click="selectDataCon(1)" :readonly="true" v-decorator="['estateName', {initialValue: this.formData.estateName,rules: [{required: true, message: '请选择地产！'}]}]"/>
-            </a-form-item>
-          </a-col>
-          <a-col :span="12">
-            <a-form-item
-              label="备注"
-              :labelCol="labelCol"
-              :wrapperCol="wrapperCol"
-            >
-              <a-input v-decorator="['remark',{initialValue: this.formData.remark}]" />
+              <a-input @click="selectDataCon(1)" :read-only="true" v-decorator="['estateName', {initialValue: this.formData.estateName,rules: [{required: true, message: '请选择地产！'}]}]"/>
             </a-form-item>
           </a-col>
         </a-row>
@@ -89,8 +80,8 @@
           </div>
         </template>
         <a-form-item v-bind="formItemLayoutWithOutLabel" style="margin-top: 10px;">
-          <a-button type="dashed" style="width: 60%" @click="addBuildingAttr">
-            <a-icon type="plus" /> 增加
+          <a-button type="dashed" style="width: 100%" @click="addBuildingAttr">
+            <a-icon type="plus" /> 增加楼栋
           </a-button>
         </a-form-item>
 
@@ -143,7 +134,7 @@
         formItemLayoutWithOutLabel: {
           wrapperCol: {
             xs: { span: 24, offset: 0 },
-            sm: { span: 20, offset: 4 },
+            sm: { span: 10, offset: 7 },
           },
         },
         visible: false,
@@ -151,14 +142,18 @@
         formData: {},
         parentGoodsGroupId: '',
         goodsAttrAndOptParams:[],
-        attrOpt:[[]],
+        attrOpt:[[{
+          unit:0
+        }]],
         cloneAttrOpt:[[{name:''}]],
       }
     },
     beforeCreate () {
       this.form = this.$form.createForm(this);
       this.form.getFieldDecorator('keys', {
-        initialValue: [],
+        initialValue: [{
+          build:0
+        }],
         preserve: true
       });
     },

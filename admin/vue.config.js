@@ -27,7 +27,13 @@ module.exports = {
     },
     plugins: [
       // Ignore all locale files of moment.js
-      new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
+      new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+      new webpack.ProvidePlugin({
+        $: 'jquery',
+
+        jQuery: 'jquery',
+        'windows.jQuery': 'jquery'
+      })
     ]
   },
 

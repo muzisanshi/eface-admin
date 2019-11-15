@@ -22,16 +22,7 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
             >
-              <a-input @click="selectDataCon(3)" :readonly="true" v-decorator="['storeyName', {initialValue: this.formData.storeyName,rules: [{required: true, message: '请选择楼层！'}]}]"/>
-            </a-form-item>
-          </a-col>
-          <a-col :span="12">
-            <a-form-item
-              label="备注"
-              :labelCol="labelCol"
-              :wrapperCol="wrapperCol"
-            >
-              <a-input v-decorator="['remark',{initialValue: this.formData.remark}]" />
+              <a-input @click="selectDataCon(3)" :read-only="true" v-decorator="['storeyName', {initialValue: this.formData.storeyName,rules: [{required: true, message: '请选择楼层！'}]}]"/>
             </a-form-item>
           </a-col>
         </a-row>
@@ -39,8 +30,8 @@
           <div class="keys">
             <a-row :gutter="24">
 
-              <a-col :span="10">
-                <a-form-item :key="k.no" v-bind="formLayout" label="房间编号" :required="false">
+              <a-col :span="7">
+                <a-form-item :key="k.no" v-bind="formLayout" label="房间编号">
                   <a-input v-decorator="[
                         `noVal[${k.no}]`,
                         {
@@ -57,8 +48,8 @@
 
               </a-col>
 
-              <a-col :span="10" >
-                <a-form-item :key="k.name" v-bind="formLayout" label="房间名称" :required="false">
+              <a-col :span="7" >
+                <a-form-item :key="k.name" v-bind="formLayout" label="房间名称">
                   <a-input v-decorator="[
                           `nameVal[${k.name}]`,
                           {
@@ -73,7 +64,15 @@
                 </a-form-item>
               </a-col>
 
-              <a-col :span="4">
+              <a-col :span="7" >
+                <a-form-item :key="k.remark" v-bind="formLayout" label="备注" :required="false">
+                  <a-input v-decorator="[
+                          `remarkVal[${k.remark}]`]" placeholder="请输入备注" style="margin-right: 8px" >
+                  </a-input>
+                </a-form-item>
+              </a-col>
+
+              <a-col :span="3">
                 <a-icon v-if="form.getFieldValue('keys').length > 1" class="dynamic-delete-button" type="minus-circle-o" :disabled="form.getFieldValue('keys').length === 1" @click="() => remove(k)" />
               </a-col>
 
@@ -82,7 +81,7 @@
           </div>
         </template>
         <a-form-item v-bind="formItemLayoutWithOutLabel" style="margin-top: 10px;">
-          <a-button type="dashed" style="width: 60%" @click="addBuildingAttr">
+          <a-button type="dashed" style="width: 100%" @click="addBuildingAttr">
             <a-icon type="plus" /> 增加房间
           </a-button>
         </a-form-item>
@@ -97,7 +96,8 @@
   import {mixin} from '@/mixins/mixin'
   import selectDataCon from '@/components/Common/selectDataCon'
   let nameNum = 0,
-    noNum = 0;
+    noNum = 0,
+    remarkNum =0;
 
   export default {
     mixins:[mixin],
@@ -138,7 +138,7 @@
         formItemLayoutWithOutLabel: {
           wrapperCol: {
             xs: { span: 24, offset: 0 },
-            sm: { span: 20, offset: 4 },
+            sm: { span: 10, offset: 7 },
           },
         },
         visible: false,
@@ -154,7 +154,11 @@
     beforeCreate () {
       this.form = this.$form.createForm(this);
       this.form.getFieldDecorator('keys', {
-        initialValue: [],
+        initialValue: [{
+          no:0,
+          name:0,
+          remark:0
+        }],
         preserve: true
       });
     },
@@ -183,7 +187,6 @@
             let parmas = {};
             parmas.rooms = this.goodsAttrAndOptParams;
             parmas.storeyId = this.formData.storeyId;
-            parmas.remark = values.remark?values.remark:'';
             console.log(parmas)
 
             this.$api.room.saveOrUpdate(parmas)
@@ -224,6 +227,7 @@
           if(data.nameVal[i]){
             obj.name = data.nameVal[i];
             obj.no = data.noVal[i];
+            obj.remark = data.remarkVal[i];
             this.goodsAttrAndOptParams.push(obj)
           }
         }
@@ -243,11 +247,13 @@
         // can use data-binding to get
         const keys = form.getFieldValue('keys');
         var arr = [{
-          name: 0,
-          noNum : 0
+          no:0,
+          name:0,
+          remark:0
         }]
         arr[0].name = ++nameNum
         arr[0].no = ++noNum
+        arr[0].remark = ++remarkNum
         const nextKeys = keys.concat(arr);
         form.setFieldsValue({
           keys: nextKeys,
