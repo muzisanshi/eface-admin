@@ -45,7 +45,7 @@
       </a-form>
     </div>
 
-    <div class="table-operator" v-if="!selectGoodsStatus">
+    <div class="table-operator">
       <a-button type="primary" icon="plus" @click="$refs.createModal.add()">新增</a-button>
 
       <a-upload
@@ -113,19 +113,6 @@ export default {
     selectArea
 
   },
-  props:{
-    selectGoodsStatus:{
-      type:Boolean,
-      default:false
-    }
-  },
-  watch:{
-    selectGoodsStatus(newVal){
-      if(newVal){
-        this.selectedRowKeys = [];
-      }
-    }
-  },
   computed: {
     ...mapState(['constants','system']),
   },
@@ -189,7 +176,8 @@ export default {
     },
 
     selectedArea(area) {
-      this.queryParam.areaId = area[area.length-1];
+      this.queryParam.areaId = area.value[area.value.length-1];
+      this.queryParam.level = area.level[area.level.length-1];
     },
 
     beforeUpload (file) {

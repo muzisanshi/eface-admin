@@ -1,11 +1,13 @@
   import { axios } from '@/utils/request'
 
 const URI = {
-  getById: '/location/getById',
-  page: '/location/getPage',
-  getAll: '/location/getLimitPage',
-  saveOrUpdate: '/location/saveOrUpdate',
-  del: '/location/delete'
+  getById: '/deviceFactory/getById',
+  page: '/deviceFactory/getPage',
+  getAll: '/deviceFactory/getAll',
+  importExcel: '/deviceFactory/importExcel',
+  exportExcel: '/deviceFactory/exportExcel',
+  saveOrUpdate: '/deviceFactory/saveOrUpdate',
+  del: '/deviceFactory/delete'
 }
 
 function getPage (parameter) {
@@ -43,10 +45,26 @@ function getAll (parameter) {
   })
 }
 
+function importExcel (parameter) {
+  return axios({
+    url: URI.importExcel,
+    params: parameter
+  })
+}
+
+function exportExcel (parameter) {
+  return axios({
+    url: URI.importExcel,
+    params: parameter
+  })
+}
+
 export default {
   getById,
   getPage,
   del,
   saveOrUpdate,
-  getAll
+  getAll,
+  importExcel,
+  exportExcel
 }

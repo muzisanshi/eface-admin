@@ -13,6 +13,11 @@ import subject from './subject'
 import storey from './storey'
 import room from './room'
 import location from './location'
+import deviceModel from './deviceModel'
+import deviceFactory from './deviceFactory'
+import deviceScreen from './deviceScreen'
+import device from './device'
+import algorithmUsuallyRule from './algorithmUsuallyRule'
 
 export default {
   constants,
@@ -28,5 +33,10 @@ export default {
   subject,
   storey,
   room,
-  location
+  location,
+  deviceModel,
+  deviceFactory,
+  deviceScreen,
+  device,
+  algorithmUsuallyRule
 }

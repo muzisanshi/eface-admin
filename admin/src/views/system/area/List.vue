@@ -72,8 +72,8 @@
       <span slot="action" slot-scope="text, record">
         <template>
           <a @click="handleEdit(record)">修改</a>
-          <a-divider v-if="record.level<3" type="vertical"/>
-          <a v-if="record.level<3" @click="handleEdit(record,'addChild')">新增下级</a>
+          <a-divider type="vertical"/>
+          <a @click="handleEdit(record,'addChild')">新增下级</a>
         </template>
       </span>
 

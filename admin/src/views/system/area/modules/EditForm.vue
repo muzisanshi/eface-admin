@@ -29,7 +29,6 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
         >
-          <!-- <a-input v-decorator="['level', {initialValue: this.formData.level,rules: [{required: true, message: '请输入级别！'}]}]" /> -->
 
           <a-select
             showSearch
@@ -136,99 +135,144 @@
         options: [],
         levelList: [
           {}
-        ]
+        ],
+        arr:[],
+        num:0
+      }
+    },
+    watch:{
+      num(newVal){
+        if(newVal == this.initCascader.length){
+            this.handleAreaArr()
+        }
       }
     },
     methods: {
       add(item, addChild) {
-        let thiz = this;
-        thiz.visible = true
-        thiz.addChild = false;
-        thiz.disabledSelectParent = false;
-        thiz.form.resetFields()
-        thiz.initCascader = [];
-        thiz.options = [];
-        thiz.formData = {};
-        thiz.$api.area.getAllParent({})
+        let that = this;
+        that.visible = true
+        that.addChild = false;
+        that.disabledSelectParent = false;
+        that.form.resetFields()
+        that.initCascader = [];
+        that.options = [];
+        that.arr = [];
+        that.num = 0;
+        that.formData = {};
+        that.$api.area.getAllParent({})
           .then(res => {
             const l = []
             for (let i = 0, j = res.length; i < j; i++) {
               l.push({
                 value: res[i].id,
-                label: res[i].shortName,
+                id: res[i].id,
+                label: res[i].name,
                 level: res[i].level,
                 isLeaf: false
               })
             }
-            thiz.options = l
+            that.options = l
             if (item) {
-
-              thiz.$api.area.getById({id: item.id})
+              that.$api.area.getById({id: item.id})
                 .then(res => {
-
                   if (addChild != 'addChild') {
-                    thiz.title = '修改'
-                    thiz.formData = res
-                    // thiz.parentId = thiz.formData.parentArea?thiz.formData.parentArea.id:null
-                    thiz.enable = thiz.formData.enable;
-                    thiz.deleted = thiz.formData.deleted;
+                    that.title = '修改'
+                    that.formData = res
+                    that.enable = that.formData.enable;
+                    that.deleted = that.formData.deleted;
                   } else {
-                    thiz.title = '新增下级'
-                    thiz.addChild = true;
-                    thiz.enable = true
-                    thiz.deleted = false
-                    thiz.disabledSelectParent = true;
+                    that.title = '新增下级'
+                    that.addChild = true;
+                    that.enable = true
+                    that.deleted = false
+                    that.disabledSelectParent = true;
+                    that.formData.level = item.level
+                    that.form.setFieldsValue({ level: item.level});
                   }
                   if (item.parentAreaId) {
-                    if (res.parentArea.parentArea) {
-                      this.initCascader.push(res.parentArea.parentArea.id)
-                      const cityParent = res
-                      this.$api.area.getAllParentId({
-                        parentAreaId: res.parentArea.parentArea.id
-                      })
-                        .then(res => {
-                          const city = []
-                          if (res.length > 0) {
-                            for (let k = 0; k < thiz.options.length; k++) {
-                              if (thiz.options[k].value == cityParent.parentArea.parentArea.id) {
-                                for (let i = 0; i < res.length; i++) {
-                                  if (thiz.options[k].level == 1) {
-                                    city.push({
-                                      value: res[i].id,
-                                      label: res[i].shortName,
-                                      level: res[i].level
-                                    })
-                                  } else {
-                                    city.push({
-                                      value: res[i].id,
-                                      label: res[i].shortName,
-                                      level: res[i].level
-                                    })
-                                  }
-                                }
-                                thiz.options[k].children = city
-                                thiz.initCascader.push(cityParent.parentArea.id)
-                                thiz.options = [...thiz.options]
-                              }
-                            }
-                          }
-                        })
+                    that.handleAreaId(res)
+                    if (that.initCascader.length>0) {
+                      if(addChild == 'addChild'){
+                        that.initCascader.push(item.id)
+                      }
+                      that.getChildArea()
                       return
                     }
                     if (res.parentArea) {
-                      thiz.initCascader.push(res.parentArea.id)
+                      that.initCascader.push(res.parentArea.id)
                     } else {
-                      thiz.initCascader = [];
+                      that.initCascader = [];
                     }
                   }
 
                 })
             } else {
-              thiz.enable = true
-              thiz.deleted = false
-              thiz.title = '新增'
+              that.enable = true
+              that.deleted = false
+              that.title = '新增'
             }
           })
+      },
+
+      handleAreaId(res){
+        if(res.parentArea){
+          this.arr.push(res.parentArea.id)
+          let cacheData = [...this.arr]
+          this.initCascader = cacheData.reverse()
+          this.handleAreaId(res.parentArea)
+        }
+      },
+
+      handleAreaArr(){
+        this.arr.unshift(this.options)
+        let cacheData = [...this.arr]
+        for (let i = this.initCascader.length-1; i >=0; i--) {
+          for(let j = this.arr[i].length-1; j >= 0; j--){
+            if(this.initCascader[i] === this.arr[i][j].id){
+              cacheData[i][j].children = this.arr[i+1]
+            }
+          }
+        }
+        this.options = cacheData[0]
+        this.initCascader = [...this.initCascader]
+        this.arr = [];
+      },
+
+      getChildArea(){
+        let that = this;
+        for (let i = 0; i < that.initCascader.length; i++) {
+          this.$api.area.getAll({
+            parentId: that.initCascader[i]
+          })
+            .then(res => {
+              const l = []
+              if(res.length){
+                if(!res[0].hasChildren){
+                  for (let i = 0, j = res.length; i < j; i++) {
+                    l.push({
+                      value: res[i].id,
+                      id: res[i].id,
+                      label: res[i].name,
+                      level: res[i].level,
+                      isLeaf: true
+                    })
+                  }
+                }else{
+                  for (let i = 0, j = res.length; i < j; i++) {
+                    l.push({
+                      value: res[i].id,
+                      id: res[i].id,
+                      label: res[i].name,
+                      level: res[i].level,
+                      isLeaf: false
+                    })
+                  }
+                }
+              }
+              that.arr[i] = l
+              that.num++
+            })
+        }
       },
 
       onChangeAddress(value) {
@@ -236,12 +280,12 @@
       },
 
       loadData(selectedOptions) {
-        let thiz = this;
+        let that = this;
         const targetOption = selectedOptions[selectedOptions.length - 1];
         if (targetOption.level < 2) {
           targetOption.loading = true;
-          this.$api.area.getAllParentId({
-            parentAreaId: targetOption.value
+          this.$api.area.getAll({
+            parentId: targetOption.value
           })
             .then(res => {
               targetOption.loading = false;
@@ -251,19 +295,19 @@
                   if (targetOption.level == 1) {
                     l.push({
                       value: res[i].id,
-                      label: res[i].shortName,
+                      label: res[i].name,
                       level: res[i].level
                     })
                   } else {
                     l.push({
                       value: res[i].id,
-                      label: res[i].shortName,
+                      label: res[i].name,
                       level: res[i].level,
                     })
                   }
                 }
                 targetOption.children = l
-                thiz.options = [...thiz.options]
+                that.options = [...that.options]
               }
             })
         }

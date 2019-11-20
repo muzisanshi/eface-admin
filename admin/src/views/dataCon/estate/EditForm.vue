@@ -231,35 +231,13 @@ export default {
             "input": "detailAddress"
             , "location": map
           });
-        ac.addEventListener("onhighlight", function (e) {  //鼠标放在下拉列表上的事件
-          // var str = "";
-          // var _value = e.fromitem.value;
-          // var value = "";
-          // if (e.fromitem.index > -1) {
-          //   value = _value.province + _value.city + _value.district + _value.street + _value.business;
-          // }
-          // str = "FromItem<br />index = " + e.fromitem.index + "<br />value = " + value;
-          //
-          // value = "";
-          // if (e.toitem.index > -1) {
-          //   _value = e.toitem.value;
-          //   value = _value.province + _value.city + _value.district + _value.street + _value.business;
-          // }
-          // str += "<br />ToItem<br />index = " + e.toitem.index + "<br />value = " + value;
-          //  G("searchResultPanel").innerHTML = str;
-        });
         var myValue;
         ac.addEventListener("onconfirm", function (e) {    //鼠标点击下拉列表后的事件
           var _value = e.item.value;
           myValue = _value.province + _value.city + _value.district + _value.street + _value.business;
-          // G("searchResultPanel").innerHTML ="onconfirm<br />index = " + e.item.index + "<br />myValue = " + myValue;
 
           that.setPlace(myValue);
         });
-        // that.$notification.error({
-        //   message: '提示',
-        //   description: '获取不到当前地址经纬度，请选择下拉选项来填充经纬度'
-        // })
       }
     },
     setPlace(myValue) {
@@ -319,11 +297,8 @@ export default {
       var geoc = new BMap.Geocoder();
       //填加鼠标点击事件
       this.map.addEventListener("click", e => {
-        //alert(e.point.lng + "," + e.point.lat);
         that.longitude = e.point.lng
         that.latitude = e.point.lat
-        // that.$set(that.applicantForm, 'lgtVal', String(e.point.lng));
-        // that.$set(that.applicantForm, 'lttVal', String(e.point.lat));
 
         this.map.clearOverlays();
         var marker = new BMap.Marker(new BMap.Point(e.point.lng, e.point.lat)); // 创建点
@@ -331,7 +306,6 @@ export default {
 
         geoc.getLocation(e.point, function (rs) {
           let addComp = rs.addressComponents;
-          // that.$set(that.applicantForm, 'adr', addComp.province+addComp.city+addComp.district+addComp.street+ addComp.streetNumber);
           that.inputChange = '';
           that.inputChange = addComp.province + addComp.city+ addComp.district + addComp.street + addComp.streetNumber+''
         });

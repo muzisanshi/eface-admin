@@ -1,11 +1,10 @@
   import { axios } from '@/utils/request'
 
 const URI = {
-  getById: '/location/getById',
-  page: '/location/getPage',
-  getAll: '/location/getLimitPage',
-  saveOrUpdate: '/location/saveOrUpdate',
-  del: '/location/delete'
+  getById: '/deviceScreen/getById',
+  page: '/deviceScreen/getPage',
+  saveOrUpdate: '/deviceScreen/saveOrUpdate',
+  del: '/deviceScreen/delete'
 }
 
 function getPage (parameter) {
@@ -36,17 +35,9 @@ function del (parameter) {
   })
 }
 
-function getAll (parameter) {
-  return axios({
-    url: URI.getAll,
-    params: parameter
-  })
-}
-
 export default {
   getById,
   getPage,
   del,
-  saveOrUpdate,
-  getAll
+  saveOrUpdate
 }

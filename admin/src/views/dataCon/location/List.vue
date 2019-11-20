@@ -9,44 +9,45 @@
     <div class="table-page-search-wrapper">
       <a-form layout="inline">
         <a-row :gutter="48">
-          <a-col :md="4" :sm="24">
+          <a-col :md="6" :sm="24">
             <a-form-item label="地区">
               <select-area ref="selectAreaAll" :initArea="initCascader"
                            @selectedArea="selectedArea($event)"></select-area>
             </a-form-item>
           </a-col>
 
-          <a-col :md="4" :sm="24">
+          <a-col :md="6" :sm="24">
             <a-form-item label="地产名称">
               <a-input v-model="queryParam.estateName" placeholder=""/>
             </a-form-item>
           </a-col>
 
-          <a-col :md="3" :sm="24">
+          <a-col :md="6" :sm="24">
             <a-form-item label="楼栋名称">
               <a-input v-model="queryParam.buildingName" placeholder=""/>
             </a-form-item>
           </a-col>
 
-          <a-col :md="3" :sm="24">
+          <a-col :md="6" :sm="24">
             <a-form-item label="单元名称">
               <a-input v-model="queryParam.unitName" placeholder=""/>
             </a-form-item>
           </a-col>
-
-          <a-col :md="3" :sm="24">
+        </a-row>
+        <a-row :gutter="48">
+          <a-col :md="6" :sm="24">
             <a-form-item label="楼层名称">
               <a-input v-model="queryParam.storeyName" placeholder=""/>
             </a-form-item>
           </a-col>
 
-          <a-col :md="3" :sm="24">
+          <a-col :md="6" :sm="24">
             <a-form-item label="房间名称">
               <a-input v-model="queryParam.name" placeholder=""/>
             </a-form-item>
           </a-col>
 
-          <a-col :md="3" :sm="24">
+          <a-col :md="4" :sm="24">
             <span class="table-page-search-submitButtons">
               <a-button type="primary" @click="$refs.table.refresh(true)">查询</a-button>
               <a-button style="margin-left: 8px" @click="resetSearchForm">重置</a-button>
@@ -56,7 +57,7 @@
       </a-form>
     </div>
 
-    <div class="table-operator" v-if="!selectGoodsStatus">
+    <div class="table-operator" v-if="!selectLocationStatus">
       <a-button type="primary" icon="plus"  @click="handleEdit(null)">新增</a-button>
 
       <a-button type="danger" icon="delete" @click="handleDelete" :disabled="selectedRowKeys.length < 1">删除</a-button>
@@ -69,7 +70,7 @@
       rowKey="id"
       :columns="columns"
       :data="loadData"
-      :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
+      :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectLocationChange}"
     >
       <span slot="serial" slot-scope="text, record, index">
 
@@ -82,13 +83,13 @@
       </span>
 
       <span slot="action" slot-scope="text, record">
-        <template>
+        <template v-if="!selectLocationStatus">
           <a @click="handleEdit(record)">修改</a>
         </template>
       </span>
 
     </s-table>
-    <edit-form ref="editModal" @ok="handleOk"/>
+    <edit-form  v-if="!selectLocationStatus" ref="editModal" @ok="handleOk"/>
   </a-card>
 </template>
 
@@ -107,21 +108,21 @@ export default {
     selectArea
 
   },
+  computed: {
+    ...mapState(['constants']),
+  },
   props:{
-    selectGoodsStatus:{
+    selectLocationStatus:{
       type:Boolean,
       default:false
     }
   },
   watch:{
-    selectGoodsStatus(newVal){
+    selectLocationStatus(newVal){
       if(newVal){
         this.selectedRowKeys = [];
       }
     }
-  },
-  computed: {
-    ...mapState(['constants']),
   },
   data () {
     return {
@@ -200,8 +201,15 @@ export default {
       })
     },
 
+    onSelectLocationChange (selectedRowKeys, selectedRows) {
+      this.selectedRowKeys = selectedRowKeys
+      this.selectedRows = selectedRows
+      this.$emit('selectedLocation',selectedRows)
+    },
+
     selectedArea(area) {
-      this.queryParam.areaId = area[area.length-1];
+      this.queryParam.areaId = area.value[area.value.length-1];
+      this.queryParam.level = area.level[area.level.length-1];
     },
   }
 }

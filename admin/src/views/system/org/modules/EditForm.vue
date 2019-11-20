@@ -162,40 +162,6 @@
         this.inputChange = area.name.join('')
       },
 
-      loadData(selectedOptions) {
-        let thiz = this;
-        const targetOption = selectedOptions[selectedOptions.length - 1];
-        if (targetOption.level < 2) {
-          targetOption.loading = true;
-          this.$api.area.getAll({
-            parentId: targetOption.value
-          })
-            .then(res => {
-              targetOption.loading = false;
-              const l = []
-              if (res.length > 0) {
-                for (let i = 0; i < res.length; i++) {
-                  if (targetOption.level == 1) {
-                    l.push({
-                      value: res[i].id,
-                      label: res[i].shortName,
-                      level: res[i].level
-                    })
-                  } else {
-                    l.push({
-                      value: res[i].id,
-                      label: res[i].shortName,
-                      level: res[i].level,
-                    })
-                  }
-                }
-                targetOption.children = l
-                thiz.options = [...thiz.options]
-              }
-            })
-        }
-      },
-
       handleChange(info) {
         let that = this;
         switch (info.file.status) {
@@ -240,20 +206,6 @@
         this.headImageAttId = null;
         this.topImg = null;
 
-        this.$api.area.getAllParent({})
-          .then(res => {
-            const l = []
-            for (let i = 0, j = res.length; i < j; i++) {
-              l.push({
-                value: res[i].id,
-                label: res[i].shortName,
-                level: res[i].level,
-                isLeaf: false
-              })
-            }
-            that.options = l
-          })
-
         if (item) {
           let that = this;
           this.title = '修改'
@@ -269,40 +221,10 @@
               that.topImg = res.resourceFullAddress;
               that.headImageAttId = res.attId;
               if (res.areas.length) {
-                if (res.areas.length > 1) {
-                  this.$api.area.getAll({
-                    parentId: res.areas[res.areas.length - 1].id
-                  })
-                    .then(resCity => {
-                      const city = []
-                      if (resCity.length > 0) {
-                        for (let k = 0; k < that.options.length; k++) {
-                          if (that.options[k].value == res.areas[res.areas.length - 1].id) {
-                            for (let i = 0; i < resCity.length; i++) {
-                              city.push({
-                                value: resCity[i].id,
-                                label: resCity[i].shortName,
-                                level: resCity[i].level
-                              })
-                            }
-                            that.options[k].children = city
-                            that.options = [...that.options]
-                            for (let i = res.areas.length - 1; i >= 0; i--) {
-                              that.initCascader.push(res.areas[i].id)
-                            }
-                            that.$refs.selectArea.initAllArea()
-                          }
-                        }
-                      }
-
-                    })
-                } else {
-                  for (let i = res.areas.length - 1; i >= 0; i--) {
-                    that.initCascader.push(res.areas[i].id)
-                  }
-                  that.$refs.selectArea.initAllArea()
+                for (let i = res.areas.length - 1; i >= 0; i--) {
+                  that.initCascader.push(res.areas[i].id)
                 }
-
+                that.$refs.selectArea.initAllArea()
               }
             })
         } else {

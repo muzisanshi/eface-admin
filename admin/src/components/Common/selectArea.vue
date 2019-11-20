@@ -24,13 +24,20 @@
     data() {
       return {
         initCascader:[],
-        initCascaderName:['','',''],
+        initCascaderName:[],
         options: [],
+        num:0,
+        arr:[]
       }
     },
     watch:{
       initArea(newVal){
         this.initCascader = newVal
+      },
+      num(newVal){
+        if(newVal == this.initCascader.length){
+          this.handleAreaArr()
+        }
       }
     },
     created(){
@@ -40,14 +47,16 @@
       initAllArea(){
         let that = this
         that.initCascader = []
-        that.initCascaderName = ['','','']
+        this.num = 0;
+        this.arr = [];
+        that.initCascaderName = []
         that.$api.area.getAllParent({})
           .then(res => {
             const l = []
             for (let i = 0, j = res.length; i < j; i++) {
               l.push({
                 value: res[i].id,
-                label: res[i].shortName,
+                label: res[i].name,
                 level: res[i].level,
                 isLeaf: false
               })
@@ -55,64 +64,66 @@
             that.options = l;
             if(that.initArea.length >0){
               that.initCascader =that.initArea
-              this.$api.area.getAll({
-                parentId:that.initArea[0]
-              })
-                .then(resProvince => {
-                  const city = []
-                  if(resProvince.length>0){
-                    for(let k = 0; k < that.options.length; k++){
-                      if(that.options[k].value == that.initArea[0]){
-                        for (let i = 0; i < resProvince.length; i++){
-                          city.push({
-                            value: resProvince[i].id,
-                            label: resProvince[i].shortName,
-                            level: resProvince[i].level,
-                            isLeaf: false
-                          })
-                        }
-                        that.options[k].children = city
-                        that.options = [...that.options];
-                        if(that.initArea[1]){
-                          this.$api.area.getAll({
-                            parentId:that.initArea[1]
-                          })
-                            .then(resCity => {
-                              const areas = []
-                              if(resCity.length>0){
-                                for(let j = 0; j < city.length; j++){
-                                  if(city[j].value == that.initArea[1]){
-                                    for (let i = 0; i < resCity.length; i++){
-                                      areas.push({
-                                        value: resCity[i].id,
-                                        label: resCity[i].shortName,
-                                        level: resCity[i].level,
-                                        isLeaf: true
-                                      })
-                                    }
-                                    that.options[k].children[j].children = areas
-                                    that.options = [...that.options]
-                                  }
-                                }
-
-                              }
-
-                            })
-                        }
-
-
-
-                      }
-                    }
-
-                  }
-
-                })
+              that.getChildArea()
             }
           })
       },
+
+      handleAreaArr(){
+        this.arr.unshift(this.options)
+        let cacheData = [...this.arr]
+        for (let i = this.initCascader.length-1; i >=0; i--) {
+          for(let j = this.arr[i].length-1; j >= 0; j--){
+            if(this.initCascader[i] === this.arr[i][j].value){
+              cacheData[i][j].children = this.arr[i+1]
+            }
+          }
+        }
+        this.options = cacheData[0]
+        this.initCascader = [...this.initCascader]
+        this.arr = [];
+      },
+
+      getChildArea(){
+        let that = this;
+        for (let i = 0; i < that.initCascader.length; i++) {
+          this.$api.area.getAll({
+            parentId: that.initCascader[i]
+          })
+            .then(res => {
+              const l = []
+              if(res.length){
+                if(!res[0].hasChildren){
+                  for (let i = 0, j = res.length; i < j; i++) {
+                    l.push({
+                      value: res[i].id,
+                      id: res[i].id,
+                      label: res[i].name,
+                      level: res[i].level,
+                      isLeaf: true
+                    })
+                  }
+                }else{
+                  for (let i = 0, j = res.length; i < j; i++) {
+                    l.push({
+                      value: res[i].id,
+                      id: res[i].id,
+                      label: res[i].name,
+                      level: res[i].level,
+                      isLeaf: false
+                    })
+                  }
+                }
+              }
+              that.arr[i] = l
+              that.num++
+            })
+        }
+      },
+
+
       loadData(selectedOptions) {
-        let thiz = this;
+        let that = this;
         this.popupVisible =true;
         const targetOption = selectedOptions[selectedOptions.length - 1];
         targetOption.loading = true;
@@ -124,12 +135,12 @@
             targetOption.loading = false;
             const l = []
             if(res.length>0){
-              if(!res[0].hasLeaf){
+              if(!res[0].hasChildren){
                 for (let i = 0; i < res.length; i++) {
 
                   l.push({
                     value: res[i].id,
-                    label: res[i].shortName,
+                    label: res[i].name,
                     level: res[i].level,
                     isLeaf: true
                   })
@@ -138,29 +149,29 @@
                 for (let i = 0; i < res.length; i++) {
                   l.push({
                     value: res[i].id,
-                    label: res[i].shortName,
+                    label: res[i].name,
                     level: res[i].level,
                     isLeaf: false
                   })
                 }
               }
               targetOption.children = l
-              thiz.options = [...thiz.options]
-
+              that.options = [...that.options]
             }
-
           })
       },
       onChangeAddress(value, selectedOptions){
-        let areaNameArr = [];
+        let areaNameArr = [],levelItem = [];
         this.initCascader = value;
         selectedOptions.map((item)=>{
           areaNameArr.push(item.label)
+          levelItem.push(item.level)
         })
         this.initCascaderName = areaNameArr
         this.$emit('selectedArea',{
           value:this.initCascader,
-          name:this.initCascaderName
+          name:this.initCascaderName,
+          level:levelItem
         })
       },
     }

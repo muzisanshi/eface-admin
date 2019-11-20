@@ -1,11 +1,11 @@
-  import { axios } from '@/utils/request'
+import { axios } from '@/utils/request'
 
 const URI = {
-  getById: '/location/getById',
-  page: '/location/getPage',
-  getAll: '/location/getLimitPage',
-  saveOrUpdate: '/location/saveOrUpdate',
-  del: '/location/delete'
+  getById: '/algorithmUsuallyRule/getById',
+  page: '/algorithmUsuallyRule/getPage',
+  getAll: '/algorithmUsuallyRule/getAll',
+  saveOrUpdate: '/algorithmUsuallyRule/saveOrUpdate',
+  del: '/algorithmUsuallyRule/delete'
 }
 
 function getPage (parameter) {
@@ -48,5 +48,5 @@ export default {
   getPage,
   del,
   saveOrUpdate,
-  getAll
+  getAll,
 }

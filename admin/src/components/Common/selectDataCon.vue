@@ -181,10 +181,11 @@
       searchName(name){
         this.name = name?name.srcElement.value:'';
         this.getEstateList()
+
       },
       getEstateList(){
         let that = this;
-        if(!that.area && !that.name){
+        if(!that.areaId && !that.name){
           this.$notification.error({
             message: '提示',
             description:'请选择地区或者输入名称来获取地产信息'

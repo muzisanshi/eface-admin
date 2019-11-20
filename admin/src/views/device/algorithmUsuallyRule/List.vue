@@ -1,41 +1,24 @@
 <!--
  * @name List.vue
  * @author lw
- * @date 2019.11.11
- * @desc 楼层管理
+ * @date 2019.11.18
+ * @desc 设备型号
 -->
 <template>
   <a-card :bordered="false" class="content">
     <div class="table-page-search-wrapper">
       <a-form layout="inline">
         <a-row :gutter="48">
-          <a-col :md="4" :sm="24">
-            <a-form-item label="地区">
-              <select-area ref="selectAreaAll" :initArea="initCascader"
-                           @selectedArea="selectedArea($event)"></select-area>
+
+          <a-col :md="5" :sm="24">
+            <a-form-item label="设备型号类型">
+              <a-select showSearch allowClear placeholder="选择型号类型"  v-model="queryParam.deviceModelType" optionFilterProp="children" :filterOption="filterCommonOption" :options="constants.list.deviceModelType">
+              </a-select>
             </a-form-item>
           </a-col>
 
           <a-col :md="4" :sm="24">
-            <a-form-item label="地产名称">
-              <a-input v-model="queryParam.estateName" placeholder=""/>
-            </a-form-item>
-          </a-col>
-
-          <a-col :md="4" :sm="24">
-            <a-form-item label="楼栋名称">
-              <a-input v-model="queryParam.buildingName" placeholder=""/>
-            </a-form-item>
-          </a-col>
-
-          <a-col :md="4" :sm="24">
-            <a-form-item label="单元名称">
-              <a-input v-model="queryParam.unitName" placeholder=""/>
-            </a-form-item>
-          </a-col>
-
-          <a-col :md="4" :sm="24">
-            <a-form-item label="楼层名称">
+            <a-form-item label="名称">
               <a-input v-model="queryParam.name" placeholder=""/>
             </a-form-item>
           </a-col>
@@ -51,7 +34,21 @@
     </div>
 
     <div class="table-operator">
-      <a-button type="primary" icon="plus" @click="$refs.createModal.add()">新增</a-button>
+      <a-button type="primary" icon="plus"  @click="handleEdit(null)">新增</a-button>
+
+      <a-upload
+        name="file"
+        :showUploadList="false"
+        :multiple="false"
+        :action="importUrl"
+        @change="handleImportExcel"
+        :headers="tokenHeader"
+      >
+        <a-button type="primary" icon="import">导入</a-button>
+      </a-upload>
+
+      <a-button type="primary" icon="export" @click="handleExportXls('/deviceModel/exportExcel','设备型号信息')">导出</a-button>
+
       <a-button type="danger" icon="delete" @click="handleDelete" :disabled="selectedRowKeys.length < 1">删除</a-button>
 
     </div>
@@ -76,31 +73,26 @@
 
       <span slot="action" slot-scope="text, record">
         <template>
-          <a @click="handleModify(record)">修改</a>
+          <a @click="handleEdit(record)">修改</a>
         </template>
       </span>
 
     </s-table>
-    <create-form ref="createModal" @ok="handleOk"/>
     <edit-form ref="editModal" @ok="handleOk"/>
   </a-card>
 </template>
 
 <script>
 import { STable } from '@/components'
-import createForm from './modules/createForm'
 import EditForm from './modules/EditForm'
 import {mapState} from 'vuex';
 import {mixin} from '@/mixins/mixin'
-import selectArea from '@/components/Common/selectArea'
 
 export default {
   mixins:[mixin],
   components: {
     STable,
-    createForm,
     EditForm,
-    selectArea
   },
   computed: {
     ...mapState(['constants']),
@@ -109,24 +101,24 @@ export default {
     return {
       columns: [
         {
-          title: '地产名称',
-          dataIndex: 'estateName'
+          title: '厂商名称',
+          dataIndex: 'deviceFactoryName'
         },
         {
-          title: '楼栋名称',
-          dataIndex: 'buildingName'
+          title: '型号类型',
+          dataIndex: 'deviceModelTypeName'
         },
         {
-          title: '楼栋单元',
-          dataIndex: 'unitName'
-        },
-        {
-          title: '楼层',
+          title: '名称',
           dataIndex: 'name'
         },
         {
-          title: '房间数量',
-          dataIndex: 'roomNum'
+          title: '序号',
+          dataIndex: 'serialNo'
+        },
+        {
+          title: '屏幕大小',
+          dataIndex: 'size'
         },
         {
           title: '备注',
@@ -140,16 +132,15 @@ export default {
         }
       ],
       loadData: parameter => {
-        return this.$api.storey.getPage(Object.assign(parameter, this.queryParam))
+        return this.$api.deviceModel.getPage(Object.assign(parameter, this.queryParam))
           .then(res => {
+            res.records.forEach(item=>{
+              item.deviceModelTypeName = this.constants.data.deviceModelType?this.constants.data.deviceModelType[item.deviceModelType]['name']:''
+            });
             return res
           })
       },
-      countries: [],
-      goodsGroups: [],
-      allBrand: [],
-      uploadFileId: '',
-      initCascader:[]
+      importUrl:process.env.VUE_APP_BASE_API+'/deviceModel/importExcel'
     }
   },
   methods: {
@@ -160,44 +151,30 @@ export default {
         title: '删除',
         content: '确定删除勾选的记录？',
         onOk () {
-          that.$api.storey.del({ ids: that.selectedRowKeys })
+          that.$api.deviceModel.del({ ids: that.selectedRowKeys })
             .then(res => {
               that.$notification.success({
                 message: '成功',
                 description: `删除成功！`
               })
-              that.handleGoodsOk()
+              that.handleOk()
             })
         },
         onCancel () {
         }
       })
     },
-
-    selectedArea(area) {
-      this.queryParam.areaId = area.value[area.value.length-1];
-      this.queryParam.level = area.level[area.level.length-1];
-    },
-
-    handleGoodsRecord(record){
-      this.$refs.editRecordModal.add(this.selectedRows[0])
-    },
-    handleModify(item){
-      this.handleEdit(item)
-    },
-    handleGoodsOk () {
-      this.$refs.table.refresh()
-      this.selectedRowKeys = [];
-      this.selectedRows = []
-    },
   }
 }
 </script>
-<style>
+<style scoped>
 .hasBack{
   background-color:#b75757;
 }
 .hasBack td {
   color:#fff;
 }
+  .table-page-search-wrapper .ant-col-sm-24{
+    padding: 0 10px!important;
+  }
 </style>
