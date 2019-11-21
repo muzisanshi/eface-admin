@@ -6,7 +6,7 @@
 -->
 <template>
   <a-modal
-    title="自定义算法"
+    title="设置算法"
     :width="1040"
     :visible="visible"
     :confirmLoading="confirmLoading"
@@ -17,9 +17,9 @@
     <a-spin :spinning="confirmLoading">
       <a-form :form="form" class="form-group">
         <a-row :gutter="24" v-if="initAlgList.length>0">
-          <a-col :span="12">
+          <a-col :span="8" class="init-width">
             <a-form-item
-              label="算法常用规则表"
+              label="算法常用规则"
               :labelCol="labelCo1"
               :wrapperCol="wrapperCo1"
             >
@@ -28,11 +28,20 @@
                 placeholder="选择默认算法"
                 optionFilterProp="children"
                 :filterOption="filterCommonOption"
+                @change="algChange"
                 :options="initAlgList"
-                v-decorator="['deviceModelId', {initialValue: this.formData.deviceModelId}]"
+                v-decorator="['algorithm.id', {initialValue: this.formData.algorithm.id}]"
               >
               </a-select>
 
+            </a-form-item>
+          </a-col>
+
+          <a-col :span="12">
+            <a-form-item :label-col="formTailLayout.labelCol" :wrapper-col="formTailLayout.wrapperCol">
+              <a-checkbox :checked="customAlg" @change="handleCheckChange">
+                自定义算法
+              </a-checkbox>
             </a-form-item>
           </a-col>
         </a-row>
@@ -43,7 +52,8 @@
               style="width: 300px;"
             >
               <a-input
-                v-decorator="['recThreshold', {initialValue: this.formData.recThreshold, rules: [{required: true,pattern: new RegExp(/^[0-9]\d*$/, 'g'), message: '请输入0-100的阀值！'}]}]"/>
+                :disabled="isEdit"
+                v-decorator="['algorithm.recThreshold', {initialValue: this.formData.algorithm.recThreshold, rules: [{required: true,pattern: new RegExp(/^[0-9]\d*$/, 'g'), message: '请输入0-100的阀值！'}]}]"/>
             </a-form-item>
           </a-col>
           <a-col :span="12">
@@ -52,7 +62,8 @@
               style="width: 300px;"
             >
               <a-input
-                v-decorator="['minFaceCheckSize', {initialValue: this.formData.minFaceCheckSize, rules: [{required: true,pattern: new RegExp(/^[0-9]\d*$/, 'g'), message: '请输入检测尺寸！'}]}]"/>
+                :disabled="isEdit"
+                v-decorator="['algorithm.minFaceCheckSize', {initialValue: this.formData.algorithm.minFaceCheckSize, rules: [{required: true,pattern: new RegExp(/^[0-9]\d*$/, 'g'), message: '请输入检测尺寸！'}]}]"/>
             </a-form-item>
 
           </a-col>
@@ -65,7 +76,8 @@
               style="width: 300px;"
             >
               <a-input
-                v-decorator="['videoOutputSize', {initialValue: this.formData.videoOutputSize, rules: [{required: true,pattern: new RegExp(/^[0-9]\d*$/, 'g'), message: '请输入输出尺寸！'}]}]"/>
+                :disabled="isEdit"
+                v-decorator="['algorithm.videoOutputSize', {initialValue: this.formData.algorithm.videoOutputSize, rules: [{required: true,pattern: new RegExp(/^[0-9]\d*$/, 'g'), message: '请输入输出尺寸！'}]}]"/>
             </a-form-item>
 
           </a-col>
@@ -75,7 +87,8 @@
               style="width: 300px;"
             >
               <a-input
-                v-decorator="['strangerTimeoutWarnSeconds', {initialValue: this.formData.strangerTimeoutWarnSeconds, rules: [{required: true, message: '请输入警告时间！'}]}]"/>
+                :disabled="isEdit"
+                v-decorator="['algorithm.strangerTimeoutWarnSeconds', {initialValue: this.formData.algorithm.strangerTimeoutWarnSeconds, rules: [{required: true, message: '请输入警告时间！'}]}]"/>
             </a-form-item>
           </a-col>
         </a-row>
@@ -87,11 +100,12 @@
               style="width: 300px;"
             >
               <a-select
+                :disabled="isEdit"
                 size="default"
                 placeholder="请选择"
                 style="width: 300px"
                 optionFilterProp="children"
-                v-decorator="['checkAlive', {initialValue: this.formData.checkAlive, rules: [{required: true, message: '请选择活体检测！'}]}]"
+                v-decorator="['algorithm.checkAlive', {initialValue: this.formData.algorithm.checkAlive?'true':'false', rules: [{required: true, message: '请选择活体检测！'}]}]"
               >
                 <a-select-option value="true">是</a-select-option>
                 <a-select-option value="false">否</a-select-option>
@@ -106,11 +120,12 @@
               style="width: 300px;"
             >
               <a-select
+                :disabled="isEdit"
                 size="default"
                 placeholder="请选择"
                 style="width: 300px"
                 optionFilterProp="children"
-                v-decorator="['checkSexual', {initialValue: this.formData.checkSexual, rules: [{required: true, message: '请选择性别检测！'}]}]"
+                v-decorator="['algorithm.checkSexual', {initialValue: this.formData.algorithm.checkSexual?'true':'false', rules: [{required: true, message: '请选择性别检测！'}]}]"
               >
                 <a-select-option value="true">是</a-select-option>
                 <a-select-option value="false">否</a-select-option>
@@ -126,8 +141,9 @@
               style="width: 300px;"
             >
               <a-input
-                v-decorator="['showLevel',
-            {initialValue: this.formData.showLevel, rules: [{required: true, message: '请输入提示信息！'}]}]"/>
+                :disabled="isEdit"
+                v-decorator="['algorithm.showLevel',
+            {initialValue: this.formData.algorithm.showLevel, rules: [{required: true, message: '请输入提示信息！'}]}]"/>
             </a-form-item>
 
           </a-col>
@@ -137,8 +153,9 @@
               style="width: 300px;"
             >
               <a-input
-                v-decorator="['recNum',
-            {initialValue: this.formData.recNum, rules: [{required: true, message: '请输入人数！'}]}]"/>
+                :disabled="isEdit"
+                v-decorator="['algorithm.recNum',
+            {initialValue: this.formData.algorithm.recNum, rules: [{required: true, message: '请输入人数！'}]}]"/>
             </a-form-item>
 
           </a-col>
@@ -151,8 +168,9 @@
               style="width: 300px;"
             >
               <a-input
-                v-decorator="['videoRotate',
-            {initialValue: this.formData.videoRotate, rules: [{required: true, message: '请输入旋转角度！'}]}]"/>
+                :disabled="isEdit"
+                v-decorator="['algorithm.videoRotate',
+            {initialValue: this.formData.algorithm.videoRotate, rules: [{required: true, message: '请输入旋转角度！'}]}]"/>
             </a-form-item>
 
 
@@ -163,8 +181,9 @@
               style="width: 300px;"
             >
               <a-input
-                v-decorator="['videoImage',
-            {initialValue: this.formData.videoImage, rules: [{required: true, message: '请输入视频镜像！'}]}]"/>
+                :disabled="isEdit"
+                v-decorator="['algorithm.videoImage',
+            {initialValue: this.formData.algorithm.videoImage, rules: [{required: true, message: '请输入视频镜像！'}]}]"/>
             </a-form-item>
           </a-col>
         </a-row>
@@ -176,8 +195,9 @@
               style="width: 300px;"
             >
               <a-input
-                v-decorator="['captureLevel',
-            {initialValue: this.formData.captureLevel, rules: [{required: true, message: '请输入抓拍等级！'}]}]"/>
+                :disabled="isEdit"
+                v-decorator="['algorithm.captureLevel',
+            {initialValue: this.formData.algorithm.captureLevel, rules: [{required: true, message: '请输入抓拍等级！'}]}]"/>
             </a-form-item>
           </a-col>
           <a-col :span="12">
@@ -186,8 +206,9 @@
               style="width: 300px;"
             >
               <a-input
-                v-decorator="['graphicCardIndexNum',
-            {initialValue: this.formData.graphicCardIndexNum, rules: [{required: true, message: '请输入显卡序号！'}]}]"/>
+                :disabled="isEdit"
+                v-decorator="['algorithm.graphicCardIndexNum',
+            {initialValue: this.formData.algorithm.graphicCardIndexNum, rules: [{required: true, message: '请输入显卡序号！'}]}]"/>
             </a-form-item>
           </a-col>
         </a-row>
@@ -200,14 +221,16 @@
                 <a-col :span="12">
                   <a-form-item label="X1" :labelCol="labelCol" :wrapperCol="wrapperCol">
                     <a-input
-                      v-decorator="['roiX1', {initialValue: this.formData.roiX1, rules: [{required: true, message: '请输入X1！'}]}]"/>
+                      :disabled="isEdit"
+                      v-decorator="['algorithm.roiX1', {initialValue: this.formData.algorithm.roiX1, rules: [{required: true, message: '请输入X1！'}]}]"/>
                   </a-form-item>
                 </a-col>
 
                 <a-col :span="12">
                   <a-form-item label="X2" :labelCol="labelCol" :wrapperCol="wrapperCol">
                     <a-input
-                      v-decorator="['roiX2', {initialValue: this.formData.roiX2, rules: [{required: true, message: '请输入X2！'}]}]"/>
+                      :disabled="isEdit"
+                      v-decorator="['algorithm.roiX2', {initialValue: this.formData.algorithm.roiX2, rules: [{required: true, message: '请输入X2！'}]}]"/>
                   </a-form-item>
                 </a-col>
               </a-row>
@@ -216,14 +239,16 @@
                 <a-col :span="12">
                   <a-form-item label="Y1" :labelCol="labelCol" :wrapperCol="wrapperCol">
                     <a-input
-                      v-decorator="['roiY1', {initialValue: this.formData.roiY1, rules: [{required: true, message: '请输入Y1！'}]}]"/>
+                      :disabled="isEdit"
+                      v-decorator="['algorithm.roiY1', {initialValue: this.formData.algorithm.roiY1, rules: [{required: true, message: '请输入Y1！'}]}]"/>
                   </a-form-item>
                 </a-col>
 
                 <a-col :span="12">
                   <a-form-item label="Y2" :labelCol="labelCol" :wrapperCol="wrapperCol">
                     <a-input
-                      v-decorator="['roiY2', {initialValue: this.formData.roiY2, rules: [{required: true, message: '请输入Y2！'}]}]"/>
+                      :disabled="isEdit"
+                      v-decorator="['algorithm.roiY2', {initialValue: this.formData.algorithm.roiY2, rules: [{required: true, message: '请输入Y2！'}]}]"/>
                   </a-form-item>
                 </a-col>
               </a-row>
@@ -237,20 +262,23 @@
                 <a-col :span="8">
                   <a-form-item label="R" :labelCol="labelCol" :wrapperCol="wrapperCol">
                     <a-input
-                      v-decorator="['strangerR', {initialValue: this.formData.strangerR, rules: [{required: true, message: '请输入R！'}]}]"/>
+                      :disabled="isEdit"
+                      v-decorator="['algorithm.strangerR', {initialValue: this.formData.algorithm.strangerR, rules: [{required: true, message: '请输入R！'}]}]"/>
                   </a-form-item>
                 </a-col>
 
                 <a-col :span="8">
                   <a-form-item label="G" :labelCol="labelCol" :wrapperCol="wrapperCol">
                     <a-input
-                      v-decorator="['strangerG', {initialValue: this.formData.strangerG, rules: [{required: true, message: '请输入G！'}]}]"/>
+                      :disabled="isEdit"
+                      v-decorator="['algorithm.strangerG', {initialValue: this.formData.algorithm.strangerG, rules: [{required: true, message: '请输入G！'}]}]"/>
                   </a-form-item>
                 </a-col>
                 <a-col :span="8">
                   <a-form-item label="B" :labelCol="labelCol" :wrapperCol="wrapperCol">
                     <a-input
-                      v-decorator="['strangerB', {initialValue: this.formData.strangerB, rules: [{required: true, message: '请输入B！'}]}]"/>
+                      :disabled="isEdit"
+                      v-decorator="['algorithm.strangerB', {initialValue: this.formData.algorithm.strangerB, rules: [{required: true, message: '请输入B！'}]}]"/>
                   </a-form-item>
                 </a-col>
               </a-row>
@@ -266,7 +294,6 @@
 
 <script>
   import {mixin} from '@/mixins/mixin'
-
   export default {
     mixins:[mixin],
     data () {
@@ -294,33 +321,24 @@
         },
         wrapperCo1: {
           xs: { span: 24 },
-          sm: { span: 16 },
+          sm: { span: 17 },
+        },
+        formTailLayout:{
+          labelCol: { span: 4 },
+          wrapperCol: { span: 8,},
         },
         visible: false,
         confirmLoading: false,
         formData: {
-          recThreshold:0,
-          minFaceCheckSize:0,
-          videoOutputSize:0,
-          strangerTimeoutWarnSeconds:0,
-          checkAlive:'',
-          checkSexual:'',
-          showLevel:1,
-          recNum:0,
-          videoRotate:0,
-          videoImage:1,
-          captureLevel:0,
-          graphicCardIndexNum:0,
-          roiX1:0,
-          roiX2:0,
-          roiY1:0,
-          roiY2:0,
-          strangerR:0,
-          strangerG:0,
-          strangerB:0
+          algorithm:{
+            checkAlive:true,
+            checkSexual:true
+          }
         },
         title: '',
-        initAlgList:[]
+        initAlgList:[],
+        isEdit:false,
+        customAlg:true
       }
     },
     beforeCreate () {
@@ -328,66 +346,86 @@
     },
     methods: {
       add (item) {
+        let that = this
         this.visible = true
         this.form.resetFields()
+        that.isEdit = false
+        that.customAlg = true
         this.formData ={
-          recThreshold:0,
-          minFaceCheckSize:0,
-          videoOutputSize:0,
-          strangerTimeoutWarnSeconds:0,
-          checkAlive:'',
-          checkSexual:'',
-          showLevel:1,
-          recNum:0,
-          videoRotate:0,
-          videoImage:1,
-          captureLevel:0,
-          graphicCardIndexNum:0,
-          roiX1:0,
-          roiX2:0,
-          roiY1:0,
-          roiY2:0,
-          strangerR:0,
-          strangerG:0,
-          strangerB:0
+          algorithm:{
+            checkAlive:true,
+            checkSexual:true
+          }
+        }
+        if(item.algorithm){
+          this.formData = item
         }
         this.$api.algorithmUsuallyRule.getAll()
           .then(res => {
             const l = []
             for (let i = 0, j = res.length; i < j; i++) {
               l.push({
-                value: res[i].id,
+                value: res[i].algorithmId,
                 label: res[i].name
               })
             }
             this.initAlgList = l
+            this.initAlgList.unshift({
+              value: '',
+              label: '请选择'
+            })
+            if(item.algorithm && item.algorithm.id){
+              this.initAlgList.map((values) =>{
+                if(values.value == item.algorithm.id){
+                  that.isEdit = true
+                  that.customAlg = false
+                  return
+                }
+              })
+            }
           })
+      },
+
+      algChange(value){
+        if(value){
+          this.$api.algorithm.getById({id: value})
+            .then(res => {
+              this.formData.algorithm = res
+              this.isEdit = true;
+              this.customAlg = false;
+            })
+        }else{
+          this.form.resetFields()
+          this.formData ={
+            algorithm:{
+              checkAlive:true,
+              checkSexual:true
+            }
+          }
+          this.isEdit = false;
+          this.customAlg = true;
+        }
+      },
+
+      handleCheckChange(e){
+        this.customAlg = e.target.checked;
+        this.$nextTick(() => {
+          this.isEdit = !this.customAlg;
+        });
       },
 
       handleSubmit () {
         const { form: { validateFields } } = this
-        // this.confirmLoading = true
+        this.confirmLoading = true
         validateFields((errors, values) => {
           if (!errors) {
-            if(this.formData.id){
-              values.id = this.formData.id
+            if(this.customAlg){
+              values.algorithm.id = ''
             }
-            let params = {
-              algorithm:values
-            }
-            this.$api.algorithmUsuallyRule.saveOrUpdate(params)
-              .then(res => {
-                this.$notification.success({
-                  message: '成功',
-                  description: this.title + '成功！'
-                })
-                // this.visible = false
-                // this.confirmLoading = false
-                // this.form.resetFields()
-                // this.$emit('ok', values)
-              }).finally(() => {
-              this.confirmLoading = false
-            })
+            this.visible = false
+            this.confirmLoading = false
+            this.form.resetFields()
+            this.$emit('customSuccess', values)
           } else {
             this.confirmLoading = false
           }
@@ -402,6 +440,10 @@
   }
   .form-group .ant-form-item{
     margin-bottom: 15px;
+  }
+
+  .form-group .init-width .ant-col-sm-7.ant-form-item-label{
+    width: 98px!important;
   }
   .clearfix:after{
     content: "";

@@ -18,6 +18,7 @@ import deviceFactory from './deviceFactory'
 import deviceScreen from './deviceScreen'
 import device from './device'
 import algorithmUsuallyRule from './algorithmUsuallyRule'
+import algorithm from './algorithm'
 
 export default {
   constants,
@@ -38,5 +39,6 @@ export default {
   deviceFactory,
   deviceScreen,
   device,
-  algorithmUsuallyRule
+  algorithmUsuallyRule,
+  algorithm
 }

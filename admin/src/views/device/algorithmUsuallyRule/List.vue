@@ -1,21 +1,14 @@
 <!--
  * @name List.vue
  * @author lw
- * @date 2019.11.18
- * @desc 设备型号
+ * @date 2019.11.21
+ * @desc 算法常用规则表
 -->
 <template>
   <a-card :bordered="false" class="content">
     <div class="table-page-search-wrapper">
       <a-form layout="inline">
         <a-row :gutter="48">
-
-          <a-col :md="5" :sm="24">
-            <a-form-item label="设备型号类型">
-              <a-select showSearch allowClear placeholder="选择型号类型"  v-model="queryParam.deviceModelType" optionFilterProp="children" :filterOption="filterCommonOption" :options="constants.list.deviceModelType">
-              </a-select>
-            </a-form-item>
-          </a-col>
 
           <a-col :md="4" :sm="24">
             <a-form-item label="名称">
@@ -35,19 +28,6 @@
 
     <div class="table-operator">
       <a-button type="primary" icon="plus"  @click="handleEdit(null)">新增</a-button>
-
-      <a-upload
-        name="file"
-        :showUploadList="false"
-        :multiple="false"
-        :action="importUrl"
-        @change="handleImportExcel"
-        :headers="tokenHeader"
-      >
-        <a-button type="primary" icon="import">导入</a-button>
-      </a-upload>
-
-      <a-button type="primary" icon="export" @click="handleExportXls('/deviceModel/exportExcel','设备型号信息')">导出</a-button>
 
       <a-button type="danger" icon="delete" @click="handleDelete" :disabled="selectedRowKeys.length < 1">删除</a-button>
 
@@ -85,7 +65,6 @@
 <script>
 import { STable } from '@/components'
 import EditForm from './modules/EditForm'
-import {mapState} from 'vuex';
 import {mixin} from '@/mixins/mixin'
 
 export default {
@@ -94,31 +73,12 @@ export default {
     STable,
     EditForm,
   },
-  computed: {
-    ...mapState(['constants']),
-  },
   data () {
     return {
       columns: [
         {
-          title: '厂商名称',
-          dataIndex: 'deviceFactoryName'
-        },
-        {
-          title: '型号类型',
-          dataIndex: 'deviceModelTypeName'
-        },
-        {
           title: '名称',
           dataIndex: 'name'
-        },
-        {
-          title: '序号',
-          dataIndex: 'serialNo'
-        },
-        {
-          title: '屏幕大小',
-          dataIndex: 'size'
         },
         {
           title: '备注',
@@ -132,15 +92,11 @@ export default {
         }
       ],
       loadData: parameter => {
-        return this.$api.deviceModel.getPage(Object.assign(parameter, this.queryParam))
+        return this.$api.algorithmUsuallyRule.getPage(Object.assign(parameter, this.queryParam))
           .then(res => {
-            res.records.forEach(item=>{
-              item.deviceModelTypeName = this.constants.data.deviceModelType?this.constants.data.deviceModelType[item.deviceModelType]['name']:''
-            });
             return res
           })
       },
-      importUrl:process.env.VUE_APP_BASE_API+'/deviceModel/importExcel'
     }
   },
   methods: {
@@ -151,7 +107,7 @@ export default {
         title: '删除',
         content: '确定删除勾选的记录？',
         onOk () {
-          that.$api.deviceModel.del({ ids: that.selectedRowKeys })
+          that.$api.algorithmUsuallyRule.del({ ids: that.selectedRowKeys })
             .then(res => {
               that.$notification.success({
                 message: '成功',

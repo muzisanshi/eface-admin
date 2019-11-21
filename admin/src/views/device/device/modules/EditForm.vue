@@ -15,7 +15,7 @@
     @cancel="handleCancel"
   >
     <a-spin :spinning="confirmLoading">
-      <a-tabs v-model="activeKey" type="editable-card" @edit="onEdit">
+      <a-tabs @change="callback"  :activeKey='activeKey' type="editable-card" @edit="onEdit">
         <a-tab-pane tab="基本信息" ref="key1" key="1" :closable="false">
           <a-form :form="form">
 
@@ -89,13 +89,15 @@
                 <a-col :span="8">
                   <a-form-item label="人脸显示数量" :labelCol="labelCol" :wrapperCol="wrapperCol">
                     <a-input
-                      v-decorator="['faceShowNum', {initialValue: this.formData.faceShowNum, rules: [{required: true,pattern: new RegExp(/^[1-9]\d*$/, 'g'), message: '请输入为数字的数量！'}]}]"/>
+                      v-decorator="['mainEngine.id',{initialValue: this.formData.mainEngine.id}]" v-show="false"/>
+                    <a-input
+                      v-decorator="['mainEngine.faceShowNum', {initialValue: this.formData.mainEngine.faceShowNum, rules: [{required: true,pattern: new RegExp(/^[1-9]\d*$/, 'g'), message: '请输入为数字的数量！'}]}]"/>
                   </a-form-item>
                 </a-col>
                 <a-col :span="8">
                   <a-form-item label="人脸显示时间" :labelCol="labelCol" :wrapperCol="wrapperCol">
                     <a-input
-                      v-decorator="['faceShowSeconds', {initialValue: this.formData.faceShowSeconds, rules: [{required: true,pattern: new RegExp(/^[1-9]\d*$/, 'g'), message: '请输入为数字的时间！'}]}]"/>
+                      v-decorator="['mainEngine.faceShowSeconds', {initialValue: this.formData.mainEngine.faceShowSeconds, rules: [{required: true,pattern: new RegExp(/^[1-9]\d*$/, 'g'), message: '请输入为数字的时间！'}]}]"/>
                   </a-form-item>
                 </a-col>
                 <a-col :span="8">
@@ -104,7 +106,7 @@
                       size="default"
                       placeholder="请选择"
                       optionFilterProp="children"
-                      v-decorator="['witnessComparison', {initialValue: this.formData.witnessComparison?this.formData.witnessComparison:'', rules: [{required: true, message: '请选择认证对比！'}]}]"
+                      v-decorator="['mainEngine.witnessComparison', {initialValue: this.formData.mainEngine.witnessComparison?'true':'false', rules: [{required: true, message: '请选择认证对比！'}]}]"
                     >
                       <a-select-option value="true">是</a-select-option>
                       <a-select-option value="false">否</a-select-option>
@@ -121,7 +123,7 @@
                       size="default"
                       placeholder="请选择"
                       optionFilterProp="children"
-                      v-decorator="['visitorRegister', {initialValue: this.formData.visitorRegister?this.formData.visitorRegister:'', rules: [{required: true, message: '请选择访客注册！'}]}]"
+                      v-decorator="['mainEngine.visitorRegister', {initialValue: this.formData.mainEngine.visitorRegister?'true':'false', rules: [{required: true, message: '请选择访客注册！'}]}]"
                     >
                       <a-select-option value="true">是</a-select-option>
                       <a-select-option value="false">否</a-select-option>
@@ -132,7 +134,7 @@
                 <a-col :span="8">
                   <a-form-item label="有效分钟数" :labelCol="labelCol" :wrapperCol="wrapperCol">
                     <a-input
-                      v-decorator="['validMinutes', {initialValue: this.formData.validMinutes, rules: [{required: true, message: '请输入有效分钟数！'}]}]"/>
+                      v-decorator="['mainEngine.validMinutes', {initialValue: this.formData.mainEngine.validMinutes, rules: [{required: true, message: '请输入有效分钟数！'}]}]"/>
                   </a-form-item>
                 </a-col>
 
@@ -142,7 +144,7 @@
                     :labelCol="labelCol"
                     :wrapperCol="wrapperCol"
                   >
-                    <a-input v-decorator="['remark',{initialValue: this.formData.remark}]" />
+                    <a-input v-decorator="['mainEngine.remark',{initialValue: this.formData.mainEngine.remark}]" />
                   </a-form-item>
                 </a-col>
 
@@ -166,6 +168,8 @@
                     :labelCol="labelCol"
                     :wrapperCol="wrapperCol"
                   >
+                    <a-input
+                      v-decorator="['mainEngine.gateBrake.id',{initialValue: this.formData.mainEngine.gateBrake.id}]" v-show="false"/>
                     <a-select
                       showSearch
                       allowClear
@@ -173,7 +177,7 @@
                       optionFilterProp="children"
                       :filterOption="filterCommonOption"
                       :options="constants.list.networkSwitchType"
-                      v-decorator="['networkSwitchType', {initialValue: this.formData.networkSwitchType,rules: [{required: true, message: '请选择网络开关类型！'}]}]">
+                      v-decorator="['mainEngine.gateBrake.networkSwitchType', {initialValue: this.formData.mainEngine.gateBrake.networkSwitchType,rules: [{required: true, message: '请选择网络开关类型！'}]}]">
                     </a-select>
                   </a-form-item>
 
@@ -187,7 +191,7 @@
                       optionFilterProp="children"
                       :filterOption="filterCommonOption"
                       :options="constants.list.direction"
-                      v-decorator="['direction', {initialValue: this.formData.direction,rules: [{required: true, message: '请选择方向！'}]}]">
+                      v-decorator="['mainEngine.gateBrake.direction', {initialValue: this.formData.mainEngine.gateBrake.direction,rules: [{required: true, message: '请选择方向！'}]}]">
                     </a-select>
                   </a-form-item>
                 </a-col>
@@ -197,7 +201,7 @@
                     :labelCol="labelCol"
                     :wrapperCol="wrapperCol"
                   >
-                    <a-input v-decorator="['gateBrakeRemark',{initialValue: this.formData.gateBrakeRemark}]" />
+                    <a-input v-decorator="['mainEngine.gateBrake.remark',{initialValue: this.formData.mainEngine.gateBrake.remark}]" />
                   </a-form-item>
                 </a-col>
               </a-row>
@@ -212,13 +216,15 @@
                     :labelCol="labelCol"
                     :wrapperCol="wrapperCol"
                   >
-                    <a-input v-decorator="['ip',{initialValue: this.formData.ip,rules: [{required: true, message: '请选择Ip地址！'}]}]" />
+                    <a-input
+                      v-decorator="['mainEngine.gateBrake.network.id',{initialValue: this.formData.mainEngine.gateBrake.network.id}]" v-show="false"/>
+                    <a-input v-decorator="['mainEngine.gateBrake.network.ip',{initialValue: this.formData.mainEngine.gateBrake.network.ip,rules: [{required: true, message: '请选择Ip地址！'}]}]" />
                   </a-form-item>
                 </a-col>
                 <a-col :span="12">
                   <a-form-item label="子网掩码" :labelCol="labelCol" :wrapperCol="wrapperCol">
                     <a-input
-                      v-decorator="['subnetMask', {initialValue: this.formData.subnetMask, rules: [{required: true, message: '请输入子网掩码！'}]}]"/>
+                      v-decorator="['mainEngine.gateBrake.network.subnetMask', {initialValue: this.formData.mainEngine.gateBrake.network.subnetMask, rules: [{required: true, message: '请输入子网掩码！'}]}]"/>
                   </a-form-item>
                 </a-col>
               </a-row>
@@ -230,13 +236,13 @@
                     :labelCol="labelCol"
                     :wrapperCol="wrapperCol"
                   >
-                    <a-input v-decorator="['defaultGateway',{initialValue: this.formData.defaultGateway, rules: [{required: true, message: '请输入默认网关！'}]}]" />
+                    <a-input v-decorator="['mainEngine.gateBrake.network.defaultGateway',{initialValue: this.formData.mainEngine.gateBrake.network.defaultGateway, rules: [{required: true, message: '请输入默认网关！'}]}]" />
                   </a-form-item>
                 </a-col>
                 <a-col :span="12">
                   <a-form-item label="MAC地址" :labelCol="labelCol" :wrapperCol="wrapperCol">
                     <a-input
-                      v-decorator="['macAddress', {initialValue: this.formData.macAddress, rules: [{required: true, message: '请输入MAC地址！'}]}]"/>
+                      v-decorator="['mainEngine.gateBrake.network.macAddress', {initialValue: this.formData.mainEngine.gateBrake.network.macAddress, rules: [{required: true, message: '请输入MAC地址！'}]}]"/>
                   </a-form-item>
                 </a-col>
               </a-row>
@@ -271,6 +277,17 @@
       </a-tabs>
 
     </a-spin>
+    <template v-if="activeKey == 1" slot="footer">
+      <a-button key="submit" type="primary" :confirmLoading="confirmLoading" @click="next('2')">
+        下一步
+      </a-button>
+    </template>
+    <template  v-if="activeKey != 1" slot="footer">
+      <a-button key="back" @cancel="handleCancel">取消</a-button>
+      <a-button key="submit" type="primary" :confirmLoading="confirmLoading" @click="handleSubmit">
+        确认
+      </a-button>
+    </template>
     <select-location ref="selectLocation" @selectSuccess="selectSuccess"></select-location>
     <custom-algorithm ref="customAlgorithm" @customSuccess="customSuccess"></custom-algorithm>
   </a-modal>
@@ -300,7 +317,14 @@
         },
         visible: false,
         confirmLoading: false,
-        formData: {},
+        formData: {
+          cameras:[],
+          mainEngine:{
+            gateBrake:{
+              network:{}
+            }
+          }
+        },
         deviceModelList:[],
         locationList: [],
         title: '',
@@ -322,9 +346,17 @@
       addEdit (item) {
         let that = this;
         this.visible = true
+        this.activeKey = '1';
         this.form.resetFields()
         this.form1.resetFields()
-        this.formData ={}
+        this.formData ={
+          cameras:[],
+          mainEngine:{
+            gateBrake:{
+              network:{}
+            }
+          }
+        }
         this.deviceModelList = []
         this.locationList = []
         this.$api.deviceModel.getAll({})
@@ -350,24 +382,58 @@
         }
       },
 
+      callback(key) {
+        if (key == 1) {
+          this.activeKey = '1';
+        } else {
+          this.next(key);
+        }
+      },
+      next(key) {
+        var that = this;
+        const { form: { validateFields } } = this
+        validateFields((errors, values) => {
+          if (!errors) {
+            that.activeKey = key+'';
+            this.formData = Object.assign(this.formData,values)
+            console.log(this.formData)
+          }
+        })
+      },
+
       selectLocation() {
         this.$refs.selectLocation.add()
       },
 
       customAlgorithm(){
-        this.$refs.customAlgorithm.add()
+        this.$refs.customAlgorithm.add(this.formData.mainEngine)
       },
 
       handleSubmit () {
-        const { form: { validateFields } } = this
+        console.log(this.formData)
+        const { form1: { validateFields } } = this
         this.confirmLoading = true
         validateFields((errors, values) => {
 
           if (!errors) {
-            if(this.formData.id){
-              values.id = this.formData.id
+            values.mainEngine.algorithm = this.formData.mainEngine.algorithm
+            values.mainEngine.gateBrake.networkSwitchType = values.mainEngine.gateBrake.networkSwitchType+''
+            if(values.mainEngine.witnessComparison == 'true'){
+              values.mainEngine.witnessComparison = true
+            }else{
+              values.mainEngine.witnessComparison = false
             }
-            this.$api.device.saveOrUpdate(values)
+
+            if(values.mainEngine.visitorRegister == 'true'){
+              values.mainEngine.visitorRegister = true
+            }else{
+              values.mainEngine.visitorRegister = false
+            }
+            console.log(this.formData,values)
+            let params = Object.assign(this.formData,values)
+
+            console.log('---params---',params)
+            this.$api.device.saveOrUpdate(params)
               .then(res => {
                 this.$notification.success({
                   message: '成功',
@@ -376,7 +442,8 @@
                 this.visible = false
                 this.confirmLoading = false
                 this.form.resetFields()
-                this.$emit('ok', values)
+                this.form1.resetFields()
+                this.$emit('ok', params)
               }).finally(() => {
               this.confirmLoading = false
             })
@@ -385,11 +452,6 @@
           }
         })
       },
-
-      callback(key) {
-        console.log(key);
-      },
-
       onEdit(targetKey, action) {
         this[action](targetKey);
       },
@@ -415,11 +477,22 @@
       },
 
       customSuccess(value){
-        console.log(value)
+        if(value.algorithm.checkAlive == 'true'){
+          value.algorithm.checkAlive = true
+        }else{
+          value.algorithm.checkAlive = false
+        }
+
+        if(value.algorithm.checkSexual == 'true'){
+          value.algorithm.checkSexual = true
+        }else{
+          value.algorithm.checkSexual = false
+        }
+        this.formData.mainEngine.algorithm = value.algorithm
+        console.log('--customSuccess--',this.formData)
       },
 
       remove(targetKey) {
-        console.log(targetKey)
         let activeKey = this.activeKey;
         let lastIndex;
         this.panes.forEach((pane, i) => {
