@@ -22,16 +22,24 @@
         visibleSelect: false,
         confirmLoadingSelect: false,
         locationList: [],
-        selectLocationStatus: true
+        selectLocationStatus: true,
+        name:'',
+        key:''
       }
     },
     components: {
       locationList
     },
     methods: {
-      add(item) {
+      add(name,key) {
         this.visibleSelect = true
         this.selectLocationStatus = true
+        if(name){
+          this.name = name
+        }
+        if(key){
+          this.key = key
+        }
       },
 
       selectedLocation(locationList) {
@@ -47,7 +55,11 @@
         } else {
           this.visibleSelect = false
           this.confirmLoadingSelect = false
-          this.$emit('selectSuccess', this.locationList)
+          this.$emit('selectSuccess', {
+            locationItem:this.locationList[0],
+            name:this.name,
+            key:this.key
+          })
           this.selectLocationStatus = false
         }
       },

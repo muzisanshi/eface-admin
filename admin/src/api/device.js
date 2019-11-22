@@ -5,6 +5,7 @@ const URI = {
   page: '/device/getPage',
   saveOrUpdate: '/device/saveOrUpdate',
   del: '/device/delete',
+  cameraDel: '/camera/delete',
   importExcel: '/device/importExcel',
   exportExcel: '/device/exportExcel'
 }
@@ -37,6 +38,13 @@ function del (parameter) {
   })
 }
 
+function cameraDel (parameter) {
+  return axios({
+    url: URI.cameraDel,
+    params: parameter
+  })
+}
+
 function importExcel (parameter) {
   return axios({
     url: URI.importExcel,
@@ -57,5 +65,6 @@ export default {
   del,
   saveOrUpdate,
   importExcel,
-  exportExcel
+  exportExcel,
+  cameraDel
 }

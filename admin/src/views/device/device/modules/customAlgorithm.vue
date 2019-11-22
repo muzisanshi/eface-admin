@@ -331,8 +331,26 @@
         confirmLoading: false,
         formData: {
           algorithm:{
-            checkAlive:true,
-            checkSexual:true
+            captureLevel:0,
+            checkAlive:false,
+            checkSexual:false,
+            graphicCardIndexNum:0,
+            id:"",
+            minFaceCheckSize:50,
+            recNum:10,
+            recThreshold:50,
+            roiX1:0,
+            roiX2:1,
+            roiY1:0,
+            roiY2:0,
+            showLevel:63,
+            strangerB:0,
+            strangerG:0,
+            strangerR:255,
+            strangerTimeoutWarnSeconds:3,
+            videoImage:0,
+            videoOutputSize:1280,
+            videoRotate:0,
           }
         },
         title: '',
@@ -353,8 +371,26 @@
         that.customAlg = true
         this.formData ={
           algorithm:{
+            captureLevel:0,
             checkAlive:true,
-            checkSexual:true
+            checkSexual:true,
+            graphicCardIndexNum:0,
+            id:"",
+            minFaceCheckSize:50,
+            recNum:10,
+            recThreshold:50,
+            roiX1:0,
+            roiX2:1,
+            roiY1:0,
+            roiY2:0,
+            showLevel:63,
+            strangerB:0,
+            strangerG:0,
+            strangerR:255,
+            strangerTimeoutWarnSeconds:3,
+            videoImage:0,
+            videoOutputSize:1280,
+            videoRotate:0,
           }
         }
         if(item.algorithm){
@@ -398,8 +434,26 @@
           this.form.resetFields()
           this.formData ={
             algorithm:{
+              captureLevel:0,
               checkAlive:true,
-              checkSexual:true
+              checkSexual:true,
+              graphicCardIndexNum:0,
+              id:"",
+              minFaceCheckSize:50,
+              recNum:10,
+              recThreshold:50,
+              roiX1:0,
+              roiX2:1,
+              roiY1:0,
+              roiY2:0,
+              showLevel:63,
+              strangerB:0,
+              strangerG:0,
+              strangerR:255,
+              strangerTimeoutWarnSeconds:3,
+              videoImage:0,
+              videoOutputSize:1280,
+              videoRotate:0,
             }
           }
           this.isEdit = false;

@@ -15,7 +15,7 @@
     @cancel="handleCancel"
   >
     <a-spin :spinning="confirmLoading">
-      <a-tabs @change="callback"  :activeKey='activeKey' type="editable-card" @edit="onEdit">
+      <a-tabs @change="callback" :activeKey='activeKey' type="editable-card" @edit="onEdit">
         <a-tab-pane tab="基本信息" ref="key1" key="1" :closable="false">
           <a-form :form="form">
 
@@ -43,7 +43,7 @@
                   :labelCol="labelCol"
                   :wrapperCol="wrapperCol"
                 >
-                  <a-input @click="selectLocation" :read-only="true" v-decorator="['locationName', {initialValue: this.formData.locationName,rules: [{required: true, message: '请选择设备位置！'}]}]"/>
+                  <a-input @click="selectLocation('','')" :read-only="true" v-decorator="['locationName', {initialValue: this.formData.locationName,rules: [{required: true, message: '请选择设备位置！'}]}]"/>
                 </a-form-item>
               </a-col>
             </a-row>
@@ -101,12 +101,12 @@
                   </a-form-item>
                 </a-col>
                 <a-col :span="8">
-                  <a-form-item label="认证对比" :labelCol="labelCol" :wrapperCol="wrapperCol">
+                  <a-form-item label="人证对比" :labelCol="labelCol" :wrapperCol="wrapperCol">
                     <a-select
                       size="default"
                       placeholder="请选择"
                       optionFilterProp="children"
-                      v-decorator="['mainEngine.witnessComparison', {initialValue: this.formData.mainEngine.witnessComparison?'true':'false', rules: [{required: true, message: '请选择认证对比！'}]}]"
+                      v-decorator="['mainEngine.witnessComparison', {initialValue: this.formData.mainEngine.witnessComparison?'true':'false', rules: [{required: true, message: '请选择人证对比！'}]}]"
                     >
                       <a-select-option value="true">是</a-select-option>
                       <a-select-option value="false">否</a-select-option>
@@ -250,26 +250,217 @@
           </a-form>
         </a-tab-pane>
 
-        <a-tab-pane v-for="pane in panes" :tab="pane.title" :key="pane.key" :closable="pane.closable">
-          <a-form :form="form">
+        <a-tab-pane v-for="pane in panes" :tab="pane.title" :key="pane.key" :closable="pane.closable" class="init-sty">
+          <a-form :form="pane.form">
 
-            <a-form-item label="名称" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input
-                v-decorator="['name1', {initialValue: pane.name1,rules: [{required: true, message: '请输入名称！'}]}]"/>
-            </a-form-item>
+            <a-card>
+              <a-row :gutter="24">
+                <a-col :span="8">
+                  <a-form-item
+                    label="相机类型"
+                    :labelCol="labelCol"
+                    :wrapperCol="wrapperCol"
+                  >
+                    <a-input
+                      v-decorator="['id',{initialValue: pane.content.id}]" v-show="false"/>
+                    <a-select
+                      showSearch
+                      allowClear
+                      placeholder="选择相机类型"
+                      optionFilterProp="children"
+                      :filterOption="filterCommonOption"
+                      :options="constants.list.networkSwitchType"
+                      v-decorator="['cameraType', {initialValue: pane.content.cameraType,rules: [{required: true, message: '请选择相机类型！'}]}]">
+                    </a-select>
+                  </a-form-item>
 
-            <a-form-item label="序号" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input
-                v-decorator="['sn1', {initialValue: pane.sn1,rules: [{required: true,pattern: new RegExp(/^[1-9]\d*$/, 'g'), message: '请输入为数字的序号！'}]}]"/>
-            </a-form-item>
+                </a-col>
+                <a-col :span="8">
+                  <a-form-item
+                    label="设备位置"
+                    :labelCol="labelCol"
+                    :wrapperCol="wrapperCol"
+                  >
+                    <a-input
+                    v-decorator="['locationId',{initialValue: pane.content.locationId}]" v-show="false"/>
+                    <a-input @click="selectLocation('camera',pane.key)" :read-only="true" v-decorator="['locationName', {initialValue: pane.content.locationName}]"/>
+                  </a-form-item>
+                </a-col>
 
-            <a-form-item
-              label="备注"
-              :labelCol="labelCol"
-              :wrapperCol="wrapperCol"
-            >
-              <a-input v-decorator="['remark',{initialValue: pane.remark}]" />
-            </a-form-item>
+                <a-col :span="8">
+                  <p>如果不选位置，就默认是主机的位置</p>
+                </a-col>
+
+              </a-row>
+
+              <a-row :gutter="24">
+                <a-col :span="8">
+                  <a-form-item
+                    label="流媒体地址"
+                    :labelCol="labelCol"
+                    :wrapperCol="wrapperCol"
+                  >
+                    <a-input v-decorator="['streamAddress',{initialValue: pane.content.streamAddress}]" />
+                  </a-form-item>
+                </a-col>
+                <a-col :span="8">
+                  <a-form-item
+                    label="解码类型"
+                    :labelCol="labelCol"
+                    :wrapperCol="wrapperCol"
+                  >
+                    <!--<a-input-->
+                      <!--v-decorator="['id',{initialValue: pane.content.id}]" v-show="false"/>-->
+                    <a-select
+                      showSearch
+                      allowClear
+                      placeholder="选择解码类型"
+                      optionFilterProp="children"
+                      :filterOption="filterCommonOption"
+                      :options="constants.list.streamDecodeType"
+                      v-decorator="['streamDecodeType', {initialValue: pane.content.streamDecodeType}]">
+                    </a-select>
+                  </a-form-item>
+
+                </a-col>
+                <a-col :span="8">
+                  <a-form-item
+                    label="备注"
+                    :labelCol="labelCol"
+                    :wrapperCol="wrapperCol"
+                  >
+                    <a-input v-decorator="['remark',{initialValue: pane.content.remark}]" />
+                  </a-form-item>
+                </a-col>
+              </a-row>
+
+            </a-card>
+
+            <a-card>
+              <a-row :gutter="24">
+                <a-col :span="8">
+                  <a-form-item
+                    label="网络开关类型"
+                    :labelCol="labelCol"
+                    :wrapperCol="wrapperCol"
+                  >
+                    <a-input
+                      v-decorator="['gateBrake.id',{initialValue: pane.content.gateBrake.id}]" v-show="false"/>
+                    <a-select
+                      showSearch
+                      allowClear
+                      placeholder="选择网络开关类型"
+                      optionFilterProp="children"
+                      :filterOption="filterCommonOption"
+                      :options="constants.list.networkSwitchType"
+                      v-decorator="['gateBrake.networkSwitchType', {initialValue: pane.content.gateBrake.networkSwitchType}]">
+                    </a-select>
+                  </a-form-item>
+
+                </a-col>
+                <a-col :span="8">
+                  <a-form-item label="方向" :labelCol="labelCol" :wrapperCol="wrapperCol">
+                    <a-select
+                      showSearch
+                      allowClear
+                      placeholder="选择方向"
+                      optionFilterProp="children"
+                      :filterOption="filterCommonOption"
+                      :options="constants.list.direction"
+                      v-decorator="['gateBrake.direction', {initialValue: pane.content.gateBrake.direction}]">
+                    </a-select>
+                  </a-form-item>
+                </a-col>
+                <a-col :span="8">
+                  <a-form-item
+                    label="备注"
+                    :labelCol="labelCol"
+                    :wrapperCol="wrapperCol"
+                  >
+                    <a-input v-decorator="['gateBrake.remark',{initialValue: pane.content.gateBrake.remark}]" />
+                  </a-form-item>
+                </a-col>
+              </a-row>
+              <a-row :gutter="24">
+                <a-col :span="12">
+                  <a-form-item
+                    label="Ip地址"
+                    :labelCol="labelCol"
+                    :wrapperCol="wrapperCol"
+                  >
+                    <a-input
+                      v-decorator="['gateBrake.network.id',{initialValue: pane.content.gateBrake.network.id}]" v-show="false"/>
+                    <a-input v-decorator="['gateBrake.network.ip',{initialValue: pane.content.gateBrake.network.ip}]" />
+                  </a-form-item>
+                </a-col>
+                <a-col :span="12">
+                  <a-form-item label="子网掩码" :labelCol="labelCol" :wrapperCol="wrapperCol">
+                    <a-input
+                      v-decorator="['gateBrake.network.subnetMask', {initialValue: pane.content.gateBrake.network.subnetMask}]"/>
+                  </a-form-item>
+                </a-col>
+              </a-row>
+
+              <a-row :gutter="24">
+                <a-col :span="12">
+                  <a-form-item
+                    label="默认网关"
+                    :labelCol="labelCol"
+                    :wrapperCol="wrapperCol"
+                  >
+                    <a-input v-decorator="['gateBrake.network.defaultGateway',{initialValue: pane.content.gateBrake.network.defaultGateway}]" />
+                  </a-form-item>
+                </a-col>
+                <a-col :span="12">
+                  <a-form-item label="MAC地址" :labelCol="labelCol" :wrapperCol="wrapperCol">
+                    <a-input
+                      v-decorator="['gateBrake.network.macAddress', {initialValue: pane.content.gateBrake.network.macAddress}]"/>
+                  </a-form-item>
+                </a-col>
+              </a-row>
+            </a-card>
+
+            <a-card>
+              <a-card>
+                <a-row :gutter="24">
+                  <a-col :span="12">
+                    <a-form-item
+                      label="Ip地址"
+                      :labelCol="labelCol"
+                      :wrapperCol="wrapperCol"
+                    >
+                      <a-input
+                        v-decorator="['network.id',{initialValue: pane.content.network.id}]" v-show="false"/>
+                      <a-input v-decorator="['network.ip',{initialValue: pane.content.network.ip}]" />
+                    </a-form-item>
+                  </a-col>
+                  <a-col :span="12">
+                    <a-form-item label="子网掩码" :labelCol="labelCol" :wrapperCol="wrapperCol">
+                      <a-input
+                        v-decorator="['network.subnetMask', {initialValue: pane.content.network.subnetMask}]"/>
+                    </a-form-item>
+                  </a-col>
+                </a-row>
+
+                <a-row :gutter="24">
+                  <a-col :span="12">
+                    <a-form-item
+                      label="默认网关"
+                      :labelCol="labelCol"
+                      :wrapperCol="wrapperCol"
+                    >
+                      <a-input v-decorator="['network.defaultGateway',{initialValue: pane.content.network.defaultGateway}]" />
+                    </a-form-item>
+                  </a-col>
+                  <a-col :span="12">
+                    <a-form-item label="MAC地址" :labelCol="labelCol" :wrapperCol="wrapperCol">
+                      <a-input
+                        v-decorator="['network.macAddress', {initialValue: pane.content.network.macAddress}]"/>
+                    </a-form-item>
+                  </a-col>
+                </a-row>
+              </a-card>
+            </a-card>
 
           </a-form>
         </a-tab-pane>
@@ -318,10 +509,26 @@
         visible: false,
         confirmLoading: false,
         formData: {
-          cameras:[],
+          cameras:[
+
+          ],
           mainEngine:{
+            faceShowNum:1,
+            faceShowSeconds:5,
+            remark:'',
+            validMinutes:0,
+            visitorRegister:false,
+            witnessComparison:false,
             gateBrake:{
-              network:{}
+              direction:'IN',
+              networkSwitchType:"NETWORK",
+              remark:'',
+              network:{
+                defaultGateway:'',
+                ip:'',
+                macAddress:'',
+                subnetMask:'255.255.255.0'
+              }
             }
           }
         },
@@ -329,7 +536,31 @@
         locationList: [],
         title: '',
         panes:[
-          { title: '相机', content: 'Content of Tab 1', key: '3',remark:'1111',closable: false },
+          { title: '相机',form:this.$form.createForm(this), content: {
+              cameraType:"NETWORK",
+              enable:true,
+              remark:'',
+              locationId:'',
+              streamAddress:'',
+              streamDecodeType:"SOFT",
+              gateBrake:{
+                direction:'IN',
+                networkSwitchType:"NETWORK",
+                remark:'',
+                network:{
+                  defaultGateway:'',
+                  ip:'',
+                  macAddress:'',
+                  subnetMask:'255.255.255.0'
+                }
+              },
+              network:{
+                defaultGateway:'',
+                ip:'',
+                macAddress:'',
+                subnetMask:'255.255.255.0'
+              }
+            }, key: '3',remark:'',closable: false },
         ],
         activeKey: '1',
         newTabIndex: 4,
@@ -350,13 +581,57 @@
         this.form.resetFields()
         this.form1.resetFields()
         this.formData ={
-          cameras:[],
+          cameras:[
+
+          ],
           mainEngine:{
+            faceShowNum:1,
+            faceShowSeconds:5,
+            remark:'',
+            validMinutes:0,
+            visitorRegister:false,
+            witnessComparison:false,
             gateBrake:{
-              network:{}
+              direction:'IN',
+              networkSwitchType:"NETWORK",
+              remark:'',
+              network:{
+                defaultGateway:'',
+                ip:'',
+                macAddress:'',
+                subnetMask:'255.255.255.0'
+              }
             }
           }
         }
+        this.panes = [
+          { title: '相机',form:this.$form.createForm(this), content: {
+              cameraType:"NETWORK",
+              enable:true,
+              remark:'',
+              locationId:'',
+              streamAddress:'',
+              streamDecodeType:"SOFT",
+              gateBrake:{
+                direction:'IN',
+                networkSwitchType:"NETWORK",
+                remark:'',
+                network:{
+                  defaultGateway:'',
+                  ip:'',
+                  macAddress:'',
+                  subnetMask:'255.255.255.0'
+                }
+              },
+              network:{
+                defaultGateway:'',
+                ip:'',
+                macAddress:'',
+                subnetMask:'255.255.255.0'
+              }
+            }, key: '3',remark:'',closable: false },
+        ]
+        this.newTabIndex = 4;
         this.deviceModelList = []
         this.locationList = []
         this.$api.deviceModel.getAll({})
@@ -372,10 +647,29 @@
           })
 
         if(item){
+          let that = this;
           this.title = '修改'
           this.$api.device.getById({id: item.id})
             .then(res => {
               this.formData = res
+              if(res.cameras.length>0){
+                res.cameras.map((item,index) =>{
+                  if(index ===0){
+                    that.panes[0].content = item
+                  }else{
+                    const panes = that.panes;
+                    const activeKey = `${that.newTabIndex++}`;
+                    panes.push({
+                      title: `相机 ${activeKey-3}`,
+                      form:this.$form.createForm(this),
+                      content: item,
+                      key: activeKey,
+                      remark:'',
+                    });
+                    that.panes = panes;
+                  }
+                })
+              }
             })
         }else{
           this.title = '新增'
@@ -396,13 +690,12 @@
           if (!errors) {
             that.activeKey = key+'';
             this.formData = Object.assign(this.formData,values)
-            console.log(this.formData)
           }
         })
       },
 
-      selectLocation() {
-        this.$refs.selectLocation.add()
+      selectLocation(name,key) {
+        this.$refs.selectLocation.add(name,key)
       },
 
       customAlgorithm(){
@@ -410,14 +703,18 @@
       },
 
       handleSubmit () {
-        console.log(this.formData)
         const { form1: { validateFields } } = this
         this.confirmLoading = true
         validateFields((errors, values) => {
 
           if (!errors) {
-            values.mainEngine.algorithm = this.formData.mainEngine.algorithm
-            values.mainEngine.gateBrake.networkSwitchType = values.mainEngine.gateBrake.networkSwitchType+''
+            if(!values.mainEngine){
+              values = {
+                mainEngine:this.formData.mainEngine
+              }
+            }else{
+              values.mainEngine.algorithm = this.formData.mainEngine.algorithm
+            }
             if(values.mainEngine.witnessComparison == 'true'){
               values.mainEngine.witnessComparison = true
             }else{
@@ -429,9 +726,22 @@
             }else{
               values.mainEngine.visitorRegister = false
             }
-            console.log(this.formData,values)
             let params = Object.assign(this.formData,values)
 
+            let camerasData = []
+            for(let i=0;i<this.panes.length;i++){
+              camerasData.push(this.panes[i].content)
+              this.panes[i].form.validateFields((errors, values) => {
+                if (!errors) {
+                  if(!values.gateBrake){
+                    camerasData[i] = this.panes[i].content
+                  }else{
+                    camerasData[i] = values;
+                  }
+                }
+              })
+            }
+            params.cameras = camerasData
             console.log('---params---',params)
             this.$api.device.saveOrUpdate(params)
               .then(res => {
@@ -457,23 +767,63 @@
       },
 
       add() {
-        const panes = this.panes;
-        const activeKey = `${this.newTabIndex++}`;
-        panes.push({
-          title: `相机 ${activeKey-3}`,
-          content: `Content of new Tab ${activeKey}`,
-          remark:'1111',
-          key: activeKey,
-        });
-        this.panes = panes;
-        this.activeKey = activeKey;
+        var that = this;
+        const { form: { validateFields } } = this
+        validateFields((errors, values) => {
+          if (!errors) {
+            const panes = this.panes;
+            const activeKey = `${this.newTabIndex++}`;
+            panes.push({
+              title: `相机 ${activeKey-3}`,
+              form:this.$form.createForm(this),
+              content: {
+                cameraType:"NETWORK",
+                enable:true,
+                remark:'',
+                locationId:'',
+                streamAddress:'',
+                streamDecodeType:"SOFT",
+                gateBrake:{
+                  direction:'IN',
+                  networkSwitchType:"NETWORK",
+                  remark:'',
+                  network:{
+                    defaultGateway:'',
+                    ip:'',
+                    macAddress:'',
+                    subnetMask:'255.255.255.0'
+                  }
+                },
+                network:{
+                  defaultGateway:'',
+                  ip:'',
+                  macAddress:'',
+                  subnetMask:'255.255.255.0'
+                }
+              },
+              key: activeKey,
+              remark:'',
+            });
+            that.panes = panes;
+            that.activeKey = activeKey;
+          }
+        })
+
       },
 
       selectSuccess(value){
-        let name = value[0].estateName+'-'+value[0].buildingName+'-'+value[0].unitName+'-'+value[0].storeyName+'-'+value[0].roomName+'-'+value[0].name
-        this.formData.locationName = name
-        this.formData.locationId = value[0].id
-        this.form.setFieldsValue({ locationName: name});
+        let locationName = value.locationItem.estateName+'-'+value.locationItem.buildingName+'-'+value.locationItem.unitName+'-'+value.locationItem.storeyName+'-'+value.locationItem.roomName+'-'+value.locationItem.name
+        if(value.name || value.key){
+          let key = parseInt(value.key)-3
+          this.panes[key].content.locationName = locationName;
+          this.panes[key].content.locationId = value.locationItem.id
+          this.panes[key].form.setFieldsValue({ locationName: locationName,locationId:value.locationItem.id});
+        }else{
+          this.formData.locationName = locationName
+          this.formData.locationId = value.locationItem.id
+          this.form.setFieldsValue({ locationName: locationName});
+        }
+
       },
 
       customSuccess(value){
@@ -489,27 +839,55 @@
           value.algorithm.checkSexual = false
         }
         this.formData.mainEngine.algorithm = value.algorithm
-        console.log('--customSuccess--',this.formData)
       },
 
       remove(targetKey) {
-        let activeKey = this.activeKey;
+        const that = this
+        let activeKey = that.activeKey;
         let lastIndex;
-        this.panes.forEach((pane, i) => {
+        that.panes.forEach((pane, i) => {
           if (pane.key === targetKey) {
             lastIndex = i - 1;
           }
         });
-        const panes = this.panes.filter(pane => pane.key !== targetKey);
+        const panes = that.panes.filter(pane => pane.key !== targetKey);
+        const curPanes = that.panes.filter(pane => pane.key === targetKey);
         if (panes.length && activeKey === targetKey) {
-          if (lastIndex >= 0) {
-            activeKey = panes[lastIndex].key;
-          } else {
-            activeKey = panes[0].key;
+          console.log(curPanes[0].content.id)
+          if(curPanes[0].content.id){
+            that.$confirm({
+              title: '删除',
+              content: '确定删除当前点击的相机？',
+              onOk () {
+                that.$api.device.cameraDel({ id: curPanes[0].content.id})
+                  .then(res => {
+                    that.$notification.success({
+                      message: '成功',
+                      description: `删除成功！`
+                    })
+                    if (lastIndex >= 0) {
+                      activeKey = panes[lastIndex].key;
+                    } else {
+                      activeKey = panes[0].key;
+                    }
+                    that.panes = panes;
+                    that.activeKey = activeKey;
+                  })
+              },
+              onCancel () {
+              }
+            })
+          }else{
+            if (lastIndex >= 0) {
+              activeKey = panes[lastIndex].key;
+            } else {
+              activeKey = panes[0].key;
+            }
+            that.panes = panes;
+            that.activeKey = activeKey;
           }
         }
-        this.panes = panes;
-        this.activeKey = activeKey;
+
       },
     }
   }
