@@ -34,7 +34,7 @@
 
           <a-col :md="4" :sm="24">
             <span class="table-page-search-submitButtons">
-              <a-button type="primary" @click="$refs.table.refresh(true)">查询</a-button>
+              <a-button type="primary" @click="loadData()">查询</a-button>
               <a-button style="margin-left: 8px" @click="resetSearchForm">重置</a-button>
             </span>
           </a-col>
@@ -62,16 +62,14 @@
 
     </div>
 
-    <s-table
+    <a-table
       ref="table"
       size="default"
       rowKey="id"
       :columns="columns"
-      :data="loadData"
+      :dataSource="data"
       :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
       @expand="handleExpand"
-      @expandedRowsChange="handleExpand"
-      @expandedRowRender="handleExpand"
     >
       <span slot="serial" slot-scope="text, record, index">
 
@@ -81,188 +79,188 @@
       <a-avatar size="large" shape="square" :src="record | resourceFullAddressFilter" slot="resourceFullAddress" slot-scope="record"/>
 
 
-      <div slot="expandedRowRender" @expandedRowRender="handleExpand" slot-scope="record, index, indent, expanded" style="margin: 0">
+      <div slot="expandedRowRender" slot-scope="record, index, indent, expanded" style="margin: 0">
         <p style="margin: 0; border-bottom: 1px dashed #DDD; padding: 10px 0;">主机信息:</p>
-        <!--<div class="mainEngine-mess">-->
-          <!--<a-row :gutter="24">-->
-            <!--<a-col :span="6">-->
-              <!--<a-form-item label="人脸显示数量" :labelCol="labelCol" :wrapperCol="wrapperCol">-->
-                <!--<span>{{record.mainEngine.faceShowNum}}</span>-->
-              <!--</a-form-item>-->
-            <!--</a-col>-->
-            <!--<a-col :span="6">-->
-              <!--<a-form-item label="人脸显示时间" :labelCol="labelCol" :wrapperCol="wrapperCol">-->
-                <!--<span>{{record.mainEngine.faceShowSeconds}}</span>-->
-              <!--</a-form-item>-->
-            <!--</a-col>-->
-            <!--<a-col :span="6">-->
-              <!--<a-form-item label="人证对比" :labelCol="labelCol" :wrapperCol="wrapperCol">-->
-                <!--<span>{{record.mainEngine.witnessComparison?'是':'否'}}</span>-->
-              <!--</a-form-item>-->
-            <!--</a-col>-->
-            <!--<a-col :span="6">-->
-              <!--<a-form-item label="访客注册" :labelCol="labelCol" :wrapperCol="wrapperCol">-->
-                <!--<span>{{record.mainEngine.visitorRegister?'是':'否'}}</span>-->
-              <!--</a-form-item>-->
-            <!--</a-col>-->
-          <!--</a-row>-->
-          <!--<a-row :gutter="24">-->
-            <!--<a-col :span="6">-->
-              <!--<a-form-item label="有效分钟" :labelCol="labelCol" :wrapperCol="wrapperCol">-->
-                <!--<span>{{record.mainEngine.validMinutes}}</span>-->
-              <!--</a-form-item>-->
-            <!--</a-col>-->
-            <!--<a-col :span="6">-->
-              <!--<a-form-item label="主机备注" :labelCol="labelCol" :wrapperCol="wrapperCol">-->
-                <!--<span>{{record.mainEngine.remark}}</span>-->
-              <!--</a-form-item>-->
-            <!--</a-col>-->
-            <!--<a-col :span="6">-->
-              <!--<a-form-item label="网络开关类型" :labelCol="labelCol" :wrapperCol="wrapperCol">-->
-                <!--<span>{{record.mainEngine.gateBrake.networkSwitchType?constants.data.networkSwitchType[record.mainEngine.gateBrake.networkSwitchType]['name'] : ''}}</span>-->
-              <!--</a-form-item>-->
-            <!--</a-col>-->
-            <!--<a-col :span="6">-->
-              <!--<a-form-item label="方向" :labelCol="labelCol" :wrapperCol="wrapperCol">-->
-                <!--<span>{{record.mainEngine.gateBrake.direction?constants.data.direction[record.mainEngine.gateBrake.direction]['name'] : ''}}</span>-->
-              <!--</a-form-item>-->
-            <!--</a-col>-->
-          <!--</a-row>-->
-          <!--<a-row :gutter="24">-->
-            <!--<a-col :span="6">-->
-              <!--<a-form-item label="门禁闸机备注" :labelCol="labelCol" :wrapperCol="wrapperCol">-->
-                <!--<span>{{record.mainEngine.gateBrake.remark}}</span>-->
-              <!--</a-form-item>-->
-            <!--</a-col>-->
-            <!--<a-col :span="6">-->
-              <!--<a-form-item label="Ip地址" :labelCol="labelCol" :wrapperCol="wrapperCol">-->
-                <!--<span>{{record.mainEngine.gateBrake.network.ip}}</span>-->
-              <!--</a-form-item>-->
-            <!--</a-col>-->
-            <!--<a-col :span="6">-->
-              <!--<a-form-item label="子网掩码" :labelCol="labelCol" :wrapperCol="wrapperCol">-->
-                <!--<span>{{record.mainEngine.gateBrake.network.subnetMask}}</span>-->
-              <!--</a-form-item>-->
-            <!--</a-col>-->
-            <!--<a-col :span="6">-->
-              <!--<a-form-item label="默认网关" :labelCol="labelCol" :wrapperCol="wrapperCol">-->
-                <!--<span>{{record.mainEngine.gateBrake.network.defaultGateway}}</span>-->
-              <!--</a-form-item>-->
-            <!--</a-col>-->
-          <!--</a-row>-->
+        <div class="mainEngine-mess">
+          <a-row :gutter="24">
+            <a-col :span="6">
+              <a-form-item label="人脸显示数量" :labelCol="labelCol" :wrapperCol="wrapperCol">
+                <!--<span>{{itemData.mainEngine.faceShowNum+''}}</span>-->
+              </a-form-item>
+            </a-col>
+            <a-col :span="6">
+              <a-form-item label="人脸显示时间" :labelCol="labelCol" :wrapperCol="wrapperCol">
+                <span>{{itemData.mainEngine.faceShowSeconds}}</span>
+              </a-form-item>
+            </a-col>
+            <a-col :span="6">
+              <a-form-item label="人证对比" :labelCol="labelCol" :wrapperCol="wrapperCol">
+                <span>{{itemData.mainEngine.witnessComparison?'是':'否'}}</span>
+              </a-form-item>
+            </a-col>
+            <a-col :span="6">
+              <a-form-item label="访客注册" :labelCol="labelCol" :wrapperCol="wrapperCol">
+                <span>{{itemData.mainEngine.visitorRegister?'是':'否'}}</span>
+              </a-form-item>
+            </a-col>
+          </a-row>
+          <a-row :gutter="24">
+            <a-col :span="6">
+              <a-form-item label="有效分钟" :labelCol="labelCol" :wrapperCol="wrapperCol">
+                <span>{{itemData.mainEngine.validMinutes}}</span>
+              </a-form-item>
+            </a-col>
+            <a-col :span="6">
+              <a-form-item label="主机备注" :labelCol="labelCol" :wrapperCol="wrapperCol">
+                <span>{{itemData.mainEngine.remark}}</span>
+              </a-form-item>
+            </a-col>
+            <a-col :span="6">
+              <a-form-item label="网络开关类型" :labelCol="labelCol" :wrapperCol="wrapperCol">
+                <span>{{itemData.mainEngine.gateBrake.networkSwitchType?constants.data.networkSwitchType[itemData.mainEngine.gateBrake.networkSwitchType]['name'] : ''}}</span>
+              </a-form-item>
+            </a-col>
+            <a-col :span="6">
+              <a-form-item label="方向" :labelCol="labelCol" :wrapperCol="wrapperCol">
+                <span>{{itemData.mainEngine.gateBrake.direction?constants.data.direction[itemData.mainEngine.gateBrake.direction]['name'] : ''}}</span>
+              </a-form-item>
+            </a-col>
+          </a-row>
+          <a-row :gutter="24">
+            <a-col :span="6">
+              <a-form-item label="门禁闸机备注" :labelCol="labelCol" :wrapperCol="wrapperCol">
+                <span>{{itemData.mainEngine.gateBrake.remark}}</span>
+              </a-form-item>
+            </a-col>
+            <a-col :span="6">
+              <a-form-item label="Ip地址" :labelCol="labelCol" :wrapperCol="wrapperCol">
+                <span>{{itemData.mainEngine.gateBrake.network.ip}}</span>
+              </a-form-item>
+            </a-col>
+            <a-col :span="6">
+              <a-form-item label="子网掩码" :labelCol="labelCol" :wrapperCol="wrapperCol">
+                <span>{{itemData.mainEngine.gateBrake.network.subnetMask}}</span>
+              </a-form-item>
+            </a-col>
+            <a-col :span="6">
+              <a-form-item label="默认网关" :labelCol="labelCol" :wrapperCol="wrapperCol">
+                <span>{{itemData.mainEngine.gateBrake.network.defaultGateway}}</span>
+              </a-form-item>
+            </a-col>
+          </a-row>
 
-          <!--<a-row :gutter="24">-->
-            <!--<a-col :span="6">-->
-              <!--<a-form-item label="MAC地址" :labelCol="labelCol" :wrapperCol="wrapperCol">-->
-                <!--<span>{{record.mainEngine.gateBrake.network.macAddress}}</span>-->
-              <!--</a-form-item>-->
-            <!--</a-col>-->
-          <!--</a-row>-->
-        <!--</div>-->
-        <!--<p style="margin: 0; border-bottom: 1px dashed #DDD; padding: 10px 0;" v-if="record.cameras">相机信息:</p>-->
+          <a-row :gutter="24">
+            <a-col :span="6">
+              <a-form-item label="MAC地址" :labelCol="labelCol" :wrapperCol="wrapperCol">
+                <span>{{itemData.mainEngine.gateBrake.network.macAddress}}</span>
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+        <p style="margin: 0; border-bottom: 1px dashed #DDD; padding: 10px 0;" v-if="record.cameras">相机信息:</p>
 
-        <!--<div class="mainEngine-mess">-->
-          <!--<div v-for="item in record.cameras">-->
-            <!--<a-row :gutter="24">-->
-              <!--<a-col :span="6">-->
-                <!--<a-form-item label="相机类型" :labelCol="labelCol" :wrapperCol="wrapperCol">-->
-                  <!--<span>{{item.cameraType?constants.data.cameraType[item.cameraType]['name'] : ''}}</span>-->
-                <!--</a-form-item>-->
-              <!--</a-col>-->
+        <div class="mainEngine-mess">
+          <div v-for="item in itemData.cameras">
+            <a-row :gutter="24">
+              <a-col :span="6">
+                <a-form-item label="相机类型" :labelCol="labelCol" :wrapperCol="wrapperCol">
+                  <span>{{item.cameraType?constants.data.cameraType[item.cameraType]['name'] : ''}}</span>
+                </a-form-item>
+              </a-col>
 
-              <!--<a-col :span="6">-->
-                <!--<a-form-item label="流媒体地址" :labelCol="labelCol" :wrapperCol="wrapperCol">-->
-                  <!--<span>{{item.streamAddress}}</span>-->
-                <!--</a-form-item>-->
-              <!--</a-col>-->
-              <!--<a-col :span="6">-->
-                <!--<a-form-item label="解码类型" :labelCol="labelCol" :wrapperCol="wrapperCol">-->
-                  <!--<span>{{item.streamDecodeType?constants.data.streamDecodeType[item.streamDecodeType]['name'] : ''}}</span>-->
-                <!--</a-form-item>-->
-              <!--</a-col>-->
-              <!--<a-col :span="6">-->
-                <!--<a-form-item label="备注" :labelCol="labelCol" :wrapperCol="wrapperCol">-->
-                  <!--<span>{{item.remark}}</span>-->
-                <!--</a-form-item>-->
-              <!--</a-col>-->
-            <!--</a-row>-->
+              <a-col :span="6">
+                <a-form-item label="流媒体地址" :labelCol="labelCol" :wrapperCol="wrapperCol">
+                  <span>{{item.streamAddress}}</span>
+                </a-form-item>
+              </a-col>
+              <a-col :span="6">
+                <a-form-item label="解码类型" :labelCol="labelCol" :wrapperCol="wrapperCol">
+                  <span>{{item.streamDecodeType?constants.data.streamDecodeType[item.streamDecodeType]['name'] : ''}}</span>
+                </a-form-item>
+              </a-col>
+              <a-col :span="6">
+                <a-form-item label="备注" :labelCol="labelCol" :wrapperCol="wrapperCol">
+                  <span>{{item.remark}}</span>
+                </a-form-item>
+              </a-col>
+            </a-row>
 
 
-            <!--<a-row :gutter="24">-->
-              <!--<a-col :span="6">-->
-                <!--<a-form-item label="设备位置" :labelCol="labelCol" :wrapperCol="wrapperCol">-->
-                  <!--<span>{{item.locationName}}</span>-->
-                <!--</a-form-item>-->
-              <!--</a-col>-->
+            <a-row :gutter="24">
+              <a-col :span="6">
+                <a-form-item label="设备位置" :labelCol="labelCol" :wrapperCol="wrapperCol">
+                  <span>{{item.locationName}}</span>
+                </a-form-item>
+              </a-col>
 
-              <!--<a-col :span="6">-->
-                <!--<a-form-item label="网络开关类型" :labelCol="labelCol" :wrapperCol="wrapperCol">-->
-                  <!--<span>{{item.gateBrake.networkSwitchType?constants.data.networkSwitchType[item.gateBrake.networkSwitchType]['name'] : ''}}</span>-->
-                <!--</a-form-item>-->
-              <!--</a-col>-->
-              <!--<a-col :span="6">-->
-                <!--<a-form-item label="方向" :labelCol="labelCol" :wrapperCol="wrapperCol">-->
-                  <!--<span>{{item.gateBrake.direction?constants.data.direction[item.gateBrake.direction]['name'] : ''}}</span>-->
-                <!--</a-form-item>-->
-              <!--</a-col>-->
-              <!--<a-col :span="6">-->
-                <!--<a-form-item label="备注(门禁闸机)" :labelCol="labelCol" :wrapperCol="wrapperCol">-->
-                  <!--<span>{{ item.gateBrake.remark }}</span>-->
-                <!--</a-form-item>-->
-              <!--</a-col>-->
-            <!--</a-row>-->
+              <a-col :span="6">
+                <a-form-item label="网络开关类型" :labelCol="labelCol" :wrapperCol="wrapperCol">
+                  <span>{{item.gateBrake.networkSwitchType?constants.data.networkSwitchType[item.gateBrake.networkSwitchType]['name'] : ''}}</span>
+                </a-form-item>
+              </a-col>
+              <a-col :span="6">
+                <a-form-item label="方向" :labelCol="labelCol" :wrapperCol="wrapperCol">
+                  <span>{{item.gateBrake.direction?constants.data.direction[item.gateBrake.direction]['name'] : ''}}</span>
+                </a-form-item>
+              </a-col>
+              <a-col :span="6">
+                <a-form-item label="备注(门禁闸机)" :labelCol="labelCol" :wrapperCol="wrapperCol">
+                  <span>{{ item.gateBrake.remark }}</span>
+                </a-form-item>
+              </a-col>
+            </a-row>
 
-            <!--<a-row :gutter="24">-->
+            <a-row :gutter="24">
 
-              <!--<a-col :span="6">-->
-                <!--<a-form-item label="Ip地址(门禁闸机)" :labelCol="labelCol" :wrapperCol="wrapperCol">-->
-                  <!--<span>{{item.gateBrake.network.ip}}</span>-->
-                <!--</a-form-item>-->
-              <!--</a-col>-->
-              <!--<a-col :span="6">-->
-                <!--<a-form-item label="子网掩码(门禁闸机)" :labelCol="labelCol" :wrapperCol="wrapperCol">-->
-                  <!--<span>{{item.gateBrake.network.subnetMask}}</span>-->
-                <!--</a-form-item>-->
-              <!--</a-col>-->
-              <!--<a-col :span="6">-->
-                <!--<a-form-item label="默认网关(门禁闸机)" :labelCol="labelCol" :wrapperCol="wrapperCol">-->
-                  <!--<span>{{item.gateBrake.network.defaultGateway}}</span>-->
-                <!--</a-form-item>-->
-              <!--</a-col>-->
-              <!--<a-col :span="6">-->
-                <!--<a-form-item label="MAC地址(门禁闸机)" :labelCol="labelCol" :wrapperCol="wrapperCol">-->
-                  <!--<span>{{item.gateBrake.network.macAddress}}</span>-->
-                <!--</a-form-item>-->
-              <!--</a-col>-->
-            <!--</a-row>-->
-            <!--<a-row :gutter="24">-->
-              <!--<a-col :span="6">-->
-                <!--<a-form-item label="Ip地址(网络配置)" :labelCol="labelCol" :wrapperCol="wrapperCol">-->
-                  <!--<span>{{item.network.ip}}</span>-->
-                <!--</a-form-item>-->
-              <!--</a-col>-->
-              <!--<a-col :span="6">-->
-                <!--<a-form-item label="子网掩码(网络配置)" :labelCol="labelCol" :wrapperCol="wrapperCol">-->
-                  <!--<span>{{item.network.subnetMask}}</span>-->
-                <!--</a-form-item>-->
-              <!--</a-col>-->
-              <!--<a-col :span="6">-->
-                <!--<a-form-item label="默认网关(网络配置)" :labelCol="labelCol" :wrapperCol="wrapperCol">-->
-                  <!--<span>{{item.network.defaultGateway}}</span>-->
-                <!--</a-form-item>-->
-              <!--</a-col>-->
-              <!--<a-col :span="6">-->
-                <!--<a-form-item label="MAC地址(网络配置)" :labelCol="labelCol" :wrapperCol="wrapperCol">-->
-                  <!--<span>{{item.network.macAddress}}</span>-->
-                <!--</a-form-item>-->
-              <!--</a-col>-->
-            <!--</a-row>-->
+              <a-col :span="6">
+                <a-form-item label="Ip地址(门禁闸机)" :labelCol="labelCol" :wrapperCol="wrapperCol">
+                  <span>{{item.gateBrake.network.ip}}</span>
+                </a-form-item>
+              </a-col>
+              <a-col :span="6">
+                <a-form-item label="子网掩码(门禁闸机)" :labelCol="labelCol" :wrapperCol="wrapperCol">
+                  <span>{{item.gateBrake.network.subnetMask}}</span>
+                </a-form-item>
+              </a-col>
+              <a-col :span="6">
+                <a-form-item label="默认网关(门禁闸机)" :labelCol="labelCol" :wrapperCol="wrapperCol">
+                  <span>{{item.gateBrake.network.defaultGateway}}</span>
+                </a-form-item>
+              </a-col>
+              <a-col :span="6">
+                <a-form-item label="MAC地址(门禁闸机)" :labelCol="labelCol" :wrapperCol="wrapperCol">
+                  <span>{{item.gateBrake.network.macAddress}}</span>
+                </a-form-item>
+              </a-col>
+            </a-row>
+            <a-row :gutter="24">
+              <a-col :span="6">
+                <a-form-item label="Ip地址(网络配置)" :labelCol="labelCol" :wrapperCol="wrapperCol">
+                  <span>{{item.network.ip}}</span>
+                </a-form-item>
+              </a-col>
+              <a-col :span="6">
+                <a-form-item label="子网掩码(网络配置)" :labelCol="labelCol" :wrapperCol="wrapperCol">
+                  <span>{{item.network.subnetMask}}</span>
+                </a-form-item>
+              </a-col>
+              <a-col :span="6">
+                <a-form-item label="默认网关(网络配置)" :labelCol="labelCol" :wrapperCol="wrapperCol">
+                  <span>{{item.network.defaultGateway}}</span>
+                </a-form-item>
+              </a-col>
+              <a-col :span="6">
+                <a-form-item label="MAC地址(网络配置)" :labelCol="labelCol" :wrapperCol="wrapperCol">
+                  <span>{{item.network.macAddress}}</span>
+                </a-form-item>
+              </a-col>
+            </a-row>
 
-            <!--<a-row :gutter="24">-->
+            <a-row :gutter="24">
 
-            <!--</a-row>-->
-          <!--</div>-->
-        <!--</div>-->
+            </a-row>
+          </div>
+        </div>
 
       </div>
 
@@ -276,8 +274,12 @@
         </template>
       </span>
 
-    </s-table>
-    <edit-form ref="editModal" @ok="handleOk"/>
+    </a-table>
+    <a-pagination class="ant-table-pagination ant-pagination" :showTotal="total => `总共 ${total} 条`" showSizeChanger
+                  :pageSize.sync="queryParam.page.pageSize"
+                  @change="onChange" @showSizeChange="onShowSizeChange" :total="pageElements"
+                  v-model="queryParam.page.pageNumber"/>
+    <edit-form ref="editModal" @ok="handleLoadOk"/>
   </a-card>
 </template>
 
@@ -298,6 +300,12 @@ export default {
   },
   data () {
     return {
+      queryParam: {
+        page: {
+          pageNumber: 1,
+          pageSize: 10
+        }
+      },
       labelCol: {
         xs: { span: 24 },
         sm: { span: 10 },
@@ -348,18 +356,31 @@ export default {
           scopedSlots: { customRender: 'action' }
         }
       ],
-      loadData: parameter => {
-        return this.$api.device.getPage(Object.assign(parameter, this.queryParam))
-          .then(res => {
-            return res
-          })
-      },
       importUrl:process.env.VUE_APP_BASE_API+'/device/importExcel',
-      expandedRowKeys:[]
+      data: [],
+      pageElements: 0,
+      itemData:{
+        mainEngine:{
+          gateBrake:{
+            network:{}
+          }
+        },
+        cameras:[]
+      }
     }
   },
+  created() {
+    this.loadData()
+  },
   methods: {
-
+    loadData() {
+      this.expandedRowKeys = []
+      this.$api.device.getPage(Object.assign({}, this.queryParam))
+        .then(res => {
+          this.data = res.records
+          this.pageElements = res.totalElements
+        })
+    },
     handleDelete () {
       const that = this
       that.$confirm({
@@ -372,7 +393,7 @@ export default {
                 message: '成功',
                 description: `删除成功！`
               })
-              that.handleOk()
+              that.handleLoadOk()
             })
         },
         onCancel () {
@@ -380,7 +401,22 @@ export default {
       })
     },
     handleExpand(expanded, record) {
-      console.log(expanded, record)
+      if(expanded){
+        this.$api.device.getById({id: record.id})
+          .then(res => {
+            this.itemData = res
+          })
+      }else{
+        this.itemData ={
+          mainEngine:{
+            gateBrake:{
+              network:{}
+            }
+          },
+          cameras:[]
+        }
+      }
+
     },
 
     handleEditInit(record){
