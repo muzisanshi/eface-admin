@@ -1,10 +1,7 @@
   import { axios } from '@/utils/request'
 
 const URI = {
-  getById: '/dictType/getById',
-  page: '/dictType/getPage',
-  saveOrUpdate: '/dictType/saveOrUpdate',
-  del: '/dictType/delete'
+  page: '/userAccount/getPage'
 }
 
 function getPage (parameter) {
@@ -14,30 +11,6 @@ function getPage (parameter) {
   })
 }
 
-function getById (parameter) {
-  return axios({
-    url: URI.getById,
-    params: parameter
-  })
-}
-
-function saveOrUpdate (parameter) {
-  return axios({
-    url: URI.saveOrUpdate,
-    params: parameter
-  })
-}
-
-function del (parameter) {
-  return axios({
-    url: URI.del,
-    params: parameter
-  })
-}
-
 export default {
-  getById,
-  getPage,
-  del,
-  saveOrUpdate
+  getPage
 }

@@ -5,7 +5,7 @@
  * @desc 新增（组织管理）
 -->
 <template>
-  <a-modal :title="title" :width="1040" :visible="visible" :confirmLoading="confirmLoading" :zIndex="zIndex" @ok="handleSubmit"
+  <a-modal :title="title" :width="1040" :visible="visible" :confirmLoading="confirmLoading" :zIndex="zIndex" :maskClosable="false" @ok="handleSubmit"
            @cancel="handleCancel">
     <a-spin :spinning="confirmLoading">
       <a-form :form="form">
@@ -281,10 +281,10 @@
       addressChange(val) {
         let that = this;
         if (val) {
-          if(that.isChangeClone){
-            that.latitude = '';
-            that.longitude = '';
-          }
+          // if(that.isChangeClone){
+          //   that.latitude = '';
+          //   that.longitude = '';
+          // }
           that.isChangeClone =true
           var myGeo = new BMap.Geocoder();
           var map = this.map

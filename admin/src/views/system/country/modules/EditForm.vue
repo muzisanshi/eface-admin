@@ -1,9 +1,3 @@
-<!--
- * @name EditForm.vue
- * @author lw
- * @date 2019.11.25
- * @desc 编辑
--->
 <template>
   <a-modal
     :title="title"
@@ -11,119 +5,173 @@
     :visible="visible"
     :confirmLoading="confirmLoading"
     @ok="handleSubmit"
+    :maskClosable="false"
     @cancel="handleCancel"
   >
     <a-spin :spinning="confirmLoading">
       <a-form :form="form">
-
-        <a-form-item label="名称" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <a-input
-            v-decorator="['name', {initialValue: this.formData.name, rules: [{required: true, message: '请输入位置名称！'}]}]"/>
-        </a-form-item>
-
-        <a-form-item label="有效分钟数" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <a-input
-            v-decorator="['validMinutes', {initialValue: this.formData.validMinutes, rules: [{required: true, message: '请输入有效分钟数！'}]}]"/>
-        </a-form-item>
-
         <a-form-item
-          label="是否时间限制"
+          label="编码"
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
         >
-          <a-switch :checked="timeLimit" @change="changeTimeLimit" v-decorator="['timeLimit']"/>
+          <a-input v-decorator="['code', {initialValue: this.formData.code, rules: [{required: true, message: '请输入编码！'}]}]" />
         </a-form-item>
 
         <a-form-item
-          label="备注"
+          label="名称"
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
         >
-          <a-input v-decorator="['remark',{initialValue: this.formData.remark}]" />
+          <a-input v-decorator="['name', {initialValue: this.formData.name, rules: [{required: true, message: '请输入名称！'}]}]" />
         </a-form-item>
 
+        <a-form-item
+          label="简写标志"
+          :labelCol="labelCol"
+          :wrapperCol="wrapperCol"
+        >
+          <a-input v-decorator="['shortMark', {initialValue: this.formData.shortMark, rules: [{required: true, message: '请输入简写标志！'}]}]" />
+        </a-form-item>
+
+        <a-form-item
+          label="全写标志"
+          :labelCol="labelCol"
+          :wrapperCol="wrapperCol"
+        >
+          <a-input v-decorator="['fullMark', {initialValue: this.formData.fullMark,rules: [{required: true, message: '请输入全写标志！'}]}]" />
+        </a-form-item>
+
+        <a-form-item
+          label="区号编码"
+          :labelCol="labelCol"
+          :wrapperCol="wrapperCol"
+        >
+          <a-input v-decorator="['nationalAreaCode.areaCode', {initialValue: this.formData.nationalAreaCode.areaCode,rules: [{required: true, message: '请输入区号编码！'}]}]" />
+        </a-form-item>
+
+        <a-form-item
+          label="是否启用注册登录"
+          :labelCol="labelCol"
+          :wrapperCol="wrapperCol"
+        >
+          <a-switch :checked="enableLoginRegister" @change="changeLoginRegister" v-decorator="['nationalAreaCode.enableLoginRegister']"/>
+        </a-form-item>
+
+        <a-form-item
+          label="排序序号"
+          :labelCol="labelCol"
+          :wrapperCol="wrapperCol"
+        >
+          <a-input v-decorator="['nationalAreaCode.orderNum', {initialValue: this.formData.nationalAreaCode.orderNum,rules: [{required: true, message: '请输入排序序号！'}]}]" />
+        </a-form-item>
+
+        <a-form-item
+          label="图片"
+          :labelCol="labelCol"
+          :wrapperCol="wrapperCol"
+        >
+          <image-upload
+            :tooltipVisible="visible"
+            :imageUrl="formData.imageAttachment?formData.imageAttachment.resourceFullAddress:''"
+            advice="建议图片大小：300px*200px"
+            @uploadSuccess="onUploadSuccess"
+          >
+          </image-upload>
+        </a-form-item>
       </a-form>
     </a-spin>
   </a-modal>
 </template>
 
 <script>
+  import { ImageUpload } from '@/components'
   import {mixin} from '@/mixins/mixin'
-
   export default {
     mixins:[mixin],
+    components: {
+      ImageUpload
+    },
     data () {
       return {
-        goodsGroups:[],
         labelCol: {
           xs: { span: 24 },
-          sm: { span: 5 },
+          sm: { span: 7 }
         },
         wrapperCol: {
           xs: { span: 24 },
-          sm: { span: 16 },
+          sm: { span: 13 }
         },
-        visible: false,
         confirmLoading: false,
-        formData: {},
-        title: '',
-        timeLimit:true
+        formData: {
+          nationalAreaCode:{}
+        },
+        form: this.$form.createForm(this),
+        title:'新增',
+        enableLoginRegister:true
       }
     },
-    beforeCreate () {
-      this.form = this.$form.createForm(this);
-    },
     methods: {
+      onUploadSuccess (item) {
+        this.formData.imageAttachment = item
+      },
       add (item) {
         this.visible = true
         this.form.resetFields()
-        this.formData ={}
+        this.formData = {
+          nationalAreaCode:{}
+        }
+        this.confirmLoading = false
         if(item){
           this.title = '修改'
-          this.$api.gateBrakeRule.getById({id: item.id})
+          this.$api.country.getById({id: item.id})
             .then(res => {
               this.formData = res
-              this.timeLimit = this.formData.timeLimit;
+              this.enableLoginRegister = this.formData.nationalAreaCode.enableLoginRegister;
             })
         }else{
           this.title = '新增'
-          this.timeLimit = true
+          this.enableLoginRegister = true
         }
       },
-
-      changeTimeLimit(checked) {
-        this.timeLimit = checked
+      changeLoginRegister(checked) {
+        this.enableLoginRegister = checked
       },
-
       handleSubmit () {
         const { form: { validateFields } } = this
         this.confirmLoading = true
         validateFields((errors, values) => {
           if (!errors) {
+            if(this.formData.imageAttachment) {
+              values.imageAttId = { id: this.formData.imageAttachment.id }
+            }
             if(this.formData.id){
               values.id = this.formData.id
             }
-            if (!values.timeLimit) {
-              values.timeLimit = this.timeLimit
+            if(this.formData.nationalAreaCode.id){
+              values.nationalAreaCode.id = this.formData.nationalAreaCode.id
             }
-            this.$api.gateBrakeRule.saveOrUpdate(values)
+            if (!values.nationalAreaCode.enableLoginRegister) {
+              values.nationalAreaCode.enableLoginRegister = this.enableLoginRegister
+            }
+            this.$api.country.saveOrUpdate(values)
               .then(res => {
                 this.$notification.success({
                   message: '成功',
-                  description: this.title + '成功！'
+                  description: this.title+`成功！`
                 })
                 this.visible = false
                 this.confirmLoading = false
-                this.form.resetFields()
                 this.$emit('ok', values)
               }).finally(() => {
+              this.form.resetFields()
               this.confirmLoading = false
             })
           } else {
             this.confirmLoading = false
           }
         })
-      },
+      }
     }
   }
 </script>

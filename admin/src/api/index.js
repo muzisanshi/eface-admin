@@ -23,6 +23,8 @@ import gateBrakeRule from './gateBrakeRule'
 import userType from './userType'
 import dictValue from './dictValue'
 import dictType from './dictType'
+import country from './country'
+import userAccount from './userAccount'
 
 export default {
   constants,
@@ -48,5 +50,7 @@ export default {
   gateBrakeRule,
   userType,
   dictValue,
-  dictType
+  dictType,
+  country,
+  userAccount
 }

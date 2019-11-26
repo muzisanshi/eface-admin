@@ -16,6 +16,11 @@
             </a-form-item>
           </a-col>
 
+          <a-col :md="6" :sm="24">
+            <a-form-item label="字典值">
+              <a-input v-model="queryParam.value" placeholder=""/>
+            </a-form-item>
+          </a-col>
 
           <a-col :md="4" :sm="24">
             <span class="table-page-search-submitButtons">
@@ -28,7 +33,7 @@
     </div>
 
     <div class="table-operator">
-      <a-button type="primary" icon="plus"  :disabled="selectedRow.length < 1" @click="handleEdit(null)">新增</a-button>
+      <a-button type="primary" icon="plus"  :disabled="selectedRow.length < 1" @click="handleEditItem(null)">新增</a-button>
 
       <a-button type="danger" icon="delete" @click="handleDelete" :disabled="selectedRowKeys.length < 1">删除</a-button>
 
@@ -54,7 +59,7 @@
 
       <span slot="action" slot-scope="text, record">
         <template>
-          <a @click="handleEdit(record)">修改</a>
+          <a @click="handleEditItem(record)">修改</a>
         </template>
       </span>
 
@@ -63,7 +68,7 @@
                   :pageSize.sync="queryParam.page.pageSize"
                   @change="onChange" @showSizeChange="onShowSizeChange" :total="pageElements"
                   v-model="queryParam.page.pageNumber"/>
-    <edit-form ref="editModal" @ok="handleLoadOk"/>
+    <edit-form ref="editModal" @ok="handleOk"/>
   </a-card>
 </template>
 
@@ -98,27 +103,26 @@ export default {
         page: {pageNumber: 1, pageSize: 10}
       },
       columns: [
-
         {
-          title: '名称',
+          title: '字典类型',
+          dataIndex: 'dictTypeName'
+        },
+        {
+          title: '字典值',
+          dataIndex: 'value'
+        },
+        {
+          title: '字典名称',
           dataIndex: 'name'
         },
         {
-          title: '是否注册',
-          dataIndex: 'enableRegister',
-          scopedSlots: {customRender: 'status'}
-        },
-        {
-          title: '门禁闸机名称',
-          dataIndex: 'gateBrakeRuleName'
-        },
-        {
-          title: '编码',
-          dataIndex: 'codeName'
-        },
-        {
-          title: '订单数量',
+          title: '排序序号',
           dataIndex: 'orderNum'
+        },
+        {
+          title: '是否可修改',
+          dataIndex: 'canUpdate',
+          scopedSlots: {customRender: 'status'}
         },
         {
           title: '备注',
@@ -139,7 +143,9 @@ export default {
     ...mapState(['constants']),
   },
   methods: {
-
+    handleEditItem (record) {
+      this.$refs.editModal.add(record,this.selectedRow[0])
+    },
     getDictValue(){
       let that = this;
       this.$api.dictValue.getPage(Object.assign(this.queryParam,{
@@ -150,7 +156,9 @@ export default {
           that.pageElements = res.totalElements
         })
     },
-
+    handleOk(){
+      this.getDictValue()
+    },
     handleDelete () {
       const that = this
       that.$confirm({

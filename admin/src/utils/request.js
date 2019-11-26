@@ -56,7 +56,7 @@ const err = (error) => {
 service.interceptors.request.use(config => {
   const token = Vue.ls.get(ACCESS_TOKEN)
   if (token) {
-    config.headers['JWT-MANAGER-ACCOUNT-AUTHORIZATION'] =token
+    config.headers['JWT-MANAGER-ACCOUNT-AUTHORIZATION'] = token
   }
   config.baseURL = process.env.VUE_APP_BASE_API
   config.method = 'post'

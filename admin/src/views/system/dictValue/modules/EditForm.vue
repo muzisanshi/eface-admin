@@ -11,6 +11,7 @@
     :visible="visible"
     :confirmLoading="confirmLoading"
     @ok="handleSubmit"
+    :maskClosable="false"
     @cancel="handleCancel"
   >
     <a-spin :spinning="confirmLoading">
@@ -20,16 +21,15 @@
           <a-input
             v-decorator="['name', {initialValue: this.formData.name, rules: [{required: true, message: '请输入位置名称！'}]}]"/>
         </a-form-item>
-
-
-        <a-form-item label="订单数量" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <a-input
-            v-decorator="['orderNum', {initialValue: this.formData.orderNum, rules: [{required: true, message: '请输入订单数量！'}]}]"/>
-        </a-form-item>
         <a-form-item label="字典值" :labelCol="labelCol" :wrapperCol="wrapperCol">
           <a-input
             v-decorator="['value', {initialValue: this.formData.value, rules: [{required: true, message: '请输入字典值！'}]}]"/>
         </a-form-item>
+        <a-form-item label="排序序号" :labelCol="labelCol" :wrapperCol="wrapperCol">
+          <a-input
+            v-decorator="['orderNum', {initialValue: this.formData.orderNum, rules: [{required: true, message: '请输入排序序号！'}]}]"/>
+        </a-form-item>
+
 
         <a-form-item
           label="是否更新"
@@ -73,6 +73,7 @@
         formData: {},
         title: '',
         canUpdate:true,
+        dictTypeId:''
       }
     },
     beforeCreate () {
@@ -82,11 +83,11 @@
       ...mapState(['constants']),
     },
     methods: {
-      add (item) {
+      add (item,id) {
         this.visible = true
         this.form.resetFields()
         this.formData ={}
-
+        this.dictTypeId = id
         if(item){
           this.title = '修改'
           this.$api.dictValue.getById({id: item.id})
@@ -111,6 +112,9 @@
           if (!errors) {
             if(this.formData.id){
               values.id = this.formData.id
+            }
+            if(this.dictTypeId){
+              values.dictTypeId = this.dictTypeId
             }
             if (!values.canUpdate) {
               values.canUpdate = this.canUpdate

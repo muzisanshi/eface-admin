@@ -1,11 +1,11 @@
   import { axios } from '@/utils/request'
 
 const URI = {
-  getById: '/gateBrakeRule/getById',
-  page: '/gateBrakeRule/getPage',
-  getAll: '/gateBrakeRule/getAll',
-  saveOrUpdate: '/gateBrakeRule/saveOrUpdate',
-  del: '/gateBrakeRule/delete'
+  getById: '/country/getById',
+  page: '/country/getPage',
+  getAll: '/country/getAll',
+  saveOrUpdate: '/country/saveOrUpdate',
+  del: '/country/delete'
 }
 
 function getPage (parameter) {
