@@ -5,7 +5,7 @@
         <div class="header">
           <a href="/">
             <img src="~@/assets/logo.png" class="logo" alt="logo">
-            <span class="title">后台管理用户登录</span>
+            <span class="title">四川翼飞视科技有限公司</span>
           </a>
         </div>
         <div class="desc">

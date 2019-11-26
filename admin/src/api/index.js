@@ -19,6 +19,10 @@ import deviceScreen from './deviceScreen'
 import device from './device'
 import algorithmUsuallyRule from './algorithmUsuallyRule'
 import algorithm from './algorithm'
+import gateBrakeRule from './gateBrakeRule'
+import userType from './userType'
+import dictValue from './dictValue'
+import dictType from './dictType'
 
 export default {
   constants,
@@ -40,5 +44,9 @@ export default {
   deviceScreen,
   device,
   algorithmUsuallyRule,
-  algorithm
+  algorithm,
+  gateBrakeRule,
+  userType,
+  dictValue,
+  dictType
 }

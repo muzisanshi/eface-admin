@@ -56,9 +56,9 @@
                 </a-form-item>
               </a-col>
               <a-col :span="12">
-                <a-form-item label="序号" :labelCol="labelCol" :wrapperCol="wrapperCol">
+                <a-form-item label="sn" :labelCol="labelCol" :wrapperCol="wrapperCol">
                   <a-input
-                    v-decorator="['sn', {initialValue: this.formData.sn, rules: [{required: true,pattern: new RegExp(/^[1-9]\d*$/, 'g'), message: '请输入为数字的序号！'}]}]"/>
+                    v-decorator="['sn', {initialValue: this.formData.sn, rules: [{required: true,pattern: new RegExp(/^[1-9]\d*$/, 'g'), message: '请输入为数字的sn！'}]}]"/>
                 </a-form-item>
               </a-col>
             </a-row>
@@ -288,7 +288,7 @@
                 </a-col>
 
                 <a-col :span="8">
-                  <p>如果不选位置，就默认是主机的位置</p>
+                  <p style="padding-top: 10px">如果不选位置，就默认是主机的位置</p>
                 </a-col>
 
               </a-row>
@@ -334,8 +334,47 @@
                 </a-col>
               </a-row>
 
+              <a-row :gutter="24">
+                <a-col :span="12">
+                  <a-form-item
+                    label="Ip地址"
+                    :labelCol="labelCol"
+                    :wrapperCol="wrapperCol"
+                  >
+                    <a-input
+                      v-decorator="['network.id',{initialValue: pane.content.network.id}]" v-show="false"/>
+                    <a-input v-decorator="['network.ip',{initialValue: pane.content.network.ip}]" />
+                  </a-form-item>
+                </a-col>
+                <a-col :span="12">
+                  <a-form-item label="子网掩码" :labelCol="labelCol" :wrapperCol="wrapperCol">
+                    <a-input
+                      v-decorator="['network.subnetMask', {initialValue: pane.content.network.subnetMask}]"/>
+                  </a-form-item>
+                </a-col>
+              </a-row>
+
+              <a-row :gutter="24">
+                <a-col :span="12">
+                  <a-form-item
+                    label="默认网关"
+                    :labelCol="labelCol"
+                    :wrapperCol="wrapperCol"
+                  >
+                    <a-input v-decorator="['network.defaultGateway',{initialValue: pane.content.network.defaultGateway}]" />
+                  </a-form-item>
+                </a-col>
+                <a-col :span="12">
+                  <a-form-item label="MAC地址" :labelCol="labelCol" :wrapperCol="wrapperCol">
+                    <a-input
+                      v-decorator="['network.macAddress', {initialValue: pane.content.network.macAddress}]"/>
+                  </a-form-item>
+                </a-col>
+              </a-row>
+
             </a-card>
 
+            <p>闸机配置</p>
             <a-card>
               <a-row :gutter="24">
                 <a-col :span="8">
@@ -420,48 +459,6 @@
               </a-row>
             </a-card>
 
-            <a-card>
-              <a-card>
-                <a-row :gutter="24">
-                  <a-col :span="12">
-                    <a-form-item
-                      label="Ip地址"
-                      :labelCol="labelCol"
-                      :wrapperCol="wrapperCol"
-                    >
-                      <a-input
-                        v-decorator="['network.id',{initialValue: pane.content.network.id}]" v-show="false"/>
-                      <a-input v-decorator="['network.ip',{initialValue: pane.content.network.ip}]" />
-                    </a-form-item>
-                  </a-col>
-                  <a-col :span="12">
-                    <a-form-item label="子网掩码" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                      <a-input
-                        v-decorator="['network.subnetMask', {initialValue: pane.content.network.subnetMask}]"/>
-                    </a-form-item>
-                  </a-col>
-                </a-row>
-
-                <a-row :gutter="24">
-                  <a-col :span="12">
-                    <a-form-item
-                      label="默认网关"
-                      :labelCol="labelCol"
-                      :wrapperCol="wrapperCol"
-                    >
-                      <a-input v-decorator="['network.defaultGateway',{initialValue: pane.content.network.defaultGateway}]" />
-                    </a-form-item>
-                  </a-col>
-                  <a-col :span="12">
-                    <a-form-item label="MAC地址" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                      <a-input
-                        v-decorator="['network.macAddress', {initialValue: pane.content.network.macAddress}]"/>
-                    </a-form-item>
-                  </a-col>
-                </a-row>
-              </a-card>
-            </a-card>
-
           </a-form>
         </a-tab-pane>
 
@@ -474,7 +471,7 @@
       </a-button>
     </template>
     <template  v-if="activeKey != 1" slot="footer">
-      <a-button key="back" @cancel="handleCancel">取消</a-button>
+      <a-button key="back" @click="handleCancel">取消</a-button>
       <a-button key="submit" type="primary" :confirmLoading="confirmLoading" @click="handleSubmit">
         确认
       </a-button>

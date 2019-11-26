@@ -30,7 +30,7 @@
                 :filterOption="filterCommonOption"
                 @change="algChange"
                 :options="initAlgList"
-                v-decorator="['algorithm.id', {initialValue: this.formData.algorithm.id}]"
+                v-decorator="['algorithm.cloneId', {initialValue: this.formData.algorithm.cloneId}]"
               >
               </a-select>
 
@@ -376,6 +376,7 @@
             checkSexual:true,
             graphicCardIndexNum:0,
             id:"",
+            cloneId:'',
             minFaceCheckSize:50,
             recNum:10,
             recThreshold:50,
@@ -415,7 +416,10 @@
                 if(values.value == item.algorithm.id){
                   that.isEdit = true
                   that.customAlg = false
+                  that.formData.algorithm.cloneId = values.value
                   return
+                }else{
+                  that.formData.algorithm.cloneId = ''
                 }
               })
             }
@@ -439,6 +443,7 @@
               checkSexual:true,
               graphicCardIndexNum:0,
               id:"",
+              cloneId:'',
               minFaceCheckSize:50,
               recNum:10,
               recThreshold:50,
@@ -466,22 +471,30 @@
         this.$nextTick(() => {
           this.isEdit = !this.customAlg;
         });
+        if(this.customAlg){
+          this.algChange('')
+        }
       },
 
       handleSubmit () {
         const { form: { validateFields } } = this
-        this.confirmLoading = true
         validateFields((errors, values) => {
           if (!errors) {
             if(this.customAlg){
               values.algorithm.id = ''
+            }else{
+              values.algorithm.id = values.algorithm.cloneId
+            }
+            if(!values.algorithm.cloneId && !this.customAlg){
+              this.$notification.error({
+                message: '提示',
+                description: `请选择常用规则或者选择自定义算法！`
+              })
+              return
             }
             this.visible = false
-            this.confirmLoading = false
             this.form.resetFields()
             this.$emit('customSuccess', values)
-          } else {
-            this.confirmLoading = false
           }
         })
       },

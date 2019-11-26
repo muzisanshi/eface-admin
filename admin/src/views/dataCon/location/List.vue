@@ -119,6 +119,7 @@ export default {
   },
   watch:{
     selectLocationStatus(newVal){
+      debugger
       if(newVal){
         this.selectedRowKeys = [];
       }
@@ -167,6 +168,83 @@ export default {
         }
       ],
       loadData: parameter => {
+        if(this.selectLocationStatus){
+          this.columns = [
+            {
+              title: '地产名称',
+              dataIndex: 'estateName'
+            },
+            {
+              title: '楼栋名称',
+              dataIndex: 'buildingName'
+            },
+            {
+              title: '楼栋单元',
+              dataIndex: 'unitName'
+            },
+            {
+              title: '楼层',
+              dataIndex: 'storeyName'
+            },
+            {
+              title: '房间名称',
+              dataIndex: 'roomName'
+            },
+            {
+              title: '位置名称',
+              dataIndex: 'name'
+            },
+            {
+              title: '编码',
+              dataIndex: 'code'
+            },
+            {
+              title: '备注',
+              dataIndex: 'remark'
+            }
+          ]
+          }else{
+          this.columns = [
+            {
+              title: '地产名称',
+              dataIndex: 'estateName'
+            },
+            {
+              title: '楼栋名称',
+              dataIndex: 'buildingName'
+            },
+            {
+              title: '楼栋单元',
+              dataIndex: 'unitName'
+            },
+            {
+              title: '楼层',
+              dataIndex: 'storeyName'
+            },
+            {
+              title: '房间名称',
+              dataIndex: 'roomName'
+            },
+            {
+              title: '位置名称',
+              dataIndex: 'name'
+            },
+            {
+              title: '编码',
+              dataIndex: 'code'
+            },
+            {
+              title: '备注',
+              dataIndex: 'remark'
+            },
+            {
+              title: '操作',
+              dataIndex: 'action',
+              width: '150px',
+              scopedSlots: { customRender: 'action' }
+            }
+          ]
+          }
         return this.$api.location.getPage(Object.assign(parameter, this.queryParam))
           .then(res => {
             return res
