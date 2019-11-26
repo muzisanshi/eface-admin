@@ -56,7 +56,7 @@ const err = (error) => {
 service.interceptors.request.use(config => {
   const token = Vue.ls.get(ACCESS_TOKEN)
   if (token) {
-    config.headers['Authorization'] =token
+    config.headers['JWT-MANAGER-ACCOUNT-AUTHORIZATION'] =token
   }
   config.baseURL = process.env.VUE_APP_BASE_API
   config.method = 'post'
@@ -86,7 +86,7 @@ service.interceptors.response.use((response) => {
     if (response.config['onFail']) {
       response.config['onFail'].call(data)
     } else {
-      if(data.errCode == 'ACCOUNT_NEED_LOGIN'){
+      if(data.errCode === 'ACCOUNT_NEED_LOGIN'){
         const token = Vue.ls.get(ACCESS_TOKEN)
         if (token) {
           store.dispatch('Logout').then(() => {
