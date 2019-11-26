@@ -211,10 +211,10 @@ export default {
     addressChange(val) {
       let that = this;
       if (val) {
-        if(that.isChangeClone){
-          that.latitude = '';
-          that.longitude = '';
-        }
+        // if(that.isChangeClone){
+        //   that.latitude = '';
+        //   that.longitude = '';
+        // }
         that.isChangeClone =true
         var myGeo = new BMap.Geocoder();
         var map = this.map
