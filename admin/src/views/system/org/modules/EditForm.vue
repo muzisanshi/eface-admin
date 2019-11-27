@@ -5,10 +5,10 @@
  * @desc 新增（组织管理）
 -->
 <template>
-  <a-modal :title="title" :width="1040" :visible="visible" :confirmLoading="confirmLoading" :zIndex="zIndex" :maskClosable="false" @ok="handleSubmit"
-           @cancel="handleCancel">
+  <a-modal :title="title" :width="1040" :visible="visible" :confirmLoading="confirmLoading" :zIndex="zIndex" :maskClosable="false" @ok="handleSubmit" @cancel="handleCancel">
     <a-spin :spinning="confirmLoading">
       <a-form :form="form">
+
         <a-row :gutter="24">
           <a-col :span="10">
             <a-form-item
@@ -16,8 +16,9 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
             >
-              <div style="width: 60px;height: 60px;border: 1px solid #cccccc;overflow: hidden;display: inline-block;border-radius: 50%"><img
-                :src="topImg" alt="" style="width: 100%;"></div>
+              <div style="width: 60px;height: 60px;border: 1px solid #cccccc;overflow: hidden;display: inline-block;border-radius: 50%">
+                <img :src="topImg" alt="" style="width: 100%;">
+              </div>
               <a-upload
                 :action="system.uploadMainUrl"
                 listType="picture"
@@ -32,7 +33,6 @@
                   浏览添加
                 </a-button>
               </a-upload>
-
             </a-form-item>
           </a-col>
         </a-row>
@@ -40,14 +40,12 @@
         <a-row :gutter="24">
           <a-col :span="12">
             <a-form-item label="组织名称" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input
-                v-decorator="['name', {initialValue: this.formData.name, rules: [{required: true, message: '请输入组织名称！'}]}]"/>
+              <a-input v-decorator="['name', {initialValue: this.formData.name, rules: [{required: true, message: '请输入组织名称！'}]}]"/>
             </a-form-item>
           </a-col>
           <a-col :span="12">
             <a-form-item label="编码" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input
-                v-decorator="['code', {initialValue: this.formData.code, rules: [{required: true, message: '请输入编码！'}]}]"/>
+              <a-input v-decorator="['code', {initialValue: this.formData.code, rules: [{required: true, message: '请输入编码！'}]}]"/>
             </a-form-item>
           </a-col>
         </a-row>
@@ -64,7 +62,7 @@
           </a-col>
           <a-col :span="12">
             <a-form-item label="详细地址" :labelCol="labelCol" :wrapperCol="wrapperCol" :required="true">
-              <input id="detailAddress" class="ant-input" v-model="inputChange"/>
+              <a-input id="detailAddress" class="ant-input" v-model="inputChange"/>
             </a-form-item>
           </a-col>
         </a-row>
@@ -103,10 +101,11 @@
   import {mixin} from '@/mixins/mixin'
   import selectArea from '@/components/Common/selectArea'
   import ARow from "ant-design-vue/es/grid/Row";
+
   export default {
     components: {
       ARow,
-      ImageUpload,selectArea
+      ImageUpload, selectArea
     },
     mixins: [mixin],
     data() {
@@ -136,7 +135,7 @@
         isChangeClone: true,
         topImg: '',
         headImageAttId: null,
-        zIndex:1
+        zIndex: 1
       }
     },
     computed: {
@@ -170,11 +169,8 @@
             break
           case 'done':
             if (info.file.response.success) {
-              // this.imageUrl = info.file.response.data.resourceFullAddress
-              // this.$emit('uploadSuccess', info.file.response.data)
               that.topImg = info.file.response.data.resourceFullAddress
               that.headImageAttId = info.file.response.data.id
-
             } else {
               this.$message.error(info.file.response.errCode + ':' + info.file.response.errDesc)
             }
@@ -215,8 +211,6 @@
               that.isChangeClone = false
               that.inputChange = res.address;
               that.latitude = res.lat;
-              that.longitude = res.lng;
-
               that.longitude = res.lng;
               that.topImg = res.resourceFullAddress;
               that.headImageAttId = res.attId;
@@ -268,15 +262,6 @@
       handleCancel() {
         this.visible = false
       },
-      rulePhone(rule, value, callback) {
-        const form = this.form;
-        const reg = /^1(3|4|5|7|8)\d{9}$/;
-        if (value && !reg.test(value)) {
-          callback('请输入正确的电话号码');
-        } else {
-          callback();
-        }
-      },
 
       addressChange(val) {
         let that = this;
@@ -285,67 +270,45 @@
           //   that.latitude = '';
           //   that.longitude = '';
           // }
-          that.isChangeClone =true
+          that.isChangeClone = true
+
           var myGeo = new BMap.Geocoder();
           var map = this.map
+
           myGeo.getPoint(val, function (point) {
             if (point) {
               map.clearOverlays()
               map.centerAndZoom(point, 12);
-              // map.centerAndZoom("成都", 12);
               map.addOverlay(new BMap.Marker(point));
-              // that.$set(that.applicantForm, 'lgtVal', String(point.lng))
-              // that.$set(that.applicantForm, 'lttVal', String(point.lat))
             }
           })
-          var ac = new BMap.Autocomplete(    //建立一个自动完成的对象
+
+          //建立一个自动完成的对象
+          var ac = new BMap.Autocomplete(
             {
               "input": "detailAddress"
               , "location": map
             });
-          ac.addEventListener("onhighlight", function (e) {  //鼠标放在下拉列表上的事件
-            // var str = "";
-            // var _value = e.fromitem.value;
-            // var value = "";
-            // if (e.fromitem.index > -1) {
-            //   value = _value.province + _value.city + _value.district + _value.street + _value.business;
-            // }
-            // str = "FromItem<br />index = " + e.fromitem.index + "<br />value = " + value;
-            //
-            // value = "";
-            // if (e.toitem.index > -1) {
-            //   _value = e.toitem.value;
-            //   value = _value.province + _value.city + _value.district + _value.street + _value.business;
-            // }
-            // str += "<br />ToItem<br />index = " + e.toitem.index + "<br />value = " + value;
-            //  G("searchResultPanel").innerHTML = str;
+          ac.addEventListener("onhighlight", function (e) { //鼠标放在下拉列表上的事件
           });
-          var myValue;
-          ac.addEventListener("onconfirm", function (e) {    //鼠标点击下拉列表后的事件
-            var _value = e.item.value;
-            myValue = _value.province + _value.city + _value.district + _value.street + _value.business;
-            // G("searchResultPanel").innerHTML ="onconfirm<br />index = " + e.item.index + "<br />myValue = " + myValue;
 
-            that.setPlace(myValue);
+          ac.addEventListener("onconfirm", function (e) { //鼠标点击下拉列表后的事件
+            var _value = e.item.value;
+            that.setPlace(_value.province + _value.city + _value.district + _value.street + _value.business);
           });
-          // that.$notification.error({
-          //   message: '提示',
-          //   description: '获取不到当前地址经纬度，请选择下拉选项来填充经纬度'
-          // })
         }
       },
 
       setPlace(myValue) {
-        console.log(myValue)
         let that = this
         var map = this.map
-        map.clearOverlays();    //清除地图上所有覆盖物
+        map.clearOverlays(); //清除地图上所有覆盖物
         function myFun(e) {
-          var pp = local.getResults().getPoi(0).point;    //获取第一个智能搜索的结果
+          var pp = local.getResults().getPoi(0).point; //获取第一个智能搜索的结果
 
           that.longitude = pp.lng
           that.latitude = pp.lat
-          console.log(that.longitude, that.latitude)
+
           map.centerAndZoom(pp, 18);
           map.addOverlay(new BMap.Marker(pp));    //添加标注
         }
@@ -360,15 +323,15 @@
       createMap() {
         let that = this;
 
-        this.map = new BMap.Map("allmap");  // 创建Map实例
-        this.map.centerAndZoom("成都", 12);      // 初始化地图,用城市名设置地图中心点
-        this.map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
-        //mp.enableScrollWheelZoom();
+        this.map = new BMap.Map("allmap"); // 创建Map实例
+        this.map.centerAndZoom("成都", 12); // 初始化地图,用城市名设置地图中心点
+        this.map.enableScrollWheelZoom(true); //开启鼠标滚轮缩放
         this.map.enableInertialDragging();
         this.map.enableContinuousZoom();
 
         //添加城市切换
         var size = new BMap.Size(10, 20);
+
         this.map.addControl(new BMap.CityListControl({
           anchor: BMAP_ANCHOR_TOP_LEFT,
           offset: size,
@@ -383,28 +346,29 @@
           // 启用显示定位
           enableGeolocation: true
         });
-        this.map.addControl(navigationControl);
 
         // 添加定位控件
         var geolocationControl = new BMap.GeolocationControl();
+
+        this.map.addControl(navigationControl);
         this.map.addControl(geolocationControl);
 
         var geoc = new BMap.Geocoder();
+
         //填加鼠标点击事件
         this.map.addEventListener("click", e => {
           that.longitude = e.point.lng
           that.latitude = e.point.lat
-          // that.$set(that.applicantForm, 'lgtVal', String(e.point.lng));
-          // that.$set(that.applicantForm, 'lttVal', String(e.point.lat));
 
           this.map.clearOverlays();
+
           var marker = new BMap.Marker(new BMap.Point(e.point.lng, e.point.lat)); // 创建点
-          this.map.addOverlay(marker);            //增加点
+
+          this.map.addOverlay(marker); //增加点
 
           geoc.getLocation(e.point, function (rs) {
             let addComp = rs.addressComponents;
-            // that.$set(that.applicantForm, 'adr', addComp.province+addComp.city+addComp.district+addComp.street+ addComp.streetNumber);
-            that.inputChange = addComp.province + addComp.city+ addComp.district + addComp.street + addComp.streetNumber+''
+            that.inputChange = addComp.province + addComp.city + addComp.district + addComp.street + addComp.streetNumber + ''
           });
         });
       },
