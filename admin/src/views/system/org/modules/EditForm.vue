@@ -64,7 +64,7 @@
           </a-col>
           <a-col :span="12">
             <a-form-item label="详细地址" :labelCol="labelCol" :wrapperCol="wrapperCol" :required="true">
-              <input class="ant-input" id="detailAddress" v-model="inputChange"/>
+              <input id="detailAddress" class="ant-input" v-model="inputChange"/>
             </a-form-item>
           </a-col>
         </a-row>
