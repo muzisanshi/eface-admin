@@ -121,7 +121,6 @@
         },
         visible: true,
         confirmLoading: false,
-
         uploadFileId: '',
         formData: {},
         title: '',
@@ -170,7 +169,7 @@
             this.loading = true
             break
           case 'done':
-            if ('00' === info.file.response.respCode) {
+            if (info.file.response.success) {
               // this.imageUrl = info.file.response.data.resourceFullAddress
               // this.$emit('uploadSuccess', info.file.response.data)
               that.topImg = info.file.response.data.resourceFullAddress
@@ -297,7 +296,6 @@
               map.addOverlay(new BMap.Marker(point));
               // that.$set(that.applicantForm, 'lgtVal', String(point.lng))
               // that.$set(that.applicantForm, 'lttVal', String(point.lat))
-
             }
           })
           var ac = new BMap.Autocomplete(    //建立一个自动完成的对象
@@ -394,7 +392,6 @@
         var geoc = new BMap.Geocoder();
         //填加鼠标点击事件
         this.map.addEventListener("click", e => {
-          //alert(e.point.lng + "," + e.point.lat);
           that.longitude = e.point.lng
           that.latitude = e.point.lat
           // that.$set(that.applicantForm, 'lgtVal', String(e.point.lng));
