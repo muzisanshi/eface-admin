@@ -29,8 +29,7 @@
                 @change="handleChange"
               >
                 <a-button>
-                  <a-icon type="upload"/>
-                  浏览添加
+                  <a-icon type="upload"/>浏览添加
                 </a-button>
               </a-upload>
             </a-form-item>
