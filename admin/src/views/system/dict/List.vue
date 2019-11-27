@@ -101,12 +101,12 @@ export default {
           dataIndex: 'name'
         },
         {
-          title: '是否注册',
+          title: '是否更新',
           dataIndex: 'canUpdate',
           scopedSlots: {customRender: 'status'}
         },
         {
-          title: '门禁闸机名称',
+          title: '是否显示',
           dataIndex: 'canView',
           scopedSlots: {customRender: 'status'}
         },
