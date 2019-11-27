@@ -38,29 +38,28 @@
         </a-row>
 
         <a-row :gutter="24">
-          <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-item label="组织名称" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                <a-input
-                  v-decorator="['name', {initialValue: this.formData.name, rules: [{required: true, message: '请输入组织名称！'}]}]"/>
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item label="编码" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                <a-input
-                  v-decorator="['code', {initialValue: this.formData.code, rules: [{required: true, message: '请输入编码！'}]}]"/>
-              </a-form-item>
-            </a-col>
-          </a-row>
+          <a-col :span="12">
+            <a-form-item label="组织名称" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <a-input
+                v-decorator="['name', {initialValue: this.formData.name, rules: [{required: true, message: '请输入组织名称！'}]}]"/>
+            </a-form-item>
+          </a-col>
+          <a-col :span="12">
+            <a-form-item label="编码" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <a-input
+                v-decorator="['code', {initialValue: this.formData.code, rules: [{required: true, message: '请输入编码！'}]}]"/>
+            </a-form-item>
+          </a-col>
+        </a-row>
 
+        <a-row :gutter="24">
           <a-col :span="12">
             <a-form-item
               label="选择地区"
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
             >
-              <select-area ref="selectArea" :initArea="initCascader"
-                           @selectedArea="selectedArea"></select-area>
+              <select-area ref="selectArea" :initArea="initCascader" @selectedArea="selectedArea"></select-area>
             </a-form-item>
           </a-col>
           <a-col :span="12">
@@ -103,8 +102,10 @@
   import {ImageUpload} from '@/components'
   import {mixin} from '@/mixins/mixin'
   import selectArea from '@/components/Common/selectArea'
+  import ARow from "ant-design-vue/es/grid/Row";
   export default {
     components: {
+      ARow,
       ImageUpload,selectArea
     },
     mixins: [mixin],
