@@ -89,10 +89,6 @@ export default {
           dataIndex: 'phoneNo'
         },
         {
-          title: '电话号码，带区号',
-          dataIndex: 'fullPhoneNo'
-        },
-        {
           title: '账户状态',
           dataIndex: 'accountStateName'
         },

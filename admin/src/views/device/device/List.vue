@@ -157,7 +157,7 @@
             </a-col>
           </a-row>
         </div>
-        <p style="margin: 0; border-bottom: 1px dashed #DDD; padding: 10px 0;" v-if="record.cameras">相机信息:</p>
+        <p style="margin: 0; border-bottom: 1px dashed #DDD; padding: 10px 0;" v-if="itemData.cameras">相机信息:</p>
 
         <div class="mainEngine-mess">
           <div v-for="item in itemData.cameras">
