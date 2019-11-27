@@ -288,7 +288,7 @@
                 </a-col>
 
                 <a-col :span="8">
-                  <p style="padding-top: 10px">如果不选位置，就默认是主机的位置</p>
+                  <p style="padding-top: 10px">如果不选，默认为设备的位置</p>
                 </a-col>
 
               </a-row>
