@@ -119,7 +119,6 @@ export default {
   },
   watch:{
     selectLocationStatus(newVal){
-      debugger
       if(newVal){
         this.selectedRowKeys = [];
       }

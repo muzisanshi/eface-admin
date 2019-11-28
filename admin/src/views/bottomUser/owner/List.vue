@@ -1,8 +1,8 @@
 <!--
  * @name List.vue
  * @author lw
- * @date 2019.11.26
- * @desc 用户信息
+ * @date 2019.11.27
+ * @desc 业主
 -->
 <template>
   <a-card :bordered="false" class="content">
@@ -11,24 +11,30 @@
         <a-row :gutter="48">
 
           <a-col :md="4" :sm="24">
+            <a-form-item label="真实姓名">
+              <a-input v-model="queryParam.realName" placeholder=""/>
+            </a-form-item>
+          </a-col>
+
+          <a-col :md="4" :sm="24">
             <a-form-item label="电话号码">
               <a-input v-model="queryParam.phoneNo" placeholder=""/>
             </a-form-item>
           </a-col>
 
-          <a-col :md="5" :sm="24">
-            <a-form-item label="账户状态">
-              <a-select showSearch allowClear placeholder="选择账户状态"  v-model="queryParam.accountState" optionFilterProp="children" :filterOption="filterCommonOption" :options="constants.list.accountState">
+          <a-col :md="4" :sm="24">
+            <a-form-item label="年龄级别">
+              <a-select showSearch allowClear placeholder="选择年龄级别"  v-model="queryParam.ageLevel" optionFilterProp="children" :filterOption="filterCommonOption" :options="constants.list.ageLevel">
               </a-select>
             </a-form-item>
           </a-col>
-
-          <a-col :md="5" :sm="24">
+          <a-col :md="4" :sm="24">
             <a-form-item label="性别">
               <a-select showSearch allowClear placeholder="选择性别"  v-model="queryParam.sexual" optionFilterProp="children" :filterOption="filterCommonOption" :options="constants.list.sexual">
               </a-select>
             </a-form-item>
           </a-col>
+
 
           <a-col :md="4" :sm="24">
             <span class="table-page-search-submitButtons">
@@ -41,6 +47,10 @@
     </div>
 
     <div class="table-operator">
+      <a-button type="primary" icon="plus"  @click="handleEditUser(null)">新增</a-button>
+
+      <a-button type="danger" icon="delete" @click="handleDelete" :disabled="selectedRowKeys.length < 1">删除</a-button>
+
     </div>
 
     <s-table
@@ -62,20 +72,33 @@
       </span>
 
       <span slot="action" slot-scope="text, record">
+        <template>
+          <a @click="handleEditUser(record)">修改</a>
+        </template>
       </span>
 
     </s-table>
+    <edit-form ref="editModal" @ok="handleOk"/>
   </a-card>
 </template>
 
 <script>
 import { STable } from '@/components'
+import EditForm from './modules/EditForm'
 import {mixin} from '@/mixins/mixin'
 import {mapState} from 'vuex';
 export default {
   mixins:[mixin],
   components: {
     STable,
+    EditForm
+
+  },
+  props:{
+    userType:{
+      type:String,
+      default:'OWNER'
+    }
   },
   computed: {
     ...mapState(['constants']),
@@ -86,11 +109,11 @@ export default {
 
         {
           title: '电话号码',
-          dataIndex: 'phoneNo'
+          dataIndex: 'fullPhoneNo'
         },
         {
-          title: '账户状态',
-          dataIndex: 'accountStateName'
+          title: '国际电话区号',
+          dataIndex: 'nationalAreaCodeId'
         },
         {
           title: '姓名',
@@ -98,22 +121,26 @@ export default {
         },
         {
           title: '年龄级别',
-          dataIndex: 'ageLevel'
+          dataIndex: 'ageLevelName'
         },
         {
           title: '性别',
           dataIndex: 'sexualName'
         },
         {
-          title: '上次登录时间',
-          dataIndex: 'lastLoginDatetime'
+          title: '操作',
+          dataIndex: 'action',
+          width: '150px',
+          scopedSlots: { customRender: 'action' }
         }
       ],
       loadData: parameter => {
-        return this.$api.userAccount.getPage(Object.assign(parameter, this.queryParam))
+        return this.$api.user.getPage(Object.assign(parameter, this.queryParam,{
+          code:this.userType
+        }))
           .then(res => {
             res.records.forEach(item=>{
-              item.accountStateName = this.constants.data.accountState?this.constants.data.accountState[item.accountState]['name']:''
+              item.ageLevelName = this.constants.data.ageLevel?this.constants.data.ageLevel[item.ageLevel]['name']:''
               item.sexualName = this.constants.data.sexual?this.constants.data.sexual[item.sexual]['name']:''
             });
             return res
@@ -121,6 +148,32 @@ export default {
       }
     }
   },
+  methods: {
+
+    handleEditUser(record){
+      this.$refs.editModal.add(record,this.userType)
+    },
+
+    handleDelete () {
+      const that = this
+      that.$confirm({
+        title: '删除',
+        content: '确定删除勾选的记录？',
+        onOk () {
+          that.$api.user.del({ ids: that.selectedRowKeys })
+            .then(res => {
+              that.$notification.success({
+                message: '成功',
+                description: `删除成功！`
+              })
+              that.handleOk()
+            })
+        },
+        onCancel () {
+        }
+      })
+    },
+  }
 }
 </script>
 <style scoped>

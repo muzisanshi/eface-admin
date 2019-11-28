@@ -3,6 +3,7 @@
 const URI = {
   getById: '/dictType/getById',
   page: '/dictType/getPage',
+  getAll: '/dictType/getAll',
   saveOrUpdate: '/dictType/saveOrUpdate',
   del: '/dictType/delete'
 }
@@ -35,9 +36,18 @@ function del (parameter) {
   })
 }
 
+function getAll (parameter) {
+  return axios({
+    url: URI.getAll,
+    params: parameter
+  })
+}
+
+
 export default {
   getById,
   getPage,
   del,
-  saveOrUpdate
+  saveOrUpdate,
+  getAll
 }

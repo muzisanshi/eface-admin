@@ -2,30 +2,19 @@ import {axios} from '@/utils/request'
 
 const URI = {
   login: '/manager/login',
-  logout: '/mock/auth/logout',
-  info: '/mock/user/info',
   getUserInfo: '/manager/getInfo',
-  updateInfo:'/manager/update',
-  queryPermissionsByUser:'/mock/user/queryPermissionsByUser',
-  genVerifyCode:'/manager/genVerifyCode'
+  updateInfo: '/manager/update',
+  genVerifyCode: '/manager/genVerifyCode',
+  getById: '/user/getById',
+  page: '/user/getPage',
+  saveOrUpdate: '/user/saveOrUpdate',
+  del: '/user/delete'
 }
 
 function login (parameter) {
   return axios({
     url: URI.login,
     params: parameter
-  })
-}
-
-function getInfo () {
-  return axios({
-    url: URI.info
-  })
-}
-
-function logout () {
-  return axios({
-    url: URI.logout
   })
 }
 
@@ -42,13 +31,6 @@ function updateInfo (parameter) {
   })
 }
 
-function queryPermissionsByUser (parameter) {
-  return axios({
-    url: URI.queryPermissionsByUser,
-    params: parameter
-  })
-}
-
 function genVerifyCode (parameter) {
   return axios({
     url: URI.genVerifyCode,
@@ -56,12 +38,42 @@ function genVerifyCode (parameter) {
   })
 }
 
+
+function getPage (parameter) {
+  return axios({
+    url: URI.page,
+    params: parameter
+  })
+}
+
+function getById (parameter) {
+  return axios({
+    url: URI.getById,
+    params: parameter
+  })
+}
+
+function saveOrUpdate (parameter) {
+  return axios({
+    url: URI.saveOrUpdate,
+    params: parameter
+  })
+}
+
+function del (parameter) {
+  return axios({
+    url: URI.del,
+    params: parameter
+  })
+}
+
 export default {
   login,
-  logout,
-  getInfo,
   getUserInfo,
   updateInfo,
-  queryPermissionsByUser,
-  genVerifyCode
+  genVerifyCode,
+  getById,
+  getPage,
+  del,
+  saveOrUpdate
 }

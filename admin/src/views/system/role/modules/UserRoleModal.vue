@@ -90,7 +90,6 @@
     },
     methods: {
       onTreeNodeSelect(id) {
-        debugger;
         if (id && id.length > 0) {
           this.selectedKeys = id
         }

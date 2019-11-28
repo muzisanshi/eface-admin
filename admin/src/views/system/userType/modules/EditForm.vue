@@ -53,9 +53,9 @@
           </a-select>
         </a-form-item>
 
-        <a-form-item label="订单数量" :labelCol="labelCol" :wrapperCol="wrapperCol">
+        <a-form-item label="排序序号" :labelCol="labelCol" :wrapperCol="wrapperCol">
           <a-input
-            v-decorator="['orderNum', {initialValue: this.formData.orderNum, rules: [{required: true, message: '请输入订单数量！'}]}]"/>
+            v-decorator="['orderNum', {initialValue: this.formData.orderNum, rules: [{required: true, message: '请输入排序序号！'}]}]"/>
         </a-form-item>
 
         <a-form-item

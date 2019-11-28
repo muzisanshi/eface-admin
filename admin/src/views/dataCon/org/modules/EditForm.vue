@@ -49,14 +49,14 @@
           </a-col>
         </a-row>
 
-        <a-row :gutter="24">
           <a-col :span="12">
             <a-form-item
               label="选择地区"
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
             >
-              <select-area ref="selectArea" :initArea="initCascader" @selectedArea="selectedArea"></select-area>
+              <select-area ref="selectArea" :initArea="initCascader"
+                           @selectedArea="selectedArea"></select-area>
             </a-form-item>
           </a-col>
           <a-col :span="12">
@@ -99,11 +99,9 @@
   import {ImageUpload} from '@/components'
   import {mixin} from '@/mixins/mixin'
   import selectArea from '@/components/Common/selectArea'
-  import ARow from "ant-design-vue/es/grid/Row";
 
   export default {
     components: {
-      ARow,
       ImageUpload, selectArea
     },
     mixins: [mixin],
@@ -119,6 +117,7 @@
         },
         visible: true,
         confirmLoading: false,
+
         uploadFileId: '',
         formData: {},
         title: '',
@@ -356,6 +355,7 @@
 
         //填加鼠标点击事件
         this.map.addEventListener("click", e => {
+          //alert(e.point.lng + "," + e.point.lat);
           that.longitude = e.point.lng
           that.latitude = e.point.lat
 
