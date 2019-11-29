@@ -26,6 +26,8 @@ import dictType from './dictType'
 import country from './country'
 import userAccount from './userAccount'
 import nationalAreaCode from './nationalAreaCode'
+import ad from './ad'
+import face from './face'
 
 export default {
   constants,
@@ -54,5 +56,7 @@ export default {
   dictType,
   country,
   userAccount,
-  nationalAreaCode
+  nationalAreaCode,
+  ad,
+  face
 }

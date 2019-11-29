@@ -103,6 +103,10 @@ export default {
           scopedSlots: {customRender: 'status'}
         },
         {
+          title: '有效时间',
+          dataIndex: 'validTime'
+        },
+        {
           title: '有效分钟数',
           dataIndex: 'validMinutes'
         },
@@ -120,6 +124,9 @@ export default {
       loadData: parameter => {
         return this.$api.gateBrakeRule.getPage(Object.assign(parameter, this.queryParam))
           .then(res => {
+            res.records.forEach(item=>{
+              item.validTime = this.timeStamp(item.validMinutes)
+            });
             return res
           })
       }
@@ -127,6 +134,25 @@ export default {
   },
   methods: {
 
+    timeStamp (StatusMinute) {
+      var day=parseInt(StatusMinute/60/24);
+      var hour=parseInt(StatusMinute/60%24);
+      var min= parseInt(StatusMinute % 60);
+      StatusMinute="";
+      if (day > 0)
+      {
+        StatusMinute= day + "天";
+      }
+      if (hour>0)
+      {
+        StatusMinute += hour + "小时";
+      }
+      if (min>0)
+      {
+        StatusMinute += parseFloat(min) + "分钟";
+      }
+      return StatusMinute;
+    },
     handleDelete () {
       const that = this
       that.$confirm({

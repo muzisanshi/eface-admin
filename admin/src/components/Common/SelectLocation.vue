@@ -34,6 +34,7 @@
       add(name,key) {
         this.visibleSelect = true
         this.selectLocationStatus = true
+        this.locationList = []
         if(name){
           this.name = name
         }

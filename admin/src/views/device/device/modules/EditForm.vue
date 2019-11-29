@@ -66,15 +66,21 @@
             <a-row :gutter="24">
               <a-col :span="12">
                 <a-form-item
+                  label="是否启用"
+                  :labelCol="labelCol"
+                  :wrapperCol="wrapperCol"
+                >
+                  <a-switch :checked="enable" @change="changeEnable" v-decorator="['enable']"/>
+                </a-form-item>
+              </a-col>
+              <a-col :span="12">
+                <a-form-item
                   label="备注"
                   :labelCol="labelCol"
                   :wrapperCol="wrapperCol"
                 >
                   <a-input v-decorator="['remark',{initialValue: this.formData.remark}]" />
                 </a-form-item>
-              </a-col>
-              <a-col :span="12">
-
               </a-col>
             </a-row>
 
@@ -250,7 +256,7 @@
           </a-form>
         </a-tab-pane>
 
-        <a-tab-pane v-for="pane in panes" :tab="pane.title" :key="pane.key" :closable="pane.closable" class="init-sty">
+        <a-tab-pane v-for="(pane,index) in panes" :tab="pane.title" :key="pane.key" :closable="pane.closable" class="init-sty">
           <a-form :form="pane.form">
 
             <a-card>
@@ -309,8 +315,6 @@
                     :labelCol="labelCol"
                     :wrapperCol="wrapperCol"
                   >
-                    <!--<a-input-->
-                      <!--v-decorator="['id',{initialValue: pane.content.id}]" v-show="false"/>-->
                     <a-select
                       showSearch
                       allowClear
@@ -335,7 +339,7 @@
               </a-row>
 
               <a-row :gutter="24">
-                <a-col :span="12">
+                <a-col :span="8">
                   <a-form-item
                     label="Ip地址"
                     :labelCol="labelCol"
@@ -346,16 +350,13 @@
                     <a-input v-decorator="['network.ip',{initialValue: pane.content.network.ip}]" />
                   </a-form-item>
                 </a-col>
-                <a-col :span="12">
+                <a-col :span="8">
                   <a-form-item label="子网掩码" :labelCol="labelCol" :wrapperCol="wrapperCol">
                     <a-input
                       v-decorator="['network.subnetMask', {initialValue: pane.content.network.subnetMask}]"/>
                   </a-form-item>
                 </a-col>
-              </a-row>
-
-              <a-row :gutter="24">
-                <a-col :span="12">
+                <a-col :span="8">
                   <a-form-item
                     label="默认网关"
                     :labelCol="labelCol"
@@ -364,12 +365,26 @@
                     <a-input v-decorator="['network.defaultGateway',{initialValue: pane.content.network.defaultGateway}]" />
                   </a-form-item>
                 </a-col>
-                <a-col :span="12">
+              </a-row>
+
+              <a-row :gutter="24">
+                <a-col :span="8">
                   <a-form-item label="MAC地址" :labelCol="labelCol" :wrapperCol="wrapperCol">
                     <a-input
                       v-decorator="['network.macAddress', {initialValue: pane.content.network.macAddress}]"/>
                   </a-form-item>
                 </a-col>
+
+                <a-col :span="8">
+                  <a-form-item
+                    label="是否启用"
+                    :labelCol="labelCol"
+                    :wrapperCol="wrapperCol"
+                  >
+                    <a-switch :checked="pane.content.enable" @change="changeNetworkEnable($event,index)" v-decorator="['enable']"/>
+                  </a-form-item>
+                </a-col>
+
               </a-row>
 
             </a-card>
@@ -649,6 +664,7 @@
           this.$api.device.getById({id: item.id})
             .then(res => {
               this.formData = res
+              this.enable = res.enable
               if(res.cameras.length>0){
                 res.cameras.map((item,index) =>{
                   if(index ===0){
@@ -662,6 +678,7 @@
                       content: item,
                       key: activeKey,
                       remark:'',
+                      closable: false
                     });
                     that.panes = panes;
                   }
@@ -670,6 +687,7 @@
             })
         }else{
           this.title = '新增'
+          this.enable = true
         }
       },
 
@@ -680,6 +698,11 @@
           this.next(key);
         }
       },
+
+      changeNetworkEnable(value,index){
+        this.panes[index].content.enable = value
+      },
+
       next(key) {
         var that = this;
         const { form: { validateFields } } = this
@@ -723,6 +746,11 @@
             }else{
               values.mainEngine.visitorRegister = false
             }
+
+            if (!values.enable) {
+              values.enable = this.enable
+            }
+
             let params = Object.assign(this.formData,values)
 
             let camerasData = []
@@ -809,7 +837,7 @@
       },
 
       selectSuccess(value){
-        let locationName = value.locationItem.estateName+'-'+value.locationItem.buildingName+'-'+value.locationItem.unitName+'-'+value.locationItem.storeyName+'-'+value.locationItem.roomName+'-'+value.locationItem.name
+        let locationName = value.locationItem.estateName+(value.locationItem.buildingName?'-'+value.locationItem.buildingName:'')+(value.locationItem.unitName?'-'+value.locationItem.unitName:'')+(value.locationItem.storeyName?'-'+value.locationItem.storeyName:'')+(value.locationItem.roomName?'-'+value.locationItem.roomName:'')+'-'+value.locationItem.name
         if(value.name || value.key){
           let key = parseInt(value.key)-3
           this.panes[key].content.locationName = locationName;

@@ -9,7 +9,13 @@
     <div class="table-page-search-wrapper">
       <a-form layout="inline">
         <a-row :gutter="48">
-          <a-col :md="4" :sm="24">
+          <a-col :md="5" :sm="24">
+            <a-form-item label="地区">
+              <a-input @click="selectRoom()"  v-model="roomName" :read-only="true" />
+            </a-form-item>
+          </a-col>
+
+          <a-col :md="5" :sm="24">
             <a-form-item label="sn">
               <a-input v-model="queryParam.sn" placeholder=""/>
             </a-form-item>
@@ -20,19 +26,35 @@
             </a-form-item>
           </a-col>
 
-          <a-col :md="4" :sm="24">
+          <a-col :md="5" :sm="24">
             <a-form-item label="设备名称">
               <a-input v-model="queryParam.name" placeholder=""/>
             </a-form-item>
           </a-col>
-
-          <a-col :md="4" :sm="24">
-            <a-form-item label="位置">
+        </a-row>
+        <a-row :gutter="48">
+          <a-col :md="5" :sm="24">
+            <a-form-item label="位置名称">
               <a-input v-model="queryParam.locationName" placeholder=""/>
             </a-form-item>
           </a-col>
 
           <a-col :md="4" :sm="24">
+            <a-form-item label="是否启用">
+              <a-select
+                size="default"
+                placeholder="请选择"
+                optionFilterProp="children"
+                v-model="queryParam.enable"
+              >
+                <a-select-option value="">请选择</a-select-option>
+                <a-select-option value="true">是</a-select-option>
+                <a-select-option value="false">否</a-select-option>
+              </a-select>
+            </a-form-item>
+          </a-col>
+
+          <a-col :md="5" :sm="24">
             <span class="table-page-search-submitButtons">
               <a-button type="primary" @click="loadData()">查询</a-button>
               <a-button style="margin-left: 8px" @click="resetSearchForm">重置</a-button>
@@ -280,6 +302,7 @@
                   @change="onChange" @showSizeChange="onShowSizeChange" :total="pageElements"
                   v-model="queryParam.page.pageNumber"/>
     <edit-form ref="editModal" @ok="handleLoadOk"/>
+    <select-room ref="selectRoom" @selectRoom="selectRoomSuccess"></select-room>
   </a-card>
 </template>
 
@@ -288,12 +311,13 @@ import { STable } from '@/components'
 import EditForm from './modules/EditForm'
 import {mapState} from 'vuex';
 import {mixin} from '@/mixins/mixin'
-
+import selectRoom from '@/components/Common/selectRoom'
 export default {
   mixins:[mixin],
   components: {
     STable,
     EditForm,
+    selectRoom
   },
   computed: {
     ...mapState(['constants']),
@@ -366,13 +390,25 @@ export default {
           }
         },
         cameras:[]
-      }
+      },
+      roomName:''
     }
   },
   created() {
     this.loadData()
   },
   methods: {
+
+    selectRoom(){
+      this.$refs.selectRoom.add(null)
+    },
+
+    selectRoomSuccess(value){
+      this.roomName = value.roomName
+      this.queryParam = Object.assign(this.queryParam,value)
+      // this.form.setFieldsValue({ roomName: value.roomName});
+    },
+
     loadData() {
       this.expandedRowKeys = []
       this.$api.device.getPage(Object.assign({}, this.queryParam))
