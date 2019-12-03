@@ -56,9 +56,9 @@
                 </a-form-item>
               </a-col>
               <a-col :span="12">
-                <a-form-item label="sn" :labelCol="labelCol" :wrapperCol="wrapperCol">
+                <a-form-item label="SN" :labelCol="labelCol" :wrapperCol="wrapperCol">
                   <a-input
-                    v-decorator="['sn', {initialValue: this.formData.sn, rules: [{required: true,pattern: new RegExp(/^[1-9]\d*$/, 'g'), message: '请输入为数字的sn！'}]}]"/>
+                    v-decorator="['sn', {initialValue: this.formData.sn, rules: [{required: true, message: '请输入SN！'}]}]"/>
                 </a-form-item>
               </a-col>
             </a-row>
@@ -87,7 +87,7 @@
           </a-form>
         </a-tab-pane>
 
-        <a-tab-pane tab="主机识别" ref="key2" key="2" :closable="false" class="init-sty">
+        <a-tab-pane tab="识别主机" ref="key2" key="2" :closable="false" class="init-sty">
           <a-form :form="form1">
 
             <a-card>
@@ -157,98 +157,39 @@
               </a-row>
 
               <a-row :gutter="24">
-
-                <a-col :span="4" style="margin-bottom: 20px">
-                  <a-button type="primary" @click="customAlgorithm">更多设置</a-button>
-                </a-col>
-
-              </a-row>
-            </a-card>
-
-            <!--门禁闸机-->
-            <a-card>
-              <a-row :gutter="24">
                 <a-col :span="8">
                   <a-form-item
-                    label="网络开关类型"
+                    label="IP地址"
                     :labelCol="labelCol"
                     :wrapperCol="wrapperCol"
                   >
                     <a-input
-                      v-decorator="['mainEngine.gateBrake.id',{initialValue: this.formData.mainEngine.gateBrake.id}]" v-show="false"/>
-                    <a-select
-                      showSearch
-                      allowClear
-                      placeholder="选择网络开关类型"
-                      optionFilterProp="children"
-                      :filterOption="filterCommonOption"
-                      :options="constants.list.networkSwitchType"
-                      v-decorator="['mainEngine.gateBrake.networkSwitchType', {initialValue: this.formData.mainEngine.gateBrake.networkSwitchType,rules: [{required: true, message: '请选择网络开关类型！'}]}]">
-                    </a-select>
-                  </a-form-item>
-
-                </a-col>
-                <a-col :span="8">
-                  <a-form-item label="方向" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                    <a-select
-                      showSearch
-                      allowClear
-                      placeholder="选择方向"
-                      optionFilterProp="children"
-                      :filterOption="filterCommonOption"
-                      :options="constants.list.direction"
-                      v-decorator="['mainEngine.gateBrake.direction', {initialValue: this.formData.mainEngine.gateBrake.direction,rules: [{required: true, message: '请选择方向！'}]}]">
-                    </a-select>
+                      v-decorator="['mainEngine.network.id',{initialValue: this.formData.mainEngine.network.id}]" v-show="false"/>
+                    <a-input v-decorator="['mainEngine.network.ip',{initialValue: this.formData.mainEngine.network.ip,rules: [{required: true, message: '请选择IP地址！'}]}]" />
                   </a-form-item>
                 </a-col>
                 <a-col :span="8">
-                  <a-form-item
-                    label="备注"
-                    :labelCol="labelCol"
-                    :wrapperCol="wrapperCol"
-                  >
-                    <a-input v-decorator="['mainEngine.gateBrake.remark',{initialValue: this.formData.mainEngine.gateBrake.remark}]" />
-                  </a-form-item>
-                </a-col>
-              </a-row>
-            </a-card>
-
-            <!--网络配置-->
-            <a-card>
-              <a-row :gutter="24">
-                <a-col :span="12">
-                  <a-form-item
-                    label="Ip地址"
-                    :labelCol="labelCol"
-                    :wrapperCol="wrapperCol"
-                  >
-                    <a-input
-                      v-decorator="['mainEngine.gateBrake.network.id',{initialValue: this.formData.mainEngine.gateBrake.network.id}]" v-show="false"/>
-                    <a-input v-decorator="['mainEngine.gateBrake.network.ip',{initialValue: this.formData.mainEngine.gateBrake.network.ip,rules: [{required: true, message: '请选择Ip地址！'}]}]" />
-                  </a-form-item>
-                </a-col>
-                <a-col :span="12">
                   <a-form-item label="子网掩码" :labelCol="labelCol" :wrapperCol="wrapperCol">
                     <a-input
-                      v-decorator="['mainEngine.gateBrake.network.subnetMask', {initialValue: this.formData.mainEngine.gateBrake.network.subnetMask, rules: [{required: true, message: '请输入子网掩码！'}]}]"/>
+                      v-decorator="['mainEngine.network.subnetMask', {initialValue: this.formData.mainEngine.network.subnetMask, rules: [{required: true, message: '请输入子网掩码！'}]}]"/>
                   </a-form-item>
                 </a-col>
-              </a-row>
-
-              <a-row :gutter="24">
-                <a-col :span="12">
+                <a-col :span="8">
                   <a-form-item
                     label="默认网关"
                     :labelCol="labelCol"
                     :wrapperCol="wrapperCol"
                   >
-                    <a-input v-decorator="['mainEngine.gateBrake.network.defaultGateway',{initialValue: this.formData.mainEngine.gateBrake.network.defaultGateway, rules: [{required: true, message: '请输入默认网关！'}]}]" />
+                    <a-input v-decorator="['mainEngine.network.defaultGateway',{initialValue: this.formData.mainEngine.network.defaultGateway, rules: [{required: true, message: '请输入默认网关！'}]}]" />
                   </a-form-item>
                 </a-col>
-                <a-col :span="12">
+              </a-row>
+
+              <a-row :gutter="24">
+                <a-col :span="8">
                   <a-form-item label="MAC地址" :labelCol="labelCol" :wrapperCol="wrapperCol">
                     <a-input
-                      v-decorator="['mainEngine.gateBrake.network.macAddress', {initialValue: this.formData.mainEngine.gateBrake.network.macAddress, rules: [{required: true, message: '请输入MAC地址！'}]}]"/>
+                      v-decorator="['mainEngine.network.macAddress', {initialValue: this.formData.mainEngine.network.macAddress, rules: [{required: true, message: '请输入MAC地址！'}]}]"/>
                   </a-form-item>
                 </a-col>
               </a-row>
@@ -288,7 +229,7 @@
                     :wrapperCol="wrapperCol"
                   >
                     <a-input
-                    v-decorator="['locationId',{initialValue: pane.content.locationId}]" v-show="false"/>
+                      v-decorator="['locationId',{initialValue: pane.content.locationId}]" v-show="false"/>
                     <a-input @click="selectLocation('camera',pane.key)" :read-only="true" v-decorator="['locationName', {initialValue: pane.content.locationName}]"/>
                   </a-form-item>
                 </a-col>
@@ -341,7 +282,7 @@
               <a-row :gutter="24">
                 <a-col :span="8">
                   <a-form-item
-                    label="Ip地址"
+                    label="IP地址"
                     :labelCol="labelCol"
                     :wrapperCol="wrapperCol"
                   >
@@ -383,6 +324,10 @@
                   >
                     <a-switch :checked="pane.content.enable" @change="changeNetworkEnable($event,index)" v-decorator="['enable']"/>
                   </a-form-item>
+                </a-col>
+
+                <a-col :span="4" style="margin-bottom: 20px">
+                  <a-button type="primary" @click="customAlgorithm(index)">更多设置</a-button>
                 </a-col>
 
               </a-row>
@@ -436,9 +381,9 @@
                 </a-col>
               </a-row>
               <a-row :gutter="24">
-                <a-col :span="12">
+                <a-col :span="8">
                   <a-form-item
-                    label="Ip地址"
+                    label="IP地址"
                     :labelCol="labelCol"
                     :wrapperCol="wrapperCol"
                   >
@@ -447,16 +392,13 @@
                     <a-input v-decorator="['gateBrake.network.ip',{initialValue: pane.content.gateBrake.network.ip}]" />
                   </a-form-item>
                 </a-col>
-                <a-col :span="12">
+                <a-col :span="8">
                   <a-form-item label="子网掩码" :labelCol="labelCol" :wrapperCol="wrapperCol">
                     <a-input
                       v-decorator="['gateBrake.network.subnetMask', {initialValue: pane.content.gateBrake.network.subnetMask}]"/>
                   </a-form-item>
                 </a-col>
-              </a-row>
-
-              <a-row :gutter="24">
-                <a-col :span="12">
+                <a-col :span="8">
                   <a-form-item
                     label="默认网关"
                     :labelCol="labelCol"
@@ -465,7 +407,11 @@
                     <a-input v-decorator="['gateBrake.network.defaultGateway',{initialValue: pane.content.gateBrake.network.defaultGateway}]" />
                   </a-form-item>
                 </a-col>
-                <a-col :span="12">
+              </a-row>
+
+              <a-row :gutter="24">
+
+                <a-col :span="8">
                   <a-form-item label="MAC地址" :labelCol="labelCol" :wrapperCol="wrapperCol">
                     <a-input
                       v-decorator="['gateBrake.network.macAddress', {initialValue: pane.content.gateBrake.network.macAddress}]"/>
@@ -531,16 +477,12 @@
             validMinutes:0,
             visitorRegister:false,
             witnessComparison:false,
-            gateBrake:{
-              direction:'IN',
-              networkSwitchType:"NETWORK",
-              remark:'',
-              network:{
-                defaultGateway:'',
-                ip:'',
-                macAddress:'',
-                subnetMask:'255.255.255.0'
-              }
+            network:{
+              defaultGateway:'',
+              ip:'',
+              id: '',
+              macAddress:'',
+              subnetMask:'255.255.255.0'
             }
           }
         },
@@ -549,6 +491,7 @@
         title: '',
         panes:[
           { title: '相机',form:this.$form.createForm(this), content: {
+              algorithm:{},
               cameraType:"NETWORK",
               enable:true,
               remark:'',
@@ -603,16 +546,12 @@
             validMinutes:0,
             visitorRegister:false,
             witnessComparison:false,
-            gateBrake:{
-              direction:'IN',
-              networkSwitchType:"NETWORK",
-              remark:'',
-              network:{
-                defaultGateway:'',
-                ip:'',
-                macAddress:'',
-                subnetMask:'255.255.255.0'
-              }
+            network:{
+              defaultGateway:'',
+              ip:'',
+              id: '',
+              macAddress:'',
+              subnetMask:'255.255.255.0'
             }
           }
         }
@@ -718,8 +657,8 @@
         this.$refs.selectLocation.add(name,key)
       },
 
-      customAlgorithm(){
-        this.$refs.customAlgorithm.add(this.formData.mainEngine)
+      customAlgorithm(index){
+        this.$refs.customAlgorithm.add(this.panes[index].content.id?this.panes[index].content:'',index)
       },
 
       handleSubmit () {
@@ -732,8 +671,6 @@
               values = {
                 mainEngine:this.formData.mainEngine
               }
-            }else{
-              values.mainEngine.algorithm = this.formData.mainEngine.algorithm
             }
             if(values.mainEngine.witnessComparison == 'true'){
               values.mainEngine.witnessComparison = true
@@ -762,6 +699,7 @@
                     camerasData[i] = this.panes[i].content
                   }else{
                     camerasData[i] = values;
+                    camerasData[i].algorithm = this.panes[i].content.algorithm
                   }
                 }
               })
@@ -802,6 +740,7 @@
               title: `相机 ${activeKey-3}`,
               form:this.$form.createForm(this),
               content: {
+                algorithm:{},
                 cameraType:"NETWORK",
                 enable:true,
                 remark:'',
@@ -863,7 +802,8 @@
         }else{
           value.algorithm.checkSexual = false
         }
-        this.formData.mainEngine.algorithm = value.algorithm
+        this.panes[value.itemIndex].content.algorithm = value.algorithm
+
       },
 
       remove(targetKey) {
@@ -878,7 +818,6 @@
         const panes = that.panes.filter(pane => pane.key !== targetKey);
         const curPanes = that.panes.filter(pane => pane.key === targetKey);
         if (panes.length && activeKey === targetKey) {
-          console.log(curPanes[0].content.id)
           if(curPanes[0].content.id){
             that.$confirm({
               title: '删除',
@@ -920,8 +859,8 @@
 <style >
 
   .init-sty .ant-card-wider-padding .ant-card-body{
-      padding: 24px 32px 0;
-    }
+    padding: 24px 32px 0;
+  }
   .init-sty .ant-card.ant-card-bordered{
     margin-bottom: 20px;
   }

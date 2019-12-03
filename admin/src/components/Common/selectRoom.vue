@@ -19,6 +19,7 @@
 
         <a-form-item
           label="地产"
+          v-if="!estateId"
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
         >
@@ -109,6 +110,12 @@
     components: {
       selectDataCon
     },
+    props:{
+      estateId:{
+        type:String,
+        default:''
+      }
+    },
     data () {
       return {
         goodsGroups:[],
@@ -170,6 +177,10 @@
         this.visible = true
         this.form.resetFields()
         this.formData ={}
+        console.log(this.estateId,!this.estateId)
+        if(this.estateId){
+          this.getBuildList(this.estateId)
+        }
       },
 
       selectSuccess(value){

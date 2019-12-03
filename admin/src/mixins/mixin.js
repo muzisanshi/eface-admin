@@ -81,8 +81,9 @@ export const mixin = {
     },
 
     /*选择地产、楼栋信息*/
-    selectDataCon (num) {
+    selectDataCon (num,index) {
       this.$refs.selectSuccess.selectData(num)
+      this.curPaneIndex = index
     },
 
     //导出

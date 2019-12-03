@@ -47,7 +47,7 @@
                 ></vueCropper>
               </div>
               <div style="margin-left:20px;">
-                <div class="show-preview" :style="{'width': '150px', 'height':'155px',  'overflow': 'hidden', 'margin': '5px'}">
+                <div class="show-preview" :style="{'width': '200px', 'height':'205px',  'overflow': 'hidden', 'margin': '5px'}">
                   <div :style="previews.div" class="preview">
                     <img :src="previews.url" :style="previews.img">
                   </div>
@@ -85,8 +85,8 @@
           original: false,
           canMoveBox: true,
           autoCrop: true,
-          autoCropWidth: 150,
-          autoCropHeight: 150,
+          autoCropWidth: 200,
+          autoCropHeight: 200,
           fixedBox: true
         },
         fileName:'',  //本机文件地址
@@ -139,7 +139,10 @@
               })
                 .then(res => {
                   formData.append("file", data, this.fileName);
-                  that.$api.face.upload(that.system.uploadMainUrl,formData)
+                  that.$api.face.upload(that.system.uploadMainUrl,Object.assign(formData,{
+                    attOrigin:'ADMIN',
+                    attType:'FACE'
+                  }))
                     .then(res => {
 
 
@@ -282,8 +285,8 @@
     margin-left: 20px;
     display: -webkit-flex;
     .cropper{
-      width: 260px;
-      height: 260px;
+      width: 360px;
+      height: 360px;
     }
     .show-preview{
       flex: 1;

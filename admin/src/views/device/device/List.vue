@@ -16,7 +16,7 @@
           </a-col>
 
           <a-col :md="5" :sm="24">
-            <a-form-item label="sn">
+            <a-form-item label="SN">
               <a-input v-model="queryParam.sn" placeholder=""/>
             </a-form-item>
           </a-col>
@@ -107,7 +107,7 @@
           <a-row :gutter="24">
             <a-col :span="6">
               <a-form-item label="人脸显示数量" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                <!--<span>{{itemData.mainEngine.faceShowNum+''}}</span>-->
+                <span>{{itemData.mainEngine.faceShowNum+''}}</span>
               </a-form-item>
             </a-col>
             <a-col :span="6">
@@ -138,43 +138,25 @@
               </a-form-item>
             </a-col>
             <a-col :span="6">
-              <a-form-item label="网络开关类型" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                <span>{{itemData.mainEngine.gateBrake.networkSwitchType?constants.data.networkSwitchType[itemData.mainEngine.gateBrake.networkSwitchType]['name'] : ''}}</span>
-              </a-form-item>
-            </a-col>
-            <a-col :span="6">
-              <a-form-item label="方向" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                <span>{{itemData.mainEngine.gateBrake.direction?constants.data.direction[itemData.mainEngine.gateBrake.direction]['name'] : ''}}</span>
-              </a-form-item>
-            </a-col>
-          </a-row>
-          <a-row :gutter="24">
-            <a-col :span="6">
-              <a-form-item label="门禁闸机备注" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                <span>{{itemData.mainEngine.gateBrake.remark}}</span>
-              </a-form-item>
-            </a-col>
-            <a-col :span="6">
               <a-form-item label="Ip地址" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                <span>{{itemData.mainEngine.gateBrake.network.ip}}</span>
+                <span>{{itemData.mainEngine.network.ip}}</span>
               </a-form-item>
             </a-col>
             <a-col :span="6">
               <a-form-item label="子网掩码" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                <span>{{itemData.mainEngine.gateBrake.network.subnetMask}}</span>
-              </a-form-item>
-            </a-col>
-            <a-col :span="6">
-              <a-form-item label="默认网关" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                <span>{{itemData.mainEngine.gateBrake.network.defaultGateway}}</span>
+                <span>{{itemData.mainEngine.network.subnetMask}}</span>
               </a-form-item>
             </a-col>
           </a-row>
-
           <a-row :gutter="24">
             <a-col :span="6">
+              <a-form-item label="默认网关" :labelCol="labelCol" :wrapperCol="wrapperCol">
+                <span>{{itemData.mainEngine.network.defaultGateway}}</span>
+              </a-form-item>
+            </a-col>
+            <a-col :span="6">
               <a-form-item label="MAC地址" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                <span>{{itemData.mainEngine.gateBrake.network.macAddress}}</span>
+                <span>{{itemData.mainEngine.network.macAddress}}</span>
               </a-form-item>
             </a-col>
           </a-row>
@@ -279,7 +261,11 @@
             </a-row>
 
             <a-row :gutter="24">
-
+              <a-col :span="6">
+                <a-form-item label="是否启用" :labelCol="labelCol" :wrapperCol="wrapperCol">
+                  <span>{{item.enable?'是':'否'}}</span>
+                </a-form-item>
+              </a-col>
             </a-row>
           </div>
         </div>
@@ -340,7 +326,7 @@ export default {
       },
       columns: [
         {
-          title: 'sn',
+          title: 'SN',
           dataIndex: 'sn'
         },
         {
@@ -385,9 +371,7 @@ export default {
       pageElements: 0,
       itemData:{
         mainEngine:{
-          gateBrake:{
-            network:{}
-          }
+          network:{}
         },
         cameras:[]
       },
@@ -445,9 +429,7 @@ export default {
       }else{
         this.itemData ={
           mainEngine:{
-            gateBrake:{
-              network:{}
-            }
+            network:{}
           },
           cameras:[]
         }

@@ -151,7 +151,7 @@ export default {
   methods: {
 
     handleEditUser(record){
-      this.$refs.editModal.add(record,this.userType)
+      this.$refs.editModal.addEdit(record,this.userType)
     },
 
     handleDelete () {

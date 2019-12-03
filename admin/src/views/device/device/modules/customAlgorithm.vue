@@ -356,16 +356,18 @@
         title: '',
         initAlgList:[],
         isEdit:false,
-        customAlg:true
+        customAlg:true,
+        itemIndex:0
       }
     },
     beforeCreate () {
       this.form = this.$form.createForm(this);
     },
     methods: {
-      add (item) {
+      add (item,index) {
         let that = this
         this.visible = true
+        this.itemIndex = index
         this.form.resetFields()
         that.isEdit = false
         that.customAlg = true
@@ -481,10 +483,11 @@
         validateFields((errors, values) => {
           if (!errors) {
             if(this.customAlg){
-              values.algorithm.id = ''
+              values.algorithm.id = this.formData.algorithm.id?this.formData.algorithm.id:''
             }else{
               values.algorithm.id = values.algorithm.cloneId
             }
+            values.itemIndex = this.itemIndex
             if(!values.algorithm.cloneId && !this.customAlg){
               this.$notification.error({
                 message: '提示',
