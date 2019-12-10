@@ -1,16 +1,19 @@
 <template>
-  <div class="logo">
+  <div class="logo" style="text-align: center;padding-left: 0">
     <router-link :to="{name:'dashboard'}">
-      <img src="~@/assets/logo.png" alt="logo">
-      <h1 v-if="showTitle">{{ title }}</h1>
+      <img v-if="constants.logoData.showLogoImageToIndexPage" :src="constants.logoData.logoImage.resourceFullAddress" alt="logo" style="height: 50px;">
     </router-link>
   </div>
 </template>
 
 <script>
+import {mapState} from 'vuex';
 export default {
   name: 'Logo',
   components: {
+  },
+  computed: {
+    ...mapState(['constants'])
   },
   props: {
     title: {

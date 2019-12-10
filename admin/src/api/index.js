@@ -15,7 +15,7 @@ import room from './room'
 import location from './location'
 import deviceModel from './deviceModel'
 import deviceFactory from './deviceFactory'
-import deviceScreen from './deviceScreen'
+import screenWindow from './screenWindow'
 import device from './device'
 import algorithmUsuallyRule from './algorithmUsuallyRule'
 import algorithm from './algorithm'
@@ -28,6 +28,12 @@ import userAccount from './userAccount'
 import nationalAreaCode from './nationalAreaCode'
 import ad from './ad'
 import face from './face'
+import userEstate from './userEstate'
+import webPageSetting from './webPageSetting'
+import deviceServiceNode from './deviceServiceNode'
+import adDist from './adDist'
+import scheduleJob from './scheduleJob'
+import recRecord from './recRecord'
 
 export default {
   constants,
@@ -46,7 +52,7 @@ export default {
   location,
   deviceModel,
   deviceFactory,
-  deviceScreen,
+  screenWindow,
   device,
   algorithmUsuallyRule,
   algorithm,
@@ -58,5 +64,11 @@ export default {
   userAccount,
   nationalAreaCode,
   ad,
-  face
+  face,
+  userEstate,
+  webPageSetting,
+  deviceServiceNode,
+  adDist,
+  scheduleJob,
+  recRecord
 }

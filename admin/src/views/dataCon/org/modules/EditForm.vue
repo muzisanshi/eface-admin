@@ -25,6 +25,7 @@
                 style="margin-left: 10px;display: inline-block;float: right;margin-top: 10px;"
                 :showUploadList="false"
                 accept="image/*"
+                :data="imgData"
                 :beforeUpload="beforeUpload"
                 @change="handleChange"
               >
@@ -48,7 +49,7 @@
             </a-form-item>
           </a-col>
         </a-row>
-
+        <a-row :gutter="24">
           <a-col :span="12">
             <a-form-item
               label="选择地区"
@@ -133,7 +134,11 @@
         isChangeClone: true,
         topImg: '',
         headImageAttId: null,
-        zIndex: 1
+        zIndex: 1,
+        imgData:{
+          attOrigin:'ADMIN',
+          attType:'NORMAL'
+        },
       }
     },
     computed: {

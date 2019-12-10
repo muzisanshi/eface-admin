@@ -3,6 +3,7 @@
 const URI = {
   getById: '/ad/getById',
   page: '/ad/getPage',
+  getAdItemByIds: '/ad/getAdItemByIds',
   saveOrUpdate: '/ad/saveOrUpdate',
   del: '/ad/delete'
 }
@@ -35,9 +36,17 @@ function del (parameter) {
   })
 }
 
+function getAdItemByIds (parameter) {
+  return axios({
+    url: URI.getAdItemByIds,
+    params: parameter
+  })
+}
+
 export default {
   getById,
   getPage,
   del,
-  saveOrUpdate
+  saveOrUpdate,
+  getAdItemByIds
 }

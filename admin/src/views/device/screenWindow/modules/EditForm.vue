@@ -40,7 +40,23 @@
 
         <a-form-item label="下标" :labelCol="labelCol" :wrapperCol="wrapperCol">
           <a-input
-            v-decorator="['indexNum', {initialValue: this.formData.indexNum, rules: [{required: true,pattern: new RegExp(/^[1-9]\d*$/, 'g'), message: '请输入为数字的下标！'}]}]"/>
+            v-decorator="['indexNum', {initialValue: this.formData.indexNum, rules: [{required: true,pattern: new RegExp(/^[0-9]\d*$/, 'g'), message: '请输入为数字的下标！'}]}]"/>
+        </a-form-item>
+
+        <a-form-item
+          label="是否下发广告"
+          :labelCol="labelCol"
+          :wrapperCol="wrapperCol"
+        >
+          <a-switch :checked="canDistAd" @change="changeCanDistAd" v-decorator="['canDistAd']"/>
+        </a-form-item>
+
+        <a-form-item
+          label="备注"
+          :labelCol="labelCol"
+          :wrapperCol="wrapperCol"
+        >
+          <a-input v-decorator="['remark',{initialValue: this.formData.remark}]" />
         </a-form-item>
 
       </a-form>
@@ -69,6 +85,7 @@
         formData: {},
         deviceModelList:[],
         title: '',
+        canDistAd:true
       }
     },
     computed: {
@@ -98,13 +115,19 @@
 
         if(item){
           this.title = '修改'
-          this.$api.deviceScreen.getById({id: item.id})
+          this.$api.screenWindow.getById({id: item.id})
             .then(res => {
               this.formData = res
+              this.canDistAd = res.canDistAd
             })
         }else{
           this.title = '新增'
+          this.canDistAd = true
         }
+      },
+
+      changeCanDistAd(checked) {
+        this.canDistAd = checked
       },
 
       handleSubmit () {
@@ -116,7 +139,12 @@
             if(this.formData.id){
               values.id = this.formData.id
             }
-            this.$api.deviceScreen.saveOrUpdate(values)
+
+            if (!values.canDistAd) {
+              values.canDistAd = this.canDistAd
+            }
+
+            this.$api.screenWindow.saveOrUpdate(values)
               .then(res => {
                 this.$notification.success({
                   message: '成功',

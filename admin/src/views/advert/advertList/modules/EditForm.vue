@@ -146,6 +146,7 @@
     methods: {
       moment,
       add (item) {
+        let that = this;
         this.visible = true
         this.form.resetFields()
         this.formData ={
@@ -161,17 +162,17 @@
           this.title = '修改'
           this.$api.ad.getById({id: item.id})
             .then(res => {
-              if(res.adItems.adFileType === 'MP4'){
+              if(res.adItem.adFileType === 'MP4'){
                 this.isVideo = true
               }else{
                 this.isVideo = false
               }
               this.formData = res
-              this.formData.adItem = res.adItems
+              this.formData.adItem = res.adItem
               this.startDate = res.beginDatetime
               this.endDate = res.endDatetime
               this.topImg = res.adItem.resourceFullAddress
-              this.$refs.videos.src =res.adItem.resourceFullAddress
+              that.$refs.videos.src =res.adItem.resourceFullAddress
               this.fileName = res.adItem.origFilename
               this.enable = this.formData.enable;
 

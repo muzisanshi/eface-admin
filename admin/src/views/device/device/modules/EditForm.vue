@@ -20,7 +20,7 @@
           <a-form :form="form">
 
             <a-row :gutter="24">
-              <a-col :span="12">
+              <a-col :span="8">
                 <a-form-item
                   label="设备型号"
                   :labelCol="labelCol"
@@ -37,7 +37,23 @@
                   </a-select>
                 </a-form-item>
               </a-col>
-              <a-col :span="12">
+              <a-col :span="8">
+                <a-form-item label="名称" :labelCol="labelCol" :wrapperCol="wrapperCol">
+                  <a-input
+                    v-decorator="['name', {initialValue: this.formData.name, rules: [{required: true, message: '请输入名称！'}]}]"/>
+                </a-form-item>
+              </a-col>
+              <a-col :span="8">
+                <a-form-item label="SN" :labelCol="labelCol" :wrapperCol="wrapperCol">
+                  <a-input
+                    v-decorator="['sn', {initialValue: this.formData.sn, rules: [{required: true, message: '请输入SN！'}]}]"/>
+                </a-form-item>
+              </a-col>
+
+            </a-row>
+
+            <a-row :gutter="24">
+              <a-col :span="8">
                 <a-form-item
                   label="设备位置"
                   :labelCol="labelCol"
@@ -46,40 +62,23 @@
                   <a-input @click="selectLocation('','')" :read-only="true" v-decorator="['locationName', {initialValue: this.formData.locationName,rules: [{required: true, message: '请选择设备位置！'}]}]"/>
                 </a-form-item>
               </a-col>
-            </a-row>
 
-            <a-row :gutter="24">
-              <a-col :span="12">
-                <a-form-item label="名称" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                  <a-input
-                    v-decorator="['name', {initialValue: this.formData.name, rules: [{required: true, message: '请输入名称！'}]}]"/>
-                </a-form-item>
-              </a-col>
-              <a-col :span="12">
-                <a-form-item label="SN" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                  <a-input
-                    v-decorator="['sn', {initialValue: this.formData.sn, rules: [{required: true, message: '请输入SN！'}]}]"/>
-                </a-form-item>
-              </a-col>
-            </a-row>
-
-            <a-row :gutter="24">
-              <a-col :span="12">
-                <a-form-item
-                  label="是否启用"
-                  :labelCol="labelCol"
-                  :wrapperCol="wrapperCol"
-                >
-                  <a-switch :checked="enable" @change="changeEnable" v-decorator="['enable']"/>
-                </a-form-item>
-              </a-col>
-              <a-col :span="12">
+              <a-col :span="8">
                 <a-form-item
                   label="备注"
                   :labelCol="labelCol"
                   :wrapperCol="wrapperCol"
                 >
                   <a-input v-decorator="['remark',{initialValue: this.formData.remark}]" />
+                </a-form-item>
+              </a-col>
+              <a-col :span="8">
+                <a-form-item
+                  label="是否启用"
+                  :labelCol="labelCol"
+                  :wrapperCol="wrapperCol"
+                >
+                  <a-switch :checked="enable" @change="changeEnable" v-decorator="['enable']"/>
                 </a-form-item>
               </a-col>
             </a-row>
@@ -164,14 +163,14 @@
                     :wrapperCol="wrapperCol"
                   >
                     <a-input
-                      v-decorator="['mainEngine.network.id',{initialValue: this.formData.mainEngine.network.id}]" v-show="false"/>
-                    <a-input v-decorator="['mainEngine.network.ip',{initialValue: this.formData.mainEngine.network.ip,rules: [{required: true, message: '请选择IP地址！'}]}]" />
+                      v-decorator="['mainEngine.network.id',{initialValue: this.formData.mainEngine.network?this.formData.mainEngine.network.id:''}]" v-show="false"/>
+                    <a-input v-decorator="['mainEngine.network.ip',{initialValue: this.formData.mainEngine.network?this.formData.mainEngine.network.ip:'',rules: [{required: true, message: '请选择IP地址！'}]}]" />
                   </a-form-item>
                 </a-col>
                 <a-col :span="8">
                   <a-form-item label="子网掩码" :labelCol="labelCol" :wrapperCol="wrapperCol">
                     <a-input
-                      v-decorator="['mainEngine.network.subnetMask', {initialValue: this.formData.mainEngine.network.subnetMask, rules: [{required: true, message: '请输入子网掩码！'}]}]"/>
+                      v-decorator="['mainEngine.network.subnetMask', {initialValue: this.formData.mainEngine.network?this.formData.mainEngine.network.subnetMask:'', rules: [{required: true, message: '请输入子网掩码！'}]}]"/>
                   </a-form-item>
                 </a-col>
                 <a-col :span="8">
@@ -180,7 +179,7 @@
                     :labelCol="labelCol"
                     :wrapperCol="wrapperCol"
                   >
-                    <a-input v-decorator="['mainEngine.network.defaultGateway',{initialValue: this.formData.mainEngine.network.defaultGateway, rules: [{required: true, message: '请输入默认网关！'}]}]" />
+                    <a-input v-decorator="['mainEngine.network.defaultGateway',{initialValue: this.formData.mainEngine.network?this.formData.mainEngine.network.defaultGateway:'', rules: [{required: true, message: '请输入默认网关！'}]}]" />
                   </a-form-item>
                 </a-col>
               </a-row>
@@ -189,7 +188,7 @@
                 <a-col :span="8">
                   <a-form-item label="MAC地址" :labelCol="labelCol" :wrapperCol="wrapperCol">
                     <a-input
-                      v-decorator="['mainEngine.network.macAddress', {initialValue: this.formData.mainEngine.network.macAddress, rules: [{required: true, message: '请输入MAC地址！'}]}]"/>
+                      v-decorator="['mainEngine.network.macAddress', {initialValue: this.formData.mainEngine.network?this.formData.mainEngine.network.macAddress:'', rules: [{required: true, message: '请输入MAC地址！'}]}]"/>
                   </a-form-item>
                 </a-col>
               </a-row>
@@ -209,7 +208,7 @@
                     :wrapperCol="wrapperCol"
                   >
                     <a-input
-                      v-decorator="['id',{initialValue: pane.content.id}]" v-show="false"/>
+                      v-decorator="['id',{initialValue: pane.content.id?pane.content.id:''}]" v-show="false"/>
                     <a-select
                       showSearch
                       allowClear
@@ -317,6 +316,21 @@
                 </a-col>
 
                 <a-col :span="8">
+                  <a-form-item label="视频输入宽度" :labelCol="labelCol" :wrapperCol="wrapperCol">
+                    <a-input
+                      v-decorator="['videoInputWidth', {initialValue: pane.content.videoInputWidth}]"/>
+                  </a-form-item>
+                </a-col>
+
+                <a-col :span="8">
+                  <a-form-item label="视频输入高度" :labelCol="labelCol" :wrapperCol="wrapperCol">
+                    <a-input
+                      v-decorator="['videoInputHeight', {initialValue: pane.content.videoInputHeight}]"/>
+                  </a-form-item>
+                </a-col>
+              </a-row>
+              <a-row :gutter="24">
+                <a-col :span="8">
                   <a-form-item
                     label="是否启用"
                     :labelCol="labelCol"
@@ -326,7 +340,17 @@
                   </a-form-item>
                 </a-col>
 
-                <a-col :span="4" style="margin-bottom: 20px">
+                <a-col :span="8">
+                  <a-form-item
+                    label="是否保存未识别记录"
+                    :labelCol="labelCol"
+                    :wrapperCol="wrapperCol"
+                  >
+                    <a-switch :checked="pane.content.saveNotRecRecord" @change="changeNetworksNR($event,index)" v-decorator="['saveNotRecRecord']"/>
+                  </a-form-item>
+                </a-col>
+
+                <a-col :span="8" style="margin-bottom: 20px;text-align: right;padding-top: 10px">
                   <a-button type="primary" @click="customAlgorithm(index)">更多设置</a-button>
                 </a-col>
 
@@ -462,7 +486,7 @@
         },
         wrapperCol: {
           xs: { span: 24 },
-          sm: { span: 16 },
+          sm: { span: 17 },
         },
         visible: false,
         confirmLoading: false,
@@ -494,10 +518,13 @@
               algorithm:{},
               cameraType:"NETWORK",
               enable:true,
+              saveNotRecRecord:true,
               remark:'',
               locationId:'',
               streamAddress:'',
               streamDecodeType:"SOFT",
+              videoInputWidth:'1280',
+              videoInputHeight:'720',
               gateBrake:{
                 direction:'IN',
                 networkSwitchType:"NETWORK",
@@ -559,10 +586,13 @@
           { title: '相机',form:this.$form.createForm(this), content: {
               cameraType:"NETWORK",
               enable:true,
+              saveNotRecRecord:true,
               remark:'',
               locationId:'',
               streamAddress:'',
               streamDecodeType:"SOFT",
+              videoInputWidth:'1280',
+              videoInputHeight:'720',
               gateBrake:{
                 direction:'IN',
                 networkSwitchType:"NETWORK",
@@ -640,6 +670,9 @@
 
       changeNetworkEnable(value,index){
         this.panes[index].content.enable = value
+      },
+      changeNetworksNR(value,index){
+        this.panes[index].content.saveNotRecRecord = value
       },
 
       next(key) {
@@ -743,10 +776,13 @@
                 algorithm:{},
                 cameraType:"NETWORK",
                 enable:true,
+                saveNotRecRecord:true,
                 remark:'',
                 locationId:'',
                 streamAddress:'',
                 streamDecodeType:"SOFT",
+                videoInputWidth:'1280',
+                videoInputHeight:'720',
                 gateBrake:{
                   direction:'IN',
                   networkSwitchType:"NETWORK",

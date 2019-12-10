@@ -38,7 +38,7 @@
             optionFilterProp="children"
             :filterOption="filterCommonOption"
             :options="buildList"
-            v-decorator="['buildingId', {initialValue: this.formData.buildingId?this.formData.buildingId:'',rules: [{required: true, message: '请选择楼栋！'}]}]"
+            v-decorator="['buildingId', {initialValue: this.formData.buildingId?this.formData.buildingId:''}]"
           >
           </a-select>
         </a-form-item>
@@ -56,7 +56,7 @@
             optionFilterProp="children"
             :filterOption="filterCommonOption"
             :options="unitList"
-            v-decorator="['unitId', {initialValue: this.formData.unitId?this.formData.unitId:'',rules: [{required: true, message: '请选择单元！'}]}]"
+            v-decorator="['unitId', {initialValue: this.formData.unitId?this.formData.unitId:''}]"
           >
           </a-select>
         </a-form-item>
@@ -177,8 +177,8 @@
         this.visible = true
         this.form.resetFields()
         this.formData ={}
-        console.log(this.estateId,!this.estateId)
         if(this.estateId){
+          this.formData.estateId = this.estateId
           this.getBuildList(this.estateId)
         }
       },
@@ -207,6 +207,7 @@
       },
 
       getUnitList(value,option){
+        this.formData.roomName=option.componentOptions.children[0].text
         this.$api.subject.getUnitAll({
           buildingId: value
         })
@@ -267,6 +268,9 @@
           if (!errors) {
             if(this.formData.roomName){
               values.roomName = this.formData.roomName
+            }
+            if(!values.buildingId){
+              values.roomName = this.formData.estateName
             }
 
             values.estateId = this.formData.estateId

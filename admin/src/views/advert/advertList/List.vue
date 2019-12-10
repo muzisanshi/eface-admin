@@ -48,7 +48,7 @@
       </a-form>
     </div>
 
-    <div class="table-operator">
+    <div class="table-operator" v-if="!selectAdStatus">
       <a-button type="primary" icon="plus"  @click="handleEdit(null)">新增</a-button>
 
       <!--<a-button type="danger" icon="delete" @click="handleDelete" :disabled="selectedRowKeys.length < 1">删除</a-button>-->
@@ -61,7 +61,7 @@
       rowKey="id"
       :columns="columns"
       :data="loadData"
-      :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange,type:'radio'}"
+      :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectAdChange}"
     >
       <span slot="serial" slot-scope="text, record, index">
 
@@ -74,13 +74,13 @@
       </span>
 
       <span slot="action" slot-scope="text, record">
-        <template>
+        <template v-if="!selectAdStatus">
           <a @click="handleEdit(record)">修改</a>
         </template>
       </span>
 
     </s-table>
-    <edit-form ref="editModal" @ok="handleOk"/>
+    <edit-form v-if="!selectAdStatus" ref="editModal" @ok="handleOk"/>
   </a-card>
 </template>
 
@@ -95,6 +95,24 @@ export default {
     STable,
     EditForm
 
+  },
+  props:{
+    selectAdStatus:{
+      type:Boolean,
+      default:false
+    },
+    playType:{
+      type: String,
+      default: 'ALL'
+    }
+  },
+  watch:{
+    selectAdStatus(newVal){
+      if(newVal){
+        this.selectedRowKeys = [];
+        this.$refs.table.refresh(true)
+      }
+    }
   },
   data () {
     return {
@@ -128,7 +146,64 @@ export default {
         }
       ],
       loadData: parameter => {
-        return this.$api.ad.getPage(Object.assign(parameter, this.queryParam))
+        if(this.selectAdStatus){
+          this.columns = [
+            {
+              title: '广告编号',
+              dataIndex: 'no'
+            },
+            {
+              title: '名称',
+              dataIndex: 'name'
+            },
+            {
+              title: '开始时间',
+              dataIndex: 'beginDatetime'
+            },
+            {
+              title: '结束时间',
+              dataIndex: 'endDatetime'
+            },
+            {
+              title: '是否启用',
+              dataIndex: 'enable',
+              scopedSlots: {customRender: 'status'}
+            }
+          ]
+        }else{
+          this.columns = [
+            {
+              title: '广告编号',
+              dataIndex: 'no'
+            },
+            {
+              title: '名称',
+              dataIndex: 'name'
+            },
+            {
+              title: '开始时间',
+              dataIndex: 'beginDatetime'
+            },
+            {
+              title: '结束时间',
+              dataIndex: 'endDatetime'
+            },
+            {
+              title: '是否启用',
+              dataIndex: 'enable',
+              scopedSlots: {customRender: 'status'}
+            },
+            {
+              title: '操作',
+              dataIndex: 'action',
+              width: '150px',
+              scopedSlots: { customRender: 'action' }
+            }
+          ]
+        }
+        return this.$api.ad.getPage(Object.assign(parameter, this.queryParam,{
+          playType:this.playType
+        }))
           .then(res => {
             return res
           })
@@ -136,6 +211,14 @@ export default {
     }
   },
   methods: {
+
+    onSelectAdChange (selectedRowKeys, selectedRows) {
+      this.selectedRowKeys = selectedRowKeys
+      this.selectedRows = selectedRows
+      if(this.selectAdStatus){
+        this.$emit('selectedAd',selectedRows)
+      }
+    },
 
     handleDelete () {
       const that = this

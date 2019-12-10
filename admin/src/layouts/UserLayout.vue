@@ -3,8 +3,12 @@
     <div class="container">
       <div class="top">
         <div class="header">
+          <div style="text-align: center" v-if="constants.logoData.showLogoImageToLoginPage">
+            <img :src="constants.logoData.logoImage.resourceFullAddress" alt="logo" style="width: 200px;height: 50px;display: inline-block;margin-bottom: 15px;">
+          </div>
           <a href="/">
-            <span class="title">四川翼飞视科技有限公司</span>
+            <span class="title" style="display: block">{{constants.logoData.logoText}}</span>
+            <p class="title_second" v-if="constants.logoData.logoSubTitle">{{constants.logoData.logoSubTitle}}</p>
           </a>
         </div>
         <div class="desc">
@@ -25,13 +29,16 @@
 <script>
 import RouteView from './RouteView'
 import { mixinDevice } from '@/utils/mixin'
-
+import {mapState} from 'vuex';
 export default {
   name: 'UserLayout',
   components: { RouteView },
   mixins: [mixinDevice],
   data () {
     return {}
+  },
+  computed: {
+    ...mapState(['constants'])
   },
   mounted () {
     document.body.classList.add('userLayout')
@@ -71,9 +78,7 @@ export default {
         text-align: center;
 
         .header {
-          height: 44px;
-          line-height: 44px;
-
+          max-height:120px;
           .badge {
             position: absolute;
             display: inline-block;
@@ -92,12 +97,22 @@ export default {
           }
 
           .title {
-            font-size: 33px;
+            font-size: 28px;
             color: rgba(0, 0, 0, .85);
             font-family: Avenir, 'Helvetica Neue', Arial, Helvetica, sans-serif;
             font-weight: 600;
             position: relative;
             top: 2px;
+          }
+
+          .title_second {
+            font-size: 24px;
+            color: rgba(0, 0, 0, .85);
+            font-family: Avenir, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+            font-weight: 600;
+            position: relative;
+            top: 2px;
+            margin-bottom: 10px;
           }
         }
         .desc {

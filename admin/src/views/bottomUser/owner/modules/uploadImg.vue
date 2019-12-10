@@ -10,9 +10,9 @@
     :width="640"
     :visible="visible"
     :confirmLoading="confirmLoading"
-    @ok="handleSubmit"
+    @ok="finish('blob')"
     :maskClosable="false"
-    @cancel="handleCancel"
+    @cancel="handleCancelImg"
   >
     <a-spin :spinning="confirmLoading">
       <div>
@@ -24,11 +24,12 @@
           <input type="button" class="oper" style="height:32px;width:35px;font-size:18px;margin:3px 5px;background-color: #1890ff;color: #fff;border-radius: 4px;line-height: 26px;cursor: pointer;outline-offset: -4px;" value="↺" title="左旋转" @click="rotateLeft"/>
           <input type="button" class="oper" style="height:32px;width:35px;font-size:18px;margin:3px 5px;background-color: #1890ff;color: #fff;border-radius: 4px;line-height: 26px;cursor: pointer;outline-offset: -4px;" value="↻" title="右旋转" @click="rotateRight"/>
           <input type="button" class="oper" style="height:32px;width:35px;font-size:18px;margin:3px 5px;background-color: #1890ff;color: #fff;border-radius: 4px;line-height: 26px;cursor: pointer;outline-offset: -4px;" value="↓" title="下载" @click="down('blob')"/>
-          <input type="button" class="btn btn-blue" value="上传头像" @click="finish('blob')">
+          <!--<input type="button" class="btn btn-blue" value="上传头像" @click="finish('blob')">-->
           <div class="line" style="margin-top: 85px;text-align: left">
             <div class="cropper-content" style="margin-top:-60px;">
               <div class="cropper">
                 <vueCropper
+                  v-if="isCropper"
                   ref="cropper"
                   :img="option.img"
                   :outputSize="option.size"
@@ -93,6 +94,7 @@
         downImg: '#',
         imgFile:'',
         uploadImgRelaPath:'', //上传后的图片的地址（不带服务器域名）
+        isCropper:false
       }
     },
     components: {
@@ -102,6 +104,34 @@
       ...mapState(['constants', 'system'])
     },
     methods: {
+
+      add () {
+        this.visible = true
+        this.isCropper = true
+        this.init()
+      },
+      init(){
+        this.headImg =''
+        this.crap = false
+        this.previews = {}
+        this.option = {
+            img: '',
+            outputSize:1,
+            full: false,
+            outputType: 'png',
+            canMove: true,
+            original: false,
+            canMoveBox: true,
+            autoCrop: true,
+            autoCropWidth: 200,
+            autoCropHeight: 200,
+            fixedBox: true
+        }
+        this.uploadImgRelaPath =''
+        this.imgFile =''
+        this.fileName = ''
+      },
+
       //放大/缩小
       changeScale(num) {
         num = num || 1;
@@ -132,24 +162,40 @@
             this.headImg = img;
             var reader = new FileReader()
             reader.readAsDataURL(data);
+            that.confirmLoading = true
             reader.onload = function (e) {
               base64 = e.target.result
-              that.$api.face.getFaces({
+              that.$api.face.canRegister({
                 imageBase64:base64
               })
-                .then(res => {
-                  formData.append("file", data, this.fileName);
-                  that.$api.face.upload(that.system.uploadMainUrl,Object.assign(formData,{
-                    attOrigin:'ADMIN',
-                    attType:'FACE'
-                  }))
-                    .then(res => {
-
-
-                    }).finally(() => {
-                  })
-                }).finally(() => {
-              })
+                .then(resRes => {
+                  formData.append("file", data, that.fileName);
+                  formData.append("attOrigin", 'ADMIN');
+                  formData.append("attType", 'FACE');
+                  that.$api.face.upload(that.system.uploadMainUrl,formData)
+                    .then(resUpl => {
+                      that.$notification.success({
+                        message: '成功',
+                        description: `上传成功`
+                      })
+                      that.visible = false
+                      that.$emit('uploadFace',resUpl)
+                      that.isCropper = false
+                      that.confirmLoading = false
+                      // that.$api.face.save({
+                      //   faceAttId:resUpl.id,
+                      //   userId:that.userId
+                      // })
+                      //   .then(res => {
+                      //     that.$notification.success({
+                      //       message: '成功',
+                      //       description: `上传成功`
+                      //     })
+                      //     that.$emit('uploadFace',that.userId)
+                      //   }).finally(() => {
+                      //  })
+                    })
+                })
             }
 
 
@@ -169,7 +215,6 @@
 
       //下载图片
       down(type) {
-        console.log('down')
         var aLink = document.createElement('a')
         aLink.download = 'author-img'
         if (type === 'blob') {
@@ -189,13 +234,12 @@
 
       //选择本地图片
       uploadImg(e, num) {
-        console.log('uploadImg');
         var _this = this;
         //上传图片
         var file = e.target.files[0]
         _this.fileName = file.name;
-        if (!/\.(gif|jpg|jpeg|png|bmp|GIF|JPG|PNG)$/.test(e.target.value)) {
-          alert('图片类型必须是.gif,jpeg,jpg,png,bmp中的一种')
+        if (!/\.(gif|jpg|jpeg|png|GIF|JPG|PNG)$/.test(e.target.value)) {
+          alert('图片类型必须是.gif,jpeg,jpg,png中的一种')
           return false
         }
         var reader = new FileReader();
@@ -225,40 +269,9 @@
         console.log(msg)
       },
 
-      add (item) {
-        let that = this;
-        this.visible = true
-      },
-
-      onUploadSuccess(id) {
-        this.uploadFileId = id
-      },
-
-      handleChange(info) {
-        let that = this;
-        switch (info.file.status) {
-          case 'uploading':
-            this.loading = true
-            break
-          case 'done':
-            if (info.file.response.success) {
-              that.topImg = info.file.response.data.resourceFullAddress
-              that.headImageAttId = info.file.response.data.id
-            } else {
-              this.$message.error(info.file.response.errCode + ':' + info.file.response.errDesc)
-            }
-            this.loading = false
-            break
-          case 'error':
-            this.$message.error(info.file.response.status + ':' + info.file.response.error)
-            this.loading = false
-            break
-        }
-      },
-
-      beforeUpload(file) {
-        this.data.title = file.name
-        return true
+      handleCancelImg(){
+        this.visible = false
+        this.isCropper = false
       },
 
       handleSubmit () {

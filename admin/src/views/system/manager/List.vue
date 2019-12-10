@@ -55,22 +55,27 @@
 
       <span slot="action" slot-scope="text, record">
         <a @click="handleEdit(record)">修改</a>
+        <a-divider v-if="record.managerType === 'OPS'" type="vertical"/>
+        <a v-if="record.managerType === 'OPS'" @click="selectEstate(record)">绑定地产</a>
       </span>
     </s-table>
     <edit-form ref="editModal" @ok="handleOk"/>
+    <select-estate ref="selectEstate"/>
   </a-card>
 </template>
 
 <script>
   import {STable} from '@/components'
   import EditForm from './modules/EditForm'
+  import selectEstate from './modules/selectEstate'
   import {mapState} from 'vuex';
   import {mixin} from '@/mixins/mixin'
 
   export default {
     components: {
       STable,
-      EditForm
+      EditForm,
+      selectEstate
     },
     mixins: [mixin],
     data() {
@@ -155,6 +160,10 @@
           onCancel() {
           }
         })
+      },
+
+      selectEstate(record){
+        this.$refs.selectEstate.add(record)
       },
 
       handleDelete() {

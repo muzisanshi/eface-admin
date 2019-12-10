@@ -1,6 +1,6 @@
 <!--
  * @name EditForm.vue
- * @author 王刚
+ * @author lw
  * @date 2019.10.8
  * @desc 账户设置
 -->
@@ -15,7 +15,7 @@
   >
     <a-spin :spinning="confirmLoading">
       <a-form :form="form">
-       
+
         <a-form-item
           label="用户名"
           :labelCol="labelCol"
@@ -23,7 +23,7 @@
         >
           <a-input v-decorator="['username', {initialValue: this.formData.username,rules: [{required: true, message: '请输入用户名！'}]}]" />
         </a-form-item>
-        
+
         <a-form-item
           label="真实姓名"
           :labelCol="labelCol"
@@ -31,7 +31,7 @@
         >
           <a-input v-decorator="['realName', {initialValue: this.formData.realName,rules: [{required: true, message: '请输入真实姓名！'}]}]" />
         </a-form-item>
-        
+
         <a-form-item
           label="手机号"
           :labelCol="labelCol"
@@ -39,12 +39,12 @@
         >
           <a-input v-decorator="['phoneNo', {initialValue: this.formData.phoneNo,rules: [{required: true, message: '请输入手机号！'}]}]" />
         </a-form-item>
-        
+
         <a-form-item label="性别" :labelCol="labelCol" :wrapperCol="wrapperCol">
           <a-select showSearch placeholder="选择性别" optionFilterProp="children" :filterOption="filterCountryOption" :options="constants.list.sexual" v-decorator="['sexual', {initialValue: this.formData.sexual?this.formData.sexual:'',rules: [{required: true, message: '请选择性别！'}]}]">
           </a-select>
         </a-form-item>
-        
+
         <a-form-item
           label="邮箱"
           :labelCol="labelCol"
@@ -52,7 +52,7 @@
         >
           <a-input v-decorator="['email', {initialValue: this.formData.email,rules: [{required: true, message: '请输入邮箱！'}]}]" />
         </a-form-item>
-        
+
         <a-form-item
           label="备注"
           :labelCol="labelCol"
@@ -60,8 +60,8 @@
         >
           <a-input v-decorator="['remark', {initialValue: this.formData.remark}]" />
         </a-form-item>
-        
-        
+
+
 
       </a-form>
     </a-spin>

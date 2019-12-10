@@ -1,13 +1,21 @@
 import { axios } from '@/utils/request'
 
 const URI = {
-  getFaces: '/face/getFaces',
-  del: '/area/delete'
+  canRegister: '/face/canRegister',
+  save: '/face/save',
+  del: '/face/delete'
 }
 
-function getFaces (parameter) {
+function canRegister (parameter) {
   return axios({
-    url: URI.getFaces,
+    url: URI.canRegister,
+    params: parameter
+  })
+}
+
+function save (parameter) {
+  return axios({
+    url: URI.save,
     params: parameter
   })
 }
@@ -30,7 +38,8 @@ function upload (url, parameter) {
 
 
 export default {
-  getFaces,
+  canRegister,
+  save,
   del,
   upload
 }

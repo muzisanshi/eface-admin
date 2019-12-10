@@ -33,15 +33,6 @@
           </a-select>
         </a-form-item>
 
-        <a-form-item
-          label="型号类型"
-          :labelCol="labelCol"
-          :wrapperCol="wrapperCol"
-        >
-          <a-select showSearch allowClear placeholder="选择型号类型" optionFilterProp="children" :filterOption="filterCommonOption" :options="constants.list.deviceModelType" v-decorator="['deviceModelType', {initialValue: this.formData.deviceModelType,rules: [{required: true, message: '请选择型号类型！'}]}]">
-          </a-select>
-        </a-form-item>
-
         <a-form-item label="名称" :labelCol="labelCol" :wrapperCol="wrapperCol">
           <a-input
             v-decorator="['name', {initialValue: this.formData.name, rules: [{required: true, message: '请输入名称！'}]}]"/>
@@ -54,7 +45,7 @@
 
         <a-form-item label="屏幕大小" :labelCol="labelCol" :wrapperCol="wrapperCol">
           <a-input
-            v-decorator="['size', {initialValue: this.formData.size, rules: [{required: true, message: '请输入屏幕大小！'}]}]"/>
+            v-decorator="['screenSize', {initialValue: this.formData.screenSize, rules: [{required: true, message: '请输入屏幕大小！'}]}]"/>
         </a-form-item>
 
         <a-form-item

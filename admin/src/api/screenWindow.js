@@ -1,10 +1,10 @@
   import { axios } from '@/utils/request'
 
 const URI = {
-  getById: '/deviceScreen/getById',
-  page: '/deviceScreen/getPage',
-  saveOrUpdate: '/deviceScreen/saveOrUpdate',
-  del: '/deviceScreen/delete'
+  getById: '/screenWindow/getById',
+  page: '/screenWindow/getPage',
+  saveOrUpdate: '/screenWindow/saveOrUpdate',
+  del: '/screenWindow/delete'
 }
 
 function getPage (parameter) {

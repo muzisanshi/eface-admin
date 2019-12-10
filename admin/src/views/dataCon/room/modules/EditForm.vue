@@ -1,8 +1,8 @@
 <!--
  * @name EditForm.vue
- * @author 王刚
+ * @author lw
  * @date 2019.11.12
- * @desc 新增修改（楼层）
+ * @desc 修改（房间）
 -->
 <template>
   <a-modal
@@ -118,13 +118,13 @@
               values.id = this.formData.id;
             }
             let params = {
-              storeys:[{
+              rooms:[{
                 name:values.name,
                 id:values.id,
-                roomNum:values.roomNum
+                no:values.no,
+                remark:values.remark
               }],
               storeyId:this.formData.storeyId,
-              remark:values.remark
             }
             this.$api.room.saveOrUpdate(params)
               .then(res => {

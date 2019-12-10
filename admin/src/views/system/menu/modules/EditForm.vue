@@ -43,8 +43,8 @@
             :wrapperCol="wrapperCol"
             :validate-status="validateStatus"
             :hasFeedback="true"
-            :required="true">
-            <span slot="help">{{ validateStatus=='error'?'请选择上级菜单':'&nbsp;&nbsp;' }}</span>
+            :required="false">
+            <!--<span slot="help">{{ validateStatus=='error'?'请选择上级菜单':'&nbsp;&nbsp;' }}</span>-->
 
 
             <a-tree-select

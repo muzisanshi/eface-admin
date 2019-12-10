@@ -10,6 +10,19 @@
       <a-form layout="inline">
         <a-row :gutter="48">
 
+          <a-col :md="5" :sm="24">
+            <a-form-item label="地区">
+              <a-input @click="selectRoom()"  v-model="roomName" :read-only="true" />
+            </a-form-item>
+          </a-col>
+
+          <a-col :md="4" :sm="24" v-if="selectUserStatus">
+            <a-form-item label="用户类型">
+              <a-select showSearch allowClear placeholder="选择用户类型"  v-model="queryParam.userTypeCode" optionFilterProp="children" :filterOption="filterCommonOption" :options="constants.list.userTypeCode">
+              </a-select>
+            </a-form-item>
+          </a-col>
+
           <a-col :md="4" :sm="24">
             <a-form-item label="真实姓名">
               <a-input v-model="queryParam.realName" placeholder=""/>
@@ -46,7 +59,7 @@
       </a-form>
     </div>
 
-    <div class="table-operator">
+    <div class="table-operator" v-if="!selectUserStatus">
       <a-button type="primary" icon="plus"  @click="handleEditUser(null)">新增</a-button>
 
       <a-button type="danger" icon="delete" @click="handleDelete" :disabled="selectedRowKeys.length < 1">删除</a-button>
@@ -59,7 +72,7 @@
       rowKey="id"
       :columns="columns"
       :data="loadData"
-      :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange,type:'radio'}"
+      :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
     >
       <span slot="serial" slot-scope="text, record, index">
 
@@ -72,13 +85,14 @@
       </span>
 
       <span slot="action" slot-scope="text, record">
-        <template>
+        <template v-if="!selectUserStatus">
           <a @click="handleEditUser(record)">修改</a>
         </template>
       </span>
 
     </s-table>
-    <edit-form ref="editModal" @ok="handleOk"/>
+    <edit-form  v-if="!selectUserStatus" ref="editModal" @ok="handleOk"/>
+    <select-room ref="selectRoom" @selectRoom="selectRoomSuccess"></select-room>
   </a-card>
 </template>
 
@@ -87,21 +101,33 @@ import { STable } from '@/components'
 import EditForm from './modules/EditForm'
 import {mixin} from '@/mixins/mixin'
 import {mapState} from 'vuex';
+import selectRoom from '@/components/Common/selectRoom'
 export default {
   mixins:[mixin],
   components: {
     STable,
-    EditForm
-
+    EditForm,
+    selectRoom
   },
   props:{
     userType:{
       type:String,
       default:'OWNER'
+    },
+    selectUserStatus:{
+      type: Boolean,
+      default: false
     }
   },
   computed: {
     ...mapState(['constants']),
+  },
+  watch:{
+    selectUserStatus(newVal){
+      if(newVal){
+        this.selectedRowKeys = [];
+      }
+    }
   },
   data () {
     return {
@@ -139,19 +165,29 @@ export default {
           code:this.userType
         }))
           .then(res => {
-            res.records.forEach(item=>{
-              item.ageLevelName = this.constants.data.ageLevel?this.constants.data.ageLevel[item.ageLevel]['name']:''
-              item.sexualName = this.constants.data.sexual?this.constants.data.sexual[item.sexual]['name']:''
-            });
-            return res
+            if(res){
+              res.records.forEach(item=>{
+                item.ageLevelName = this.constants.data.ageLevel?this.constants.data.ageLevel[item.ageLevel]['name']:''
+                item.sexualName = this.constants.data.sexual?this.constants.data.sexual[item.sexual]['name']:''
+              });
+              return res
+            }
+
           })
-      }
+      },
+      roomName:''
     }
   },
   methods: {
 
     handleEditUser(record){
       this.$refs.editModal.addEdit(record,this.userType)
+    },
+
+    selectRoomSuccess(value){
+      this.roomName = value.roomName
+      this.queryParam = Object.assign(this.queryParam,value)
+      // this.form.setFieldsValue({ roomName: value.roomName});
     },
 
     handleDelete () {

@@ -1,9 +1,11 @@
 import api from '@/api/index'
-
+import { UPDATE_LOGO_DATA } from '@/store/mutation-types'
+import { setStore } from '@/utils/storage'
 export default {
   state: {
     data: {},
-    list: {}
+    list: {},
+    logoData: {}
   },
   mutations: {
     UPDATE_CONSTANTS(state, data) {
@@ -11,6 +13,9 @@ export default {
     },
     UPDATE_CONSTANTS_LIST(state, list) {
       state.list = list
+    },
+    UPDATE_LOGO_DATA (state, data) {
+      state.logoData = data
     }
   },
   actions: {
@@ -33,6 +38,14 @@ export default {
         commit("UPDATE_CONSTANTS", res)
         commit("UPDATE_CONSTANTS_LIST", list)
       }).catch(err => {})
+    },
+
+    loadLogoData ({
+       commit
+    }) {
+    api.webPageSetting.getInfo().then(res => {
+      commit("UPDATE_LOGO_DATA", res)
+    }).catch(err => {})
     }
   }
 }

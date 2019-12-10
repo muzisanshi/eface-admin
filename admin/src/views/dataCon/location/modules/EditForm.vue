@@ -168,11 +168,6 @@
         visible: false,
         confirmLoading: false,
         formData: {},
-        parentGoodsGroupId: '',
-        goodsAttrAndOptParams:[],
-        goodsId:'',
-        attrOpt:[[]],
-        cloneAttrOpt:[[{name:''}]],
         buildList:[],
         unitList:[],
         storeyList:[],
@@ -189,6 +184,10 @@
         this.visible = true
         this.form.resetFields()
         this.formData ={}
+        this.buildList = [],
+        this.unitList = [],
+        this.storeyList = [],
+        this.roomList = []
         if(item){
           this.title = '修改'
           this.$api.location.getById({id: item.id})

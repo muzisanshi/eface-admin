@@ -4,6 +4,7 @@ const URI = {
   getById: '/estate/getById',
   getLimitPage: '/estate/getLimitPage',
   page: '/estate/getPage',
+  getAll: '/estate/getAll',
   saveOrUpdate: '/estate/saveOrUpdate',
   del: '/estate/delete'
 }
@@ -29,6 +30,13 @@ function saveOrUpdate (parameter) {
   })
 }
 
+function getAll (parameter) {
+  return axios({
+    url: URI.getAll,
+    params: parameter
+  })
+}
+
 function del (parameter) {
   return axios({
     url: URI.del,
@@ -37,13 +45,6 @@ function del (parameter) {
 }
 
 
-function getAllParent (parameter) {
-  return axios({
-    url: URI.getAllParent,
-    params: parameter
-  })
-}
-
 function getLimitPage (parameter) {
   return axios({
     url: URI.getLimitPage,
@@ -51,18 +52,10 @@ function getLimitPage (parameter) {
   })
 }
 
-function logicalDelete (parameter) {
-  return axios({
-    url: URI.logicalDelete,
-    params: parameter
-  })
-}
-
 export default {
   getById,
   getLimitPage,
-  getAllParent,
-  logicalDelete,
+  getAll,
   getPage,
   del,
   saveOrUpdate

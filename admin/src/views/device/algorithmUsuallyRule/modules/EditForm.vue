@@ -102,7 +102,7 @@
 
           </a-col>
           <a-col :span="12">
-            <p>性别检测（开启后影响速度）</p>
+            <p>性别年龄检测（开启后影响速度）</p>
             <a-form-item
               style="width: 300px;"
             >
@@ -111,7 +111,7 @@
                 placeholder="请选择"
                 style="width: 300px"
                 optionFilterProp="children"
-                v-decorator="['algorithm.checkSexual', {initialValue: this.formData.algorithm.checkSexual?'true':'false', rules: [{required: true, message: '请选择性别检测！'}]}]"
+                v-decorator="['algorithm.checkSexualAge', {initialValue: this.formData.algorithm.checkSexualAge?'true':'false', rules: [{required: true, message: '请选择性别检测！'}]}]"
               >
                 <a-select-option value="true">是</a-select-option>
                 <a-select-option value="false">否</a-select-option>
@@ -159,13 +159,13 @@
 
           </a-col>
           <a-col :span="12">
-            <p>视频镜像，1：水平翻转，-1：垂直翻转</p>
+            <p>视频翻转，1：水平翻转，-1：垂直翻转</p>
             <a-form-item
               style="width: 300px;"
             >
               <a-input
-                v-decorator="['algorithm.videoImage',
-            {initialValue: this.formData.algorithm.videoImage, rules: [{required: true, message: '请输入视频镜像！'}]}]"/>
+                v-decorator="['algorithm.videoFlip',
+            {initialValue: this.formData.algorithm.videoFlip, rules: [{required: true, message: '请输入视频镜像！'}]}]"/>
             </a-form-item>
           </a-col>
         </a-row>
@@ -292,7 +292,29 @@
         visible: false,
         confirmLoading: false,
         formData: {
-          algorithm:{}
+          algorithm:{
+            captureLevel:2,
+            checkAlive:true,
+            checkSexualAge:true,
+            graphicCardIndexNum:0,
+            id:"",
+            cloneId:'',
+            minFaceCheckSize:50,
+            recNum:10,
+            recThreshold:50,
+            roiX1:0,
+            roiX2:1,
+            roiY1:0,
+            roiY2:1,
+            showLevel:63,
+            strangerB:0,
+            strangerG:0,
+            strangerR:255,
+            strangerTimeoutWarnSeconds:3,
+            videoFlip:0,
+            videoOutputSize:1280,
+            videoRotate:0,
+          }
         },
         deviceFactoryList:[],
         title: '',
@@ -310,7 +332,29 @@
         this.visible = true
         this.form.resetFields()
         this.formData ={
-          algorithm:{}
+          algorithm:{
+            captureLevel:2,
+            checkAlive:true,
+            checkSexualAge:true,
+            graphicCardIndexNum:0,
+            id:"",
+            cloneId:'',
+            minFaceCheckSize:50,
+            recNum:10,
+            recThreshold:50,
+            roiX1:0,
+            roiX2:1,
+            roiY1:0,
+            roiY2:1,
+            showLevel:63,
+            strangerB:0,
+            strangerG:0,
+            strangerR:255,
+            strangerTimeoutWarnSeconds:3,
+            videoFlip:0,
+            videoOutputSize:1280,
+            videoRotate:0,
+          }
         }
 
         if(item){
@@ -332,6 +376,9 @@
           if (!errors) {
             if(this.formData.id){
               values.id = this.formData.id
+            }
+            if(this.formData.algorithm.id){
+              values.algorithm.id = this.formData.algorithm.id;
             }
             this.$api.algorithmUsuallyRule.saveOrUpdate(values)
               .then(res => {

@@ -1,8 +1,8 @@
 <!--
  * @name List.vue
  * @author lw
- * @date 2019.11.18
- * @desc 设备屏
+ * @date 2019.12.5
+ * @desc 节点管理
 -->
 <template>
   <a-card :bordered="false" class="content">
@@ -10,15 +10,45 @@
       <a-form layout="inline">
         <a-row :gutter="48">
 
-          <a-col :md="5" :sm="24">
-            <a-form-item label="设备型号名称">
-              <a-input v-model="queryParam.deviceModelName" placeholder=""/>
+          <a-col :md="4" :sm="24">
+            <a-form-item label="内网IP">
+              <a-input v-model="queryParam.insideIp" placeholder=""/>
             </a-form-item>
           </a-col>
 
           <a-col :md="4" :sm="24">
-            <a-form-item label="名称">
-              <a-input v-model="queryParam.name" placeholder=""/>
+            <a-form-item label="外网IP">
+              <a-input v-model="queryParam.outerIp" placeholder=""/>
+            </a-form-item>
+          </a-col>
+
+          <a-col :md="4" :sm="24">
+            <a-form-item label="是否使用ssl">
+              <a-select
+                size="default"
+                placeholder="请选择"
+                optionFilterProp="children"
+                v-model="queryParam.useSSL"
+              >
+                <a-select-option value="">请选择</a-select-option>
+                <a-select-option value="true">是</a-select-option>
+                <a-select-option value="false">否</a-select-option>
+              </a-select>
+            </a-form-item>
+          </a-col>
+
+          <a-col :md="4" :sm="24">
+            <a-form-item label="是否启用">
+              <a-select
+                size="default"
+                placeholder="请选择"
+                optionFilterProp="children"
+                v-model="queryParam.enable"
+              >
+                <a-select-option value="">请选择</a-select-option>
+                <a-select-option value="true">是</a-select-option>
+                <a-select-option value="false">否</a-select-option>
+              </a-select>
             </a-form-item>
           </a-col>
 
@@ -45,7 +75,7 @@
       rowKey="id"
       :columns="columns"
       :data="loadData"
-      :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
+      :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange,type:'radio'}"
     >
       <span slot="serial" slot-scope="text, record, index">
 
@@ -87,16 +117,42 @@ export default {
     return {
       columns: [
         {
-          title: '设备型号',
-          dataIndex: 'deviceModelName'
+          title: '内网IP',
+          dataIndex: 'insideIp'
         },
         {
-          title: '名称',
-          dataIndex: 'name'
+          title: '外网IP',
+          dataIndex: 'outerIp'
         },
         {
-          title: '下标',
-          dataIndex: 'indexNum'
+          title: '内网端口',
+          dataIndex: 'innerPort'
+        },
+        {
+          title: '外网端口',
+          dataIndex: 'outerPort'
+        },
+        {
+          title: '最大连接数',
+          dataIndex: 'maxConnectionsSize'
+        },
+        {
+          title: '是否使用ssl',
+          dataIndex: 'useSSL',
+          scopedSlots: {customRender: 'status'}
+        },
+        {
+          title: '是否启用',
+          dataIndex: 'enable',
+          scopedSlots: {customRender: 'status'}
+        },
+        {
+          title: '在线数量',
+          dataIndex: 'countOnline'
+        },
+        {
+          title: '备注',
+          dataIndex: 'remark'
         },
         {
           title: '操作',
@@ -106,11 +162,12 @@ export default {
         }
       ],
       loadData: parameter => {
-        return this.$api.deviceScreen.getPage(Object.assign(parameter, this.queryParam))
+        return this.$api.deviceServiceNode.getPage(Object.assign(parameter, this.queryParam))
           .then(res => {
             return res
           })
       },
+      importUrl:process.env.VUE_APP_BASE_API+'/deviceModel/importExcel'
     }
   },
   methods: {
@@ -121,7 +178,7 @@ export default {
         title: '删除',
         content: '确定删除勾选的记录？',
         onOk () {
-          that.$api.deviceScreen.del({ ids: that.selectedRowKeys })
+          that.$api.deviceServiceNode.del({ id: that.selectedRowKeys[0] })
             .then(res => {
               that.$notification.success({
                 message: '成功',

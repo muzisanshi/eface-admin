@@ -5,6 +5,7 @@ const URI = {
   getById: '/org/getById',
   saveOrUpdate: '/org/saveOrUpdate',
   getAll: '/org/getAll',
+  getEstates: '/org/getEstates',
   del: '/org/delete'
 }
 
@@ -43,11 +44,18 @@ function getAll (parameter) {
   })
 }
 
+function getEstates (parameter) {
+  return axios({
+    url: URI.getEstates,
+    params: parameter
+  })
+}
 
 export default {
   getPage,
   getById,
   del,
   saveOrUpdate,
-  getAll
+  getAll,
+  getEstates
 }

@@ -36,7 +36,7 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
             >
-              <a-select showSearch allowClear @change="managerTypeChange" placeholder="选择管理员类型" optionFilterProp="children"
+              <a-select showSearch allowClear placeholder="选择管理员类型" optionFilterProp="children"
                         :filterOption="filterCommonOption" :options="constants.list.managerType"
                         v-decorator="['manager.managerType', {initialValue: this.formData.managerType,rules: [{required: true, message: '请选择管理员类型！'}]}]">
               </a-select>
@@ -101,11 +101,22 @@
         </a-row>
 
         <a-row :gutter="24">
+
+          <a-col :span="12">
+            <a-form-item label="密码" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <a-input v-decorator="['manager.password',{initialValue: this.formData.password, rules: [{required: true, message: '请填写密码！'}]}]"/>
+            </a-form-item>
+          </a-col>
+
           <a-col :span="12">
             <a-form-item label="邮件" :labelCol="labelCol" :wrapperCol="wrapperCol">
               <a-input v-decorator="['manager.email',{initialValue: this.formData.email}]"/>
             </a-form-item>
           </a-col>
+
+        </a-row>
+
+        <a-row :gutter="24">
           <a-col :span="12">
             <a-form-item label="备注" :labelCol="labelCol" :wrapperCol="wrapperCol">
               <a-input v-decorator="['manager.remark',{initialValue: this.formData.remark}]"/>
@@ -113,26 +124,26 @@
           </a-col>
         </a-row>
 
-        <a-row :gutter="24" v-if="isEstateList">
-          <a-col :span="23">
-            <a-form-item
-              label="地产"
-              :labelCol="labelCo1"
-              :wrapperCol="wrapperCo1"
-            >
-              <a-select
-                showSearch
-                mode="multiple"
-                placeholder="选择地产"
-                optionFilterProp="children"
-                :filterOption="filterCommonOption"
-                :options="estateList"
-                v-decorator="['manager.estateIds', {initialValue: this.formData.estateIds?this.formData.estateIds:[],rules: [{required: true, message: '请选择地产！'}]}]"
-              >
-              </a-select>
-            </a-form-item>
-          </a-col>
-        </a-row>
+        <!--<a-row :gutter="24" v-if="isEstateList">-->
+          <!--<a-col :span="23">-->
+            <!--<a-form-item-->
+              <!--label="地产"-->
+              <!--:labelCol="labelCo1"-->
+              <!--:wrapperCol="wrapperCo1"-->
+            <!--&gt;-->
+              <!--<a-select-->
+                <!--showSearch-->
+                <!--mode="multiple"-->
+                <!--placeholder="选择地产"-->
+                <!--optionFilterProp="children"-->
+                <!--:filterOption="filterCommonOption"-->
+                <!--:options="estateList"-->
+                <!--v-decorator="['manager.estateIds', {initialValue: this.formData.estateIds?this.formData.estateIds:[],rules: [{required: true, message: '请选择地产！'}]}]"-->
+              <!--&gt;-->
+              <!--</a-select>-->
+            <!--</a-form-item>-->
+          <!--</a-col>-->
+        <!--</a-row>-->
 
       </a-form>
     </a-spin>
@@ -178,7 +189,6 @@
         roleList: [],
         orgList: [],
         estateList:[],
-        isEstateList:false
       }
     },
     computed: {
@@ -216,20 +226,6 @@
             this.orgList = l
           })
 
-        this.$api.estate.getAll({
-          name:'',
-          areaId:''
-        })
-          .then(res => {
-            const l = []
-            for (let i = 0, j = res.length; i < j; i++) {
-              l.push({
-                value: res[i].id,
-                label: res[i].name
-              })
-            }
-            this.estateList = l
-          })
 
         if (item) {
           this.title = '修改'
@@ -239,14 +235,6 @@
             })
         } else {
           this.title = '新增'
-        }
-      },
-
-      managerTypeChange(value){
-        if('OPS' == value){
-          this.isEstateList = true
-        }else{
-          this.isEstateList = false
         }
       },
 

@@ -10,7 +10,7 @@
       <a-form layout="inline">
         <a-row :gutter="48">
           <a-col :md="5" :sm="24">
-            <a-form-item label="地区">
+            <a-form-item label="地产位置">
               <a-input @click="selectRoom()"  v-model="roomName" :read-only="true" />
             </a-form-item>
           </a-col>
@@ -64,7 +64,7 @@
       </a-form>
     </div>
 
-    <div class="table-operator">
+    <div class="table-operator" v-if="!selectDeviceStatus">
       <a-button type="primary" icon="plus"  @click="handleEditInit(null)">新增</a-button>
 
       <!--<a-upload-->
@@ -80,6 +80,10 @@
 
       <!--<a-button type="primary" icon="export" @click="handleExportXls('/device/exportExcel','设备信息')">导出</a-button>-->
 
+      <a-button type="primary" v-if="selectedRows.length === 1 && selectedRows[0].deviceStatus === '离线'">上线</a-button>
+
+      <a-button type="primary" v-if="selectedRows.length === 1 && selectedRows[0].deviceStatus === '在线'">下线</a-button>
+
       <a-button type="danger" icon="delete" @click="handleDelete" :disabled="selectedRowKeys.length < 1">删除</a-button>
 
     </div>
@@ -90,7 +94,7 @@
       rowKey="id"
       :columns="columns"
       :dataSource="data"
-      :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
+      :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectDeviceChange}"
       @expand="handleExpand"
     >
       <span slot="serial" slot-scope="text, record, index">
@@ -277,7 +281,7 @@
       </span>
 
       <span slot="action" slot-scope="text, record">
-        <template>
+        <template v-if="!selectDeviceStatus">
           <a @click="handleEditInit(record)">修改</a>
         </template>
       </span>
@@ -287,7 +291,7 @@
                   :pageSize.sync="queryParam.page.pageSize"
                   @change="onChange" @showSizeChange="onShowSizeChange" :total="pageElements"
                   v-model="queryParam.page.pageNumber"/>
-    <edit-form ref="editModal" @ok="handleLoadOk"/>
+    <edit-form v-if="!selectDeviceStatus" ref="editModal" @ok="handleLoadOk"/>
     <select-room ref="selectRoom" @selectRoom="selectRoomSuccess"></select-room>
   </a-card>
 </template>
@@ -304,6 +308,19 @@ export default {
     STable,
     EditForm,
     selectRoom
+  },
+  props:{
+    selectDeviceStatus:{
+      type:Boolean,
+      default:false
+    }
+  },
+  watch:{
+    selectDeviceStatus(newVal){
+      if(newVal){
+        this.selectedRowKeys = [];
+      }
+    }
   },
   computed: {
     ...mapState(['constants']),
@@ -342,8 +359,20 @@ export default {
           dataIndex: 'locationName'
         },
         {
+          title: '设备状态',
+          dataIndex: 'deviceStatus'
+        },
+        {
+          title: '上线时间',
+          dataIndex: 'onlineDatetime'
+        },
+        {
           title: '版本',
           dataIndex: 'softVer'
+        },
+        {
+          title: '构建版本',
+          dataIndex: 'buildVer'
         },
         {
           title: '是否启用',
@@ -379,6 +408,111 @@ export default {
     }
   },
   created() {
+    if(this.selectDeviceStatus){
+      this.columns = [
+        {
+          title: 'SN',
+          dataIndex: 'sn'
+        },
+        {
+          title: '名称',
+          dataIndex: 'name'
+        },
+        {
+          title: '设备型号',
+          dataIndex: 'deviceModelName'
+        },
+        {
+          title: '位置信息',
+          dataIndex: 'locationName'
+        },
+        {
+          title: '设备状态',
+          dataIndex: 'deviceStatus'
+        },
+        {
+          title: '上线时间',
+          dataIndex: 'onlineDatetime'
+        },
+        {
+          title: '版本',
+          dataIndex: 'softVer'
+        },
+        {
+          title: '构建版本',
+          dataIndex: 'buildVer'
+        },
+        {
+          title: '是否启用',
+          dataIndex: 'enable',
+          scopedSlots: {customRender: 'status'}
+        },
+        {
+          title: '是否删除',
+          dataIndex: 'deleted',
+          scopedSlots: {customRender: 'status'}
+        },
+        {
+          title: '备注',
+          dataIndex: 'remark'
+        }
+      ]
+    }else{
+      this.columns = [
+        {
+          title: 'SN',
+          dataIndex: 'sn'
+        },
+        {
+          title: '名称',
+          dataIndex: 'name'
+        },
+        {
+          title: '设备型号',
+          dataIndex: 'deviceModelName'
+        },
+        {
+          title: '位置信息',
+          dataIndex: 'locationName'
+        },
+        {
+          title: '设备状态',
+          dataIndex: 'deviceStatus'
+        },
+        {
+          title: '上线时间',
+          dataIndex: 'onlineDatetime'
+        },
+        {
+          title: '版本',
+          dataIndex: 'softVer'
+        },
+        {
+          title: '构建版本',
+          dataIndex: 'buildVer'
+        },
+        {
+          title: '是否启用',
+          dataIndex: 'enable',
+          scopedSlots: {customRender: 'status'}
+        },
+        {
+          title: '是否删除',
+          dataIndex: 'deleted',
+          scopedSlots: {customRender: 'status'}
+        },
+        {
+          title: '备注',
+          dataIndex: 'remark'
+        },
+        {
+          title: '操作',
+          dataIndex: 'action',
+          width: '150px',
+          scopedSlots: { customRender: 'action' }
+        }
+      ]
+    }
     this.loadData()
   },
   methods: {
@@ -397,6 +531,9 @@ export default {
       this.expandedRowKeys = []
       this.$api.device.getPage(Object.assign({}, this.queryParam))
         .then(res => {
+          res.records.forEach(item=>{
+            item.deviceStatus = item.deviceStatus === 'OFFLINE'?'离线':item.deviceStatus === 'ONLINE'?'在线':'未知'
+          });
           this.data = res.records
           this.pageElements = res.totalElements
         })
@@ -434,7 +571,15 @@ export default {
           cameras:[]
         }
       }
+    },
 
+    onSelectDeviceChange (selectedRowKeys, selectedRows) {
+      this.selectedRowKeys = selectedRowKeys
+      this.selectedRows = selectedRows
+      if(this.selectDeviceStatus){
+        this.$emit('selectedDevice',selectedRows)
+        this.selectAdStatus = false
+      }
     },
 
     handleEditInit(record){

@@ -105,10 +105,6 @@ export default {
           dataIndex: 'deviceFactoryName'
         },
         {
-          title: '型号类型',
-          dataIndex: 'deviceModelTypeName'
-        },
-        {
           title: '名称',
           dataIndex: 'name'
         },
@@ -118,7 +114,7 @@ export default {
         },
         {
           title: '屏幕大小',
-          dataIndex: 'size'
+          dataIndex: 'screenSize'
         },
         {
           title: '备注',
