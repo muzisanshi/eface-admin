@@ -1,7 +1,8 @@
-  import { axios } from '@/utils/request'
+import { axios } from '@/utils/request'
 
 const URI = {
-  page: '/recRecord/getPage'
+  page: '/recRecord/getPage',
+  getRecImage: '/recRecord/getRecImage'
 }
 
 function getPage (parameter) {
@@ -11,6 +12,14 @@ function getPage (parameter) {
   })
 }
 
+function getRecImage (parameter) {
+  return axios({
+    url: URI.getRecImage,
+    params: parameter
+  })
+}
+
 export default {
-  getPage
+  getPage,
+  getRecImage
 }

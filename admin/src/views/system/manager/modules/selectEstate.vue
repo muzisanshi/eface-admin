@@ -7,16 +7,16 @@
 <template>
   <a-modal title="绑定地产" :width="1240" :visible="visible" :confirmLoading="confirmLoading" :maskClosable="false" @ok="handleSubmit"
            @cancel="handleCancel">
-    <a-spin :spinning="confirmLoading">
+    <a-spin :spinning="confirmLoading" v-if="visible">
         <a-collapse @change="changeActiveKey">
           <template v-for="(item,index) in orgList">
             <a-collapse-panel :header="item.label+'（'+item.selectedNum+'）'" :key="index" :showArrow="false" style="position: relative">
-              <div style="position: absolute;right: 10px;top: 10px;">
+              <div style="position: absolute;right: 10px;top: 10px;" v-if="item.estates.length>0">
                 <a-checkbox :indeterminate="item.indeterminate" @change="onCheckAllChange($event,index)" :checked="item.checkAll">
                   全选
                 </a-checkbox>
               </div>
-              <a-checkbox-group :options="item.estates" :value="item.checked" @change="onCheckoutChange($event,index)" />
+              <a-checkbox-group :options="item.estates" :value="item.selected" @change="onCheckboxChange($event,index)" />
             </a-collapse-panel>
           </template>
         </a-collapse>
@@ -53,13 +53,10 @@
         confirmLoading: false,
 
         uploadFileId: '',
-        formData: {},
-        title: '',
-        form: this.$form.createForm(this),
-        text: `A dog is a type of domesticated animal.Known for its loyalty and faithfulness,it can be found as a welcome guest in many households across the world.`,
         orgList:[],
         itemList:[],
-
+        managerId:'',
+        activeKey:''
       }
     },
     computed: {
@@ -71,10 +68,11 @@
       },
       add(item) {
         this.visible = true
-        this.form.resetFields()
-        this.formData = {};
         this.orgList = []
-        this.$api.org.getAll({
+        this.itemList = []
+        this.activeKey = ''
+        this.managerId = item.id
+        this.$api.org.getAllByManager({
           managerId: item.id
         })
           .then(res => {
@@ -97,7 +95,7 @@
                 .then(resItem => {
                   for (let k = 0; k < this.orgList.length; k++) {
                     for (let j = 0; j< resItem.length; j++) {
-                      if(this.orgList[k].id === resItem[j].orgId){
+                      if(this.orgList[k].value === resItem[j].orgId){
                         this.orgList[k].selected = resItem[j].estateIds
                       }
                     }
@@ -106,8 +104,8 @@
           })
       },
 
-      onCheckoutChange(checkedList,index){
-        this.orgList[index].checked = checkedList
+      onCheckboxChange(checkedList,index){
+        this.orgList[index].selected = checkedList
         this.orgList[index].selectedNum = checkedList.length
         this.orgList[index].indeterminate = !!checkedList.length && checkedList.length < this.orgList[index].estates.length;
         this.orgList[index].checkAll = checkedList.length === this.orgList[index].estates.length;
@@ -117,8 +115,7 @@
         this.orgList[index].indeterminate = false;
         this.orgList[index].checkAll = e.target.checked;
         this.orgList[index].selectedNum = e.target.checked?this.orgList[index].estates.length:0
-        this.orgList[index].checked = e.target.checked ? this.handleSelectedCheck(this.orgList[index].estates) : []
-        console.log(this.orgList[index].checked)
+        this.orgList[index].selected = e.target.checked ? this.handleSelectedCheck(this.orgList[index].estates) : []
       },
 
       handleSelectedCheck(data){
@@ -146,9 +143,16 @@
                     value: res[i].id,
                     label: res[i].name,
                   })
+
                 }
                 that.orgList[currentItem].estates = l
-                console.log(that.orgList[currentItem].checked)
+                if(Object.is(that.orgList[currentItem].estates.length,that.orgList[currentItem].selectedNum)){
+                  that.orgList[currentItem].checkAll = true
+                  that.orgList[currentItem].indeterminate = false
+                }else{
+                  that.orgList[currentItem].checkAll = false
+                  that.orgList[currentItem].indeterminate = true
+                }
               })
           }
         }
@@ -156,30 +160,34 @@
       },
 
       handleSubmit() {
-        const {form: {validateFields}} = this
-        this.confirmLoading = true
-        validateFields((errors, values) => {
-          if (!errors) {
-            if (this.formData.id) {
-              values.manager.id = this.formData.id;
+        let orgEstates = []
+        if(this.orgList.length>0){
+          this.orgList.map((item)=>{
+            let obj = {
+              estateIds: item.selected,
+              orgId: item.value
             }
-            this.$api.manager.saveOrUpdate(values)
-              .then(res => {
-                this.$notification.success({
-                  message: '成功',
-                  description: this.title + '成功'
-                })
-                this.visible = false
-                this.confirmLoading = false
-                this.form.resetFields()
-                this.$emit('ok', values)
-              }).finally(() => {
-              this.confirmLoading = false
-            })
-          } else {
-            this.confirmLoading = false
+            orgEstates.push(obj)
+          })
+
+          let params = {
+            managerId: this.managerId,
+            orgEstates: orgEstates
           }
-        })
+          this.$api.org.saveOrUpdateOps(params)
+            .then(res => {
+              this.$notification.success({
+                message: '成功',
+                description: '绑定成功'
+              })
+              this.visible = false
+              this.confirmLoading = false
+            }).finally(() => {
+            this.confirmLoading = false
+          })
+
+        }
+
       },
     }
   }

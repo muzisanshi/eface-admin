@@ -179,9 +179,6 @@ export default {
       this.queryParam.level = area.level[area.level.length-1];
     },
 
-    handleGoodsRecord(record){
-      this.$refs.editRecordModal.add(this.selectedRows[0])
-    },
     handleModify(item){
       this.handleEdit(item)
     },

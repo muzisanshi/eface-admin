@@ -1,20 +1,29 @@
 <!--
  * @name List.vue
  * @author lw
- * @date 2019.5.29
- * @desc 地产管理
+ * @date 2019.12.11
+ * @desc 街道办管理
 -->
 <template>
   <a-card :bordered="false" class="content">
     <div class="table-page-search-wrapper">
       <a-form layout="inline">
         <a-row :gutter="48">
+
           <a-col :md="4" :sm="24">
             <a-form-item label="名称">
-              <a-input v-model="queryParam.name"/>
+              <a-input v-model="queryParam.name" placeholder=""/>
             </a-form-item>
           </a-col>
-          <a-col :md="3" :sm="24">
+
+          <a-col :md="4" :sm="24">
+            <a-form-item label="地区">
+              <select-area ref="selectAreaAll" :initArea="initCascader"
+                           @selectedArea="selectedArea($event)"></select-area>
+            </a-form-item>
+          </a-col>
+
+          <a-col :md="4" :sm="24">
             <span class="table-page-search-submitButtons">
               <a-button type="primary" @click="$refs.table.refresh(true)">查询</a-button>
               <a-button style="margin-left: 8px" @click="resetSearchForm">重置</a-button>
@@ -25,8 +34,10 @@
     </div>
 
     <div class="table-operator">
-      <a-button type="primary" icon="plus" @click="handleEdit(null)">新增</a-button>
+      <a-button type="primary" icon="plus"  @click="handleEdit(null)">新增</a-button>
+
       <a-button type="danger" icon="delete" @click="handleDelete" :disabled="selectedRowKeys.length < 1">删除</a-button>
+
     </div>
 
     <s-table
@@ -38,13 +49,11 @@
       :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
     >
       <span slot="serial" slot-scope="text, record, index">
+
         {{ index + 1 }}
       </span>
 
       <a-avatar size="large" shape="square" :src="record | resourceFullAddressFilter" slot="resourceFullAddress" slot-scope="record"/>
-
-      <!-- <p slot="expandedRowRender" slot-scope="record" style="margin: 0">{{record.summary}}</p> -->
-
       <span slot="status" slot-scope="text">
         <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />
       </span>
@@ -54,67 +63,39 @@
           <a @click="handleEdit(record)">修改</a>
         </template>
       </span>
+
     </s-table>
     <edit-form ref="editModal" @ok="handleOk"/>
-    <!--<div id='allmap' style="width:100%;height:350px;"></div>-->
   </a-card>
 </template>
 
 <script>
 import { STable } from '@/components'
-import EditForm from './EditForm'
+import EditForm from './modules/EditForm'
+import {mapState} from 'vuex';
 import {mixin} from '@/mixins/mixin'
-
+import selectArea from '@/components/Common/selectArea'
 export default {
   mixins:[mixin],
   components: {
     STable,
-    EditForm
+    EditForm,
+    selectArea
+  },
+  computed: {
+    ...mapState(['constants']),
   },
   data () {
     return {
-      queryParam: {
-        enable:''
-      },
       columns: [
         {
-          title: '#',
-          scopedSlots: { customRender: 'serial' }
-        },
-        {
-          title: '编码',
-          dataIndex: 'code'
+          title: '关联区域',
+          dataIndex: 'areaName'
         },
         {
           title: '名称',
           dataIndex: 'name'
         },
-        {
-          title: '组织名称',
-          dataIndex: 'orgName'
-        },
-        {
-          title: '地区名称',
-          dataIndex: 'areaName'
-        },
-        {
-          title: '详细地址',
-          dataIndex: 'fullAddress'
-        },
-        {
-          title: '街道办',
-          dataIndex: 'streetOfficeName'
-        },
-
-        {
-          title: '纬度',
-          dataIndex: 'lat'
-        },
-        {
-          title: '经度',
-          dataIndex: 'lng'
-        },
-
         {
           title: '备注',
           dataIndex: 'remark'
@@ -126,9 +107,9 @@ export default {
           scopedSlots: { customRender: 'action' }
         }
       ],
-      enableChecked:false,
+      initCascader:[],
       loadData: parameter => {
-        return this.$api.estate.getPage(Object.assign(parameter, this.queryParam))
+        return this.$api.streetOffice.getPage(Object.assign(parameter, this.queryParam))
           .then(res => {
             return res
           })
@@ -136,13 +117,18 @@ export default {
     }
   },
   methods: {
+
+    selectedArea(area) {
+      this.queryParam.areaId = area.value[area.value.length-1];
+    },
+
     handleDelete () {
       const that = this
       that.$confirm({
         title: '删除',
         content: '确定删除勾选的记录？',
         onOk () {
-          that.$api.estate.del({ ids: that.selectedRowKeys })
+          that.$api.streetOffice.del({ ids: that.selectedRowKeys })
             .then(res => {
               that.$notification.success({
                 message: '成功',
@@ -154,7 +140,18 @@ export default {
         onCancel () {
         }
       })
-    }
+    },
   }
 }
 </script>
+<style scoped>
+.hasBack{
+  background-color:#b75757;
+}
+.hasBack td {
+  color:#fff;
+}
+  .table-page-search-wrapper .ant-col-sm-24{
+    padding: 0 10px!important;
+  }
+</style>

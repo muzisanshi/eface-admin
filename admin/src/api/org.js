@@ -4,7 +4,9 @@ const URI = {
   page: '/org/getPage',
   getById: '/org/getById',
   saveOrUpdate: '/org/saveOrUpdate',
+  saveOrUpdateOps: '/opsEstate/saveOrUpdate',
   getAll: '/org/getAll',
+  getAllByManager: '/org/getAllByManager',
   getEstates: '/org/getEstates',
   del: '/org/delete'
 }
@@ -30,6 +32,13 @@ function saveOrUpdate (parameter) {
   })
 }
 
+function saveOrUpdateOps (parameter) {
+  return axios({
+    url: URI.saveOrUpdateOps,
+    params: parameter
+  })
+}
+
 function del (parameter) {
   return axios({
     url: URI.del,
@@ -40,6 +49,13 @@ function del (parameter) {
 function getAll (parameter) {
   return axios({
     url: URI.getAll,
+    params: parameter
+  })
+}
+
+function getAllByManager (parameter) {
+  return axios({
+    url: URI.getAllByManager,
     params: parameter
   })
 }
@@ -57,5 +73,7 @@ export default {
   del,
   saveOrUpdate,
   getAll,
-  getEstates
+  getAllByManager,
+  getEstates,
+  saveOrUpdateOps
 }

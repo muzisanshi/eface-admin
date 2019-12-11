@@ -7,7 +7,6 @@
       :action="system.uploadMainUrl"
       :beforeUpload="beforeUpload"
       @change="handleChange"
-      :headers="header"
       :data="data"
       accept="image/*"
     >
@@ -58,7 +57,8 @@ export default {
         'X-clientId': SIGN.clientId
       },
       data: {
-        title: null
+        attOrigin:'ADMIN',
+        attType:'NORMAL'
       },
       config: {
         imageCompressionParams: {

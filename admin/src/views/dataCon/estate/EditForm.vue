@@ -19,24 +19,12 @@
       <a-form :form="form">
         <a-row :gutter="24">
           <a-col :span="12">
-            <a-form-item
-              label="选择地区"
-              :labelCol="labelCol"
-              :wrapperCol="wrapperCol"
-            >
-              <select-area ref="selectArea" :initArea="initCascader"
-                           @selectedArea="selectedArea"></select-area>
-            </a-form-item>
-          </a-col>
-          <a-col :span="12">
             <a-form-item label="名称" :labelCol="labelCol" :wrapperCol="wrapperCol">
               <a-input
                 v-decorator="['name', {initialValue: this.formData.name, rules: [{required: true, message: '请输入组织名称！'}]}]"/>
             </a-form-item>
           </a-col>
-        </a-row>
 
-        <a-row :gutter="24">
           <a-col :span="12">
             <a-form-item
               label="组织"
@@ -54,6 +42,21 @@
               </a-select>
             </a-form-item>
           </a-col>
+
+        </a-row>
+
+        <a-row :gutter="24">
+          <a-col :span="12">
+            <a-form-item
+              label="选择地区"
+              :labelCol="labelCol"
+              :wrapperCol="wrapperCol"
+            >
+              <select-area ref="selectArea" :initArea="initCascader"
+                           @selectedArea="selectedArea"></select-area>
+            </a-form-item>
+          </a-col>
+
           <a-col :span="12">
             <a-form-item label="详细地址" :labelCol="labelCol" :wrapperCol="wrapperCol" :required="true">
               <input class="ant-input" id="detailAddress" v-model="inputChange" />
@@ -76,11 +79,20 @@
 
         <a-row :gutter="24">
           <a-col :span="12">
+            <a-form-item label="街道办" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <a-input @click="selectStreetOffice" :read-only="true" v-decorator="['streetOfficeName', {initialValue: this.formData.streetOfficeName,rules: [{required: true, message: '请选择街道办！'}]}]"/>
+            </a-form-item>
+          </a-col>
+
+          <a-col :span="12">
             <a-form-item label="编码" :labelCol="labelCol" :wrapperCol="wrapperCol">
               <a-input
                 v-decorator="['code', {initialValue: this.formData.code, rules: [{required: true, message: '请输入编码！'}]}]"/>
             </a-form-item>
           </a-col>
+        </a-row>
+
+        <a-row :gutter="24">
           <a-col :span="12">
             <a-form-item
               label="备注"
@@ -92,6 +104,8 @@
           </a-col>
         </a-row>
 
+        <select-street-office ref="selectStreetOffice" @selectSuccess="selectSuccess"></select-street-office>
+
         <div id='allmap' style="width:100%;height:350px;margin-bottom: 15px"></div>
 
       </a-form>
@@ -102,10 +116,11 @@
 <script>
   import {mixin} from '@/mixins/mixin'
   import selectArea from '@/components/Common/selectArea'
+  import selectStreetOffice from '@/components/Common/selectStreetOffice'
 export default {
   mixins:[mixin],
   components: {
-    selectArea
+    selectArea,selectStreetOffice
   },
   data () {
     return {
@@ -151,6 +166,17 @@ export default {
     onUploadSuccess (id){
       this.uploadFileId = id
     },
+
+    selectSuccess(value){
+      this.formData.streetOfficeName = value.name
+      this.formData.streetOfficeId = value.value
+      this.form.setFieldsValue({ streetOfficeName: value.name});
+    },
+
+    selectStreetOffice() {
+      this.$refs.selectStreetOffice.selectStreetOffice()
+    },
+
     add (item) {
       this.zIndex = 10
       let that = this;
@@ -165,7 +191,7 @@ export default {
       this.latitude = '';
       this.longitude = '';
       this.inputChange = '';
-      this.$api.org.getAll()
+      this.$api.org.getAll({})
         .then(res => {
           const l = []
           for (let i = 0, j = res.length; i < j; i++) {
@@ -325,6 +351,9 @@ export default {
           values.fullAddress = this.inputChange;
           if (this.initCascader.length > 0) {
             values.areaId = this.initCascader[this.initCascader.length - 1]
+          }
+          if(this.formData.streetOfficeId){
+            values.streetOfficeId = this.formData.streetOfficeId
           }
           this.$api.estate.saveOrUpdate(values)
             .then(res => {

@@ -34,6 +34,8 @@ import deviceServiceNode from './deviceServiceNode'
 import adDist from './adDist'
 import scheduleJob from './scheduleJob'
 import recRecord from './recRecord'
+import streetOffice from './streetOffice'
+import deviceVersion from './deviceVersion'
 
 export default {
   constants,
@@ -70,5 +72,7 @@ export default {
   deviceServiceNode,
   adDist,
   scheduleJob,
-  recRecord
+  recRecord,
+  streetOffice,
+  deviceVersion
 }

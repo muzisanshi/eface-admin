@@ -10,38 +10,38 @@
       <a-form layout="inline">
         <a-row :gutter="48">
 
-          <a-col :md="5" :sm="24">
+          <a-col :md="6" :sm="24">
             <a-form-item label="地区">
               <a-input @click="selectRoom()"  v-model="roomName" :read-only="true" />
             </a-form-item>
           </a-col>
 
-          <a-col :md="4" :sm="24" v-if="selectUserStatus">
+          <a-col :md="6" :sm="24" v-if="selectUserStatus">
             <a-form-item label="用户类型">
               <a-select showSearch allowClear placeholder="选择用户类型"  v-model="queryParam.userTypeCode" optionFilterProp="children" :filterOption="filterCommonOption" :options="constants.list.userTypeCode">
               </a-select>
             </a-form-item>
           </a-col>
 
-          <a-col :md="4" :sm="24">
+          <a-col :md="5" :sm="24">
             <a-form-item label="真实姓名">
               <a-input v-model="queryParam.realName" placeholder=""/>
             </a-form-item>
           </a-col>
 
-          <a-col :md="4" :sm="24">
+          <a-col :md="5" :sm="24">
             <a-form-item label="电话号码">
               <a-input v-model="queryParam.phoneNo" placeholder=""/>
             </a-form-item>
           </a-col>
 
-          <a-col :md="4" :sm="24">
+          <a-col :md="5" :sm="24">
             <a-form-item label="年龄级别">
               <a-select showSearch allowClear placeholder="选择年龄级别"  v-model="queryParam.ageLevel" optionFilterProp="children" :filterOption="filterCommonOption" :options="constants.list.ageLevel">
               </a-select>
             </a-form-item>
           </a-col>
-          <a-col :md="4" :sm="24">
+          <a-col :md="5" :sm="24">
             <a-form-item label="性别">
               <a-select showSearch allowClear placeholder="选择性别"  v-model="queryParam.sexual" optionFilterProp="children" :filterOption="filterCommonOption" :options="constants.list.sexual">
               </a-select>

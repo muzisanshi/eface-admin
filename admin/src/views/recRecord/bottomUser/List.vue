@@ -76,12 +76,15 @@
       </span>
 
       <span slot="action" slot-scope="text, record">
+        <template>
+          <a @click="handleEdit(record)">查看截图</a>
+        </template>
       </span>
 
     </s-table>
 
     <select-data-Con ref="selectSuccess" @selectSuccess="selectSuccess"></select-data-Con>
-
+    <look-img ref="editModal" @ok="handleOk"/>
   </a-card>
 </template>
 
@@ -91,10 +94,11 @@ import {mixin} from '@/mixins/mixin'
 import {mapState} from 'vuex';
 import moment from 'moment';
 import selectDataCon from '@/components/Common/selectDataCon'
+import lookImg from './lookImg'
 export default {
   mixins:[mixin],
   components: {
-    STable,selectDataCon
+    STable,selectDataCon,lookImg
   },
   computed: {
     ...mapState(['constants']),
@@ -114,15 +118,7 @@ export default {
           dataIndex: 'phoneNo'
         },
         {
-          title: '年龄级别',
-          dataIndex: 'ageLevelName'
-        },
-        {
-          title: '性别',
-          dataIndex: 'sexualName'
-        },
-        {
-          title: '地产',
+          title: '地产名称',
           dataIndex: 'estateName'
         },
         {
@@ -164,6 +160,12 @@ export default {
         {
           title: '备注',
           dataIndex: 'remark'
+        },
+        {
+          title: '操作',
+          dataIndex: 'action',
+          width: '150px',
+          scopedSlots: { customRender: 'action' }
         }
       ],
       dateFormat: 'YYYY-MM-DD HH:mm:ss',
@@ -175,10 +177,6 @@ export default {
           endDate:this.endDate?this.endDate:this.moment().endOf('day').format(this.dateFormat)
         }))
           .then(res => {
-            res.records.forEach(item=>{
-              item.ageLevelName = this.constants.data.ageLevel?this.constants.data.ageLevel[item.ageLevel]['name']:''
-              item.sexualName = this.constants.data.sexual?this.constants.data.sexual[item.sexual]['name']:''
-            });
             return res
           })
       }
