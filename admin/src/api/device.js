@@ -7,6 +7,10 @@ const URI = {
   del: '/device/delete',
   cameraDel: '/camera/delete',
   importExcel: '/device/importExcel',
+  openGateBrake: '/device/openGateBrake',
+  recoverConnect: '/device/recoverConnect',
+  rejectConnect: '/device/rejectConnect',
+  resetDevice: '/device/resetDevice',
   exportExcel: '/device/exportExcel'
 }
 
@@ -59,6 +63,34 @@ function exportExcel (parameter) {
   })
 }
 
+function openGateBrake (parameter) {
+  return axios({
+    url: URI.openGateBrake,
+    params: parameter
+  })
+}
+
+function recoverConnect (parameter) {
+  return axios({
+    url: URI.recoverConnect,
+    params: parameter
+  })
+}
+
+function rejectConnect (parameter) {
+  return axios({
+    url: URI.rejectConnect,
+    params: parameter
+  })
+}
+
+function resetDevice (parameter) {
+  return axios({
+    url: URI.resetDevice,
+    params: parameter
+  })
+}
+
 export default {
   getById,
   getPage,
@@ -66,5 +98,9 @@ export default {
   saveOrUpdate,
   importExcel,
   exportExcel,
-  cameraDel
+  cameraDel,
+  openGateBrake,
+  recoverConnect,
+  rejectConnect,
+  resetDevice
 }

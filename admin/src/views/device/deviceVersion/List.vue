@@ -11,15 +11,29 @@
         <a-row :gutter="48">
 
           <a-col :md="4" :sm="24">
-            <a-form-item label="名称">
-              <a-input v-model="queryParam.name" placeholder=""/>
+            <a-form-item label="设备型号">
+              <a-input v-model="queryParam.deviceModelName" placeholder=""/>
             </a-form-item>
           </a-col>
 
           <a-col :md="4" :sm="24">
-            <a-form-item label="地区">
-              <select-area ref="selectAreaAll" :initArea="initCascader"
-                           @selectedArea="selectedArea($event)"></select-area>
+            <a-form-item label="版本">
+              <a-input v-model="queryParam.softVer" placeholder=""/>
+            </a-form-item>
+          </a-col>
+
+          <a-col :md="4" :sm="24">
+            <a-form-item label="是否强制更新">
+              <a-select
+                size="default"
+                placeholder="请选择"
+                optionFilterProp="children"
+                v-model="queryParam.forcedUpdate"
+              >
+                <a-select-option value="">请选择</a-select-option>
+                <a-select-option value="true">是</a-select-option>
+                <a-select-option value="false">否</a-select-option>
+              </a-select>
             </a-form-item>
           </a-col>
 
@@ -75,13 +89,11 @@ import { STable } from '@/components'
 import EditForm from './modules/EditForm'
 import {mapState} from 'vuex';
 import {mixin} from '@/mixins/mixin'
-import selectArea from '@/components/Common/selectArea'
 export default {
   mixins:[mixin],
   components: {
     STable,
     EditForm,
-    selectArea
   },
   computed: {
     ...mapState(['constants']),

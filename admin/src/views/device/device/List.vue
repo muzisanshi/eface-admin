@@ -80,9 +80,9 @@
 
       <!--<a-button type="primary" icon="export" @click="handleExportXls('/device/exportExcel','设备信息')">导出</a-button>-->
 
-      <a-button type="primary" v-if="selectedRows.length === 1 && selectedRows[0].deviceStatus === '离线'">上线</a-button>
+      <a-button type="primary" @click="recoverDevice" v-if="selectedRows.length === 1 && selectedRows[0].deviceStatus === '离线'">上线</a-button>
 
-      <a-button type="primary" v-if="selectedRows.length === 1 && selectedRows[0].deviceStatus === '在线'">下线</a-button>
+      <a-button type="primary" @click="rejectDevice" v-if="selectedRows.length === 1 && selectedRows[0].deviceStatus === '在线'">下线</a-button>
 
       <a-button type="danger" icon="delete" @click="handleDelete" :disabled="selectedRowKeys.length < 1">删除</a-button>
 
@@ -341,60 +341,7 @@ export default {
         xs: { span: 24 },
         sm: { span: 14 },
       },
-      columns: [
-        {
-          title: 'SN',
-          dataIndex: 'sn'
-        },
-        {
-          title: '名称',
-          dataIndex: 'name'
-        },
-        {
-          title: '设备型号',
-          dataIndex: 'deviceModelName'
-        },
-        {
-          title: '位置信息',
-          dataIndex: 'locationName'
-        },
-        {
-          title: '设备状态',
-          dataIndex: 'deviceStatus'
-        },
-        {
-          title: '上线时间',
-          dataIndex: 'onlineDatetime'
-        },
-        {
-          title: '版本',
-          dataIndex: 'softVer'
-        },
-        {
-          title: '构建版本',
-          dataIndex: 'buildVer'
-        },
-        {
-          title: '是否启用',
-          dataIndex: 'enable',
-          scopedSlots: {customRender: 'status'}
-        },
-        {
-          title: '是否删除',
-          dataIndex: 'deleted',
-          scopedSlots: {customRender: 'status'}
-        },
-        {
-          title: '备注',
-          dataIndex: 'remark'
-        },
-        {
-          title: '操作',
-          dataIndex: 'action',
-          width: '150px',
-          scopedSlots: { customRender: 'action' }
-        }
-      ],
+      columns: [],
       importUrl:process.env.VUE_APP_BASE_API+'/device/importExcel',
       data: [],
       pageElements: 0,
@@ -519,6 +466,28 @@ export default {
 
     selectRoom(){
       this.$refs.selectRoom.add(null)
+    },
+
+    recoverDevice(){
+      this.$api.device.recoverConnect({ deviceSn: this.selectedRows[0].sn })
+        .then(res => {
+          this.$notification.success({
+            message: '成功',
+            description: `上线成功！`
+          })
+          this.handleLoadOk()
+        })
+    },
+
+    rejectDevice(){
+      this.$api.device.rejectConnect({ deviceSn: this.selectedRows[0].sn })
+        .then(res => {
+          this.$notification.success({
+            message: '成功',
+            description: `下线成功！`
+          })
+          this.handleLoadOk()
+        })
     },
 
     selectRoomSuccess(value){

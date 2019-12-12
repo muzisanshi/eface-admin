@@ -23,12 +23,6 @@
             </a-form-item>
           </a-col>
 
-          <a-col :md="5" :sm="24">
-            <a-form-item label="性别">
-              <a-select showSearch allowClear placeholder="选择性别"  v-model="queryParam.sexual" optionFilterProp="children" :filterOption="filterCommonOption" :options="constants.list.sexual">
-              </a-select>
-            </a-form-item>
-          </a-col>
 
           <a-col :md="4" :sm="24">
             <span class="table-page-search-submitButtons">
@@ -93,16 +87,12 @@ export default {
           dataIndex: 'accountStateName'
         },
         {
-          title: '姓名',
-          dataIndex: 'realName'
+          title: '文件类型',
+          dataIndex: 'fileType'
         },
         {
-          title: '年龄级别',
-          dataIndex: 'ageLevel'
-        },
-        {
-          title: '性别',
-          dataIndex: 'sexualName'
+          title: '详细地址',
+          dataIndex: 'resourceFullAddress'
         },
         {
           title: '上次登录时间',

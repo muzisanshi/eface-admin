@@ -154,6 +154,10 @@ export default {
           dataIndex: 'sexualName'
         },
         {
+          title: '关系',
+          dataIndex: 'relationship'
+        },
+        {
           title: '操作',
           dataIndex: 'action',
           width: '150px',

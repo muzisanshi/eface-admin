@@ -49,7 +49,7 @@
               </a-row>
 
               <a-row :gutter="24">
-                <a-col :span="8">
+                <a-col :span="12">
                   <a-form-item label="电话号码" :labelCol="labelCol" :wrapperCol="wrapperCol" class="national-code">
                     <a-input v-decorator="['phoneNo', {initialValue: this.formData.phoneNo, rules: [{required: true, message: '请输入电话号码！'}]}]">
                       <a-select
@@ -65,14 +65,34 @@
                     </a-input>
                   </a-form-item>
                 </a-col>
-                <a-col :span="8">
+
+                <a-col :span="12">
+                  <a-form-item
+                    label="关系"
+                    :labelCol="labelCol"
+                    :wrapperCol="wrapperCol"
+                  >
+                    <a-select
+                      showSearch
+                      placeholder="选择关系"
+                      optionFilterProp="children"
+                      :filterOption="filterCommonOption"
+                      :options="dictValueList"
+                      v-decorator="['relationship', {initialValue: this.formData.relationship, rules: [{required: true, message: '请选择关系！'}]}]"
+                    >
+                    </a-select>
+                  </a-form-item>
+                </a-col>
+              </a-row>
+              <a-row :gutter="24">
+                <a-col :span="12">
                   <a-form-item label="姓名" :labelCol="labelCol" :wrapperCol="wrapperCol">
                     <a-input
                       v-decorator="['realName', {initialValue: this.formData.realName, rules: [{required: true, message: '请输入姓名！'}]}]"/>
                   </a-form-item>
                 </a-col>
 
-                <a-col :span="8">
+                <a-col :span="12">
                   <a-form-item
                     label="性別"
                     :labelCol="labelCol"
@@ -93,17 +113,17 @@
                     :wrapperCol="wrapperCol"
                   >
                     <a-input
-                      v-decorator="['visitorExtendInfo.id',{initialValue: this.formData.visitorExtendInfo.id}]" v-show="false"/>
+                      v-decorator="['visitorExtendInfo.id',{initialValue: this.formData.visitorExtendInfo?this.formData.visitorExtendInfo.id:''}]" v-show="false"/>
                     <a-input
-                      v-decorator="['visitorExtendInfo.interviewerId',{initialValue: this.formData.visitorExtendInfo.interviewerId}]" v-show="false"/>
-                    <a-input @click="selectUser()" :read-only="true" v-decorator="['visitorExtendInfo.interviewerRealName', {initialValue: this.formData.visitorExtendInfo.interviewerRealName}]"/>
+                      v-decorator="['visitorExtendInfo.interviewerId',{initialValue: this.formData.visitorExtendInfo?this.formData.visitorExtendInfo.interviewerId:''}]" v-show="false"/>
+                    <a-input @click="selectUser()" :read-only="true" v-decorator="['visitorExtendInfo.interviewerRealName', {initialValue: this.formData.visitorExtendInfo?this.formData.visitorExtendInfo.interviewerRealName:''}]"/>
                   </a-form-item>
                 </a-col>
 
                 <a-col :span="8" v-if="userType === 'VISITOR'">
                   <a-form-item label="受访原因" :labelCol="labelCol" :wrapperCol="wrapperCol">
                     <a-input
-                      v-decorator="['visitorExtendInfo.reason', {initialValue: this.formData.visitorExtendInfo.reason}]"/>
+                      v-decorator="['visitorExtendInfo.reason', {initialValue: this.formData.visitorExtendInfo?this.formData.visitorExtendInfo.reason:''}]"/>
                   </a-form-item>
                 </a-col>
 
@@ -146,23 +166,7 @@
                     <a-input @click="selectDataCon(1,index)" :read-only="true" v-decorator="['estateName', {initialValue: pane.content.estateName,rules: [{required: true, message: '请选择地产！'}]}]"/>
                   </a-form-item>
                 </a-col>
-                <a-col :span="8">
-                  <a-form-item
-                    label="关系"
-                    :labelCol="labelCol"
-                    :wrapperCol="wrapperCol"
-                  >
-                    <a-select
-                      showSearch
-                      placeholder="选择关系"
-                      optionFilterProp="children"
-                      :filterOption="filterCommonOption"
-                      :options="dictValueList"
-                      v-decorator="['relationship', {initialValue: pane.content.relationship, rules: [{required: true, message: '请选择关系！'}]}]"
-                    >
-                    </a-select>
-                  </a-form-item>
-                </a-col>
+
 
                 <a-col :span="8">
                   <a-form-item
@@ -274,7 +278,7 @@
       </a-button>
     </template>
     <select-data-Con ref="selectSuccess" @selectSuccess="selectSuccess"></select-data-Con>
-    <select-room ref="selectRoom" :estateId="panes[curPaneIndex].content.estateId" @selectRoom="selectRoomSuccess"></select-room>
+    <!--<select-room ref="selectRoom" :estateId="panes[curPaneIndex].content.estateId" @selectRoom="selectRoomSuccess"></select-room>-->
     <upload-face ref="uploadFace" @uploadFace="uploadFaceSuccess"></upload-face>
     <select-user ref="selectUser" @selectUserSuccess="selectUserSuccess"></select-user>
   </a-modal>
@@ -340,6 +344,7 @@
         activeKey: '1',
         newTabIndex: 3,
         itemIndex:0,
+        curPaneIndex:0,
         data:{
           attOrigin:'ADMIN',
           attType:'NORMAL'
@@ -350,7 +355,6 @@
           { title: '受访区域',form:this.$form.createForm(this), content: {
               estateId:"",
               relieve:false,
-              relationship:'',
               gateBrakeLimits:[
                 {
                   estateId:'',
@@ -379,18 +383,21 @@
     components: {
       ImageUpload,selectDataCon,selectRoom,uploadFace,selectUser
     },
+    watch:{
+      activeKey(newVal){
+        if(parseInt(newVal)-2<0){
+          this.curPaneIndex = 0
+        }else{
+          this.panes.map((item,index) =>{
+            if(item.key === newVal){
+              this.curPaneIndex = index
+            }
+          })
+        }
+      }
+    },
     computed: {
       ...mapState(['constants', 'system']),
-      curPaneIndex:{
-        get(){
-          if(parseInt(this.activeKey)-2<0){
-            return 0
-          }else{
-            return parseInt(this.activeKey)-2
-          }
-        },
-        set(val){}
-      }
     },
     methods: {
       moment,
@@ -410,7 +417,6 @@
           { title: '受访区域',form:this.$form.createForm(this), content: {
               estateId:"",
               relieve:false,
-              relationship:'',
               gateBrakeLimits:[
                 {
                   estateId:'',
@@ -757,7 +763,6 @@
                 estateId:"",
                 relieve:false,
                 id:'',
-                relationship:'',
                 gateBrakeLimits: []
               },
               key: activeKey,
@@ -765,7 +770,7 @@
             });
             that.panes = panes;
             that.activeKey = activeKey;
-            that.panes[activeKey-2].form.getFieldDecorator('keys', {
+            that.panes[that.panes.length-1].form.getFieldDecorator('keys', {
               initialValue: [],
               preserve: true
             });
@@ -785,39 +790,14 @@
         });
         const panes = that.panes.filter(pane => pane.key !== targetKey);
         const curPanes = that.panes.filter(pane => pane.key === targetKey);
-        if (panes.length && activeKey === targetKey) {
-          if(curPanes[0].content.id){
-            that.$confirm({
-              title: '删除',
-              content: '确定删除当前点击的受访区域？',
-              onOk () {
-                // that.$api.device.cameraDel({ id: curPanes[0].content.id})
-                //   .then(res => {
-                //     that.$notification.success({
-                //       message: '成功',
-                //       description: `删除成功！`
-                //     })
-                //     if (lastIndex >= 0) {
-                //       activeKey = panes[lastIndex].key;
-                //     } else {
-                //       activeKey = panes[0].key;
-                //     }
-                //     that.panes = panes;
-                //     that.activeKey = activeKey;
-                //   })
-              },
-              onCancel () {
-              }
-            })
-          }else{
-            if (lastIndex >= 0) {
-              activeKey = panes[lastIndex].key;
-            } else {
-              activeKey = panes[0].key;
-            }
-            that.panes = panes;
-            that.activeKey = activeKey;
+        if (panes.length) {
+          if (lastIndex >= 0) {
+            activeKey = panes[lastIndex].key;
+          } else {
+            activeKey = panes[0].key;
           }
+          that.panes = panes;
+          that.activeKey = activeKey;
         }
 
       },
@@ -878,14 +858,12 @@
       //提交
       handleSubmit () {
         const { form: { validateFields } } = this
-        this.confirmLoading = true
-        let camerasData = []
+        let camerasData = [],isSubmit = true;
         for(let i=0;i<this.panes.length;i++){
           this.panes[i].content.code = this.userType
           camerasData.push(this.panes[i].content)
           this.panes[i].form.validateFields((errors, valuesItem) => {
             if (!errors) {
-              this.panes[i].content.relationship = valuesItem.relationship;
               let roomNameData = [...valuesItem.roomNameVal],remarkData = [...valuesItem.remarkVal];
               let prevLeng = roomNameData.length;
               roomNameData = this.trimSpace(roomNameData);
@@ -896,26 +874,29 @@
               }
               camerasData[i] = this.panes[i].content
               camerasData[i].gateBrakeLimits = camerasData[i].gateBrakeLimits.slice(0,roomNameData.length)
+            }else{
+              isSubmit =false
+              return
             }
           })
-
-
         }
-        this.formData.userEstates = camerasData
-        console.log('--formData--',this.formData)
-
-        this.$api.user.saveOrUpdate(this.formData)
-          .then(res => {
-            this.$notification.success({
-              message: '成功',
-              description: `保存成功`
-            })
-            this.visible = false
-            this.confirmLoading = false
-            this.form.resetFields()
-            this.$emit('ok', this.formData)
-          }).finally(() => {
-        })
+        if(isSubmit){
+          this.formData.userEstates = camerasData
+          console.log('--formData--',this.formData)
+          this.confirmLoading = true
+          this.$api.user.saveOrUpdate(this.formData)
+            .then(res => {
+              this.$notification.success({
+                message: '成功',
+                description: `保存成功`
+              })
+              this.visible = false
+              this.confirmLoading = false
+              this.form.resetFields()
+              this.$emit('ok', this.formData)
+            }).finally(() => {
+          })
+        }
       },
 
     }

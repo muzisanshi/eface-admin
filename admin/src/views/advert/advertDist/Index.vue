@@ -333,6 +333,7 @@
         this.form.resetFields()
         this.formData ={}
         that.windows = [];
+        this.initCascader = []
         that.windowsMax = [];
         if(this.activeKey === '1'){
           that.windows =[
@@ -340,7 +341,6 @@
               form: that.$form.createForm(this),
               title: '窗口1',
               screenWindowIndex:1,
-              deviceScreenId: 0,
               imageShowSeconds:that.playTime[4].value,
               adNames: '',
               maxScreenSize: 11,
@@ -358,7 +358,6 @@
               form: that.$form.createForm(this),
               title: '窗口1',
               screenWindowIndex:0,
-              deviceScreenId: 0,
               imageShowSeconds:that.playTime[4].value,
               adNames: '',
               maxScreenSize: 300,
@@ -372,7 +371,6 @@
               form: that.$form.createForm(this),
               title: '窗口2',
               screenWindowIndex:1,
-              deviceScreenId: 0,
               maxScreenSize: 300,
               minScreenSize: 11,
               imageShowSeconds:that.playTime[4].value,
@@ -386,7 +384,6 @@
               form: that.$form.createForm(this),
               title: '窗口3',
               screenWindowIndex:3,
-              deviceScreenId: 0,
               maxScreenSize: 300,
               minScreenSize: 11,
               imageShowSeconds:that.playTime[4].value,
@@ -429,10 +426,10 @@
       afterCarChange(current){
         this.afterChangeAcar(current,0)
       },
-      fterCar2Change(current){
+      afterCar2Change(current){
         this.afterChangeAcar(current,1)
       },
-      fterCar3Change(current){
+      afterCar3Change(current){
         this.afterChangeAcar(current,2)
       },
 

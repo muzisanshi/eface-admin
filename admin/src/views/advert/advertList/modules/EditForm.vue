@@ -172,10 +172,10 @@
               this.startDate = res.beginDatetime
               this.endDate = res.endDatetime
               this.topImg = res.adItem.resourceFullAddress
-              that.$refs.videos.src =res.adItem.resourceFullAddress
+              this.headImageAttId = res.adItem.attId
               this.fileName = res.adItem.origFilename
               this.enable = this.formData.enable;
-
+              // this.$refs.videos.src = res.adItem.resourceFullAddress
             })
         }else{
           this.title = '新增'

@@ -32,6 +32,7 @@
         >
           <a-select
             showSearch
+            allowClear
             placeholder="选择楼栋"
             @change="getUnitList"
             optionFilterProp="children"
@@ -50,6 +51,7 @@
         >
           <a-select
             showSearch
+            allowClear
             placeholder="选择单元"
             @change="getStoreyList"
             optionFilterProp="children"
@@ -67,6 +69,7 @@
         >
           <a-select
             showSearch
+            allowClear
             placeholder="选择楼层"
             @change="getRoomList"
             optionFilterProp="children"
@@ -84,6 +87,7 @@
         >
           <a-select
             showSearch
+            allowClear
             placeholder="选择房间"
             optionFilterProp="children"
             :filterOption="filterCommonOption"

@@ -43,8 +43,6 @@
 
       <a-avatar size="large" shape="square" :src="record | resourceFullAddressFilter" slot="resourceFullAddress" slot-scope="record"/>
 
-      <!-- <p slot="expandedRowRender" slot-scope="record" style="margin: 0">{{record.summary}}</p> -->
-
       <span slot="status" slot-scope="text">
         <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />
       </span>
@@ -56,7 +54,6 @@
       </span>
     </s-table>
     <edit-form ref="editModal" @ok="handleOk"/>
-    <!--<div id='allmap' style="width:100%;height:350px;"></div>-->
   </a-card>
 </template>
 

@@ -211,7 +211,7 @@
             if (!values.forcedUpdate) {
               values.forcedUpdate = this.forcedUpdate
             }
-            values.headImageAttId = this.headImageAttId
+            values.updatePackageAttId = this.headImageAttId
             this.$api.deviceVersion.saveOrUpdate(values)
               .then(res => {
                 this.$notification.success({
