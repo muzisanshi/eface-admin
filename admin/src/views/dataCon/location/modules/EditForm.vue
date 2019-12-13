@@ -177,6 +177,7 @@
         storeyList:[],
         roomList:[],
         title: '',
+        isInitData:false
       }
     },
     beforeCreate () {
@@ -185,30 +186,30 @@
     methods: {
       add (item) {
         let that = this;
-        this.visible = true
-        this.form.resetFields()
-        this.formData ={}
-        this.buildList = [],
-        this.unitList = [],
-        this.storeyList = [],
-        this.roomList = []
+        this.visible = true;
+        this.form.resetFields();
+        this.formData ={};
+        this.buildList = [];
+        this.unitList = [];
+        this.storeyList = [];
+        this.roomList = [];
         if(item){
           this.title = '修改'
           this.$api.location.getById({id: item.id})
             .then(res => {
-              this.formData = res
               if(res.estateId){
-                that.getBuildList(res.estateId)
+                that.getBuildList(res.estateId,res.buildingId)
               }
               if(res.buildingId){
-                that.getUnitList(res.buildingId)
+                that.getUnitList(res.buildingId,res.unitId)
               }
               if(res.unitId){
-                that.getStoreyList(res.unitId)
+                that.getStoreyList(res.unitId,res.storeyId)
               }
               if(res.storeyId){
-                that.getRoomList(res.storeyId)
+                that.getRoomList(res.storeyId,res.roomId)
               }
+              this.formData = res
             })
         }else{
           this.title = '新增'
@@ -219,10 +220,20 @@
         this.formData.estateName = value.name
         this.formData.estateId = value.value
         this.getBuildList(value.value)
-        this.form.setFieldsValue({ storeyName: value.name});
+        this.form.setFieldsValue({ estateName: value.name});
       },
 
-      getBuildList(value){
+      getBuildList(value,buildingId){
+        this.form.setFieldsValue({
+          buildingId:'',
+          unitId: '',
+          storeyId:'',
+          roomId:''
+        });
+        this.buildList = [];
+        this.unitList = [];
+        this.storeyList = [];
+        this.roomList = [];
         this.$api.subject.getBuildAll({
           estateId: value
         })
@@ -235,10 +246,23 @@
               })
             }
             this.buildList = l
+            if(buildingId && typeof buildingId === 'string'){
+              this.form.setFieldsValue({
+                buildingId: buildingId
+              });
+            }
           })
       },
 
-      getUnitList(value){
+      getUnitList(value,unitId){
+        this.form.setFieldsValue({
+          unitId: '',
+          storeyId:'',
+          roomId:''
+        });
+        this.unitList = [];
+        this.storeyList = [];
+        this.roomList = [];
         this.$api.subject.getUnitAll({
           buildingId: value
         })
@@ -251,10 +275,21 @@
               })
             }
             this.unitList = l
+            if(unitId && typeof unitId === 'string'){
+              this.form.setFieldsValue({
+                unitId: unitId
+              });
+            }
           })
       },
 
-      getStoreyList(value){
+      getStoreyList(value,storeyId){
+        this.form.setFieldsValue({
+          storeyId: '',
+          roomId:''
+        });
+        this.storeyList = [];
+        this.roomList = [];
         this.$api.storey.getAll({
           unitId: value
         })
@@ -267,10 +302,19 @@
               })
             }
             this.storeyList = l
+            if(storeyId && typeof storeyId === 'string'){
+              this.form.setFieldsValue({
+                storeyId: storeyId
+              });
+            }
           })
       },
 
-      getRoomList(value){
+      getRoomList(value,roomId){
+        this.form.setFieldsValue({
+          roomId:''
+        });
+        this.roomList = [];
         this.$api.room.getAll({
           storeyId: value
         })
@@ -283,6 +327,11 @@
               })
             }
             this.roomList = l
+            if(roomId && typeof roomId === 'string'){
+              this.form.setFieldsValue({
+                roomId: roomId
+              });
+            }
           })
       },
 

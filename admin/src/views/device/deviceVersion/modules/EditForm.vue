@@ -48,7 +48,7 @@
         </a-form-item>
 
         <a-form-item
-          label="备注"
+          label="内容"
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
         >

@@ -117,6 +117,10 @@ export default {
     return {
       columns: [
         {
+          title: '节点ID',
+          dataIndex: 'workId'
+        },
+        {
           title: '内网IP',
           dataIndex: 'insideIp'
         },

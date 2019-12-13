@@ -163,11 +163,15 @@
       onChangeAddress(value, selectedOptions){
         let areaNameArr = [],levelItem = [];
         this.initCascader = value;
-        selectedOptions.map((item)=>{
-          areaNameArr.push(item.label)
-          levelItem.push(item.level)
-        })
-        this.initCascaderName = areaNameArr
+        if(value.length){
+          selectedOptions.map((item)=>{
+            areaNameArr.push(item.label)
+            levelItem.push(item.level)
+          })
+          this.initCascaderName = areaNameArr
+        }else{
+          this.initCascaderName = ''
+        }
         this.$emit('selectedArea',{
           value:this.initCascader,
           name:this.initCascaderName,

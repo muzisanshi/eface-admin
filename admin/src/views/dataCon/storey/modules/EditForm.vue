@@ -119,10 +119,10 @@
               storeys:[{
                 name:values.name,
                 id:values.id,
-                roomNum:values.roomNum
+                roomNum:values.roomNum,
+                remark:values.remark
               }],
-              unitId:this.formData.unitId,
-              remark:values.remark
+              unitId:this.formData.unitId
             }
             this.$api.storey.saveOrUpdate(params)
               .then(res => {

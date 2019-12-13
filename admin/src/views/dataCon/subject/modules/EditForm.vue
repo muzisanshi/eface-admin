@@ -48,7 +48,7 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
         >
-          <a-input v-decorator="['buildRemark',{initialValue: this.formData.buildRemark}]"/>
+          <a-input v-decorator="['remark',{initialValue: this.formData.remark}]"/>
         </a-form-item>
 
       </a-form>
@@ -124,11 +124,12 @@
                 id:values.buildId,
                 units:[{
                   id:values.id,
-                  name:values.name
+                  name:values.name,
+                  remark:values.remark
                 }]
               }],
-              estateId:this.formData.estateId,
-              remark:values.buildRemark
+              estateId:this.formData.estateId
+
             }
             this.$api.subject.saveOrUpdate(params)
               .then(res => {

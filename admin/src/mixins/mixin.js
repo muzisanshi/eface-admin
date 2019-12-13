@@ -41,6 +41,7 @@ export const mixin = {
     /*重置list传参*/
     resetSearchForm () {
       this.queryParam = {}
+      this.initCascader = []
     },
 
     /*分页change方法*/

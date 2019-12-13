@@ -70,24 +70,31 @@
 
                     </a-col>
                     <a-col :span="8" style="width: 260px">
-                      <a-carousel autoplay :autoplaySpeed='autoplaySpeed' :beforeChange="beforeCarChange" :afterChange="afterCarChange" :speed="speed">
-                        <div v-for="(pro, index1) in item.adList" v-if="item.adList.length>0">
-                          <div style="">
-                            <img v-if="pro.fileType === 'IMAGE' || pro.fileType === 'GIF'" :src="pro.resourceFullAddress" alt="" style="width: 100%;">
-                            <video v-if="pro.fileType === 'VIDEO' && item.isPlay" width="200" height="300" ref="videosOne" @ended="endVideo" controls autoplay>
-                              <source  :src="pro.resourceFullAddress" type="video/mp4">
-                            </video>
-                          </div>
+                      <div style="width: 260px;height: 300px;">
+                        <div style="width: 100%;height: 100%;border: 1px solid #ccc;overflow: hidden">
+                          <a-carousel autoplay v-if="item.adList.length>0" :autoplaySpeed='autoplaySpeed' :beforeChange="beforeCarChange" :afterChange="afterCarChange" :speed="speed">
+                            <div v-for="(pro, index1) in item.adList">
+                              <div style="">
+                                <img v-if="pro.fileType === 'IMAGE' || pro.fileType === 'GIF'" :src="pro.resourceFullAddress" alt="" style="width: 100%;">
+                                <video v-if="pro.fileType === 'VIDEO' && item.isPlay" width="200" height="300" ref="videosOne" @ended="endVideo" controls autoplay>
+                                  <source  :src="pro.resourceFullAddress" type="video/mp4">
+                                </video>
+                              </div>
+                            </div>
+                            <div v-if="item.adList.length===0 || !item.adList">
+                            </div>
+                          </a-carousel>
                         </div>
-                        <div v-if="item.adList.length===0 || !item.adList">
-                        </div>
-                      </a-carousel>
+                      </div>
+
+
+                      <div style="text-align: center;padding: 10px 0;"><a-checkbox @change="onMinLookChange" :checked="checkLook">实时预览</a-checkbox></div>
 
                     </a-col>
                   </a-row>
                   <a-row :gutter="24">
                     <a-col :span="10">
-                      <div style="margin-top: 10px;text-align: center">
+                      <div style="text-align: center">
                         <a-button type="primary" @click="handleSubmit(index)">保存</a-button>
                       </div>
                     </a-col>
@@ -178,24 +185,25 @@
             <a-col :span="8" style="width: 300px" :offset="2" v-if="windows.length>2">
               <div style="width: 300px;height: 700px;">
                 <div style="width: 100%;height: 300px;border: 1px solid #ccc;overflow: hidden">
-                  <a-carousel autoplay :autoplaySpeed='autoplaySpeed' :beforeChange="beforeCarChange" :afterChange="afterCarChange" ref="carousel" :speed="speed">
-                    <div v-for="(pro, index1) in windows[0].adList" v-if="windows[0].adList.length>0">
+                  <a-carousel autoplay v-if="windows[0].adList.length>0" :autoplaySpeed='autoplaySpeed' :beforeChange="beforeCarChange" :afterChange="afterCarChange" ref="carousel" :speed="speed">
+                    <div v-for="(pro, index1) in windows[0].adList">
                       <div style="">
                         <img v-if="pro.fileType === 'IMAGE' || pro.fileType === 'GIF'" :src="pro.resourceFullAddress" alt="" style="width: 100%;">
-                        <video v-if="pro.fileType === 'VIDEO' && item.isPlay" width="250" height="300" ref="videos" controls autoplay>
+                        <video v-if="pro.fileType === 'VIDEO' && windows[0].isPlay" width="250" height="300" ref="videos" controls autoplay>
                           <source :src="pro.resourceFullAddress" type="video/mp4">
                         </video>
                       </div>
                     </div>
                   </a-carousel>
+
                 </div>
                 <div style="display: flex;">
                   <div style="width: 175px;height: 100px;border: 1px solid #ccc;overflow: hidden">
-                    <a-carousel autoplay :autoplaySpeed='autoplaySpeed' :beforeChange="beforeCar2Change" :afterChange="afterCar2Change" :speed="speed">
-                      <div v-for="(pro, index1) in windows[1].adList" v-if="windows[1].adList.length>0">
+                    <a-carousel autoplay v-if="windows[1].adList.length>0" :autoplaySpeed='autoplaySpeed' :beforeChange="beforeCar2Change" :afterChange="afterCar2Change" :speed="speed">
+                      <div v-for="(pro, index1) in windows[1].adList">
                         <div style="">
                           <img v-if="pro.fileType === 'IMAGE' || pro.fileType === 'GIF'" :src="pro.resourceFullAddress" alt="" style="width: 100%;">
-                          <video v-if="pro.fileType === 'VIDEO' && item.isPlay" width="175" height="100" ref="videos" controls autoplay>
+                          <video v-if="pro.fileType === 'VIDEO' && windows[1].isPlay" width="175" height="100" ref="videos" controls autoplay>
                             <source :src="pro.resourceFullAddress" type="video/mp4">
                           </video>
                         </div>
@@ -207,17 +215,18 @@
                   </div>
                 </div>
                 <div style="width: 100%;height: 300px;border: 1px solid #ccc;margin-top: 10px;overflow: hidden">
-                  <a-carousel autoplay :autoplaySpeed='autoplaySpeed' :beforeChange="beforeCar3Change" :afterChange="afterCar3Change" :speed="speed">
-                    <div v-for="(pro, index1) in windows[2].adList" v-if="windows[2].adList.length>0">
+                  <a-carousel autoplay v-if="windows[2].adList.length>0" :autoplaySpeed='autoplaySpeed' :beforeChange="beforeCar3Change" :afterChange="afterCar3Change" :speed="speed">
+                    <div v-for="(pro, index1) in windows[2].adList">
                       <div style="">
                         <img v-if="pro.fileType === 'IMAGE' || pro.fileType === 'GIF'" :src="pro.resourceFullAddress" alt="" style="width: 100%;">
-                        <video v-if="pro.fileType === 'VIDEO' && item.isPlay" width="300" height="300" ref="videos" controls autoplay>
+                        <video v-if="pro.fileType === 'VIDEO' && windows[2].isPlay" width="300" height="300" ref="videos" controls autoplay>
                           <source :src="pro.resourceFullAddress" type="video/mp4">
                         </video>
                       </div>
                     </div>
                   </a-carousel>
                 </div>
+                <div style="text-align: center;padding: 10px 0;"><a-checkbox @change="onMinLookChange" :checked="checkSecLook">实时预览</a-checkbox></div>
               </div>
 
             </a-col>
@@ -311,6 +320,8 @@
         initCascader:[],
         autoplaySpeed:5000,
         speed: 1000,
+        checkLook:true,
+        checkSecLook:true
       }
     },
     beforeCreate () {
@@ -474,16 +485,56 @@
           }
           this.windows[value.key].adNames = adNames
           this.windows[value.key].adIds = adIds
+          if(this.activeKey === '1'){
+            if(that.checkLook){
+              that.getAdDataList(adIds,value.key)
+            }
+          }else{
+            if(that.checkSecLook){
+              that.getAdDataList(adIds,value.key)
+            }
+          }
 
-          this.$api.ad.getAdItemByIds({
-            adIds:adIds,
-            playType: that.windows[value.key].playType?that.windows[value.key].playType:'ALL'
-          })
-            .then(res => {
-              that.windows[value.key].adList = res
-            }).finally(() => {
-            })
         }
+      },
+
+      onMinLookChange(e){
+        let that = this;
+        if(this.activeKey === '1'){
+          this.checkLook = e.target.checked
+          if(e.target.checked){
+            this.getAdDataList(this.windows[0].adIds,0)
+          }else{
+            this.windows[0].adList = []
+          }
+
+        }else{
+          this.checkSecLook = e.target.checked
+          if(e.target.checked){
+            this.windows.map((item,index)=>{
+              if(item.adIds && item.adIds.length>0){
+                that.getAdDataList(item.adIds,index)
+              }
+            })
+
+          }else{
+            this.windows.map((item)=>{
+              item.adList = []
+            })
+          }
+        }
+
+      },
+
+      getAdDataList(adIds ,key){
+        this.$api.ad.getAdItemByIds({
+          adIds:adIds,
+          playType: this.windows[key].playType?this.windows[key].playType:'ALL'
+        })
+          .then(res => {
+            this.windows[key].adList = res
+          }).finally(() => {
+        })
       },
 
       handleSubmit (index) {

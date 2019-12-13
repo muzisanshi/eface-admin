@@ -93,6 +93,7 @@
       size="default"
       rowKey="id"
       :columns="columns"
+      :scroll="{ x: 1800 }"
       :dataSource="data"
       :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectDeviceChange}"
       @expand="handleExpand"
@@ -111,7 +112,7 @@
           <a-row :gutter="24">
             <a-col :span="6">
               <a-form-item label="人脸显示数量" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                <span>{{itemData.mainEngine.faceShowNum+''}}</span>
+                <span>{{itemData.mainEngine.faceShowNum?itemData.mainEngine.faceShowNum+'':''}}</span>
               </a-form-item>
             </a-col>
             <a-col :span="6">
@@ -390,6 +391,14 @@ export default {
           dataIndex: 'buildVer'
         },
         {
+          title: '配置版本',
+          dataIndex: 'configVer'
+        },
+        {
+          title: '数据库配置版本',
+          dataIndex: 'dbConfigVer'
+        },
+        {
           title: '是否启用',
           dataIndex: 'enable',
           scopedSlots: {customRender: 'status'}
@@ -437,6 +446,14 @@ export default {
         {
           title: '构建版本',
           dataIndex: 'buildVer'
+        },
+        {
+          title: '配置版本',
+          dataIndex: 'configVer'
+        },
+        {
+          title: '数据库配置版本',
+          dataIndex: 'dbConfigVer'
         },
         {
           title: '是否启用',

@@ -58,6 +58,7 @@
             style="margin-left: 10px;display: inline-block;float: right;margin-top: 10px;"
             :showUploadList="false"
             :accept="fileType"
+            :data="imgData"
             :beforeUpload="beforeUpload"
             @change="handleChange"
           >
@@ -126,6 +127,10 @@
         formData: {
           adItem:{}
         },
+        imgData: {
+          attOrigin:'ADMIN',
+          attType:'NORMAL'
+        },
         title: '',
         topImg:'',
         timeLimit:true,
@@ -191,9 +196,11 @@
             break
           case 'done':
             if (info.file.response.success) {
-              that.topImg = info.file.response.data.resourceFullAddress
-              this.$refs.videos.src =info.file.response.data.resourceFullAddress
               that.headImageAttId = info.file.response.data.id
+              that.topImg = info.file.response.data.resourceFullAddress
+              if(that.isVideo){
+                that.$refs.videos.src =info.file.response.data.resourceFullAddress
+              }
             } else {
               this.$message.error(info.file.response.errCode + ':' + info.file.response.errDesc)
             }
@@ -237,7 +244,6 @@
       },
 
       changeFileType(value,option){
-        console.log(value,option)
         if(value === 'IMAGE' || value === 'GIF'){
           this.fileType = 'image/png,image/jpg,image/gif';
           this.isVideo = false

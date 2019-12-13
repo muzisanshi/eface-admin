@@ -132,6 +132,10 @@ export default {
           dataIndex: 'name'
         },
         {
+          title: '备注',
+          dataIndex: 'remark'
+        },
+        {
           title: '操作',
           dataIndex: 'action',
           width: '150px',

@@ -16,7 +16,10 @@
   >
     <a-spin :spinning="confirmLoading">
       <a-form :form="form">
-
+        <a-form-item label="节点ID" :labelCol="labelCol" :wrapperCol="wrapperCol">
+          <a-input
+            v-decorator="['workId', {initialValue: this.formData.workId, rules: [{required: true,pattern: new RegExp(/^[0-9]\d*$/, 'g'), message: '请输入节点ID(数字)！'}]}]"/>
+        </a-form-item>
         <a-form-item label="内网IP" :labelCol="labelCol" :wrapperCol="wrapperCol">
           <a-input
             v-decorator="['innerIp', {initialValue: this.formData.insideIp, rules: [{required: true, message: '请输入名称！'}]}]"/>

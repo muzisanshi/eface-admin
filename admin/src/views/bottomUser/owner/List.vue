@@ -132,7 +132,6 @@ export default {
   data () {
     return {
       columns: [
-
         {
           title: '电话号码',
           dataIndex: 'phoneNo'

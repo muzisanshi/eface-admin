@@ -123,6 +123,10 @@ export default {
           dataIndex: 'content'
         },
         {
+          title: '构建版本',
+          dataIndex: 'buildVer'
+        },
+        {
           title: '备注',
           dataIndex: 'remark'
         },

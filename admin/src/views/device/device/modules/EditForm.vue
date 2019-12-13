@@ -340,7 +340,7 @@
                   </a-form-item>
                 </a-col>
 
-                <a-col :span="8">
+                <a-col :span="12">
                   <a-form-item
                     label="是否保存未识别记录"
                     :labelCol="labelCol"
@@ -350,7 +350,7 @@
                   </a-form-item>
                 </a-col>
 
-                <a-col :span="8" style="margin-bottom: 20px;text-align: right;padding-top: 10px">
+                <a-col :span="4" style="margin-bottom: 20px;text-align: right;padding-top: 10px">
                   <a-button type="primary" @click="customAlgorithm(index)">更多设置</a-button>
                 </a-col>
 
@@ -852,40 +852,14 @@
           }
         });
         const panes = that.panes.filter(pane => pane.key !== targetKey);
-        const curPanes = that.panes.filter(pane => pane.key === targetKey);
-        if (panes.length && activeKey === targetKey) {
-          if(curPanes[0].content.id){
-            that.$confirm({
-              title: '删除',
-              content: '确定删除当前点击的相机？',
-              onOk () {
-                that.$api.device.cameraDel({ id: curPanes[0].content.id})
-                  .then(res => {
-                    that.$notification.success({
-                      message: '成功',
-                      description: `删除成功！`
-                    })
-                    if (lastIndex >= 0) {
-                      activeKey = panes[lastIndex].key;
-                    } else {
-                      activeKey = panes[0].key;
-                    }
-                    that.panes = panes;
-                    that.activeKey = activeKey;
-                  })
-              },
-              onCancel () {
-              }
-            })
-          }else{
-            if (lastIndex >= 0) {
-              activeKey = panes[lastIndex].key;
-            } else {
-              activeKey = panes[0].key;
-            }
-            that.panes = panes;
-            that.activeKey = activeKey;
+        if (panes.length) {
+          if (lastIndex >= 0) {
+            activeKey = panes[lastIndex].key;
+          } else {
+            activeKey = panes[0].key;
           }
+          that.panes = panes;
+          that.activeKey = activeKey;
         }
 
       },

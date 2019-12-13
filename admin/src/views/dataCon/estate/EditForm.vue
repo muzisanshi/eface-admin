@@ -80,7 +80,9 @@
         <a-row :gutter="24">
           <a-col :span="12">
             <a-form-item label="街道办" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input @click="selectStreetOffice" :read-only="true" v-decorator="['streetOfficeName', {initialValue: this.formData.streetOfficeName,rules: [{required: true, message: '请选择街道办！'}]}]"/>
+              <a-input @click="selectStreetOffice" :read-only="true" v-decorator="['streetOfficeName', {initialValue: this.formData.streetOfficeName}]">
+                <a-icon slot="suffix" @click="clearStreetOffice" type="close" style="color: rgba(0, 0, 0, 0.25);"/>
+              </a-input>
             </a-form-item>
           </a-col>
 
@@ -232,6 +234,11 @@ export default {
     selectedArea(area) {
       this.initCascader = area.value;
       this.inputChange = area.name.join('')
+    },
+
+    clearStreetOffice(){
+      this.formData.streetOfficeName = '';
+      this.formData.streetOfficeId = '';
     },
 
     addressChange(val) {
