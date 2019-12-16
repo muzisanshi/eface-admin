@@ -13,23 +13,32 @@ const statusMap = {
     status: 'default',
     text: '否'
   }
-};
+}
 
 const statusFilter = function (type) {
   return statusMap[type].text
-};
+}
 
 const statusTypeFilter = function (type) {
   return statusMap[type].status
-};
+}
 
 const resourceFullAddressFilter = function (record) {
   return record.resourceFullAddress
-};
+}
 
+const frameAttResourceAddressFilter = function (record) {
+  return record.frameAttResourceAddress
+}
+
+const rootAttResourceAddressFilter = function (record) {
+  return record.rootAttResourceAddress
+}
 
 export {
   statusFilter,
   statusTypeFilter,
-  resourceFullAddressFilter
+  resourceFullAddressFilter,
+  frameAttResourceAddressFilter,
+  rootAttResourceAddressFilter
 }

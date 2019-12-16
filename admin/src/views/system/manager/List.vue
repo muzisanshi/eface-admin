@@ -87,7 +87,7 @@
           },
           {
             title: '电话号码',
-            dataIndex: 'phoneNo'
+            dataIndex: 'fullPhoneNo'
           },
           {
             title: '姓名',
@@ -129,6 +129,7 @@
           return this.$api.manager.getPage(Object.assign(parameter, this.queryParam))
             .then(res => {
               res.records.forEach(item => {
+                item.fullPhoneNo = item.areaCode + item.phoneNo
                 item.sexual = this.constants.data.sexual ? this.constants.data.sexual[item.sexual]['name'] : ''
                 item.accountState = this.constants.data.accountState ? this.constants.data.accountState[item.accountState]['name'] : ''
                 item.managerTypeName = this.constants.data.managerType ? this.constants.data.managerType[item.managerType]['name'] : ''

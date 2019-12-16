@@ -10,8 +10,8 @@
       :data="data"
       accept="image/*"
     >
-      <img v-if="imageUrl" :src="imageUrl" alt="" />
-      <div v-else>
+      <img v-if="curImageUrl" :src="curImageUrl" alt="" />
+      <div v-if="!curImageUrl">
         <a-icon :type="loading ? 'loading' : 'plus'" />
         <div class="ant-upload-text">上传图片</div>
       </div>
@@ -40,7 +40,7 @@ export default {
     },
     imageUrl: {
       type: String,
-      required: false
+      default: ''
     },
     tooltipVisible: {
       type: [String, Boolean],
@@ -50,6 +50,11 @@ export default {
   },
   computed: {
     ...mapState(['system'])
+  },
+  watch:{
+    imageUrl(newVal){
+      this.curImageUrl = newVal
+    }
   },
   data () {
     return {
@@ -69,7 +74,8 @@ export default {
       },
       uploadMainUrl: null,
       loading: false,
-      checked: true
+      checked: true,
+      curImageUrl:''
     }
   },
   methods: {
@@ -83,7 +89,7 @@ export default {
           break
         case 'done':
           if('00' === info.file.response.respCode){
-            // this.imageUrl = info.file.response.data.resourceFullAddress
+            this.curImageUrl = info.file.response.data.resourceFullAddress
             this.$emit('uploadSuccess', info.file.response.data)
           }else{
             this.$message.error(info.file.response.errCode + ':' + info.file.response.errDesc)

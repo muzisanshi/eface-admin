@@ -1,8 +1,8 @@
 <!--
  * @name List.vue
  * @author lw
- * @date 2019.12.11
- * @desc 设备版本
+ * @date 2019.12.16
+ * @desc APP版本
 -->
 <template>
   <a-card :bordered="false" class="content">
@@ -10,30 +10,29 @@
       <a-form layout="inline">
         <a-row :gutter="48">
 
-          <a-col :md="4" :sm="24">
-            <a-form-item label="设备型号">
-              <a-input v-model="queryParam.deviceModelName" placeholder=""/>
-            </a-form-item>
-          </a-col>
-
-          <a-col :md="4" :sm="24">
-            <a-form-item label="版本">
-              <a-input v-model="queryParam.softVer" placeholder=""/>
-            </a-form-item>
-          </a-col>
-
-          <a-col :md="4" :sm="24">
-            <a-form-item label="是否强制更新">
-              <a-select
-                size="default"
-                placeholder="请选择"
-                optionFilterProp="children"
-                v-model="queryParam.forcedUpdate"
-              >
-                <a-select-option value="">请选择</a-select-option>
-                <a-select-option value="true">是</a-select-option>
-                <a-select-option value="false">否</a-select-option>
+          <a-col :md="5" :sm="24">
+            <a-form-item label="APP类型">
+              <a-select showSearch allowClear placeholder="选择APP类型"  v-model="queryParam.appType" optionFilterProp="children" :filterOption="filterCommonOption" :options="constants.list.appType">
               </a-select>
+            </a-form-item>
+          </a-col>
+
+          <a-col :md="5" :sm="24">
+            <a-form-item label="设备类型">
+              <a-select showSearch allowClear placeholder="选择设备类型"  v-model="queryParam.deviceType" optionFilterProp="children" :filterOption="filterCommonOption" :options="constants.list.deviceType">
+              </a-select>
+            </a-form-item>
+          </a-col>
+
+          <a-col :md="4" :sm="24">
+            <a-form-item label="框架版本">
+              <a-input v-model="queryParam.frameVer" placeholder=""/>
+            </a-form-item>
+          </a-col>
+
+          <a-col :md="4" :sm="24">
+            <a-form-item label="内核版本">
+              <a-input v-model="queryParam.rootVer" placeholder=""/>
             </a-form-item>
           </a-col>
 
@@ -67,7 +66,8 @@
         {{ index + 1 }}
       </span>
 
-      <a-avatar size="large" shape="square" :src="record | resourceFullAddressFilter" slot="resourceFullAddress" slot-scope="record"/>
+      <a-avatar size="large" shape="square" :src="record | frameAttResourceAddressFilter" slot="frameAttResourceAddress" slot-scope="record"/>
+      <a-avatar size="large" shape="square" :src="record | rootAttResourceAddressFilter" slot="rootAttResourceAddress" slot-scope="record"/>
       <span slot="status" slot-scope="text">
         <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />
       </span>
@@ -86,7 +86,7 @@
 
 <script>
 import { STable } from '@/components'
-import EditForm from '../appVersion/modules/EditForm'
+import EditForm from './modules/EditForm'
 import {mapState} from 'vuex';
 import {mixin} from '@/mixins/mixin'
 export default {
@@ -102,29 +102,28 @@ export default {
     return {
       columns: [
         {
-          title: '设备型号',
-          dataIndex: 'deviceModelName'
+          title: 'APP类型',
+          dataIndex: 'appTypeName'
         },
         {
-          title: '版本',
-          dataIndex: 'softVer'
+          title: '框架版本',
+          dataIndex: 'frameVer'
         },
         {
-          title: '是否强制更新',
-          dataIndex: 'forcedUpdate',
-          scopedSlots: {customRender: 'status'}
+          title: '内核版本',
+          dataIndex: 'rootVer'
         },
         {
-          title: '打包附件',
-          scopedSlots: { customRender: 'resourceFullAddress' }
+          title: '框架附件',
+          scopedSlots: { customRender: 'frameAttResourceAddress' }
+        },
+        {
+          title: '内核附件',
+          scopedSlots: { customRender: 'rootAttResourceAddress' }
         },
         {
           title: '更新内容',
           dataIndex: 'content'
-        },
-        {
-          title: '构建版本',
-          dataIndex: 'buildVer'
         },
         {
           title: '备注',
@@ -139,8 +138,11 @@ export default {
       ],
       initCascader:[],
       loadData: parameter => {
-        return this.$api.deviceVersion.getPage(Object.assign(parameter, this.queryParam))
+        return this.$api.appVersion.getPage(Object.assign(parameter, this.queryParam))
           .then(res => {
+            res.records.forEach(item=>{
+              item.appTypeName = this.constants.data.appType?this.constants.data.appType[item.appType]['name']:''
+            });
             return res
           })
       },
@@ -158,7 +160,7 @@ export default {
         title: '删除',
         content: '确定删除勾选的记录？',
         onOk () {
-          that.$api.deviceVersion.del({ ids: that.selectedRowKeys })
+          that.$api.appVersion.del({ ids: that.selectedRowKeys })
             .then(res => {
               that.$notification.success({
                 message: '成功',

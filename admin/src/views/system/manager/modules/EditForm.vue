@@ -5,7 +5,7 @@
  * @desc 新增（账号管理）
 -->
 <template>
-  <a-modal :title="title+'新增用户'" :width="740" :visible="visible" :confirmLoading="confirmLoading" :maskClosable="false" @ok="handleSubmit"
+  <a-modal :title="title+'新增用户'" :width="840" :visible="visible" :confirmLoading="confirmLoading" :maskClosable="false" @ok="handleSubmit"
            @cancel="handleCancel">
     <a-spin :spinning="confirmLoading">
       <a-form :form="form">
@@ -16,12 +16,30 @@
                 v-decorator="['manager.username', {initialValue: this.formData.username, rules: [{required: true, message: '请输入名称！'}]}]"/>
             </a-form-item>
           </a-col>
+          <!--<a-col :span="12">-->
+            <!--<a-form-item label="电话号码" :labelCol="labelCol" :wrapperCol="wrapperCol">-->
+              <!--<a-input-->
+                <!--v-decorator="['manager.phoneNo', {initialValue: this.formData.phoneNo, rules: [{required: true, message: '请输入电话号码！'},{validator: rulePhone}]}]"/>-->
+            <!--</a-form-item>-->
+          <!--</a-col>-->
+
           <a-col :span="12">
-            <a-form-item label="电话号码" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input
-                v-decorator="['manager.phoneNo', {initialValue: this.formData.phoneNo, rules: [{required: true, message: '请输入电话号码！'},{validator: rulePhone}]}]"/>
+            <a-form-item label="电话号码" :labelCol="labelCol" :wrapperCol="wrapperCol" class="national-code">
+              <a-input v-decorator="['manager.phoneNo', {initialValue: this.formData.phoneNo, rules: [{required: true, message: '请输入电话号码！'}]}]">
+                <a-select
+                  showSearch
+                  allowClear
+                  slot="addonBefore"
+                  placeholder="选择区号"
+                  optionFilterProp="children"
+                  :filterOption="filterCommonOption"
+                  :options="nationalAreaCodeList"
+                  v-decorator="['manager.nationalAreaCodeId', {initialValue: this.formData.nationalAreaCodeId}]">
+                </a-select>
+              </a-input>
             </a-form-item>
           </a-col>
+
         </a-row>
         <a-row :gutter="24">
           <a-col :span="12">
@@ -189,6 +207,7 @@
         roleList: [],
         orgList: [],
         estateList:[],
+        nationalAreaCodeList:[],
       }
     },
     computed: {
@@ -226,16 +245,30 @@
             this.orgList = l
           })
 
+        this.$api.nationalAreaCode.getAll()
+          .then(res => {
+            const l = []
+            for (let i = 0, j = res.length; i < j; i++) {
+              l.push({
+                value: res[i].id,
+                label: res[i].areaCode
+              })
+            }
+            this.nationalAreaCodeList = l
+            if (item) {
+              this.title = '修改'
+              this.$api.manager.getById({id: item.id})
+                .then(res => {
+                  this.formData = res
+                })
+            } else {
+              this.title = '新增'
+              this.formData.nationalAreaCodeId=this.nationalAreaCodeList[0].value
+            }
 
-        if (item) {
-          this.title = '修改'
-          this.$api.manager.getById({id: item.id})
-            .then(res => {
-              this.formData = res
-            })
-        } else {
-          this.title = '新增'
-        }
+          })
+
+
       },
 
       handleSubmit() {

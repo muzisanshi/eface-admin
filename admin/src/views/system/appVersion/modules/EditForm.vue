@@ -1,7 +1,7 @@
 <!--
  * @name EditForm.vue
  * @author lw
- * @date 2019.12.11
+ * @date 2019.12.16
  * @desc 编辑
 -->
 <template>
@@ -18,43 +18,55 @@
       <a-form :form="form">
 
         <a-form-item
-          label="设备型号"
+          label="APP类型"
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
         >
           <a-select
             showSearch
-            placeholder="选择设备型号"
+            allowClear
+            placeholder="选择APP类型"
             optionFilterProp="children"
             :filterOption="filterCommonOption"
-            :options="deviceModelList"
-            v-decorator="['deviceModelId', {initialValue: this.formData.deviceModelId?this.formData.deviceModelId:'', rules: [{required: true, message: '请选择设备型号！'}]}]"
-          >
+            :options="constants.list.appType"
+            v-decorator="['appType', {initialValue: this.formData.appType,rules: [{required: true, message: '请选择APP类型！'}]}]">
           </a-select>
         </a-form-item>
 
-        <a-form-item label="版本" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <a-input
-            v-decorator="['softVer', {initialValue: this.formData.softVer, rules: [{required: true, message: '请输入版本！'}]}]"/>
-        </a-form-item>
-
-
         <a-form-item
-          label="是否强制更新"
+          label="设备类型"
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
         >
-          <a-switch :checked="forcedUpdate" @change="changeForcedUpdate" v-decorator="['forcedUpdate']"/>
+          <a-select
+            showSearch
+            allowClear
+            placeholder="选择设备类型"
+            optionFilterProp="children"
+            :filterOption="filterCommonOption"
+            :options="constants.list.deviceType"
+            v-decorator="['deviceType', {initialValue: this.formData.deviceType,rules: [{required: true, message: '请选择设备类型！'}]}]">
+          </a-select>
+        </a-form-item>
+
+        <a-form-item label="框架版本" :labelCol="labelCol" :wrapperCol="wrapperCol">
+          <a-input
+            v-decorator="['frameVer', {initialValue: this.formData.frameVer, rules: [{required: true, message: '请输入框架版本！'}]}]"/>
+        </a-form-item>
+
+        <a-form-item label="内核版本" :labelCol="labelCol" :wrapperCol="wrapperCol">
+          <a-input
+            v-decorator="['rootVer', {initialValue: this.formData.rootVer, rules: [{required: true, message: '请输入内核版本！'}]}]"/>
         </a-form-item>
 
         <a-form-item
-          label="内容"
+          label="更新内容"
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
         >
           <a-textarea
-            placeholder="内容"
-            v-decorator="['content',{initialValue: this.formData.content, rules: [{required: true, message: '请输入内容！'}]}]"
+            placeholder="更新内容"
+            v-decorator="['content',{initialValue: this.formData.content, rules: [{required: true, message: '请输入更新内容！'}]}]"
             :autosize="{ minRows: 2, maxRows: 6 }"
           />
         </a-form-item>
@@ -68,7 +80,7 @@
         </a-form-item>
 
         <a-form-item
-          label="打包附件"
+          label="框架附件"
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
         >
@@ -78,11 +90,32 @@
             :showUploadList="false"
             accept="image/*"
             :data="imgData"
-            :beforeUpload="beforeUpload"
+            @change="handleFrameChange"
+            name="file"
+          >
+            <img v-if="frameImg" :src="frameImg" alt="" style="width: 150px;"/>
+            <div v-else>
+              <a-icon :type="frameloading ? 'frameloading' : 'plus'" />
+              <div class="ant-upload-text">上传图片</div>
+            </div>
+          </a-upload>
+        </a-form-item>
+
+        <a-form-item
+          label="内核附件"
+          :labelCol="labelCol"
+          :wrapperCol="wrapperCol"
+        >
+          <a-upload
+            :action="system.uploadMainUrl"
+            listType="picture-card"
+            :showUploadList="false"
+            accept="image/*"
+            :data="imgData"
             @change="handleChange"
             name="file"
           >
-            <img v-if="topImg" :src="topImg" alt="" style="width: 150px;"/>
+            <img v-if="rootImg" :src="rootImg" alt="" style="width: 150px;"/>
             <div v-else>
               <a-icon :type="loading ? 'loading' : 'plus'" />
               <div class="ant-upload-text">上传图片</div>
@@ -103,7 +136,6 @@
     mixins:[mixin],
     data () {
       return {
-        goodsGroups:[],
         labelCol: {
           xs: { span: 24 },
           sm: { span: 5 },
@@ -116,10 +148,11 @@
         confirmLoading: false,
         formData: {},
         title: '',
-        deviceModelList:[],
-        forcedUpdate:true,
-        topImg: '',
-        headImageAttId: null,
+        rootImg: '',
+        frameImg:'',
+        frameAttId: null,
+        rootAttId: null,
+        frameloading:false,
         imgData:{
           attOrigin:'ADMIN',
           attType:'NORMAL'
@@ -137,41 +170,46 @@
     },
     methods: {
       add (item) {
-        let that = this;
         this.visible = true
         this.form.resetFields()
         this.formData ={}
-        this.deviceModelList = []
-        this.headImageAttId = null;
-        this.topImg = null;
-        this.$api.deviceModel.getAll({})
-          .then(res => {
-            const l = []
-            for (let i = 0, j = res.length; i < j; i++) {
-              l.push({
-                value: res[i].id,
-                label: res[i].name
-              })
-            }
-            this.deviceModelList = l
-          })
-
+        this.rootAttId = null;
+        this.frameAttId = null;
+        this.rootImg = null;
+        this.frameImg = null;
         if(item){
           this.title = '修改'
-          this.$api.deviceVersion.getById({id: item.id})
+          this.$api.appVersion.getById({id: item.id})
             .then(res => {
               this.formData = res
-              this.forcedUpdate = res.forcedUpdate
-              this.topImg = res.resourceFullAddress
+              this.rootImg = res.frameAttResourceAddress
+              this.frameImg = res.rootAttResourceAddress
             })
         }else{
           this.title = '新增'
-          this.forcedUpdate = true
         }
       },
 
-      changeForcedUpdate(checked) {
-        this.forcedUpdate = checked
+      handleFrameChange(info) {
+        let that = this;
+        switch (info.file.status) {
+          case 'uploading':
+            this.frameloading = true
+            break
+          case 'done':
+            if (info.file.response.success) {
+              that.frameImg = info.file.response.data.resourceFullAddress
+              that.frameAttId = info.file.response.data.id
+            } else {
+              this.$message.error(info.file.response.errCode + ':' + info.file.response.errDesc)
+            }
+            this.frameloading = false
+            break
+          case 'error':
+            this.$message.error(info.file.response.status + ':' + info.file.response.error)
+            this.frameloading = false
+            break
+        }
       },
 
       handleChange(info) {
@@ -182,8 +220,8 @@
             break
           case 'done':
             if (info.file.response.success) {
-              that.topImg = info.file.response.data.resourceFullAddress
-              that.headImageAttId = info.file.response.data.id
+              that.rootImg = info.file.response.data.resourceFullAddress
+              that.rootAttId = info.file.response.data.id
             } else {
               this.$message.error(info.file.response.errCode + ':' + info.file.response.errDesc)
             }
@@ -196,24 +234,17 @@
         }
       },
 
-      beforeUpload() {
-        return true
-      },
-
       handleSubmit () {
         const { form: { validateFields } } = this
         this.confirmLoading = true
         validateFields((errors, values) => {
-
           if (!errors) {
             if(this.formData.id){
               values.id = this.formData.id
             }
-            if (!values.forcedUpdate) {
-              values.forcedUpdate = this.forcedUpdate
-            }
-            values.updatePackageAttId = this.headImageAttId
-            this.$api.deviceVersion.saveOrUpdate(values)
+            values.frameAttId = this.frameAttId
+            values.rootAttId = this.rootAttId
+            this.$api.appVersion.saveOrUpdate(values)
               .then(res => {
                 this.$notification.success({
                   message: '成功',

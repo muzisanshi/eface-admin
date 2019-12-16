@@ -128,6 +128,9 @@
             .then(res => {
               this.formData = res
               this.enableLoginRegister = this.formData.nationalAreaCode.enableLoginRegister;
+              this.formData.imageAttachment= {
+                resourceFullAddress:res.resourceFullAddress
+              }
             })
         }else{
           this.title = '新增'
@@ -143,7 +146,7 @@
         validateFields((errors, values) => {
           if (!errors) {
             if(this.formData.imageAttachment) {
-              values.imageAttId = { id: this.formData.imageAttachment.id }
+              values.imageAttId = this.formData.imageAttachment.id
             }
             if(this.formData.id){
               values.id = this.formData.id

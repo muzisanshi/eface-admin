@@ -161,6 +161,7 @@
                     label="IP地址"
                     :labelCol="labelCol"
                     :wrapperCol="wrapperCol"
+                    :required="true"
                   >
                     <a-input
                       v-decorator="['mainEngine.network.id',{initialValue: this.formData.mainEngine.network?this.formData.mainEngine.network.id:''}]" v-show="false"/>

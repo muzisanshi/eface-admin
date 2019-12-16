@@ -1,8 +1,8 @@
 <!--
  * @name List.vue
  * @author lw
- * @date 2019.12.11
- * @desc 设备版本
+ * @date 2019.12.16
+ * @desc 同步用户记录
 -->
 <template>
   <a-card :bordered="false" class="content">
@@ -10,29 +10,30 @@
       <a-form layout="inline">
         <a-row :gutter="48">
 
+
+
           <a-col :md="4" :sm="24">
-            <a-form-item label="设备型号">
-              <a-input v-model="queryParam.deviceModelName" placeholder=""/>
+            <a-form-item label="设备名称">
+              <a-input v-model="queryParam.deviceName" placeholder=""/>
             </a-form-item>
           </a-col>
 
           <a-col :md="4" :sm="24">
-            <a-form-item label="版本">
-              <a-input v-model="queryParam.softVer" placeholder=""/>
+            <a-form-item label="设备SN">
+              <a-input v-model="queryParam.deviceSn" placeholder=""/>
             </a-form-item>
           </a-col>
 
-          <a-col :md="4" :sm="24">
-            <a-form-item label="是否强制更新">
-              <a-select
-                size="default"
-                placeholder="请选择"
-                optionFilterProp="children"
-                v-model="queryParam.forcedUpdate"
-              >
-                <a-select-option value="">请选择</a-select-option>
-                <a-select-option value="true">是</a-select-option>
-                <a-select-option value="false">否</a-select-option>
+          <a-col :md="5" :sm="24">
+            <a-form-item label="执行状态">
+              <a-select showSearch allowClear placeholder="选择执行状态"  v-model="queryParam.executeStatus" optionFilterProp="children" :filterOption="filterCommonOption" :options="constants.list.actionExecuteStatus">
+              </a-select>
+            </a-form-item>
+          </a-col>
+
+          <a-col :md="5" :sm="24">
+            <a-form-item label="报文最后发送状态">
+              <a-select showSearch allowClear placeholder="报文最后发送状态"  v-model="queryParam.lastMsgSendStatus" optionFilterProp="children" :filterOption="filterCommonOption" :options="constants.list.msgSendStatus">
               </a-select>
             </a-form-item>
           </a-col>
@@ -48,7 +49,8 @@
     </div>
 
     <div class="table-operator">
-      <a-button type="primary" icon="plus"  @click="handleEdit(null)">新增</a-button>
+      <a-button type="primary" @click="rePush" :disabled="selectedRowKeys.length < 1">重新推送</a-button>
+
 
       <a-button type="danger" icon="delete" @click="handleDelete" :disabled="selectedRowKeys.length < 1">删除</a-button>
 
@@ -79,21 +81,18 @@
       </span>
 
     </s-table>
-
-    <edit-form ref="editModal" @ok="handleOk"/>
   </a-card>
 </template>
 
 <script>
 import { STable } from '@/components'
-import EditForm from '../appVersion/modules/EditForm'
 import {mapState} from 'vuex';
 import {mixin} from '@/mixins/mixin'
+
 export default {
   mixins:[mixin],
   components: {
     STable,
-    EditForm,
   },
   computed: {
     ...mapState(['constants']),
@@ -102,33 +101,44 @@ export default {
     return {
       columns: [
         {
-          title: '设备型号',
-          dataIndex: 'deviceModelName'
+          title: '用户电话',
+          dataIndex: 'userPhoneNo'
         },
         {
-          title: '版本',
-          dataIndex: 'softVer'
+          title: '设备名称',
+          dataIndex: 'deviceName'
         },
         {
-          title: '是否强制更新',
-          dataIndex: 'forcedUpdate',
-          scopedSlots: {customRender: 'status'}
+          title: '设备SN',
+          dataIndex: 'deviceSn'
         },
         {
-          title: '打包附件',
-          scopedSlots: { customRender: 'resourceFullAddress' }
+          title: '执行状态',
+          align:'center',
+          dataIndex: 'executeStatusName'
         },
         {
-          title: '更新内容',
-          dataIndex: 'content'
+          title: '执行次数',
+          align:'center',
+          dataIndex: 'executeNum'
         },
         {
-          title: '构建版本',
-          dataIndex: 'buildVer'
+          title: '报文发送成功次数',
+          align:'center',
+          dataIndex: 'msgSendSuccessNum'
         },
         {
-          title: '备注',
-          dataIndex: 'remark'
+          title: '执行描述',
+          dataIndex: 'executeDesc'
+        },
+        {
+          title: '报文最后发送状态',
+          align:'center',
+          dataIndex: 'lastMsgSendStatusName'
+        },
+        {
+          title: '最后执行时间',
+          dataIndex: 'lastExecuteDatetime'
         },
         {
           title: '操作',
@@ -137,10 +147,13 @@ export default {
           scopedSlots: { customRender: 'action' }
         }
       ],
-      initCascader:[],
       loadData: parameter => {
-        return this.$api.deviceVersion.getPage(Object.assign(parameter, this.queryParam))
+        return this.$api.userAction.getPage(Object.assign(parameter, this.queryParam))
           .then(res => {
+            res.records.forEach(item=>{
+              item.executeStatusName = this.constants.data.actionExecuteStatus?this.constants.data.actionExecuteStatus[item.executeStatus]['name']:''
+              item.lastMsgSendStatusName = this.constants.data.msgSendStatus?this.constants.data.msgSendStatus[item.lastMsgSendStatus]['name']:''
+            });
             return res
           })
       },
@@ -148,8 +161,24 @@ export default {
   },
   methods: {
 
-    selectedArea(area) {
-      this.queryParam.areaId = area.value[area.value.length-1];
+    rePush () {
+      const that = this
+      that.$confirm({
+        title: '重新推送',
+        content: '确定重新推送勾选的记录？',
+        onOk () {
+          that.$api.userAction.rePush({ ids: that.selectedRowKeys })
+            .then(res => {
+              that.$notification.success({
+                message: '成功',
+                description: `重新推送成功！`
+              })
+              that.handleOk()
+            })
+        },
+        onCancel () {
+        }
+      })
     },
 
     handleDelete () {
@@ -158,7 +187,7 @@ export default {
         title: '删除',
         content: '确定删除勾选的记录？',
         onOk () {
-          that.$api.deviceVersion.del({ ids: that.selectedRowKeys })
+          that.$api.userAction.del({ ids: that.selectedRowKeys })
             .then(res => {
               that.$notification.success({
                 message: '成功',
