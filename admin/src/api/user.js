@@ -1,10 +1,10 @@
-import {axios} from '@/utils/request'
+import { axios } from '@/utils/request'
 
 const URI = {
-  login: '/manager/login',
+  login: '/login',
+  genVerifyCode: '/genVerifyCode',
   getUserInfo: '/manager/getInfo',
   updateInfo: '/manager/update',
-  genVerifyCode: '/manager/genVerifyCode',
   getById: '/user/getById',
   page: '/user/getPage',
   saveOrUpdate: '/user/saveOrUpdate',
@@ -37,7 +37,6 @@ function genVerifyCode (parameter) {
     params: parameter
   })
 }
-
 
 function getPage (parameter) {
   return axios({

@@ -1,14 +1,14 @@
-import {axios} from '@/utils/request'
+import { axios } from '@/utils/request'
 
 const URI = {
+  logout: '/logout',
   getById: '/manager/getById',
   page: '/manager/getPage',
   saveOrUpdate: '/manager/saveOrUpdate',
   del: '/manager/delete',
   getInfo: '/manager/getInfo',
   update: '/manager/update',
-  updatePassword: '/manager/updatePassword',
-  logout: '/manager/logout'
+  updatePassword: '/manager/updatePassword'
 }
 
 // 用户管理---wg-2019/6/24
@@ -33,8 +33,7 @@ function saveOrUpdate (parameter) {
   })
 }
 
-
-function del(parameter) {
+function del (parameter) {
   return axios({
     url: URI.del,
     params: parameter
@@ -55,14 +54,14 @@ function update (parameter) {
   })
 }
 
-function updatePassword(parameter) {
+function updatePassword (parameter) {
   return axios({
     url: URI.updatePassword,
     params: parameter
   })
 }
 
-function logout(parameter) {
+function logout (parameter) {
   return axios({
     url: URI.logout,
     params: parameter
