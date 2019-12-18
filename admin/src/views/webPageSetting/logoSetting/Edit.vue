@@ -158,10 +158,10 @@
         this.$api.webPageSetting.getInfo()
           .then(res => {
             this.formData = res
-            this.logoImage = this.formData.logoImage.resourceFullAddress;
-            this.loginBgImage = this.formData.loginBgImage.resourceFullAddress;
-            this.logoImageId = this.formData.logoImageId;
-            this.loginBgImageId = this.formData.loginBgImageId;
+            this.logoImage = this.formData.logoImage?this.formData.logoImage.resourceFullAddress:'';
+            this.loginBgImage = this.formData.loginBgImage? this.formData.loginBgImage.resourceFullAddress:'';
+            this.logoImageId = this.formData.logoImageAttId;
+            this.loginBgImageId = this.formData.loginBgImageAttId;
             this.showLogoImageToLoginPage = this.formData.showLogoImageToLoginPage;
             this.showLogoImageToIndexPage = this.formData.showLogoImageToIndexPage;
             this.loginBgImageToLoginPage = this.formData.loginBgImageToLoginPage;
@@ -264,7 +264,7 @@
             }
 
             if (this.logoImageId) {
-              values.logoImageId = this.logoImageId
+              values.logoImageAttId = this.logoImageId
             }else{
               this.$notification.error({
                 message: '提示',
@@ -275,7 +275,7 @@
             }
 
             if (this.loginBgImageId) {
-              values.loginBgImageId = this.loginBgImageId
+              values.loginBgImageAttId = this.loginBgImageId
             }else{
               this.$notification.error({
                 message: '提示',

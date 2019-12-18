@@ -106,9 +106,9 @@
 
               <a-row :gutter="24">
 
-                <a-col :span="8" v-if="userType === 'VISITOR'">
+                <a-col :span="12" v-if="userType === 'VISITOR'">
                   <a-form-item
-                    label="用户"
+                    label="受访用户"
                     :labelCol="labelCol"
                     :wrapperCol="wrapperCol"
                   >
@@ -120,7 +120,7 @@
                   </a-form-item>
                 </a-col>
 
-                <a-col :span="8" v-if="userType === 'VISITOR'">
+                <a-col :span="12" v-if="userType === 'VISITOR'">
                   <a-form-item label="受访原因" :labelCol="labelCol" :wrapperCol="wrapperCol">
                     <a-input
                       v-decorator="['visitorExtendInfo.reason', {initialValue: this.formData.visitorExtendInfo?this.formData.visitorExtendInfo.reason:''}]"/>
@@ -186,16 +186,11 @@
               <a-row :gutter="24">
 
               <a-col :span="9">
-              <a-form-item :key="k.roomName" v-bind="formLayout" label="受访区域" :required="true">
+              <a-form-item :key="k.roomName" v-bind="formLayout" label="受访区域">
                 <a-input @click="selectRoom(index1)" :read-only="true" v-decorator="[
                 `roomNameVal[${k.roomName}]`,
                 {
-                initialValue: pane.content.gateBrakeLimits[index1].roomName,
-                rules: [{
-                required: true,
-                whitespace: true,
-                message: '受访区域不能为空',
-                }],
+                initialValue: pane.content.gateBrakeLimits[index1].roomName
                 }
                 ]" placeholder="请选择受访区域" style="margin-right: 8px" >
 
@@ -278,7 +273,7 @@
       </a-button>
     </template>
     <select-data-Con ref="selectSuccess" @selectSuccess="selectSuccess"></select-data-Con>
-    <!--<select-room ref="selectRoom" :estateId="panes[curPaneIndex].content.estateId" @selectRoom="selectRoomSuccess"></select-room>-->
+    <select-room ref="selectRoom" :estateId="panes[curPaneIndex].content.estateId" @selectRoom="selectRoomSuccess"></select-room>
     <upload-face ref="uploadFace" @uploadFace="uploadFaceSuccess"></upload-face>
     <select-user ref="selectUser" @selectUserSuccess="selectUserSuccess"></select-user>
   </a-modal>
@@ -366,7 +361,7 @@
                   endDatetime:'',
                   remark:'',
                   roomName:'',
-                  enable:false,
+                  enable:true,
                 },
               ]
             }, key: '2',remark:'',closable: false },
@@ -428,13 +423,27 @@
                   endDatetime:'',
                   remark:'',
                   roomName:'',
-                  enable:false,
+                  enable:true,
                 },
               ]
             }, key: '2',remark:'',closable: false },
         ];
         this.panes[0].form.getFieldDecorator('keys', {
-          initialValue: [],
+          initialValue: [
+            {
+              estateId:'',
+              buildingId:"",
+              unitId:'',
+              storeyId:'',
+              roomId:"",
+              id:'',
+              beginDatetime:'',
+              endDatetime:'',
+              remark:'',
+              roomName:'',
+              enable:true
+            }
+          ],
           preserve: true
         });
         this.userType = userType
@@ -454,6 +463,9 @@
                   })
                 }
                 that.dictValueList = l
+                if(!item){
+                  that.formData.relationship=that.dictValueList[0].value
+                }
               }
             }
           })
@@ -516,6 +528,8 @@
             }else{
               this.title = '新增'
               this.formData.nationalAreaCodeId=this.nationalAreaCodeList[0].value
+              this.formData.sexual=this.constants.list.sexual[1].value
+
             }
           })
       },
@@ -774,6 +788,7 @@
               initialValue: [],
               preserve: true
             });
+            that.addAttr(that.panes.length-1)
           }
         })
       },
@@ -828,7 +843,7 @@
           endDatetime:'',
           remark:'',
           roomName:'',
-          enable:false
+          enable:true
         })
         let arr = [{
           remark: 0,
@@ -864,22 +879,32 @@
           camerasData.push(this.panes[i].content)
           this.panes[i].form.validateFields((errors, valuesItem) => {
             if (!errors) {
-              let roomNameData = [...valuesItem.roomNameVal],remarkData = [...valuesItem.remarkVal];
-              let prevLeng = roomNameData.length;
-              roomNameData = this.trimSpace(roomNameData);
-              let nextLeng = roomNameData.length
-              remarkData = remarkData.splice(prevLeng-nextLeng,remarkData.length)
+              // console.log(valuesItem)
+              let remarkData = [];
+
+              valuesItem.remarkVal.forEach((item,index) =>{
+                remarkData.push(item)
+              })
               for(let j=0;j<remarkData.length;j++){
                 this.panes[i].content.gateBrakeLimits[j].remark = remarkData[j]
+                if(!this.panes[i].content.gateBrakeLimits[j].beginDatetime){
+                  this.$notification.error({
+                    message: '提示',
+                    description: `请选择受访区域${i}的开始时间`
+                  })
+                  isSubmit =false
+                  return false
+                }
               }
+              console.log('--remarkData--',remarkData)
               camerasData[i] = this.panes[i].content
-              camerasData[i].gateBrakeLimits = camerasData[i].gateBrakeLimits.slice(0,roomNameData.length)
             }else{
               isSubmit =false
-              return
+              return false
             }
           })
         }
+
         if(isSubmit){
           this.formData.userEstates = camerasData
           console.log('--formData--',this.formData)

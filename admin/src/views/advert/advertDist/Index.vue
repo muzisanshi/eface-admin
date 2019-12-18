@@ -485,6 +485,7 @@
           }
           this.windows[value.key].adNames = adNames
           this.windows[value.key].adIds = adIds
+          this.windows[value.key].form.setFieldsValue({ adNames: adNames});
           if(this.activeKey === '1'){
             if(that.checkLook){
               that.getAdDataList(adIds,value.key)

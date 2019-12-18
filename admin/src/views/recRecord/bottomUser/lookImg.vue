@@ -7,14 +7,17 @@
 <template>
   <a-modal
     title="查看图片"
-    :width="640"
+    :width="340"
     :visible="visible"
     :confirmLoading="confirmLoading"
     :maskClosable="false"
     @cancel="handleCancel"
   >
     <a-spin :spinning="confirmLoading">
-      <img :src="imgUrl" alt="">
+      <div style="text-align: center">
+        <img :src="imgUrl" alt="">
+      </div>
+
     </a-spin>
     <template slot="footer">
       <a-button key="submit" type="primary" :confirmLoading="confirmLoading" @click="handleCancel">
@@ -40,13 +43,19 @@
         this.imgUrl = ''
         this.$api.recRecord.getRecImage({id: item.id})
           .then(res => {
-            if(!res.fullAdresss && !res.imgBase64){
+            if(!res.recImageResourceFullAddress && !res.recImageBase64){
               this.$notification.error({
                 message: '提示',
                 description:'暂无截图'
               })
             }else{
               this.visible = true
+              if(res.recImageResourceFullAddress){
+               this.imgUrl = res.recImageResourceFullAddress
+              }
+              if(res.recImageBase64){
+                this.imgUrl = res.recImageBase64
+              }
             }
           })
       },

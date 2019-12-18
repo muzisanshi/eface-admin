@@ -86,7 +86,7 @@
 
 <script>
 import { STable } from '@/components'
-import EditForm from '../appVersion/modules/EditForm'
+import EditForm from './modules/EditForm'
 import {mapState} from 'vuex';
 import {mixin} from '@/mixins/mixin'
 export default {

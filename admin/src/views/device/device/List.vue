@@ -103,7 +103,15 @@
         {{ index + 1 }}
       </span>
 
-      <a-avatar size="large" shape="square" :src="record | resourceFullAddressFilter" slot="resourceFullAddress" slot-scope="record"/>
+      <span slot="deviceStatus" slot-scope="text, record">
+        <template>
+          <div>
+            <span v-if="record.deviceStatus === '在线'" style="width: 6px;height: 6px;background-color: #52c41a;display: inline-block;border-radius: 50%;margin-right: 8px;margin-bottom: 2px;"></span>
+            <span v-if="record.deviceStatus !== '在线'" style="width: 6px;height: 6px;background-color: #FA6274;display: inline-block;border-radius: 50%;margin-right: 8px;margin-bottom: 2px;"></span>
+            <span>{{record.deviceStatus}}</span>
+          </div>
+        </template>
+      </span>
 
 
       <div slot="expandedRowRender" slot-scope="record, index, indent, expanded" style="margin: 0">
@@ -376,7 +384,7 @@ export default {
         },
         {
           title: '设备状态',
-          dataIndex: 'deviceStatus'
+          dataIndex: 'deviceStatusName'
         },
         {
           title: '上线时间',
@@ -433,7 +441,8 @@ export default {
         },
         {
           title: '设备状态',
-          dataIndex: 'deviceStatus'
+          dataIndex: 'deviceStatus',
+          scopedSlots: { customRender: 'deviceStatus' }
         },
         {
           title: '上线时间',

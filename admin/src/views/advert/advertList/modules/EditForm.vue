@@ -129,7 +129,7 @@
         },
         imgData: {
           attOrigin:'ADMIN',
-          attType:'NORMAL'
+          attType:'AD'
         },
         title: '',
         topImg:'',
@@ -237,10 +237,12 @@
 
       beginDateChange(date, dateString) {
         this.formData.beginDatetime = dateString;
+        this.startDate = dateString
       },
 
       endDateChange(date, dateString) {
         this.formData.endDatetime = dateString;
+        this.endDate = dateString
       },
 
       changeFileType(value,option){

@@ -139,12 +139,6 @@ export default {
         {
           title: '最后执行时间',
           dataIndex: 'lastExecuteDatetime'
-        },
-        {
-          title: '操作',
-          dataIndex: 'action',
-          width: '150px',
-          scopedSlots: { customRender: 'action' }
         }
       ],
       loadData: parameter => {

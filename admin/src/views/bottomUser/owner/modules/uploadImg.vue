@@ -48,7 +48,7 @@
                 ></vueCropper>
               </div>
               <div style="margin-left:20px;">
-                <div class="show-preview" :style="{'width': '200px', 'height':'205px',  'overflow': 'hidden', 'margin': '5px'}">
+                <div class="show-preview" :style="{'width': '150px', 'height':'155px',  'overflow': 'hidden', 'margin': '5px'}">
                   <div :style="previews.div" class="preview">
                     <img :src="previews.url" :style="previews.img">
                   </div>
@@ -119,12 +119,12 @@
             outputSize:1,
             full: false,
             outputType: 'png',
-            canMove: true,
+            canMove: false,
             original: false,
             canMoveBox: true,
             autoCrop: true,
-            autoCropWidth: 200,
-            autoCropHeight: 200,
+            autoCropWidth: 150,
+            autoCropHeight: 150,
             fixedBox: true
         }
         this.uploadImgRelaPath =''
@@ -134,6 +134,7 @@
 
       //放大/缩小
       changeScale(num) {
+        console.log('num',num)
         num = num || 1;
         this.$refs.cropper.changeScale(num);
       },
@@ -165,6 +166,7 @@
             that.confirmLoading = true
             reader.onload = function (e) {
               base64 = e.target.result
+              console.log(base64)
               that.$api.face.canRegister({
                 imageBase64:base64
               })
@@ -195,7 +197,9 @@
                       //   }).finally(() => {
                       //  })
                     })
-                })
+                }).catch(resRes => {
+                that.confirmLoading = false
+              })
             }
 
 
@@ -237,7 +241,8 @@
         var _this = this;
         //上传图片
         var file = e.target.files[0]
-        _this.fileName = file.name;
+        _this.fileName = file.name.split('.')[0]+'.png';
+        console.log(_this.fileName)
         if (!/\.(gif|jpg|jpeg|png|GIF|JPG|PNG)$/.test(e.target.value)) {
           alert('图片类型必须是.gif,jpeg,jpg,png中的一种')
           return false
@@ -298,8 +303,8 @@
     margin-left: 20px;
     display: -webkit-flex;
     .cropper{
-      width: 360px;
-      height: 360px;
+      width: 250px;
+      height: 250px;
     }
     .show-preview{
       flex: 1;

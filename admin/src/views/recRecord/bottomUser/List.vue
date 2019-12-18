@@ -61,6 +61,7 @@
       ref="table"
       size="default"
       rowKey="id"
+      :scroll="{ x: 1500 }"
       :columns="columns"
       :data="loadData"
       :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange,type:'radio'}"
@@ -130,10 +131,6 @@ export default {
           dataIndex: 'qualityLevel'
         },
         {
-          title: '识别日期',
-          dataIndex: 'recDate'
-        },
-        {
           title: '识别时间',
           dataIndex: 'recDatetime'
         },
@@ -143,11 +140,7 @@ export default {
         },
         {
           title: '识别结果',
-          dataIndex: 'recResult'
-        },
-        {
-          title: '识别结果描述',
-          dataIndex: 'recResultDesc'
+          dataIndex: 'recResultName'
         },
         {
           title: '位置名称',
@@ -164,7 +157,8 @@ export default {
         {
           title: '操作',
           dataIndex: 'action',
-          width: '150px',
+          fixed:'right',
+          width: '100px',
           scopedSlots: { customRender: 'action' }
         }
       ],
@@ -173,10 +167,13 @@ export default {
       endDate:'',
       loadData: parameter => {
         return this.$api.recRecord.getPage(Object.assign(parameter, this.queryParam,{
-          beginDate:this.startDate?this.startDate:this.moment().startOf('day').subtract(0, 'days').format(this.dateFormat),
-          endDate:this.endDate?this.endDate:this.moment().endOf('day').format(this.dateFormat)
+          beginDatetime:this.startDate?this.startDate:this.moment().startOf('day').subtract(0, 'days').format(this.dateFormat),
+          endDatetime:this.endDate?this.endDate:this.moment().endOf('day').format(this.dateFormat)
         }))
           .then(res => {
+            res.records.forEach(item=>{
+              item.recResultName = this.constants.data.recResult?this.constants.data.recResult[item.recResult]['name']:''
+            });
             return res
           })
       }
