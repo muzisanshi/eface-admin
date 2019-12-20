@@ -351,7 +351,7 @@ export default {
         sm: { span: 14 },
       },
       columns: [],
-      importUrl:process.env.VUE_APP_BASE_API+'/device/importExcel',
+      importUrl:process.env.VUE_APP_ADMIN_SERVICE_BASE_URL+'/device/importExcel',
       data: [],
       pageElements: 0,
       itemData:{

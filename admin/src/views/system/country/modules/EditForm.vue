@@ -151,6 +151,9 @@
             if(this.formData.id){
               values.id = this.formData.id
             }
+            if(this.formData.imageAttId){
+              values.imageAttId = this.formData.imageAttId
+            }
             if(this.formData.nationalAreaCode.id){
               values.nationalAreaCode.id = this.formData.nationalAreaCode.id
             }

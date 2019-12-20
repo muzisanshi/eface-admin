@@ -1,7 +1,7 @@
 import {axios} from '@/utils/request'
 
 const URI = {
-  getUploadParams: '/system/getUploadParams'
+  getUploadParams: '/resourceService/upload'
 }
 
 function getUploadParams(parameter) {

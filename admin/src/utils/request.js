@@ -58,7 +58,7 @@ service.interceptors.request.use(config => {
   if (token) {
     config.headers['JWT-MANAGER-ACCOUNT-AUTHORIZATION'] = token
   }
-  config.baseURL = process.env.VUE_APP_BASE_API
+  config.baseURL = process.env.VUE_APP_ADMIN_SERVICE_BASE_URL
   config.method = 'post'
   if (config.enctype) {
     config.headers['Content-Type'] = config.enctype
