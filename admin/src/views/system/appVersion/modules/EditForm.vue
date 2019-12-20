@@ -69,6 +69,7 @@
             v-decorator="['content',{initialValue: this.formData.content, rules: [{required: true, message: '请输入更新内容！'}]}]"
             :autosize="{ minRows: 2, maxRows: 6 }"
           />
+          <span>换行请用"||"隔开</span>
         </a-form-item>
 
         <a-form-item

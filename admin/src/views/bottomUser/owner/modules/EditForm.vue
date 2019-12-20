@@ -66,7 +66,7 @@
                   </a-form-item>
                 </a-col>
 
-                <a-col :span="12">
+                <a-col :span="12"  v-if="userType === 'OWNER'">
                   <a-form-item
                     label="关系"
                     :labelCol="labelCol"
@@ -83,8 +83,6 @@
                     </a-select>
                   </a-form-item>
                 </a-col>
-              </a-row>
-              <a-row :gutter="24">
                 <a-col :span="12">
                   <a-form-item label="姓名" :labelCol="labelCol" :wrapperCol="wrapperCol">
                     <a-input
@@ -102,9 +100,6 @@
                     </a-select>
                   </a-form-item>
                 </a-col>
-              </a-row>
-
-              <a-row :gutter="24">
 
                 <a-col :span="12" v-if="userType === 'VISITOR'">
                   <a-form-item

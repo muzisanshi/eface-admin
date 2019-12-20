@@ -527,7 +527,7 @@ export default {
       this.$api.device.getPage(Object.assign({}, this.queryParam))
         .then(res => {
           res.records.forEach(item=>{
-            item.deviceStatus = item.deviceStatus === 'OFFLINE'?'离线':item.deviceStatus === 'ONLINE'?'在线':'未知'
+            item.deviceStatus = item.deviceStatus === 'OFFLINE'?'离线':'在线'
           });
           this.data = res.records
           this.pageElements = res.totalElements

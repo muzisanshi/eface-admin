@@ -46,10 +46,9 @@
                         label="区域绑定"
                         :labelCol="labelCol"
                         :wrapperCol="wrapperCol"
-                        :required="true"
                       >
                         <select-area ref="selectAreaAll" :initArea="initCascader"
-                                     @selectedArea="selectedArea($event,index)"></select-area>
+                                     @selectedArea="selectedArea($event,index)" :selectAll="true"></select-area>
                       </a-form-item>
 
                       <a-form-item
@@ -146,10 +145,9 @@
                           label="区域绑定"
                           :labelCol="labelCol"
                           :wrapperCol="wrapperCol"
-                          :required="true"
                         >
                           <select-area ref="selectAreaAll" :initArea="initCascader"
-                                       @selectedArea="selectedArea($event,index)"></select-area>
+                                       @selectedArea="selectedArea($event,index)" :selectAll="true"></select-area>
                         </a-form-item>
 
                         <a-form-item

@@ -10,15 +10,14 @@
       <a-form layout="inline">
         <a-row :gutter="48">
 
-
-          <a-col :md="4" :sm="24">
+          <a-col :md="5" :sm="24">
             <a-form-item label="用户类型">
               <a-select showSearch allowClear placeholder="选择用户类型"  v-model="queryParam.code" optionFilterProp="children" :filterOption="filterCommonOption" :options="constants.list.userTypeCode">
               </a-select>
             </a-form-item>
           </a-col>
 
-          <a-col :md="4" :sm="24">
+          <a-col :md="5" :sm="24">
             <a-form-item
               label="地产"
             >
@@ -26,12 +25,20 @@
             </a-form-item>
           </a-col>
 
-          <a-col :md="4" :sm="24">
+          <a-col :md="5" :sm="24">
             <a-form-item label="全地址">
               <a-input v-model="queryParam.fullAddress" placeholder=""/>
             </a-form-item>
           </a-col>
 
+          <a-col :md="5" :sm="24">
+            <a-form-item label="识别结果">
+              <a-select showSearch allowClear placeholder="选择识别结果"  v-model="queryParam.recResult" optionFilterProp="children" :filterOption="filterCommonOption" :options="constants.list.recResult">
+              </a-select>
+            </a-form-item>
+          </a-col>
+        </a-row>
+        <a-row :gutter="48">
           <a-col :span="8">
             <a-form-item label="结束时间" :required="false">
               <a-range-picker
@@ -108,6 +115,14 @@ export default {
     return {
       queryParam:{
         estateName:'',
+      },
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 1 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 18 },
       },
       columns: [
         {

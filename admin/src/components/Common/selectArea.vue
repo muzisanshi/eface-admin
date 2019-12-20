@@ -5,7 +5,7 @@
  * @desc 选择地区（公用）
 -->
 <template>
-  <a-cascader :options="options" @change="onChangeAddress" :loadData="loadData" :value='initCascader'  placeholder="选择地区"/>
+  <a-cascader :options="options" @change="onChangeAddress" :loadData="loadData" :changeOnSelect="selectAll" :value='initCascader'  placeholder="选择地区"/>
 </template>
 
 <script>
@@ -19,7 +19,12 @@
       isSelectArea:{
         type:Boolean,
         default: false
-      }
+      },
+      selectAll:{
+        type:Boolean,
+        default: false
+      },
+
     },
     data() {
       return {

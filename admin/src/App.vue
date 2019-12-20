@@ -25,10 +25,9 @@
 
     },
     methods: {
-      ...mapActions(['loadConstants', 'loadSystemSetting','loadLogoData']),
+      ...mapActions(['loadConstants','loadLogoData']),
       init() {
         this.loadConstants(); //获取枚举
-        this.loadSystemSetting(); //获取上传地址接口
         this.loadLogoData()
       },
     }
