@@ -18,7 +18,7 @@
       <div>
         <div class="info-item">
           <label class="btn btn-orange" for="uploads" style="display:inline-block;padding: 4px 10px;text-align: center;background-color: #1890ff;color: #fff;border: 1px solid transparent;border-radius: 4px;cursor: pointer">选择图片</label>
-          <input type="file" id="uploads" :value="imgFile" style="position:absolute; clip:rect(0 0 0 0);" accept="image/png, image/jpeg, image/gif, image/jpg" @change="uploadImg($event, 1)">
+          <a-input type="file" id="uploads" :value="imgFile" style="position:absolute; clip:rect(0 0 0 0);" accept="image/png, image/jpeg, image/gif, image/jpg" @change="uploadImg($event, 1)"/>
           <input type="button" class="oper" style="height:32px;width:35px;font-size:18px;margin:0 5px 0 10px;background-color: #1890ff;color: #fff;border-radius: 4px;line-height: 26px;cursor: pointer;outline-offset: -4px;" value="+" title="放大" @click="changeScale(1)"/>
           <input type="button" class="oper" style="height:32px;width:35px;font-size:18px;margin:3px 5px;background-color: #1890ff;color: #fff;border-radius: 4px;line-height: 26px;cursor: pointer;outline-offset: -4px;" value="-" title="缩小" @click="changeScale(-1)"/>
           <input type="button" class="oper" style="height:32px;width:35px;font-size:18px;margin:3px 5px;background-color: #1890ff;color: #fff;border-radius: 4px;line-height: 26px;cursor: pointer;outline-offset: -4px;" value="↺" title="左旋转" @click="rotateLeft"/>
@@ -220,12 +220,14 @@
 
       //选择本地图片
       uploadImg (e, num) {
+
         var _this = this
         //上传图片
         var file = e.target.files[0]
+
         _this.fileName = file.name.split('.')[0] + '.png'
-        const isLt1M = file.size / 1024 / 1024 < 1
-        if (!isLt1M) {
+
+        if (!(file.size / 1024 / 1024 < 1)) {
           this.$message.error('图片最大为1MB!')
           return false
         }
@@ -238,7 +240,9 @@
         var reader = new FileReader()
 
         reader.onload = (e) => {
+
           let data
+
           if (typeof e.target.result === 'object') {
             // 把Array Buffer转化为blob 如果是base64不需要
             data = window.URL.createObjectURL(new Blob([e.target.result]))
