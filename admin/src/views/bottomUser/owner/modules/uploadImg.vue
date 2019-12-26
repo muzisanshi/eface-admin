@@ -47,8 +47,7 @@
                 ></vueCropper>
               </div>
               <div style="margin-left:20px;">
-                <div class="show-preview"
-                     :style="{'width': '150px', 'height':'155px',  'overflow': 'hidden', 'margin': '5px'}">
+                <div class="show-preview" :style="{'width': '150px', 'height':'155px',  'overflow': 'hidden', 'margin': '5px'}">
                   <div :style="previews.div" class="preview">
                     <img :src="previews.url" :style="previews.img">
                   </div>
@@ -164,7 +163,6 @@
             that.confirmLoading = true
             reader.onload = function (e) {
               base64 = e.target.result
-              console.log(base64)
               that.$api.face.canRegister({
                 imageBase64: base64
               })
@@ -236,7 +234,9 @@
           this.$message.error('图片类型必须是.jpg,jpeg,png中的一种')
           return false
         }
+
         var reader = new FileReader()
+
         reader.onload = (e) => {
           let data
           if (typeof e.target.result === 'object') {
