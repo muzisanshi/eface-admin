@@ -168,8 +168,8 @@
             this.formData = res
             this.logoImage = this.formData.logoImage?this.formData.logoImage.resourceFullAddress:'';
             this.loginBgImage = this.formData.loginBgImage? this.formData.loginBgImage.resourceFullAddress:'';
-            this.logoImageId = this.formData.logoImageAttId;
-            this.loginBgImageId = this.formData.loginBgImageAttId;
+            this.logoImageId = this.formData.logoImageId;
+            this.loginBgImageId = this.formData.loginBgImageId;
             this.showLogoImageToLoginPage = this.formData.showLogoImageToLoginPage;
             this.showLogoImageToIndexPage = this.formData.showLogoImageToIndexPage;
             this.loginBgImageToLoginPage = this.formData.loginBgImageToLoginPage;
@@ -285,7 +285,7 @@
             }else{
               this.$notification.error({
                 message: '提示',
-                description: '请上传系统LOGO图片！'
+                description: '请上传背景图片！'
               })
               this.confirmLoading = false
               return
