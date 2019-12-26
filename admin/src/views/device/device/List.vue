@@ -82,7 +82,15 @@
 
       <a-button type="primary" @click="recoverDevice" v-if="selectedRows.length === 1 && selectedRows[0].deviceStatus === '离线'">上线</a-button>
 
+      <a-button type="primary" @click="resetDevice" v-if="selectedRows.length === 1 && selectedRows[0].deviceStatus === '在线'">重置</a-button>
+
+      <a-button type="primary" @click="openGateBrake" v-if="selectedRows.length === 1 && selectedRows[0].deviceStatus === '在线'">开启闸机</a-button>
+
+      <a-button type="primary" @click="distributionUser" v-if="selectedRows.length === 1 && selectedRows[0].deviceStatus === '在线'">同步底库用户</a-button>
+
       <a-button type="primary" @click="rejectDevice" v-if="selectedRows.length === 1 && selectedRows[0].deviceStatus === '在线'">下线</a-button>
+
+
 
       <a-button type="danger" icon="delete" @click="handleDelete" :disabled="selectedRowKeys.length < 1">删除</a-button>
 
@@ -500,6 +508,39 @@ export default {
           this.$notification.success({
             message: '成功',
             description: `上线成功！`
+          })
+          this.handleLoadOk()
+        })
+    },
+
+    resetDevice(){
+      this.$api.device.resetDevice({ deviceSn: this.selectedRows[0].sn })
+        .then(res => {
+          this.$notification.success({
+            message: '成功',
+            description: `重置成功！`
+          })
+          this.handleLoadOk()
+        })
+    },
+
+    syncUser(){
+      this.$api.device.syncUser({ id: this.selectedRows[0].id })
+        .then(res => {
+          this.$notification.success({
+            message: '成功',
+            description: `同步底库用户成功！`
+          })
+          this.handleLoadOk()
+        })
+    },
+
+    openGateBrake(){
+      this.$api.device.openGateBrake({ deviceSn: this.selectedRows[0].sn })
+        .then(res => {
+          this.$notification.success({
+            message: '成功',
+            description: `开启闸机成功！`
           })
           this.handleLoadOk()
         })

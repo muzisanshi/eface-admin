@@ -1,9 +1,10 @@
 import Vue from 'vue'
 import axios from 'axios'
 import store from '@/store'
-import {VueAxios} from './axios'
+import { VueAxios } from './axios'
 import notification from 'ant-design-vue/es/notification'
-import {ACCESS_TOKEN} from '@/store/mutation-types'
+import { ACCESS_TOKEN } from '@/store/mutation-types'
+import md5 from 'js-md5'
 
 const MOCK_BASE_URL = '/api'
 
@@ -54,6 +55,9 @@ const err = (error) => {
 
 // request interceptor
 service.interceptors.request.use(config => {
+  const clientId = 'admin'
+  const timestamp = new Date().getTime()+''
+  const signature = clientId + timestamp + 'da74588912504563e464ffe8956de784'
   const token = Vue.ls.get(ACCESS_TOKEN)
   if (token) {
     config.headers['JWT-MANAGER-ACCOUNT-AUTHORIZATION'] = token
@@ -65,6 +69,9 @@ service.interceptors.request.use(config => {
   } else {
     config.headers['Content-Type'] = 'application/json;charset=utf-8'
   }
+  config.headers['X-clientId'] = clientId
+  config.headers['X-timestamp'] = timestamp
+  config.headers['X-signature'] = md5(signature)
   const data = config.params
   if (data && data.pageNo) {
     data.page = {

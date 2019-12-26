@@ -5,7 +5,7 @@
       <a-dropdown>
         <span class="action ant-dropdown-link user-dropdown-menu">
           <a-avatar class="avatar" size="small" :src="avatar()"/>
-          <span>{{ user.username}}</span>
+          <span>{{ user?user.username:''}}</span>
         </span>
         <a-menu slot="overlay" class="user-dropdown-menu-wrapper">
           <a-menu-item key="0" @click="editUserInfo">
@@ -55,7 +55,6 @@ export default {
     }else{
       this.user = Vue.ls.get(MANAGER)
     }
-    
   },
   methods: {
     ...mapActions(['Logout']),
@@ -90,7 +89,7 @@ export default {
     editUserInfo(){
       this.$refs.editModal.add()
     },
-    
+
     editPassward(){
       this.$refs.editPasswordModal.add()
     }

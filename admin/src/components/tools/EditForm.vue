@@ -21,7 +21,7 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
         >
-          <a-input v-decorator="['username', {initialValue: this.formData.username,rules: [{required: true, message: '请输入用户名！'}]}]" />
+          <a-input disabled v-decorator="['username', {initialValue: this.formData.username,rules: [{required: true, message: '请输入用户名！'}]}]" />
         </a-form-item>
 
         <a-form-item
@@ -37,7 +37,7 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
         >
-          <a-input v-decorator="['phoneNo', {initialValue: this.formData.phoneNo,rules: [{required: true, message: '请输入手机号！'}]}]" />
+          <a-input disabled v-decorator="['phoneNo', {initialValue: this.formData.phoneNo,rules: [{required: true, message: '请输入手机号！'}]}]" />
         </a-form-item>
 
         <a-form-item label="性别" :labelCol="labelCol" :wrapperCol="wrapperCol">
@@ -50,7 +50,7 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
         >
-          <a-input v-decorator="['email', {initialValue: this.formData.email,rules: [{required: true, message: '请输入邮箱！'}]}]" />
+          <a-input v-decorator="['email', {initialValue: this.formData.email}]" />
         </a-form-item>
 
         <a-form-item
@@ -60,8 +60,6 @@
         >
           <a-input v-decorator="['remark', {initialValue: this.formData.remark}]" />
         </a-form-item>
-
-
 
       </a-form>
     </a-spin>

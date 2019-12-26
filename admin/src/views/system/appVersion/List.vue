@@ -66,8 +66,21 @@
         {{ index + 1 }}
       </span>
 
-      <a-avatar size="large" shape="square" :src="record | frameAttResourceAddressFilter" slot="frameAttResourceAddress" slot-scope="record"/>
-      <a-avatar size="large" shape="square" :src="record | rootAttResourceAddressFilter" slot="rootAttResourceAddress" slot-scope="record"/>
+      <span slot="frameAttResourceAddress" slot-scope="text, record">
+        <template>
+          <div style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis;width: 150px;">
+            <a :href="record.frameAttResourceAddress">{{record.frameAttResourceAddress}}</a>
+          </div>
+        </template>
+      </span>
+
+      <span slot="rootAttResourceAddress" slot-scope="text, record">
+        <template>
+          <div style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis;width: 150px;">
+            <a :href="record.rootAttResourceAddress">{{record.rootAttResourceAddress}}</a>
+          </div>
+        </template>
+      </span>
       <span slot="status" slot-scope="text">
         <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />
       </span>

@@ -38,13 +38,9 @@
             v-decorator="['softVer', {initialValue: this.formData.softVer, rules: [{required: true, message: '请输入版本！'}]}]"/>
         </a-form-item>
 
-
-        <a-form-item
-          label="是否强制更新"
-          :labelCol="labelCol"
-          :wrapperCol="wrapperCol"
-        >
-          <a-switch :checked="forcedUpdate" @change="changeForcedUpdate" v-decorator="['forcedUpdate']"/>
+        <a-form-item label="构建版本" :labelCol="labelCol" :wrapperCol="wrapperCol">
+          <a-input
+            v-decorator="['buildVer', {initialValue: this.formData.buildVer, rules: [{required: true, message: '请输入构建版本！'}]}]"/>
         </a-form-item>
 
         <a-form-item
@@ -74,18 +70,17 @@
         >
           <a-upload
             :action="system.uploadMainUrl"
-            listType="picture-card"
             :showUploadList="false"
-            accept="image/*"
+            accept="*"
+            :headers="clientHeader"
             :data="imgData"
             :beforeUpload="beforeUpload"
             @change="handleChange"
             name="file"
           >
-            <img v-if="topImg" :src="topImg" alt="" style="width: 150px;"/>
+            <a v-if="topImg" style="width: 150px;">{{topImgName}}</a>
             <div v-else>
-              <a-icon :type="loading ? 'loading' : 'plus'" />
-              <div class="ant-upload-text">上传图片</div>
+              <a-button> <a-icon type="upload" /> 上传附件 </a-button>
             </div>
           </a-upload>
         </a-form-item>
@@ -117,8 +112,8 @@
         formData: {},
         title: '',
         deviceModelList:[],
-        forcedUpdate:true,
         topImg: '',
+        topImgName:'',
         headImageAttId: null,
         imgData:{
           attOrigin:'ADMIN',
@@ -161,17 +156,13 @@
           this.$api.deviceVersion.getById({id: item.id})
             .then(res => {
               this.formData = res
-              this.forcedUpdate = res.forcedUpdate
               this.topImg = res.resourceFullAddress
+              this.topImgName = res.updatePackageAttOrigFilename
+              this.headImageAttId = res.updatePackageAttId
             })
         }else{
           this.title = '新增'
-          this.forcedUpdate = true
         }
-      },
-
-      changeForcedUpdate(checked) {
-        this.forcedUpdate = checked
       },
 
       handleChange(info) {
@@ -182,8 +173,14 @@
             break
           case 'done':
             if (info.file.response.success) {
+              that.topImgName = that.fileData.title
               that.topImg = info.file.response.data.resourceFullAddress
               that.headImageAttId = info.file.response.data.id
+              that.confirmLoading = false
+              that.$notification.success({
+                message: '成功',
+                description:'上传成功！'
+              })
             } else {
               this.$message.error(info.file.response.errCode + ':' + info.file.response.errDesc)
             }
@@ -196,10 +193,6 @@
         }
       },
 
-      beforeUpload() {
-        return true
-      },
-
       handleSubmit () {
         const { form: { validateFields } } = this
         this.confirmLoading = true
@@ -209,9 +202,7 @@
             if(this.formData.id){
               values.id = this.formData.id
             }
-            if (!values.forcedUpdate) {
-              values.forcedUpdate = this.forcedUpdate
-            }
+
             values.updatePackageAttId = this.headImageAttId
             this.$api.deviceVersion.saveOrUpdate(values)
               .then(res => {

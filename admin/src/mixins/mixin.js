@@ -7,6 +7,11 @@
 import api from '@/api/index'
 import Vue from 'vue'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
+import md5 from 'md5'
+const SIGN = {
+  clientId: 'admin',
+  key: 'da74588912504563e464ffe8956de784'
+}
 export const mixin = {
   data () {
     return {
@@ -18,6 +23,12 @@ export const mixin = {
       deleted: false,
       visible: false,
       tokenHeader: { 'authorization': Vue.ls.get(ACCESS_TOKEN) },
+      clientHeader: {
+        'X-clientId': SIGN.clientId
+      },
+      fileData: {
+        title: ''
+      }
     }
   },
   created () {},
@@ -117,8 +128,6 @@ export const mixin = {
         }
       })
     },
-
-
     //导入
     handleImportExcel (info) {
       switch (info.file.status){
@@ -156,6 +165,25 @@ export const mixin = {
           this.$message.error(info.file.response.status + ':' + info.file.response.error)
           this.loading = false
           break
+      }
+    },
+
+    //上传之前
+    beforeUpload (file) {
+      this.confirmLoading = true
+      this.fileData.title = file.name
+      const timestamp = new Date().getTime() + ''
+      const signature = SIGN.clientId + timestamp + SIGN.key
+      this.clientHeader['X-timestamp'] = timestamp
+      this.clientHeader['X-signature'] = md5(signature)
+      if (file.type.indexOf('image') !== -1) {
+        const isLt1M = file.size / 1024 / 1024 < 1
+          if (!isLt1M) {
+            this.$message.error('图片最大为1MB!')
+          }
+        return isLt1M
+      } else {
+        return true
       }
     }
 

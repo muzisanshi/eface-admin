@@ -192,6 +192,13 @@
                       v-decorator="['mainEngine.network.macAddress', {initialValue: this.formData.mainEngine.network?this.formData.mainEngine.network.macAddress:'', rules: [{required: true, message: '请输入MAC地址！'}]}]"/>
                   </a-form-item>
                 </a-col>
+
+                <a-col :span="8">
+                  <a-form-item label="端口" :labelCol="labelCol" :wrapperCol="wrapperCol">
+                    <a-input
+                      v-decorator="['mainEngine.network.port', {initialValue: this.formData.mainEngine.network?this.formData.mainEngine.network.port:'', rules: [{required: true, message: '请输入端口！'}]}]"/>
+                  </a-form-item>
+                </a-col>
               </a-row>
             </a-card>
           </a-form>
@@ -332,6 +339,12 @@
               </a-row>
               <a-row :gutter="24">
                 <a-col :span="8">
+                  <a-form-item label="端口" :labelCol="labelCol" :wrapperCol="wrapperCol">
+                    <a-input
+                      v-decorator="['network.port', {initialValue: pane.content.network.port}]"/>
+                  </a-form-item>
+                </a-col>
+                <a-col :span="6">
                   <a-form-item
                     label="是否启用"
                     :labelCol="labelCol"
@@ -341,11 +354,11 @@
                   </a-form-item>
                 </a-col>
 
-                <a-col :span="12">
+                <a-col :span="6">
                   <a-form-item
                     label="是否保存未识别记录"
-                    :labelCol="labelCol"
-                    :wrapperCol="wrapperCol"
+                    :labelCol="labelCo1"
+                    :wrapperCol="wrapperCo1"
                   >
                     <a-switch :checked="pane.content.saveNotRecRecord" @change="changeNetworksNR($event,index)" v-decorator="['saveNotRecRecord']"/>
                   </a-form-item>
@@ -442,6 +455,15 @@
                       v-decorator="['gateBrake.network.macAddress', {initialValue: pane.content.gateBrake.network.macAddress}]"/>
                   </a-form-item>
                 </a-col>
+
+                <a-col :span="8">
+                  <a-form-item label="端口" :labelCol="labelCol" :wrapperCol="wrapperCol">
+                    <a-input
+                      v-decorator="['gateBrake.network.port', {initialValue: pane.content.gateBrake.network.port}]"/>
+                  </a-form-item>
+                </a-col>
+
+
               </a-row>
             </a-card>
 
@@ -489,6 +511,15 @@
           xs: { span: 24 },
           sm: { span: 17 },
         },
+
+        labelCo1: {
+          xs: { span: 24 },
+          sm: { span: 14 },
+        },
+        wrapperCo1: {
+          xs: { span: 24 },
+          sm: { span: 10 },
+        },
         visible: false,
         confirmLoading: false,
         formData: {
@@ -534,12 +565,14 @@
                   defaultGateway:'',
                   ip:'',
                   macAddress:'',
+                  port:'',
                   subnetMask:'255.255.255.0'
                 }
               },
               network:{
                 defaultGateway:'',
                 ip:'',
+                port:'',
                 macAddress:'',
                 subnetMask:'255.255.255.0'
               }
@@ -578,6 +611,7 @@
               defaultGateway:'',
               ip:'',
               id: '',
+              port:'',
               macAddress:'',
               subnetMask:'255.255.255.0'
             }
@@ -601,6 +635,7 @@
                 network:{
                   defaultGateway:'',
                   ip:'',
+                  port:'',
                   macAddress:'',
                   subnetMask:'255.255.255.0'
                 }
@@ -608,6 +643,7 @@
               network:{
                 defaultGateway:'',
                 ip:'',
+                port:'',
                 macAddress:'',
                 subnetMask:'255.255.255.0'
               }
@@ -791,6 +827,7 @@
                   network:{
                     defaultGateway:'',
                     ip:'',
+                    port:'',
                     macAddress:'',
                     subnetMask:'255.255.255.0'
                   }
@@ -798,6 +835,7 @@
                 network:{
                   defaultGateway:'',
                   ip:'',
+                  port:'',
                   macAddress:'',
                   subnetMask:'255.255.255.0'
                 }

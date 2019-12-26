@@ -104,7 +104,6 @@ export default {
           .then(res => {
             res.records.forEach(item=>{
               item.accountStateName = this.constants.data.accountState?this.constants.data.accountState[item.accountState]['name']:''
-              item.sexualName = this.constants.data.sexual?this.constants.data.sexual[item.sexual]['name']:''
             });
             return res
           })

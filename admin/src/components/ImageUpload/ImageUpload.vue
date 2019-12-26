@@ -7,6 +7,7 @@
       :action="system.uploadMainUrl"
       :beforeUpload="beforeUpload"
       @change="handleChange"
+      :headers="header"
       :data="data"
       accept="image/*"
     >
@@ -28,7 +29,7 @@ import md5 from 'md5'
 import { mapState } from 'vuex';
 
 const SIGN = {
-  clientId: 'admin-service',
+  clientId: 'admin',
   key: 'da74588912504563e464ffe8956de784'
 }
 export default {
@@ -113,15 +114,19 @@ export default {
     },
     beforeUpload (file) {
       this.data.title = file.name
-      const timestamp = new Date().getTime() + ''
+      const isLt1M = file.size / 1024 / 1024 < 1;
+      if (!isLt1M) {
+        this.$message.error('图片最大为1MB!');
+      }
+      const timestamp = new Date().getTime() + '';
+      const signature = SIGN.clientId + timestamp + SIGN.key
       this.header['X-timestamp'] = timestamp
-      this.header['X-signature'] = md5(SIGN.clientId + timestamp + SIGN.key)
-
+      this.header['X-signature'] = md5(signature)
       this.data['imageCompressionParams.enable'] = this.config.imageCompressionParams.enable
       this.data['imageCompressionParams.scale'] = this.config.imageCompressionParams.scale
       this.data['imageCompressionParams.outputQuality'] = this.config.imageCompressionParams.enable?(this.config.imageCompressionParams.outputQuality/100).toFixed(2) : 1
 
-      return true
+      return isLt1M
     },
     handleCancel () {
       this.visible = false

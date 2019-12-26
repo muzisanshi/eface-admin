@@ -242,7 +242,12 @@
         //上传图片
         var file = e.target.files[0]
         _this.fileName = file.name.split('.')[0]+'.png';
-        console.log(_this.fileName)
+        const isLt1M = file.size / 1024 / 1024 < 1;
+        if (!isLt1M) {
+          this.$message.error('图片最大为1MB!');
+          return false
+        }
+
         if (!/\.(gif|jpg|jpeg|png|GIF|JPG|PNG)$/.test(e.target.value)) {
           alert('图片类型必须是.gif,jpeg,jpg,png中的一种')
           return false

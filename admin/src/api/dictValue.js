@@ -4,6 +4,7 @@ const URI = {
   getById: '/dictValue/getById',
   page: '/dictValue/getPage',
   saveOrUpdate: '/dictValue/saveOrUpdate',
+  getRelationship: '/dictValue/getRelationship',
   del: '/dictValue/delete'
 }
 
@@ -28,6 +29,13 @@ function saveOrUpdate (parameter) {
   })
 }
 
+function getRelationship (parameter) {
+  return axios({
+    url: URI.getRelationship,
+    params: parameter
+  })
+}
+
 function del (parameter) {
   return axios({
     url: URI.del,
@@ -39,5 +47,6 @@ export default {
   getById,
   getPage,
   del,
-  saveOrUpdate
+  saveOrUpdate,
+  getRelationship
 }

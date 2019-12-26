@@ -42,9 +42,9 @@ const user = {
         api.user.login(userInfo).then(response => {
           const result = response
           Vue.ls.set(ACCESS_TOKEN, result.managerToken, 7 * 24 * 60 * 60 * 1000)
-          Vue.ls.set(MANAGER, result.manager)
+          Vue.ls.set(MANAGER, result.managerInfoData)
           commit('SET_TOKEN', result.managerToken)
-          commit('SET_INFO', result.manager)
+          commit('SET_INFO', result.managerInfoData)
           resolve()
         }).catch(error => {
           reject(error)

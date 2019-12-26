@@ -36,6 +36,7 @@
                       style="margin-left: 10px;display: inline-block;float: right;margin-top: 10px;"
                       :showUploadList="false"
                       accept="image/*"
+                      :headers="clientHeader"
                       :data="data"
                       :beforeUpload="beforeUpload"
                       @change="handleChange"
@@ -446,22 +447,18 @@
         that.fileList = []
         this.headImageAttId = null;
         this.topImg = null;
-        this.$api.dictType.getAll({})
+        this.$api.dictValue.getRelationship()
           .then(res => {
-            for (let i = 0, j = res.length; i < j; i++) {
-              if(res[i].name==='关系'){
-                const l = []
-                for (let j = 0;j<res[i].dictValues.length; j++) {
-                  l.push({
-                    value: res[i].dictValues[j].value,
-                    label: res[i].dictValues[j].name
-                  })
-                }
-                that.dictValueList = l
-                if(!item){
-                  that.formData.relationship=that.dictValueList[0].value
-                }
-              }
+            const l = []
+            for (let i = 0;i<res.length; i++) {
+              l.push({
+                value: res[i].value,
+                label: res[i].name
+              })
+            }
+            that.dictValueList = l
+            if(!item){
+              that.formData.relationship=that.dictValueList[0].value
             }
           })
         this.$api.nationalAreaCode.getAll()
@@ -578,6 +575,8 @@
         })
       },
 
+
+
       //头像上传回调
       handleChange(info) {
         let that = this;
@@ -589,6 +588,7 @@
             if (info.file.response.success) {
               that.topImg = info.file.response.data.resourceFullAddress
               that.headImageAttId = info.file.response.data.id
+              that.confirmLoading = false
             } else {
               this.$message.error(info.file.response.errCode + ':' + info.file.response.errDesc)
             }
@@ -599,11 +599,6 @@
             this.loading = false
             break
         }
-      },
-
-      //头像上传
-      beforeUpload() {
-        return true
       },
 
       //保存基本信息

@@ -58,8 +58,9 @@
             style="margin-left: 10px;display: inline-block;float: right;margin-top: 10px;"
             :showUploadList="false"
             :accept="fileType"
+            :headers="clientHeader"
             :data="imgData"
-            :beforeUpload="beforeUpload"
+            :beforeUpload="beforeFileUpload"
             @change="handleChange"
           >
             <a-input :read-only="true" v-model="fileName"/>
@@ -109,6 +110,11 @@
   import {mixin} from '@/mixins/mixin'
   import {mapState} from 'vuex';
   import moment from 'moment';
+  import md5 from 'md5'
+  const SIGN = {
+    clientId: 'admin',
+    key: 'da74588912504563e464ffe8956de784'
+  }
   export default {
     mixins:[mixin],
     data () {
@@ -213,9 +219,12 @@
         }
       },
 
-      beforeUpload(file) {
-        console.log(file)
+      beforeFileUpload(file) {
         this.fileName = file.name
+        const timestamp = new Date().getTime() + ''
+        const signature = SIGN.clientId + timestamp + SIGN.key
+        this.clientHeader['X-timestamp'] = timestamp
+        this.clientHeader['X-signature'] = md5(signature)
         if(file.type.split('/')[0] === 'video'){
           this.formData.adItem.adFileType = 'MP4'
           this.isVideo = true

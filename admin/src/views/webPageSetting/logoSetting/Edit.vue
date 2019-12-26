@@ -29,6 +29,8 @@
             listType="picture"
             style="margin-left: 10px;display: inline-block;float: right;margin-top: 10px;width: 220px;"
             :showUploadList="false"
+            :headers="clientHeader"
+            :data="imgData"
             :accept="fileType"
             :beforeUpload="beforeUpload"
             @change="handleChange"
@@ -71,6 +73,8 @@
             listType="picture"
             style="margin-left: 10px;display: inline-block;float: right;margin-top: 10px;width: 170px;"
             :showUploadList="false"
+            :headers="clientHeader"
+            :data="imgData"
             :accept="fileType"
             :beforeUpload="beforeUpload"
             @change="handleBgChange"
@@ -132,7 +136,11 @@
         showLogoImageToLoginPage:false,
         showLogoImageToIndexPage:true,
         loginBgImageToLoginPage:true,
-        fileType:'image/*'
+        fileType:'image/*',
+        imgData:{
+          attOrigin:'ADMIN',
+          attType:'NORMAL'
+        },
       }
     },
     beforeCreate () {
@@ -187,6 +195,7 @@
             if (info.file.response.success) {
               that.logoImage = info.file.response.data.resourceFullAddress
               that.logoImageId = info.file.response.data.id
+              that.confirmLoading = false
             } else {
               this.$message.error(info.file.response.errCode + ':' + info.file.response.errDesc)
             }
@@ -209,6 +218,7 @@
             if (info.file.response.success) {
               that.loginBgImage = info.file.response.data.resourceFullAddress
               that.loginBgImageId = info.file.response.data.id
+              that.confirmLoading = false
             } else {
               this.$message.error(info.file.response.errCode + ':' + info.file.response.errDesc)
             }
@@ -219,10 +229,6 @@
             this.loading = false
             break
         }
-      },
-
-      beforeUpload(file) {
-        return true
       },
 
       changeToLogin(checked) {

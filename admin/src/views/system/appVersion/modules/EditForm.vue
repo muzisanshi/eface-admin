@@ -87,17 +87,17 @@
         >
           <a-upload
             :action="system.uploadMainUrl"
-            listType="picture-card"
             :showUploadList="false"
-            accept="image/*"
+            accept="*"
+            :headers="clientHeader"
             :data="imgData"
+            :beforeUpload="beforeFrameUpload"
             @change="handleFrameChange"
             name="file"
           >
-            <img v-if="frameImg" :src="frameImg" alt="" style="width: 150px;"/>
+            <a v-if="frameImg" style="width: 150px;">{{frameImgName}}</a>
             <div v-else>
-              <a-icon :type="frameloading ? 'frameloading' : 'plus'" />
-              <div class="ant-upload-text">上传图片</div>
+              <a-button> <a-icon type="upload" /> 上传附件 </a-button>
             </div>
           </a-upload>
         </a-form-item>
@@ -109,17 +109,17 @@
         >
           <a-upload
             :action="system.uploadMainUrl"
-            listType="picture-card"
             :showUploadList="false"
-            accept="image/*"
+            accept="*"
+            :headers="clientHeader"
             :data="imgData"
+            :beforeUpload="beforeRootUpload"
             @change="handleChange"
             name="file"
           >
-            <img v-if="rootImg" :src="rootImg" alt="" style="width: 150px;"/>
+            <a v-if="rootImg" style="width: 150px;">{{rootImgName}}</a>
             <div v-else>
-              <a-icon :type="loading ? 'loading' : 'plus'" />
-              <div class="ant-upload-text">上传图片</div>
+              <a-button> <a-icon type="upload" /> 上传附件 </a-button>
             </div>
           </a-upload>
         </a-form-item>
@@ -133,6 +133,11 @@
   import {mixin} from '@/mixins/mixin'
   import {mapState} from 'vuex';
   import selectArea from '@/components/Common/selectArea'
+  import md5 from 'md5'
+  const SIGN = {
+    clientId: 'admin',
+    key: 'da74588912504563e464ffe8956de784'
+  }
   export default {
     mixins:[mixin],
     data () {
@@ -150,7 +155,9 @@
         formData: {},
         title: '',
         rootImg: '',
+        frameImgName:'',
         frameImg:'',
+        rootImgName:'',
         frameAttId: null,
         rootAttId: null,
         frameloading:false,
@@ -183,8 +190,13 @@
           this.$api.appVersion.getById({id: item.id})
             .then(res => {
               this.formData = res
-              this.rootImg = res.frameAttResourceAddress
-              this.frameImg = res.rootAttResourceAddress
+              this.frameImg = res.frameAttResourceAddress
+              this.rootImg = res.rootAttResourceAddress
+
+              this.rootImgName = res.rootAttOrigFilename
+              this.frameImgName = res.frameAttOrigFilename
+              this.frameAttId = res.frameAttId
+              this.rootAttId =res.rootAttId
             })
         }else{
           this.title = '新增'
@@ -201,6 +213,11 @@
             if (info.file.response.success) {
               that.frameImg = info.file.response.data.resourceFullAddress
               that.frameAttId = info.file.response.data.id
+              that.confirmLoading = false
+              that.$notification.success({
+                message: '成功',
+                description:'上传成功！'
+              })
             } else {
               this.$message.error(info.file.response.errCode + ':' + info.file.response.errDesc)
             }
@@ -223,6 +240,11 @@
             if (info.file.response.success) {
               that.rootImg = info.file.response.data.resourceFullAddress
               that.rootAttId = info.file.response.data.id
+              that.confirmLoading = false
+              that.$notification.success({
+                message: '成功',
+                description:'上传成功！'
+              })
             } else {
               this.$message.error(info.file.response.errCode + ':' + info.file.response.errDesc)
             }
@@ -233,6 +255,26 @@
             this.loading = false
             break
         }
+      },
+
+      beforeFrameUpload(file) {
+        this.frameImgName = file.name
+        this.confirmLoading = true
+        const timestamp = new Date().getTime() + ''
+        const signature = SIGN.clientId + timestamp + SIGN.key
+        this.clientHeader['X-timestamp'] = timestamp
+        this.clientHeader['X-signature'] = md5(signature)
+        return true
+      },
+
+      beforeRootUpload(file) {
+        this.rootImgName = file.name
+        this.confirmLoading = true
+        const timestamp = new Date().getTime() + ''
+        const signature = SIGN.clientId + timestamp + SIGN.key
+        this.clientHeader['X-timestamp'] = timestamp
+        this.clientHeader['X-signature'] = md5(signature)
+        return true
       },
 
       handleSubmit () {

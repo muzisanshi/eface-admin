@@ -1,7 +1,7 @@
 <template>
   <page-view :avatar="avatar" :title="false">
     <div slot="headerContent">
-      <div class="title">{{ timeFix }}，{{ user.username }}</div>
+      <div class="title">{{ timeFix }}，{{ user?user.username:'' }}</div>
     </div>
   </page-view>
 </template>
@@ -29,7 +29,7 @@ export default {
     ...mapMutations(['SET_INFO']),
     userInfo () {
       if(JSON.stringify(this.$store.getters.userInfo) == '{}'){
-        if(Vue.ls.get('MANAGER').username){
+        if(Vue.ls.get('MANAGER') && Vue.ls.get('MANAGER').username){
           return Vue.ls.get('MANAGER')
         }
       }else{
@@ -40,7 +40,7 @@ export default {
   },
   created () {
     this.user = this.userInfo
-    this.avatar = this.userInfo.avatar
+    this.avatar = this.userInfo?this.userInfo.avatar:''
   },
   methods: {
     ...mapGetters(['nickname']),

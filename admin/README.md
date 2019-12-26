@@ -50,10 +50,10 @@ mpm run build
 NODE_ENV=development
 
 // 接口baseUrl
-VUE_APP_BASE_API=http://192.168.101.119:25000/adminService
+ADMIN_SERVICE_BASE_URL=http://192.168.101.119:25000/adminService
 ```
 
-建议只修改VUE_APP_BASE_API的值。
+建议只修改ADMIN_SERVICE_BASE_URL的值。
 
 ## API接口的使用
 

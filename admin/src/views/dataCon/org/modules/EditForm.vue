@@ -25,6 +25,7 @@
                 style="margin-left: 10px;display: inline-block;float: right;margin-top: 10px;"
                 :showUploadList="false"
                 accept="image/*"
+                :headers="clientHeader"
                 :data="imgData"
                 :beforeUpload="beforeUpload"
                 @change="handleChange"
@@ -184,11 +185,6 @@
             this.loading = false
             break
         }
-      },
-
-      beforeUpload(file) {
-        this.data.title = file.name
-        return true
       },
 
       add(item) {

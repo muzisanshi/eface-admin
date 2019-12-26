@@ -11,6 +11,7 @@ const URI = {
   recoverConnect: '/device/recoverConnect',
   rejectConnect: '/device/rejectConnect',
   resetDevice: '/device/resetDevice',
+  syncUser: '/device/syncUser',
   exportExcel: '/device/exportExcel'
 }
 
@@ -84,6 +85,13 @@ function rejectConnect (parameter) {
   })
 }
 
+function syncUser (parameter) {
+  return axios({
+    url: URI.syncUser,
+    params: parameter
+  })
+}
+
 function resetDevice (parameter) {
   return axios({
     url: URI.resetDevice,
@@ -102,5 +110,6 @@ export default {
   openGateBrake,
   recoverConnect,
   rejectConnect,
-  resetDevice
+  resetDevice,
+  syncUser
 }

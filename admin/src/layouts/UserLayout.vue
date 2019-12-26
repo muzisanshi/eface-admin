@@ -7,8 +7,8 @@
             <img :src="constants.logoData.logoImage.resourceFullAddress" alt="logo" style="width: 200px;height: 50px;display: inline-block;margin-bottom: 15px;">
           </div>
           <a href="/">
-            <span class="title" style="display: block">{{constants.logoData.logoText}}</span>
-            <p class="title_second" v-if="constants.logoData.logoSubTitle">{{constants.logoData.logoSubTitle}}</p>
+            <span class="title" style="display: block">{{constants.logoData.logoText?constants.logoData.logoText:'e-face'}}</span>
+            <p class="title_second">{{constants.logoData.logoSubTitle?constants.logoData.logoSubTitle:'智慧社区AI管控系统'}}</p>
           </a>
         </div>
         <div class="desc">

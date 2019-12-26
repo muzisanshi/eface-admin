@@ -23,21 +23,6 @@
           </a-col>
 
           <a-col :md="4" :sm="24">
-            <a-form-item label="是否强制更新">
-              <a-select
-                size="default"
-                placeholder="请选择"
-                optionFilterProp="children"
-                v-model="queryParam.forcedUpdate"
-              >
-                <a-select-option value="">请选择</a-select-option>
-                <a-select-option value="true">是</a-select-option>
-                <a-select-option value="false">否</a-select-option>
-              </a-select>
-            </a-form-item>
-          </a-col>
-
-          <a-col :md="4" :sm="24">
             <span class="table-page-search-submitButtons">
               <a-button type="primary" @click="$refs.table.refresh(true)">查询</a-button>
               <a-button style="margin-left: 8px" @click="resetSearchForm">重置</a-button>
@@ -67,7 +52,13 @@
         {{ index + 1 }}
       </span>
 
-      <a-avatar size="large" shape="square" :src="record | resourceFullAddressFilter" slot="resourceFullAddress" slot-scope="record"/>
+      <span slot="resourceFullAddress" slot-scope="text, record">
+        <template>
+          <div style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis;width: 300px;">
+            <a :href="record.resourceFullAddress">{{record.resourceFullAddress}}</a>
+          </div>
+        </template>
+      </span>
       <span slot="status" slot-scope="text">
         <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />
       </span>
@@ -110,12 +101,8 @@ export default {
           dataIndex: 'softVer'
         },
         {
-          title: '是否强制更新',
-          dataIndex: 'forcedUpdate',
-          scopedSlots: {customRender: 'status'}
-        },
-        {
-          title: '打包附件',
+          title: '附件地址',
+          width: '300px',
           scopedSlots: { customRender: 'resourceFullAddress' }
         },
         {
