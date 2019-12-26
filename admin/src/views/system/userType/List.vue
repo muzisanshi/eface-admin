@@ -103,7 +103,7 @@ export default {
           scopedSlots: {customRender: 'status'}
         },
         {
-          title: '规则名称',
+          title: '门禁闸机常用规则名称',
           dataIndex: 'gateBrakeRuleName'
         },
         {
