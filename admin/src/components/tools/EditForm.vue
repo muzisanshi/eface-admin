@@ -53,14 +53,6 @@
           <a-input v-decorator="['email', {initialValue: this.formData.email}]" />
         </a-form-item>
 
-        <a-form-item
-          label="备注"
-          :labelCol="labelCol"
-          :wrapperCol="wrapperCol"
-        >
-          <a-input v-decorator="['remark', {initialValue: this.formData.remark}]" />
-        </a-form-item>
-
       </a-form>
     </a-spin>
   </a-modal>
