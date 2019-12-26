@@ -346,20 +346,7 @@
           { title: '受访区域',form:this.$form.createForm(this), content: {
               estateId:"",
               relieve:false,
-              gateBrakeLimits:[
-                {
-                  estateId:'',
-                  buildingId:"",
-                  unitId:'',
-                  storeyId:'',
-                  roomId:"",
-                  beginDatetime:'',
-                  endDatetime:'',
-                  remark:'',
-                  roomName:'',
-                  enable:true,
-                },
-              ]
+              gateBrakeLimits:[]
             }, key: '2',remark:'',closable: false },
         ],
       }
@@ -408,38 +395,11 @@
           { title: '受访区域',form:this.$form.createForm(this), content: {
               estateId:"",
               relieve:false,
-              gateBrakeLimits:[
-                {
-                  estateId:'',
-                  buildingId:"",
-                  unitId:'',
-                  storeyId:'',
-                  roomId:"",
-                  beginDatetime:'',
-                  endDatetime:'',
-                  remark:'',
-                  roomName:'',
-                  enable:true,
-                },
-              ]
+              gateBrakeLimits:[]
             }, key: '2',remark:'',closable: false },
         ];
         this.panes[0].form.getFieldDecorator('keys', {
-          initialValue: [
-            {
-              estateId:'',
-              buildingId:"",
-              unitId:'',
-              storeyId:'',
-              roomId:"",
-              id:'',
-              beginDatetime:'',
-              endDatetime:'',
-              remark:'',
-              roomName:'',
-              enable:true
-            }
-          ],
+          initialValue: [],
           preserve: true
         });
         this.userType = userType
@@ -869,12 +829,13 @@
           camerasData.push(this.panes[i].content)
           this.panes[i].form.validateFields((errors, valuesItem) => {
             if (!errors) {
-              // console.log(valuesItem)
               let remarkData = [];
+              if(valuesItem.remarkVal && valuesItem.remarkVal.length){
+                valuesItem.remarkVal.forEach((item,index) =>{
+                  remarkData.push(item)
+                })
+              }
 
-              valuesItem.remarkVal.forEach((item,index) =>{
-                remarkData.push(item)
-              })
               for(let j=0;j<remarkData.length;j++){
                 this.panes[i].content.gateBrakeLimits[j].remark = remarkData[j]
                 if(!this.panes[i].content.gateBrakeLimits[j].beginDatetime){
@@ -897,7 +858,6 @@
 
         if(isSubmit){
           this.formData.userEstates = camerasData
-          console.log('--formData--',this.formData)
           this.confirmLoading = true
           this.$api.user.saveOrUpdate(this.formData)
             .then(res => {
@@ -910,6 +870,7 @@
               this.form.resetFields()
               this.$emit('ok', this.formData)
             }).finally(() => {
+            this.confirmLoading = false
           })
         }
       },

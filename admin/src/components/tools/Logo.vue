@@ -1,7 +1,7 @@
 <template>
-  <div class="logo" style="text-align: center;padding-left: 0">
+  <div class="logo" style="text-align: center;padding-left: 0" v-if="constants.logoData.showLogoImageToIndexPage">
     <router-link :to="{name:'dashboard'}" tag="a" style="display: block">
-      <img v-if="constants.logoData.showLogoImageToIndexPage" :src="constants.logoData.logoImage?constants.logoData.logoImage.resourceFullAddress:require('../../../public/logo.png')" alt="logo" style="height: 50px;width: 200px;">
+      <img :src="constants.logoData.logoImage?constants.logoData.logoImage.resourceFullAddress:require('../../../public/logo.png')" alt="logo" style="height: 50px;width: 200px;">
     </router-link>
   </div>
 </template>

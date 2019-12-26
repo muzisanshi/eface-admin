@@ -99,7 +99,6 @@ const user = {
       return new Promise((resolve) => {
         commit('SET_TOKEN', '')
         Vue.ls.remove(ACCESS_TOKEN)
-
         api.manager.logout(state.token).then(() => {
           resolve()
         }).catch(() => {

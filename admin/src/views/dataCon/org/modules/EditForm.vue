@@ -40,7 +40,7 @@
 
         <a-row :gutter="24">
           <a-col :span="12">
-            <a-form-item label="组织名称" :labelCol="labelCol" :wrapperCol="wrapperCol">
+            <a-form-item label="名称" :labelCol="labelCol" :wrapperCol="wrapperCol">
               <a-input v-decorator="['name', {initialValue: this.formData.name, rules: [{required: true, message: '请输入组织名称！'}]}]"/>
             </a-form-item>
           </a-col>
@@ -175,6 +175,7 @@
             if (info.file.response.success) {
               that.topImg = info.file.response.data.resourceFullAddress
               that.headImageAttId = info.file.response.data.id
+              that.confirmLoading = false
             } else {
               this.$message.error(info.file.response.errCode + ':' + info.file.response.errDesc)
             }

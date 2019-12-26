@@ -85,7 +85,7 @@
 
             <div style="margin-top: 10px">
               <a-button type="primary" class="ant-upload-text">浏览上传</a-button>
-              <a-button type="primary" style="margin-left: 10px" @click.stop="delLogoImage">删除</a-button>
+              <a-button type="primary" style="margin-left: 10px" @click.stop="delLogoBgImage">删除</a-button>
             </div>
           </a-upload>
         </a-form-item>
@@ -245,7 +245,15 @@
 
 
       delLogoImage(){
-        console.log('111')
+        this.showLogoImageToLoginPage = ''
+        this.logoImage = ''
+        this.logoImageId = ''
+      },
+
+      delLogoBgImage(){
+        this.showLogoImageToIndexPage = ''
+        this.loginBgImage = ''
+        this.loginBgImageId = ''
       },
 
       handleSubmit () {
@@ -269,27 +277,9 @@
               values.loginBgImageToLoginPage = this.loginBgImageToLoginPage
             }
 
-            if (this.logoImageId) {
-              values.logoImageAttId = this.logoImageId
-            }else{
-              this.$notification.error({
-                message: '提示',
-                description: '请上传系统LOGO图片！'
-              })
-              this.confirmLoading = false
-              return
-            }
+            values.logoImageAttId = this.logoImageId
 
-            if (this.loginBgImageId) {
-              values.loginBgImageAttId = this.loginBgImageId
-            }else{
-              this.$notification.error({
-                message: '提示',
-                description: '请上传背景图片！'
-              })
-              this.confirmLoading = false
-              return
-            }
+            values.loginBgImageAttId = this.loginBgImageId
 
             this.$api.webPageSetting.saveOrUpdate(values)
               .then(res => {

@@ -18,7 +18,7 @@
           size="large"
           type="text"
           placeholder="用户: admin"
-          v-decorator="['username',{rules: [{ required: true, message: '请输入用户名' }], validateTrigger: 'change'}]"
+          v-decorator="['username',{initialValue: this.formData.username,rules: [{ required: true, message: '请输入用户名' }], validateTrigger: 'change'}]"
         >
           <a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }"/>
         </a-input>
@@ -30,7 +30,7 @@
           type="password"
           autocomplete="false"
           placeholder="密码: 111111"
-          v-decorator="['password',{rules: [{ required: true, message: '请输入密码' }], validateTrigger: 'blur'}]"
+          v-decorator="['password',{initialValue: this.formData.password,rules: [{ required: true, message: '请输入密码' }], validateTrigger: 'blur'}]"
         >
           <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }"/>
         </a-input>
@@ -58,6 +58,14 @@
         </a-col>
       </a-row>
 
+      <a-row :gutter="0">
+        <a-col :span="14">
+          <a-form-item>
+            <a-checkbox @change="onChange" :defaultChecked="passWordChecked">记住密码</a-checkbox>
+          </a-form-item>
+        </a-col>
+      </a-row>
+
       <a-form-item style="margin-top:24px">
         <a-button
           size="large"
@@ -76,9 +84,10 @@
 </template>
 
 <script>
+  import Vue from 'vue'
   import md5 from 'md5'
   import {mapActions} from 'vuex'
-
+  import { SAVE_PASSWORD } from '@/store/mutation-types'
   export default {
     data() {
       return {
@@ -89,11 +98,28 @@
         inputCodeContent: "",
         verifiedCode: "",
         inputCodeNull: true,
-        codeImgUrl: ''
+        codeImgUrl: '',
+        passWordChecked:false,
+        formData:{}
       }
     },
     created() {
       this.getCodeImg();
+      if(Vue.ls.get(SAVE_PASSWORD)){
+        if(Vue.ls.get(SAVE_PASSWORD).checked){
+          this.passWordChecked = Vue.ls.get(SAVE_PASSWORD).checked
+          this.formData = {
+            username: Vue.ls.get(SAVE_PASSWORD).name,
+            password: Vue.ls.get(SAVE_PASSWORD).password
+          }
+        }else{
+          this.passWordChecked =false
+          this.formData = {
+            username: '',
+            password: ''
+          }
+        }
+      }
     },
     methods: {
       ...mapActions(['Login']),
@@ -105,6 +131,11 @@
           }).finally(() => {
         })
       },
+
+      onChange(e) {
+        this.passWordChecked = e.target.checked
+      },
+
       inputCodeChange(e) {
         this.inputCodeContent = e.target.value
         if (!e.target.value || 0 == e.target.value) {
@@ -132,7 +163,7 @@
             loginParams.password = values.password
             loginParams.uniqueId = this.form.uniqueId;
             Login(loginParams)
-              .then((res) => this.loginSuccess(res))
+              .then((res) => this.loginSuccess(res,values))
               .catch(err => this.loginFailed(err))
               .finally(() => {
                 state.loginBtn = false
@@ -144,12 +175,22 @@
           }
         })
       },
-      loginSuccess(res) {
+      loginSuccess(res,values) {
+        let that = this;
         this.$router.push({name: 'dashboard'})
+        if(this.passWordChecked){
+          Vue.ls.set(SAVE_PASSWORD, {
+            checked:that.passWordChecked,
+            name:values.username,
+            password:values.password
+          })
+
+
+        }
       },
       loginFailed(err) {
       }
-    }
+    },
   }
 </script>
 

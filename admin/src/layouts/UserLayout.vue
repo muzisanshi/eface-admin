@@ -1,6 +1,6 @@
 <template>
   <div id="userLayout" :class="['user-layout-wrapper', device]">
-    <div class="container">
+    <div class="container" :style="{background:constants.logoData.loginBgImageToLoginPage ? (constants.logoData.loginBgImage? '#f0f2f5 url('+constants.logoData.loginBgImage.resourceFullAddress+') 0%' : '#f0f2f5 url('+require('@/assets/background.svg')+') no-repeat 50%'):'none'}">
       <div class="top">
         <div class="header">
           <div style="text-align: center" v-if="constants.logoData.showLogoImageToLoginPage">
@@ -65,7 +65,6 @@ export default {
     .container {
       width: 100%;
       min-height: 100%;
-      background: #f0f2f5 url(~@/assets/background.svg) no-repeat 50%;
       background-size: 100%;
       padding: 110px 0 144px;
       position: relative;

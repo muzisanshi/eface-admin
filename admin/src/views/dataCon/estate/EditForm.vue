@@ -18,12 +18,24 @@
     <a-spin :spinning="confirmLoading">
       <a-form :form="form">
         <a-row :gutter="24">
+
+          <a-col :span="12">
+            <a-form-item label="编码" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <a-input
+                v-decorator="['code', {initialValue: this.formData.code, rules: [{required: true, message: '请输入编码！'}]}]"/>
+            </a-form-item>
+          </a-col>
+
           <a-col :span="12">
             <a-form-item label="名称" :labelCol="labelCol" :wrapperCol="wrapperCol">
               <a-input
                 v-decorator="['name', {initialValue: this.formData.name, rules: [{required: true, message: '请输入组织名称！'}]}]"/>
             </a-form-item>
           </a-col>
+
+        </a-row>
+
+        <a-row :gutter="24">
 
           <a-col :span="12">
             <a-form-item
@@ -43,6 +55,15 @@
             </a-form-item>
           </a-col>
 
+          <a-col :span="12">
+            <a-form-item label="街道办" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <a-input @click="selectStreetOffice" :read-only="true" v-decorator="['streetOfficeName', {initialValue: this.formData.streetOfficeName}]">
+                <a-icon slot="suffix" @click="clearStreetOffice" type="close" style="color: rgba(0, 0, 0, 0.25);"/>
+                <a-button slot="enterButton">新增</a-button>
+              </a-input>
+            </a-form-item>
+          </a-col>
+
         </a-row>
 
         <a-row :gutter="24">
@@ -59,7 +80,9 @@
 
           <a-col :span="12">
             <a-form-item label="详细地址" :labelCol="labelCol" :wrapperCol="wrapperCol" :required="true">
-              <input class="ant-input" id="detailAddress" v-model="inputChange" />
+
+              <a-input id="detailAddress" class="ant-input" v-model="inputChange"/>
+
             </a-form-item>
           </a-col>
         </a-row>
@@ -73,23 +96,6 @@
           <a-col :span="12">
             <a-form-item label="纬度" :labelCol="labelCol" :wrapperCol="wrapperCol">
               <a-input :disabled="true"  v-model="latitude"/>
-            </a-form-item>
-          </a-col>
-        </a-row>
-
-        <a-row :gutter="24">
-          <a-col :span="12">
-            <a-form-item label="街道办" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input @click="selectStreetOffice" :read-only="true" v-decorator="['streetOfficeName', {initialValue: this.formData.streetOfficeName}]">
-                <a-icon slot="suffix" @click="clearStreetOffice" type="close" style="color: rgba(0, 0, 0, 0.25);"/>
-              </a-input>
-            </a-form-item>
-          </a-col>
-
-          <a-col :span="12">
-            <a-form-item label="编码" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input
-                v-decorator="['code', {initialValue: this.formData.code, rules: [{required: true, message: '请输入编码！'}]}]"/>
             </a-form-item>
           </a-col>
         </a-row>
