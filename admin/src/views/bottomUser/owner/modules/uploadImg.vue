@@ -184,25 +184,11 @@
                       that.$emit('uploadFace',resUpl)
                       that.isCropper = false
                       that.confirmLoading = false
-                      // that.$api.face.save({
-                      //   faceAttId:resUpl.id,
-                      //   userId:that.userId
-                      // })
-                      //   .then(res => {
-                      //     that.$notification.success({
-                      //       message: '成功',
-                      //       description: `上传成功`
-                      //     })
-                      //     that.$emit('uploadFace',that.userId)
-                      //   }).finally(() => {
-                      //  })
                     })
                 }).catch(resRes => {
                 that.confirmLoading = false
               })
             }
-
-
           })
         } else {
           this.$refs.cropper.getCropData((data) => {
