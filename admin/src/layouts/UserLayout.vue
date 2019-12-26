@@ -4,7 +4,7 @@
       <div class="top">
         <div class="header">
           <div style="text-align: center" v-if="constants.logoData.showLogoImageToLoginPage">
-            <img :src="constants.logoData.logoImage.resourceFullAddress" alt="logo" style="width: 200px;height: 50px;display: inline-block;margin-bottom: 15px;">
+            <img :src="constants.logoData.logoImage?constants.logoData.logoImage.resourceFullAddress:require('../../public/logo.png')" alt="logo" style="width: 200px;height: 50px;display: inline-block;margin-bottom: 15px;">
           </div>
           <a href="/">
             <span class="title" style="display: block">{{constants.logoData.logoText?constants.logoData.logoText:'e-face'}}</span>
