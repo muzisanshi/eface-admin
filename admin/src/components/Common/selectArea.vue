@@ -38,6 +38,9 @@
     watch:{
       initArea(newVal){
         this.initCascader = newVal
+        if(this.initCascader.length){
+          this.initAllArea();
+        }
       },
       num(newVal){
         if(newVal == this.initCascader.length){

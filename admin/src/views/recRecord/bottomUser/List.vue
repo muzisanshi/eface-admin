@@ -33,7 +33,7 @@
 
           <a-col :md="5" :sm="24">
             <a-form-item label="识别结果">
-              <a-select showSearch allowClear placeholder="选择识别结果"  v-model="queryParam.recResult" optionFilterProp="children" :filterOption="filterCommonOption" :options="constants.list.recResult">
+              <a-select showSearch placeholder="选择识别结果"  v-model="queryParam.recResult" optionFilterProp="children" :filterOption="filterCommonOption" :options="constants.list.recResult">
               </a-select>
             </a-form-item>
           </a-col>
@@ -44,6 +44,7 @@
               <a-range-picker
                 :defaultValue="[moment().startOf('day').subtract(0, 'days'), moment().endOf('day')]"
                 @change="onChange"
+                :allowClear="false"
                 :disabledDate="disabledDate"
                 format="YYYY-MM-DD HH:mm:ss"
                 :showTime="{ defaultValue: moment('00:00:00', 'HH:mm:ss') }"

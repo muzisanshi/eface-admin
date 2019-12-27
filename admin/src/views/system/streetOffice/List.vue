@@ -65,7 +65,7 @@
       </span>
 
     </s-table>
-    <edit-form ref="editModal" @ok="handleOk"/>
+    <edit-form ref="editModal" :initArea="initArea" @ok="handleOk"/>
   </a-card>
 </template>
 
@@ -108,6 +108,7 @@ export default {
         }
       ],
       initCascader:[],
+      initArea:[],
       loadData: parameter => {
         return this.$api.streetOffice.getPage(Object.assign(parameter, this.queryParam))
           .then(res => {

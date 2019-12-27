@@ -55,7 +55,6 @@
                     <a-input v-decorator="['phoneNo', {initialValue: this.formData.phoneNo, rules: [{required: true, message: '请输入电话号码！'}]}]">
                       <a-select
                         showSearch
-                        allowClear
                         slot="addonBefore"
                         placeholder="选择区号"
                         optionFilterProp="children"
@@ -858,6 +857,14 @@
 
         if(isSubmit){
           this.formData.userEstates = camerasData
+          if(!this.formData.faces || this.formData.faces.length === 0){
+            this.$notification.error({
+              message: '提示',
+              description: `请上传人脸照片`
+            })
+            return
+          }
+          console.log(this.formData)
           this.confirmLoading = true
           this.$api.user.saveOrUpdate(this.formData)
             .then(res => {

@@ -50,6 +50,12 @@
   import selectArea from '@/components/Common/selectArea'
   export default {
     mixins:[mixin],
+    props:{
+      initArea:{
+        type:Array,
+        default:[]
+      }
+    },
     data () {
       return {
         goodsGroups:[],
@@ -65,7 +71,7 @@
         confirmLoading: false,
         formData: {},
         title: '',
-        initCascader: [],
+        initCascader: this.initArea,
       }
     },
     components: {
@@ -80,10 +86,14 @@
     methods: {
       add (item) {
         let that = this;
+        that.initCascader = []
+       if(this.initArea.length){
+         this.initCascader = this.initArea
+       }
         this.visible = true
         this.form.resetFields()
         this.formData ={}
-        that.initCascader = []
+
         if(item){
           this.title = '修改'
           this.$api.streetOffice.getById({id: item.id})
@@ -127,6 +137,7 @@
                 this.visible = false
                 this.confirmLoading = false
                 this.form.resetFields()
+                this.$emit('addSuccess', res)
                 this.$emit('ok', values)
               }).finally(() => {
               this.confirmLoading = false

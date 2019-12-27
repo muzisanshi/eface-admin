@@ -59,7 +59,7 @@
             <a-form-item label="街道办" :labelCol="labelCol" :wrapperCol="wrapperCol">
               <a-input @click="selectStreetOffice" :read-only="true" v-decorator="['streetOfficeName', {initialValue: this.formData.streetOfficeName}]">
                 <a-icon slot="suffix" @click="clearStreetOffice" type="close" style="color: rgba(0, 0, 0, 0.25);"/>
-                <a-button slot="enterButton">新增</a-button>
+                <a-icon slot="addonAfter" @click="addStreetOffice" type="plus"/>
               </a-input>
             </a-form-item>
           </a-col>
@@ -114,6 +114,8 @@
 
         <select-street-office ref="selectStreetOffice" @selectSuccess="selectSuccess"></select-street-office>
 
+        <add-street-office ref="addStreetOffice" :initArea="initCascader" @addSuccess="selectSuccess"></add-street-office>
+
         <div id='allmap' style="width:100%;height:350px;margin-bottom: 15px"></div>
 
       </a-form>
@@ -125,10 +127,11 @@
   import {mixin} from '@/mixins/mixin'
   import selectArea from '@/components/Common/selectArea'
   import selectStreetOffice from '@/components/Common/selectStreetOffice'
+  import addStreetOffice from '@/views/system/streetOffice/modules/EditForm.vue'
 export default {
   mixins:[mixin],
   components: {
-    selectArea,selectStreetOffice
+    selectArea,selectStreetOffice,addStreetOffice
   },
   data () {
     return {
@@ -181,8 +184,13 @@ export default {
       this.form.setFieldsValue({ streetOfficeName: value.name});
     },
 
+
     selectStreetOffice() {
       this.$refs.selectStreetOffice.selectStreetOffice()
+    },
+
+    addStreetOffice(){
+      this.$refs.addStreetOffice.add()
     },
 
     add (item) {

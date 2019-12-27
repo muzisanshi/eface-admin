@@ -188,6 +188,16 @@
         if(!that.areaId && !that.name){
 
         }else{
+          this.estateList = [];
+          this.buildList = [];
+          this.unitList = [];
+          this.storeyList = [];
+          this.form.setFieldsValue({
+            estateId: '',
+            buildId: '',
+            unitId:'',
+            storeyList:''
+          });
           this.$api.estate.getLimitPage({
             name:that.name,
             areaId:that.areaId
@@ -209,6 +219,14 @@
       estateChange(value,option){
         this.currentData = value
         this.currentDataName = option.componentOptions.children[0].text
+        this.buildList = [];
+        this.unitList = [];
+        this.storeyList = [];
+        this.form.setFieldsValue({
+          buildId: '',
+          unitId:'',
+          storeyList:''
+        });
         if(this.curItem>1){
           this.$api.subject.getBuildAll({
             estateId: value
@@ -228,6 +246,12 @@
       },
 
       buildChange(value){
+        this.unitList = [];
+        this.storeyList = [];
+        this.form.setFieldsValue({
+          unitId:'',
+          storeyList:''
+        });
         if(this.curItem>1){
           this.$api.subject.getUnitAll({
             buildingId: value
@@ -248,7 +272,10 @@
       unitChange(value,option){
         this.currentData = value
         this.currentDataName = option.componentOptions.children[0].text
-        console.log(this.currentDataName)
+        this.storeyList = [];
+        this.form.setFieldsValue({
+          storeyList:''
+        });
         if(this.curItem>2){
           this.$api.storey.getAll({
             unitId: value

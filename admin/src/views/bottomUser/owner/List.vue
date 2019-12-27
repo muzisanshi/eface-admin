@@ -183,6 +183,10 @@ export default {
   },
   methods: {
 
+    selectRoom(){
+      this.$refs.selectRoom.add();
+    },
+
     handleEditUser(record){
       this.$refs.editModal.addEdit(record,this.userType)
     },
