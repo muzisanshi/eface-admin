@@ -119,6 +119,10 @@ export default {
           dataIndex: 'appTypeName'
         },
         {
+          title: '设备类型',
+          dataIndex: 'deviceTypeName'
+        },
+        {
           title: '框架版本',
           dataIndex: 'frameVer'
         },
@@ -155,6 +159,7 @@ export default {
           .then(res => {
             res.records.forEach(item=>{
               item.appTypeName = this.constants.data.appType?this.constants.data.appType[item.appType]['name']:''
+              item.deviceTypeName = this.constants.data.deviceType?this.constants.data.deviceType[item.deviceType]['name']:''
             });
             return res
           })
