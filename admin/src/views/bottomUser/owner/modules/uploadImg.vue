@@ -229,6 +229,7 @@
 
         if (!(file.size / 1024 / 1024 < 1)) {
           this.$message.error('图片最大为1MB!')
+          _this.confirmLoading = false
           return false
         }
 

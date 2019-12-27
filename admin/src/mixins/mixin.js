@@ -180,6 +180,7 @@ export const mixin = {
         const isLt1M = file.size / 1024 / 1024 < 1
           if (!isLt1M) {
             this.$message.error('图片最大为1MB!')
+            this.confirmLoading = false
           }
         return isLt1M
       } else {

@@ -120,7 +120,13 @@
 
         <a-row :gutter="24">
 
-          <a-col :span="12">
+          <a-col :span="12" v-if="formData.id">
+            <a-form-item label="密码" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <a-input v-decorator="['manager.password',{initialValue: this.formData.password}]"/>
+            </a-form-item>
+          </a-col>
+
+          <a-col :span="12" v-else>
             <a-form-item label="密码" :labelCol="labelCol" :wrapperCol="wrapperCol">
               <a-input v-decorator="['manager.password',{initialValue: this.formData.password, rules: [{required: true, message: '请填写密码！'}]}]"/>
             </a-form-item>
