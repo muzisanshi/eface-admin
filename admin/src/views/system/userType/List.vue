@@ -107,7 +107,7 @@ export default {
           dataIndex: 'gateBrakeRuleName'
         },
         {
-          title: '编码',
+          title: '类型编码',
           dataIndex: 'codeName'
         },
         {

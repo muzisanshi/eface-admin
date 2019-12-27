@@ -87,14 +87,6 @@ export default {
           dataIndex: 'accountStateName'
         },
         {
-          title: '文件类型',
-          dataIndex: 'fileType'
-        },
-        {
-          title: '详细地址',
-          dataIndex: 'resourceFullAddress'
-        },
-        {
           title: '上次登录时间',
           dataIndex: 'lastLoginDatetime'
         }

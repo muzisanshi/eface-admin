@@ -150,7 +150,7 @@ export default {
           dataIndex: 'name'
         },
         {
-          title: '房间编码',
+          title: '房间编号',
           dataIndex: 'no'
         },
         {

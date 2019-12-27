@@ -40,13 +40,13 @@
 
         <a-row :gutter="24">
           <a-col :span="12">
-            <a-form-item label="名称" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input v-decorator="['name', {initialValue: this.formData.name, rules: [{required: true, message: '请输入组织名称！'}]}]"/>
+            <a-form-item label="编码" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <a-input v-decorator="['code', {initialValue: this.formData.code, rules: [{required: true, message: '请输入编码！'}]}]"/>
             </a-form-item>
           </a-col>
           <a-col :span="12">
-            <a-form-item label="编码" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input v-decorator="['code', {initialValue: this.formData.code, rules: [{required: true, message: '请输入编码！'}]}]"/>
+            <a-form-item label="名称" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <a-input v-decorator="['name', {initialValue: this.formData.name, rules: [{required: true, message: '请输入组织名称！'}]}]"/>
             </a-form-item>
           </a-col>
         </a-row>
@@ -161,8 +161,12 @@
       },
 
       selectedArea(area) {
-        this.initCascader = area.value;
-        this.inputChange = area.name.join('')
+        console.log(area)
+        if(area.value.length){
+          this.initCascader = area.value;
+          this.inputChange = area.name.join('')
+        }
+
       },
 
       handleChange(info) {

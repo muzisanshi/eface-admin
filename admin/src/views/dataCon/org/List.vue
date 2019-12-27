@@ -77,6 +77,10 @@
       return {
         columns: [
           {
+            title: '编码',
+            dataIndex: 'code'
+          },
+          {
             title: '组织名称',
             dataIndex: 'name',
           },
@@ -87,14 +91,6 @@
           {
             title: '详细地址',
             dataIndex: 'address'
-          },
-          {
-            title: '文件类型',
-            dataIndex: 'fileTypeName'
-          },
-          {
-            title: '编码',
-            dataIndex: 'code'
           },
           {
             title: '纬度',
@@ -119,9 +115,6 @@
         loadData: parameter => {
           return this.$api.org.getPage(Object.assign(parameter, this.queryParam))
             .then(res => {
-              res.records.forEach(item => {
-                item.fileTypeName = this.constants.data.fileType ? this.constants.data.fileType[item.fileType]['name'] : ''
-              });
               return res
             })
         },

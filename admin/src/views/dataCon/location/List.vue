@@ -128,6 +128,14 @@ export default {
     return {
       columns: [
         {
+          title: '编码',
+          dataIndex: 'code'
+        },
+        {
+          title: '名称',
+          dataIndex: 'name'
+        },
+        {
           title: '地产名称',
           dataIndex: 'estateName'
         },
@@ -148,14 +156,6 @@ export default {
           dataIndex: 'roomName'
         },
         {
-          title: '位置名称',
-          dataIndex: 'name'
-        },
-        {
-          title: '编码',
-          dataIndex: 'code'
-        },
-        {
           title: '备注',
           dataIndex: 'remark'
         },
@@ -170,6 +170,14 @@ export default {
         if(this.selectLocationStatus){
           this.columns = [
             {
+              title: '编码',
+              dataIndex: 'code'
+            },
+            {
+              title: '名称',
+              dataIndex: 'name'
+            },
+            {
               title: '地产名称',
               dataIndex: 'estateName'
             },
@@ -188,14 +196,6 @@ export default {
             {
               title: '房间名称',
               dataIndex: 'roomName'
-            },
-            {
-              title: '位置名称',
-              dataIndex: 'name'
-            },
-            {
-              title: '编码',
-              dataIndex: 'code'
             },
             {
               title: '备注',
@@ -205,6 +205,14 @@ export default {
           }else{
           this.columns = [
             {
+              title: '编码',
+              dataIndex: 'code'
+            },
+            {
+              title: '名称',
+              dataIndex: 'name'
+            },
+            {
               title: '地产名称',
               dataIndex: 'estateName'
             },
@@ -223,14 +231,6 @@ export default {
             {
               title: '房间名称',
               dataIndex: 'roomName'
-            },
-            {
-              title: '位置名称',
-              dataIndex: 'name'
-            },
-            {
-              title: '编码',
-              dataIndex: 'code'
             },
             {
               title: '备注',

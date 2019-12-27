@@ -14,14 +14,14 @@
               <a-row :gutter="48">
 
                 <a-col :md="6" :sm="24">
-                  <a-form-item label="名称">
-                    <a-input v-model="queryParam.name" placeholder=""/>
+                  <a-form-item label="编码">
+                    <a-input v-model="queryParam.code" placeholder=""/>
                   </a-form-item>
                 </a-col>
 
                 <a-col :md="6" :sm="24">
-                  <a-form-item label="编码">
-                    <a-input v-model="queryParam.code" placeholder=""/>
+                  <a-form-item label="名称">
+                    <a-input v-model="queryParam.name" placeholder=""/>
                   </a-form-item>
                 </a-col>
 
@@ -95,7 +95,10 @@ export default {
   data () {
     return {
       columns: [
-
+        {
+          title: '编码',
+          dataIndex: 'code'
+        },
         {
           title: '名称',
           dataIndex: 'name'
@@ -109,10 +112,6 @@ export default {
           title: '是否显示',
           dataIndex: 'canView',
           scopedSlots: {customRender: 'status'}
-        },
-        {
-          title: '编码',
-          dataIndex: 'code'
         },
         {
           title: '备注',
