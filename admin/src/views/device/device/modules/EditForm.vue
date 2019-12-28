@@ -161,17 +161,16 @@
                     label="IP地址"
                     :labelCol="labelCol"
                     :wrapperCol="wrapperCol"
-                    :required="true"
                   >
                     <a-input
                       v-decorator="['mainEngine.network.id',{initialValue: this.formData.mainEngine.network?this.formData.mainEngine.network.id:''}]" v-show="false"/>
-                    <a-input v-decorator="['mainEngine.network.ip',{initialValue: this.formData.mainEngine.network?this.formData.mainEngine.network.ip:'',rules: [{required: true, message: '请选择IP地址！'}]}]" />
+                    <a-input v-decorator="['mainEngine.network.ip',{initialValue: this.formData.mainEngine.network?this.formData.mainEngine.network.ip:''}]" />
                   </a-form-item>
                 </a-col>
                 <a-col :span="8">
                   <a-form-item label="子网掩码" :labelCol="labelCol" :wrapperCol="wrapperCol">
                     <a-input
-                      v-decorator="['mainEngine.network.subnetMask', {initialValue: this.formData.mainEngine.network?this.formData.mainEngine.network.subnetMask:'', rules: [{required: true, message: '请输入子网掩码！'}]}]"/>
+                      v-decorator="['mainEngine.network.subnetMask', {initialValue: this.formData.mainEngine.network?this.formData.mainEngine.network.subnetMask:''}]"/>
                   </a-form-item>
                 </a-col>
                 <a-col :span="8">
@@ -180,7 +179,7 @@
                     :labelCol="labelCol"
                     :wrapperCol="wrapperCol"
                   >
-                    <a-input v-decorator="['mainEngine.network.defaultGateway',{initialValue: this.formData.mainEngine.network?this.formData.mainEngine.network.defaultGateway:'', rules: [{required: true, message: '请输入默认网关！'}]}]" />
+                    <a-input v-decorator="['mainEngine.network.defaultGateway',{initialValue: this.formData.mainEngine.network?this.formData.mainEngine.network.defaultGateway:''}]" />
                   </a-form-item>
                 </a-col>
               </a-row>
@@ -189,14 +188,14 @@
                 <a-col :span="8">
                   <a-form-item label="MAC地址" :labelCol="labelCol" :wrapperCol="wrapperCol">
                     <a-input
-                      v-decorator="['mainEngine.network.macAddress', {initialValue: this.formData.mainEngine.network?this.formData.mainEngine.network.macAddress:'', rules: [{required: true, message: '请输入MAC地址！'}]}]"/>
+                      v-decorator="['mainEngine.network.macAddress', {initialValue: this.formData.mainEngine.network?this.formData.mainEngine.network.macAddress:''}]"/>
                   </a-form-item>
                 </a-col>
 
                 <a-col :span="8">
                   <a-form-item label="端口" :labelCol="labelCol" :wrapperCol="wrapperCol">
                     <a-input
-                      v-decorator="['mainEngine.network.port', {initialValue: this.formData.mainEngine.network?this.formData.mainEngine.network.port:'', rules: [{required: true, message: '请输入端口！'}]}]"/>
+                      v-decorator="['mainEngine.network.port', {initialValue: this.formData.mainEngine.network?this.formData.mainEngine.network.port:''}]"/>
                   </a-form-item>
                 </a-col>
               </a-row>
@@ -534,7 +533,7 @@
             visitorRegister:false,
             witnessComparison:false,
             network:{
-              defaultGateway:'',
+              defaultGateway:'192.168.0.1',
               ip:'',
               id: '',
               macAddress:'',
@@ -546,40 +545,9 @@
         locationList: [],
         title: '',
         panes:[
-          { title: '相机',form:this.$form.createForm(this), content: {
-              algorithm:{},
-              cameraType:"NETWORK",
-              enable:true,
-              saveNotRecRecord:true,
-              remark:'',
-              locationId:'',
-              streamAddress:'',
-              streamDecodeType:"SOFT",
-              videoInputWidth:'1280',
-              videoInputHeight:'720',
-              gateBrake:{
-                direction:'IN',
-                networkSwitchType:"NETWORK",
-                remark:'',
-                network:{
-                  defaultGateway:'',
-                  ip:'',
-                  macAddress:'',
-                  port:'',
-                  subnetMask:'255.255.255.0'
-                }
-              },
-              network:{
-                defaultGateway:'',
-                ip:'',
-                port:'',
-                macAddress:'',
-                subnetMask:'255.255.255.0'
-              }
-            }, key: '3',remark:'',closable: false },
         ],
         activeKey: '1',
-        newTabIndex: 4,
+        newTabIndex: 3,
       }
     },
     computed: {
@@ -611,45 +579,14 @@
               defaultGateway:'',
               ip:'',
               id: '',
-              port:'',
+              port:'80',
               macAddress:'',
               subnetMask:'255.255.255.0'
             }
           }
         }
-        this.panes = [
-          { title: '相机',form:this.$form.createForm(this), content: {
-              cameraType:"NETWORK",
-              enable:true,
-              saveNotRecRecord:true,
-              remark:'',
-              locationId:'',
-              streamAddress:'',
-              streamDecodeType:"SOFT",
-              videoInputWidth:'1280',
-              videoInputHeight:'720',
-              gateBrake:{
-                direction:'IN',
-                networkSwitchType:"NETWORK",
-                remark:'',
-                network:{
-                  defaultGateway:'',
-                  ip:'',
-                  port:'',
-                  macAddress:'',
-                  subnetMask:'255.255.255.0'
-                }
-              },
-              network:{
-                defaultGateway:'',
-                ip:'',
-                port:'',
-                macAddress:'',
-                subnetMask:'255.255.255.0'
-              }
-            }, key: '3',remark:'',closable: false },
-        ]
-        this.newTabIndex = 4;
+        this.panes = []
+        this.newTabIndex = 3;
         this.deviceModelList = []
         this.locationList = []
         this.$api.deviceModel.getAll({})
@@ -673,21 +610,17 @@
               this.enable = res.enable
               if(res.cameras.length>0){
                 res.cameras.map((item,index) =>{
-                  if(index ===0){
-                    that.panes[0].content = item
-                  }else{
-                    const panes = that.panes;
-                    const activeKey = `${that.newTabIndex++}`;
-                    panes.push({
-                      title: `相机 ${activeKey-3}`,
-                      form:this.$form.createForm(this),
-                      content: item,
-                      key: activeKey,
-                      remark:'',
-                      closable: false
-                    });
-                    that.panes = panes;
-                  }
+                  const panes = that.panes;
+                  const activeKey = `${that.newTabIndex++}`;
+                  panes.push({
+                    title: `相机 ${activeKey-3>0?activeKey-3:''}`,
+                    form:this.$form.createForm(this),
+                    content: item,
+                    key: activeKey,
+                    remark:'',
+                    closable: false
+                  });
+                  that.panes = panes;
                 })
               }
             })
@@ -807,7 +740,7 @@
             const panes = this.panes;
             const activeKey = `${this.newTabIndex++}`;
             panes.push({
-              title: `相机 ${activeKey-3}`,
+              title: `相机 ${activeKey-3>0?activeKey-3:''}`,
               form:this.$form.createForm(this),
               content: {
                 algorithm:{},
@@ -825,17 +758,17 @@
                   networkSwitchType:"NETWORK",
                   remark:'',
                   network:{
-                    defaultGateway:'',
+                    defaultGateway:'192.168.0.1',
                     ip:'',
-                    port:'',
+                    port:'80',
                     macAddress:'',
                     subnetMask:'255.255.255.0'
                   }
                 },
                 network:{
-                  defaultGateway:'',
+                  defaultGateway:'192.168.0.1',
                   ip:'',
-                  port:'',
+                  port:'80',
                   macAddress:'',
                   subnetMask:'255.255.255.0'
                 }
@@ -866,13 +799,12 @@
       },
 
       customSuccess(value){
-        if(value.algorithm.checkAlive == 'true'){
+        if(value.algorithm.checkAlive === 'true'){
           value.algorithm.checkAlive = true
         }else{
           value.algorithm.checkAlive = false
         }
-
-        if(value.algorithm.checkSexual == 'true'){
+        if(value.algorithm.checkSexual === 'true'){
           value.algorithm.checkSexual = true
         }else{
           value.algorithm.checkSexual = false

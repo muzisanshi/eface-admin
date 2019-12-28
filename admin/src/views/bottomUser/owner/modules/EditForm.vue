@@ -526,6 +526,9 @@
             if(key === '2'){
               that.activeKey = key+'';
               this.formData = Object.assign(this.formData,values)
+              if(this.panes[0].content.gateBrakeLimits.length === 0){
+                that.addAttr(0)
+              }
             }else{
               that.activeKey = key+'';
               this.formData = Object.assign(this.formData,values)

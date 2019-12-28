@@ -81,7 +81,7 @@
 
           </div>
         </template>
-        <a-form-item v-bind="formItemLayoutWithOutLabel" style="margin-top: 10px;">
+        <a-form-item v-bind="formItemLayoutWithOutLabel" style="margin-top: 10px;" v-if="formData.roomNum>form.getFieldValue('keys').length">
           <a-button type="dashed" style="width: 100%" @click="addBuildingAttr">
             <a-icon type="plus" /> 增加房间
           </a-button>
@@ -173,6 +173,7 @@
       selectSuccess(value){
         this.formData.storeyName = value.name
         this.formData.storeyId = value.value
+        this.formData.roomNum = value.roomNum
         this.form.setFieldsValue({ storeyName: value.name});
       },
 

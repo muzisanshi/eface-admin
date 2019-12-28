@@ -145,7 +145,8 @@
         currentData:'',
         currentDataName:'',
         areaId:'',
-        name:''
+        name:'',
+        currentItem:{}
       }
     },
     created(){
@@ -285,7 +286,8 @@
               for (let i = 0, j = res.length; i < j; i++) {
                 l.push({
                   value: res[i].id,
-                  label: res[i].name
+                  label: res[i].name,
+                  roomNum:res[i].roomNum,
                 })
               }
               this.storeyList = l
@@ -296,6 +298,7 @@
 
       storeyChange(value,option){
         this.currentData = value
+        this.currentItem = this.storeyList.filter(item=>item.value === value)[0]
         this.currentDataName = option.componentOptions.children[0].text
       },
 
@@ -305,7 +308,8 @@
           if (!errors) {
             this.$emit('selectSuccess', {
               value:this.currentData,
-              name:this.currentDataName
+              name:this.currentDataName,
+              roomNum:this.currentItem.roomNum?this.currentItem.roomNum:0
             })
             this.visible = false
             this.form.resetFields();
