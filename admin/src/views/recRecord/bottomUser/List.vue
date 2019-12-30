@@ -11,6 +11,18 @@
         <a-row :gutter="48">
 
           <a-col :md="5" :sm="24">
+            <a-form-item label="姓名">
+              <a-input v-model="queryParam.realName" placeholder=""/>
+            </a-form-item>
+          </a-col>
+
+          <a-col :md="5" :sm="24">
+            <a-form-item label="电话号码">
+              <a-input v-model="queryParam.phoneNo" placeholder=""/>
+            </a-form-item>
+          </a-col>
+
+          <a-col :md="5" :sm="24">
             <a-form-item label="用户类型">
               <a-select showSearch allowClear placeholder="选择用户类型"  v-model="queryParam.code" optionFilterProp="children" :filterOption="filterCommonOption" :options="constants.list.userTypeCode">
               </a-select>
@@ -26,7 +38,7 @@
           </a-col>
 
           <a-col :md="5" :sm="24">
-            <a-form-item label="全地址">
+            <a-form-item label="位置地址">
               <a-input v-model="queryParam.fullAddress" placeholder=""/>
             </a-form-item>
           </a-col>
@@ -37,15 +49,13 @@
               </a-select>
             </a-form-item>
           </a-col>
-        </a-row>
-        <a-row :gutter="48">
-          <a-col :span="8">
+
+          <a-col :span="8" style="padding-left: 10px">
             <a-form-item label="结束时间" :required="false">
               <a-range-picker
                 :defaultValue="[moment().startOf('day').subtract(0, 'days'), moment().endOf('day')]"
                 @change="onChange"
                 :allowClear="false"
-                :disabledDate="disabledDate"
                 format="YYYY-MM-DD HH:mm:ss"
                 :showTime="{ defaultValue: moment('00:00:00', 'HH:mm:ss') }"
               />
@@ -58,6 +68,7 @@
               <a-button style="margin-left: 8px" @click="resetSearchForm">重置</a-button>
             </span>
           </a-col>
+
         </a-row>
       </a-form>
     </div>
@@ -86,7 +97,7 @@
 
       <span slot="action" slot-scope="text, record">
         <template>
-          <a @click="handleEdit(record)">查看截图</a>
+          <a @click="handleLookEdit(record)">查看截图</a>
         </template>
       </span>
 
@@ -139,10 +150,6 @@ export default {
           dataIndex: 'estateName'
         },
         {
-          title: '地产地址',
-          dataIndex: 'estateFullAddress'
-        },
-        {
           title: '质量级别',
           dataIndex: 'qualityLevel'
         },
@@ -163,12 +170,8 @@ export default {
           dataIndex: 'locationName'
         },
         {
-          title: '全地址',
+          title: '位置地址',
           dataIndex: 'fullAddress'
-        },
-        {
-          title: '备注',
-          dataIndex: 'remark'
         },
         {
           title: '操作',
@@ -189,6 +192,7 @@ export default {
           .then(res => {
             res.records.forEach(item=>{
               item.recResultName = this.constants.data.recResult?this.constants.data.recResult[item.recResult]['name']:''
+              item.qualityLevel = item.qualityLevel === 0?'优秀':item.qualityLevel === 1?'良好':item.qualityLevel === 2?'中':'差'
             });
             return res
           })
@@ -197,6 +201,11 @@ export default {
   },
   methods:{
     moment,
+
+    handleLookEdit (record) {
+      this.$refs.editModal.add(record, this.startDate?this.startDate:this.moment().startOf('day').subtract(0, 'days').format(this.dateFormat), this.endDate?this.endDate:this.moment().endOf('day').format(this.dateFormat))
+    },
+
     onChange(dates) {
       this.startDate = dates[0].format(this.dateFormat);
       this.endDate = dates[1].format(this.dateFormat)

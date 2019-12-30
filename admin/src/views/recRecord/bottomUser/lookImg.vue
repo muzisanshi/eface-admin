@@ -15,7 +15,7 @@
   >
     <a-spin :spinning="confirmLoading">
       <div style="text-align: center">
-        <img :src="imgUrl" alt="">
+        <img :src="imgUrl" style="width: 100%" alt="">
       </div>
 
     </a-spin>
@@ -39,22 +39,27 @@
       }
     },
     methods: {
-      add(item) {
-        this.imgUrl = ''
-        this.$api.recRecord.getRecImage({id: item.id})
+      add(item, startDate, endDate) {
+        let that = this
+        that.imgUrl = ''
+        that.$api.recRecord.getRecImage({
+          id: item.id,
+          beginDatetime:startDate,
+          endDatetime:endDate
+        })
           .then(res => {
             if(!res.recImageResourceFullAddress && !res.recImageBase64){
-              this.$notification.error({
+              that.$notification.error({
                 message: '提示',
                 description:'暂无截图'
               })
             }else{
-              this.visible = true
+              that.visible = true
               if(res.recImageResourceFullAddress){
-               this.imgUrl = res.recImageResourceFullAddress
+                that.imgUrl = res.recImageResourceFullAddress
               }
               if(res.recImageBase64){
-                this.imgUrl = res.recImageBase64
+                that.imgUrl = res.recImageBase64
               }
             }
           })
