@@ -146,7 +146,8 @@
         currentDataName:'',
         areaId:'',
         name:'',
-        currentItem:{}
+        currentItem:{},
+        roomNum:0
       }
     },
     created(){
@@ -172,6 +173,7 @@
         this.storeyList = [];
         this.areaId = ''
         this.name = ''
+        this.roomNum = 0
       },
       selectedArea(area) {
         this.initCascader = area.value;
@@ -193,6 +195,7 @@
           this.buildList = [];
           this.unitList = [];
           this.storeyList = [];
+          this.roomNum = 0
           this.form.setFieldsValue({
             estateId: '',
             buildId: '',
@@ -223,6 +226,7 @@
         this.buildList = [];
         this.unitList = [];
         this.storeyList = [];
+        this.roomNum = 0
         this.form.setFieldsValue({
           buildId: '',
           unitId:'',
@@ -249,6 +253,7 @@
       buildChange(value){
         this.unitList = [];
         this.storeyList = [];
+        this.roomNum = 0
         this.form.setFieldsValue({
           unitId:'',
           storeyList:''
@@ -274,6 +279,7 @@
         this.currentData = value
         this.currentDataName = option.componentOptions.children[0].text
         this.storeyList = [];
+        this.roomNum = 0
         this.form.setFieldsValue({
           storeyList:''
         });
@@ -298,8 +304,18 @@
 
       storeyChange(value,option){
         this.currentData = value
-        this.currentItem = this.storeyList.filter(item=>item.value === value)[0]
+        this.roomNum = 0
+        this.getUnAddRoomList(value)
         this.currentDataName = option.componentOptions.children[0].text
+      },
+
+      getUnAddRoomList(id){
+        this.$api.storey.getMaxRoomNum({
+          storyId: id
+        })
+          .then(res => {
+            this.roomNum = res.maxRoomNum
+          })
       },
 
       handleSubmit(){
@@ -309,7 +325,7 @@
             this.$emit('selectSuccess', {
               value:this.currentData,
               name:this.currentDataName,
-              roomNum:this.currentItem.roomNum?this.currentItem.roomNum:0
+              roomNum:this.roomNum
             })
             this.visible = false
             this.form.resetFields();

@@ -6,7 +6,7 @@
 -->
 <template>
   <a-modal
-    title="编辑"
+    title="新增"
     :width="1040"
     :visible="visible"
     :confirmLoading="confirmLoading"
@@ -20,8 +20,8 @@
           <a-col :span="12">
             <a-form-item
               label="楼栋单元"
-              :labelCol="labelCol"
-              :wrapperCol="wrapperCol"
+              :labelCol="labelCo1"
+              :wrapperCol="wrapperCo1"
             >
               <a-input @click="selectDataCon(2)" :read-only="true" v-decorator="['unitName', {initialValue: this.formData.unitName,rules: [{required: true, message: '请选择楼栋单元！'}]}]"/>
             </a-form-item>
@@ -57,10 +57,10 @@
                             rules: [{
                               required: true,
                               whitespace: true,
-                              message: '房号不能为空',
+                              message: '房间数量不能为空',
                             }],
                           }
-                        ]" placeholder="请输入房号" style="margin-right: 8px" >
+                        ]" placeholder="请输入房间数量" style="margin-right: 8px" >
                   </a-input>
                 </a-form-item>
               </a-col>
@@ -115,6 +115,14 @@
         wrapperCol: {
           xs: { span: 24 },
           sm: { span: 16 },
+        },
+        labelCo1: {
+          xs: { span: 24 },
+          sm: { span: 4 },
+        },
+        wrapperCo1: {
+          xs: { span: 24 },
+          sm: { span: 17 },
         },
         formLayout:{
           labelCol: {

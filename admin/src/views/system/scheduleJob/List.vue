@@ -68,6 +68,7 @@
 import { STable } from '@/components'
 import EditForm from './EditForm'
 import {mixin} from '@/mixins/mixin'
+import {mapState} from 'vuex';
 export default {
   mixins:[mixin],
   components: {
@@ -120,15 +121,17 @@ export default {
       loadData: parameter => {
         return this.$api.scheduleJob.getPage(Object.assign(parameter, this.queryParam))
           .then(res => {
+            res.records.forEach(item => {
+              item.scheduleStatus = this.constants.data.scheduleStatus ? this.constants.data.scheduleStatus[item.scheduleStatus]['name'] : ''
+              item.triggerState = item.triggerState === 'NONE' ? '无': item.triggerState === 'NORMAL' ? '正常' : item.triggerState === 'PAUSED' ? '暂停' :  item.triggerState === 'COMPLETE' ? '完成' : item.triggerState === 'ERROR' ? '错误' : item.triggerState === 'BLOCKED' ? '阻塞' :''
+            });
             return res
           })
       },
     }
   },
-  filters: {
-    resourceFullAddressFilter (record) {
-      return record.resourceFullAddress
-    }
+  computed: {
+    ...mapState(['constants'])
   },
   methods: {
     handleDelete () {

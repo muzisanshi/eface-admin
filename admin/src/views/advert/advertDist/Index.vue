@@ -467,6 +467,7 @@
         this.windows[index].adNames = ''
         this.windows[index].adIds = []
         this.windows[index].adList = []
+        this.windows[index].form.setFieldsValue({ adNames: ''});
       },
 
       selectAdSuccess(value){

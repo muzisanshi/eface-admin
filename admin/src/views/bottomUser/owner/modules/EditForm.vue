@@ -50,21 +50,6 @@
               </a-row>
 
               <a-row :gutter="24">
-                <a-col :span="12">
-                  <a-form-item label="电话号码" :labelCol="labelCol" :wrapperCol="wrapperCol" class="national-code">
-                    <a-input v-decorator="['phoneNo', {initialValue: this.formData.phoneNo, rules: [{required: true, message: '请输入电话号码！'}]}]">
-                      <a-select
-                        showSearch
-                        slot="addonBefore"
-                        placeholder="选择区号"
-                        optionFilterProp="children"
-                        :filterOption="filterCommonOption"
-                        :options="nationalAreaCodeList"
-                        v-decorator="['nationalAreaCodeId', {initialValue: this.formData.nationalAreaCodeId}]">
-                      </a-select>
-                    </a-input>
-                  </a-form-item>
-                </a-col>
 
                 <a-col :span="12"  v-if="userType === 'OWNER'">
                   <a-form-item
@@ -83,6 +68,25 @@
                     </a-select>
                   </a-form-item>
                 </a-col>
+
+                <a-col :span="12">
+                  <a-form-item label="电话号码" :labelCol="labelCol" :wrapperCol="wrapperCol" class="national-code">
+                    <a-input v-decorator="['phoneNo', {initialValue: this.formData.phoneNo, rules: [{required: true, message: '请输入电话号码！'}]}]">
+                      <a-select
+                        showSearch
+                        slot="addonBefore"
+                        placeholder="选择区号"
+                        optionFilterProp="children"
+                        :filterOption="filterCommonOption"
+                        :options="nationalAreaCodeList"
+                        v-decorator="['nationalAreaCodeId', {initialValue: this.formData.nationalAreaCodeId}]">
+                      </a-select>
+                    </a-input>
+                  </a-form-item>
+                </a-col>
+
+
+
                 <a-col :span="12">
                   <a-form-item label="姓名" :labelCol="labelCol" :wrapperCol="wrapperCol">
                     <a-input

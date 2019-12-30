@@ -10,13 +10,6 @@
       <a-form layout="inline">
         <a-row :gutter="48">
 
-          <a-col :md="5" :sm="24">
-            <a-form-item label="设备型号类型">
-              <a-select showSearch allowClear placeholder="选择型号类型"  v-model="queryParam.deviceModelType" optionFilterProp="children" :filterOption="filterCommonOption" :options="constants.list.deviceModelType">
-              </a-select>
-            </a-form-item>
-          </a-col>
-
           <a-col :md="4" :sm="24">
             <a-form-item label="名称">
               <a-input v-model="queryParam.name" placeholder=""/>

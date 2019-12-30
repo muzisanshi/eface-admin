@@ -72,11 +72,11 @@
         </a-form-item>
 
         <a-form-item
-          label="详细备注"
+          label="备注"
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
         >
-          <a-input v-decorator="['remark', {initialValue: this.formData.remark,rules: [{required: true, message: '请输入详细备注！'}]}]" />
+          <a-input v-decorator="['remark', {initialValue: this.formData.remark}]" />
         </a-form-item>
 
       </a-form>

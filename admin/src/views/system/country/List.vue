@@ -90,7 +90,7 @@
             dataIndex: 'fullMark'
           },
           {
-            title: '区号编码',
+            title: '国际电话区号',
             dataIndex: 'nationalAreaCode.areaCode'
           },
           {

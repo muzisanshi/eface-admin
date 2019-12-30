@@ -122,10 +122,7 @@
       getStreetList(){
         let that = this;
         if(!that.areaId && !that.name){
-          this.$notification.error({
-            message: '提示',
-            description:'请选择地区或者输入名称来获取地产信息'
-          })
+
         }else{
           this.$api.streetOffice.getAll({
             name:that.name,

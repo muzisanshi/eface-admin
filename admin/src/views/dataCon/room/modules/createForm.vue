@@ -6,7 +6,7 @@
 -->
 <template>
   <a-modal
-    title="编辑"
+    title="新增"
     :width="1040"
     :visible="visible"
     :confirmLoading="confirmLoading"
@@ -20,8 +20,8 @@
           <a-col :span="12">
             <a-form-item
               label="楼层"
-              :labelCol="labelCol"
-              :wrapperCol="wrapperCol"
+              :labelCol="labelCo1"
+              :wrapperCol="wrapperCo1"
             >
               <a-input @click="selectDataCon(3)" :read-only="true" v-decorator="['storeyName', {initialValue: this.formData.storeyName,rules: [{required: true, message: '请选择楼层！'}]}]"/>
             </a-form-item>
@@ -115,6 +115,14 @@
         wrapperCol: {
           xs: { span: 24 },
           sm: { span: 16 },
+        },
+        labelCo1: {
+          xs: { span: 24 },
+          sm: { span: 4 },
+        },
+        wrapperCo1: {
+          xs: { span: 24 },
+          sm: { span: 17 },
         },
         formLayout:{
           labelCol: {

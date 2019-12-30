@@ -260,22 +260,22 @@
             </a-row>
             <a-row :gutter="24">
               <a-col :span="6">
-                <a-form-item label="Ip地址(网络配置)" :labelCol="labelCol" :wrapperCol="wrapperCol">
+                <a-form-item label="Ip地址(相机配置)" :labelCol="labelCol" :wrapperCol="wrapperCol">
                   <span>{{item.network.ip}}</span>
                 </a-form-item>
               </a-col>
               <a-col :span="6">
-                <a-form-item label="子网掩码(网络配置)" :labelCol="labelCol" :wrapperCol="wrapperCol">
+                <a-form-item label="子网掩码(相机配置)" :labelCol="labelCol" :wrapperCol="wrapperCol">
                   <span>{{item.network.subnetMask}}</span>
                 </a-form-item>
               </a-col>
               <a-col :span="6">
-                <a-form-item label="默认网关(网络配置)" :labelCol="labelCol" :wrapperCol="wrapperCol">
+                <a-form-item label="默认网关(相机配置)" :labelCol="labelCol" :wrapperCol="wrapperCol">
                   <span>{{item.network.defaultGateway}}</span>
                 </a-form-item>
               </a-col>
               <a-col :span="6">
-                <a-form-item label="MAC地址(网络配置)" :labelCol="labelCol" :wrapperCol="wrapperCol">
+                <a-form-item label="MAC地址(相机配置)" :labelCol="labelCol" :wrapperCol="wrapperCol">
                   <span>{{item.network.macAddress}}</span>
                 </a-form-item>
               </a-col>

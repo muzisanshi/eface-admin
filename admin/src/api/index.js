@@ -38,6 +38,7 @@ import streetOffice from './streetOffice'
 import deviceVersion from './deviceVersion'
 import appVersion from './appVersion'
 import userAction from './userAction'
+import advice from './advice'
 
 export default {
   constants,
@@ -78,5 +79,6 @@ export default {
   streetOffice,
   deviceVersion,
   appVersion,
-  userAction
+  userAction,
+  advice
 }

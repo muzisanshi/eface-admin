@@ -81,7 +81,7 @@
           <a-col :span="12">
             <a-form-item label="详细地址" :labelCol="labelCol" :wrapperCol="wrapperCol" :required="true">
 
-              <a-input id="detailAddress" class="ant-input" v-model="inputChange"/>
+              <a-input id="detailAddress" class="ant-input" style="position: relative;" v-model="inputChange"/>
 
             </a-form-item>
           </a-col>
@@ -116,7 +116,7 @@
 
         <add-street-office ref="addStreetOffice" :initArea="initCascader" @addSuccess="selectSuccess"></add-street-office>
 
-        <div id='allmap' style="width:100%;height:350px;margin-bottom: 15px"></div>
+        <div id='allmap' style="width:100%;height:300px;"></div>
 
       </a-form>
     </a-spin>

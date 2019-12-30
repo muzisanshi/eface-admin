@@ -5,6 +5,7 @@ const URI = {
   page: '/storey/getPage',
   getAll: '/storey/getAll',
   saveOrUpdate: '/storey/saveOrUpdate',
+  getMaxRoomNum: '/room/getMaxRoomNum',
   del: '/storey/delete'
 }
 
@@ -18,6 +19,13 @@ function getPage (parameter) {
 function getById (parameter) {
   return axios({
     url: URI.getById,
+    params: parameter
+  })
+}
+
+function getMaxRoomNum (parameter) {
+  return axios({
+    url: URI.getMaxRoomNum,
     params: parameter
   })
 }
@@ -48,5 +56,6 @@ export default {
   getPage,
   del,
   getAll,
-  saveOrUpdate
+  saveOrUpdate,
+  getMaxRoomNum
 }

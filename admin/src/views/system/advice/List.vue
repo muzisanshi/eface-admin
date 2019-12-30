@@ -17,8 +17,8 @@
           </a-col>
 
           <a-col :md="5" :sm="24">
-            <a-form-item label="账户状态">
-              <a-select showSearch allowClear placeholder="选择账户状态"  v-model="queryParam.accountState" optionFilterProp="children" :filterOption="filterCommonOption" :options="constants.list.accountState">
+            <a-form-item label="反馈状态">
+              <a-select showSearch allowClear placeholder="选择反馈状态"  v-model="queryParam.handleState" optionFilterProp="children" :filterOption="filterCommonOption" :options="constants.list.adviceHandleState">
               </a-select>
             </a-form-item>
           </a-col>
@@ -32,9 +32,6 @@
           </a-col>
         </a-row>
       </a-form>
-    </div>
-
-    <div class="table-operator">
     </div>
 
     <s-table
@@ -55,8 +52,26 @@
         <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />
       </span>
 
+
       <span slot="action" slot-scope="text, record">
-      </span>
+          <a-dropdown :trigger="['click']" :disabled="record.handleState !== 'NOT_HANDLE'">
+            <span class="ant-dropdown-link" v-if="record.handleState !== 'NOT_HANDLE'">
+              不能操作
+            </span>
+            <a class="ant-dropdown-link" v-if="record.handleState === 'NOT_HANDLE'">
+              操作
+              <a-icon type="down"/>
+            </a>
+            <a-menu slot="overlay">
+              <a-menu-item>
+                <a href="javascript:;" @click="handleState('RESOLVED',record.id)">已解决</a>
+              </a-menu-item>
+              <a-menu-item>
+                <a href="javascript:;" @click="handleState('RESOLVED',record.id)">忽略</a>
+              </a-menu-item>
+            </a-menu>
+          </a-dropdown>
+        </span>
 
     </s-table>
   </a-card>
@@ -79,33 +94,63 @@ export default {
       columns: [
 
         {
-          title: '电话号码',
-          dataIndex: 'phoneNo'
+          title: '账户电话',
+          dataIndex: 'userAccountPhoneNo'
         },
         {
           title: '国际电话区号',
           dataIndex: 'areaCode'
         },
         {
-          title: '账户状态',
-          dataIndex: 'accountStateName'
+          title: '联系电话',
+          dataIndex: 'phoneNo'
         },
         {
-          title: '上次登录时间',
-          dataIndex: 'lastLoginDatetime'
+          title: '反馈内容',
+          dataIndex: 'content'
+        },
+        {
+          title: '操作状态',
+          dataIndex: 'handleStateName'
+        },
+        {
+          title: '备注',
+          dataIndex: 'remark'
+        },
+        {
+          title: '操作',
+          dataIndex: 'action',
+          width: '150px',
+          scopedSlots: { customRender: 'action' }
         }
       ],
       loadData: parameter => {
-        return this.$api.userAccount.getPage(Object.assign(parameter, this.queryParam))
+        return this.$api.advice.getPage(Object.assign(parameter, this.queryParam))
           .then(res => {
             res.records.forEach(item=>{
-              item.accountStateName = this.constants.data.accountState?this.constants.data.accountState[item.accountState]['name']:''
+              item.handleStateName = this.constants.data.adviceHandleState?this.constants.data.adviceHandleState[item.handleState]['name']:''
             });
             return res
           })
       }
     }
   },
+  methods:{
+    handleState(value,id){
+      let that = this;
+      that.$api.advice.updateAdviceHandleState({
+        ids: [id],
+        handleState:value
+      })
+        .then(res => {
+          that.$notification.success({
+            message: '成功',
+            description: `操作成功！`
+          })
+          that.handleOk()
+        })
+    }
+  }
 }
 </script>
 <style scoped>

@@ -52,7 +52,7 @@
           <a-col :md="4" :sm="24">
             <span class="table-page-search-submitButtons">
               <a-button type="primary" @click="$refs.table.refresh(true)">查询</a-button>
-              <a-button style="margin-left: 8px" @click="resetSearchForm">重置</a-button>
+              <a-button style="margin-left: 8px" @click="resetUserSearchForm">重置</a-button>
             </span>
           </a-col>
         </a-row>
@@ -182,6 +182,13 @@ export default {
     }
   },
   methods: {
+
+    /*重置list传参*/
+    resetUserSearchForm () {
+      this.queryParam = {}
+      this.initCascader = [];
+      this.roomName = ''
+    },
 
     selectRoom(){
       this.$refs.selectRoom.add();

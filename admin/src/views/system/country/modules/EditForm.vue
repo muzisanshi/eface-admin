@@ -43,11 +43,11 @@
         </a-form-item>
 
         <a-form-item
-          label="区号编码"
+          label="国际电话区号"
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
         >
-          <a-input v-decorator="['nationalAreaCode.areaCode', {initialValue: this.formData.nationalAreaCode.areaCode,rules: [{required: true, message: '请输入区号编码！'}]}]" />
+          <a-input v-decorator="['nationalAreaCode.areaCode', {initialValue: this.formData.nationalAreaCode.areaCode,rules: [{required: true, message: '请输入国际电话区号！'}]}]" />
         </a-form-item>
 
         <a-form-item

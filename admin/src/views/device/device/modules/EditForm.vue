@@ -15,7 +15,10 @@
     @cancel="handleCancel"
   >
     <a-spin :spinning="confirmLoading">
-      <a-tabs @change="callback" :activeKey='activeKey' type="editable-card" @edit="onEdit">
+      <div @click="add" style="position: absolute;right: 0; top: 0;z-index: 10">
+        <a-button>添加相机</a-button>
+      </div>
+      <a-tabs hideAdd @change="callback" :activeKey='activeKey' type="editable-card" @edit="onEdit">
         <a-tab-pane tab="基本信息" ref="key1" key="1" :closable="false">
           <a-form :form="form">
 
@@ -831,6 +834,9 @@
           }
           that.panes = panes;
           that.activeKey = activeKey;
+        }else{
+          that.panes = [];
+          that.activeKey = '2';
         }
 
       },
