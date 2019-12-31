@@ -61,6 +61,10 @@
   import {mixin} from '@/mixins/mixin'
   export default {
     props:{
+      initArea:{
+        type:Array,
+        default:[]
+      }
     },
     components: {
       selectArea
@@ -107,6 +111,11 @@
         this.streetList = [];
         this.areaId = ''
         this.name = ''
+        if(this.initArea.length){
+          this.initCascader = this.initArea
+          this.areaId = this.initCascader[this.initCascader.length-1]
+          this.getStreetList()
+        }
       },
       selectedArea(area) {
         this.initCascader = area.value;

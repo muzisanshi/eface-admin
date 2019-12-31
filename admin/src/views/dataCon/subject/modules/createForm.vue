@@ -160,18 +160,19 @@
     beforeCreate () {
       this.form = this.$form.createForm(this);
       this.form.getFieldDecorator('keys', {
-        initialValue: [{
-          build:0
-        }],
+        initialValue: [],
         preserve: true
       });
+
     },
     methods: {
       add (item) {
         this.visible = true
         this.form.resetFields()
         this.formData = {}
-
+        if(this.form.getFieldValue('keys').length === 0){
+            this.addBuildingAttr()
+        }
       },
 
       selectSuccess(value){
@@ -282,6 +283,8 @@
         form.setFieldsValue({
           keys: keys.filter(key => key !== k),
         });
+        const keys1 = form.getFieldValue('keys');
+        console.log(keys,keys1,k)
       },
 
       removeAttrOpt(index,index1,id) {

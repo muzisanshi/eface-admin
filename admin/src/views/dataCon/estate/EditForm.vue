@@ -56,18 +56,6 @@
           </a-col>
 
           <a-col :span="12">
-            <a-form-item label="街道办" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input @click="selectStreetOffice" :read-only="true" v-decorator="['streetOfficeName', {initialValue: this.formData.streetOfficeName}]">
-                <a-icon slot="suffix" @click="clearStreetOffice" type="close" style="color: rgba(0, 0, 0, 0.25);"/>
-                <a-icon slot="addonAfter" @click="addStreetOffice" type="plus"/>
-              </a-input>
-            </a-form-item>
-          </a-col>
-
-        </a-row>
-
-        <a-row :gutter="24">
-          <a-col :span="12">
             <a-form-item
               label="选择地区"
               :labelCol="labelCol"
@@ -75,6 +63,19 @@
             >
               <select-area ref="selectArea" :initArea="initCascader"
                            @selectedArea="selectedArea"></select-area>
+            </a-form-item>
+          </a-col>
+
+        </a-row>
+
+        <a-row :gutter="24">
+
+          <a-col :span="12">
+            <a-form-item label="街道办" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <a-input @click="selectStreetOffice" :read-only="true" v-decorator="['streetOfficeName', {initialValue: this.formData.streetOfficeName}]">
+                <a-icon slot="suffix" @click="clearStreetOffice" type="close" style="color: rgba(0, 0, 0, 0.25);"/>
+                <a-icon slot="addonAfter" @click="addStreetOffice" type="plus"/>
+              </a-input>
             </a-form-item>
           </a-col>
 
@@ -112,7 +113,7 @@
           </a-col>
         </a-row>
 
-        <select-street-office ref="selectStreetOffice" @selectSuccess="selectSuccess"></select-street-office>
+        <select-street-office ref="selectStreetOffice" :initArea="initCascader" @selectSuccess="selectSuccess"></select-street-office>
 
         <add-street-office ref="addStreetOffice" :initArea="initCascader" @addSuccess="selectSuccess"></add-street-office>
 
