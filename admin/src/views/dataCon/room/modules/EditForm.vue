@@ -60,7 +60,7 @@
 
 <script>
   import {mixin} from '@/mixins/mixin'
-  import selectDataCon from '@/components/Common/selectDataCon'
+  import selectDataCon from '@/components/Common/SelectDataCon'
   export default {
     mixins:[mixin],
     components: {

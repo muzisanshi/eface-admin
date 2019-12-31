@@ -93,7 +93,7 @@
 <script>
   import {mixin} from '@/mixins/mixin'
   import {mapState} from 'vuex';
-  import selectArea from '@/components/Common/selectArea'
+  import selectArea from '@/components/Common/SelectArea'
   export default {
     mixins:[mixin],
     data () {

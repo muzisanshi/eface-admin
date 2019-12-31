@@ -57,7 +57,7 @@
 </template>
 
 <script>
-  import selectArea from './selectArea'
+  import selectArea from './SelectArea'
   import {mixin} from '@/mixins/mixin'
   export default {
     props:{

@@ -100,7 +100,7 @@
   import {mapState} from 'vuex';
   import {ImageUpload} from '@/components'
   import {mixin} from '@/mixins/mixin'
-  import selectArea from '@/components/Common/selectArea'
+  import selectArea from '@/components/Common/SelectArea'
 
   export default {
     components: {

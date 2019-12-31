@@ -67,7 +67,7 @@
 <script>
   import {STable} from '@/components'
   import EditForm from './modules/EditForm'
-  import selectEstate from './modules/selectEstate'
+  import selectEstate from './modules/SelectEstate'
   import {mapState} from 'vuex';
   import {mixin} from '@/mixins/mixin'
 

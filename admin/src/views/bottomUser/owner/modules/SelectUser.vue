@@ -16,7 +16,7 @@
 
 <script>
 
-  import userList from './userList'
+  import userList from './UserList'
   export default {
     data() {
       return {

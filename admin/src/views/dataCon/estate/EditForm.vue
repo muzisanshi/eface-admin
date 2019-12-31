@@ -126,8 +126,8 @@
 
 <script>
   import {mixin} from '@/mixins/mixin'
-  import selectArea from '@/components/Common/selectArea'
-  import selectStreetOffice from '@/components/Common/selectStreetOffice'
+  import selectArea from '@/components/Common/SelectArea'
+  import selectStreetOffice from '@/components/Common/SelectStreetOffice'
   import addStreetOffice from '@/views/system/streetOffice/modules/EditForm.vue'
 export default {
   mixins:[mixin],

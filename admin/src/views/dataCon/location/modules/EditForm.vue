@@ -123,7 +123,7 @@
 
 <script>
   import {mixin} from '@/mixins/mixin'
-  import selectDataCon from '@/components/Common/selectDataCon'
+  import selectDataCon from '@/components/Common/SelectDataCon'
   let nameNum = 0,
     noNum = 0;
 

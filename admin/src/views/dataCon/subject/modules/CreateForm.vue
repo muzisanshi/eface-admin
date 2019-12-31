@@ -94,7 +94,7 @@
 
 <script>
   import {mixin} from '@/mixins/mixin'
-  import selectDataCon from '@/components/Common/selectDataCon'
+  import selectDataCon from '@/components/Common/SelectDataCon'
   let buildNum = 0;
   export default {
     mixins:[mixin],
@@ -281,10 +281,8 @@
         }
 
         form.setFieldsValue({
-          keys: keys.filter(key => key !== k),
+          keys: keys.filter(key => key.build !== k.build),
         });
-        const keys1 = form.getFieldValue('keys');
-        console.log(keys,keys1,k)
       },
 
       removeAttrOpt(index,index1,id) {

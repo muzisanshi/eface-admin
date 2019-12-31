@@ -98,7 +98,7 @@ import { STable } from '@/components'
 import EditForm from './modules/EditForm'
 import {mapState} from 'vuex';
 import {mixin} from '@/mixins/mixin'
-import selectArea from '@/components/Common/selectArea'
+import selectArea from '@/components/Common/SelectArea'
 
 export default {
   mixins:[mixin],

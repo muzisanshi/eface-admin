@@ -239,8 +239,8 @@
 <script>
   import {mixin} from '@/mixins/mixin'
   import {mapState} from 'vuex';
-  import selectArea from '@/components/Common/selectArea.vue'
-  import selectAd from '@/components/Common/selectAd.vue'
+  import selectArea from '@/components/Common/SelectArea.vue'
+  import selectAd from '@/components/Common/SelectAd.vue'
   export default {
     mixins:[mixin],
     data () {

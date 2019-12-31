@@ -282,10 +282,10 @@
   import {mixin} from '@/mixins/mixin'
   import {mapState} from 'vuex';
   import {ImageUpload} from '@/components'
-  import selectDataCon from '@/components/Common/selectDataCon'
-  import selectRoom from '@/components/Common/selectRoom'
+  import selectDataCon from '@/components/Common/SelectDataCon'
+  import selectRoom from '@/components/Common/SelectRoom'
   import selectUser from './SelectUser'
-  import uploadFace from './uploadImg'
+  import uploadFace from './UploadImg'
   import moment from 'moment';
   import api from '@/api/index'
   let remarkNum = 0,roomNameNum = 0;

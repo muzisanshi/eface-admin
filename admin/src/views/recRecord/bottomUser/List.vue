@@ -33,7 +33,9 @@
             <a-form-item
               label="地产"
             >
-              <a-input @click="selectDataCon(1)" :read-only="true" v-model="queryParam.estateName"/>
+              <a-input @click="selectDataCon(1)" :read-only="true" v-model="queryParam.estateName">
+                <a-icon slot="suffix" @click="clearSelected" type="close" style="color: rgba(0, 0, 0, 0.25);"/>
+              </a-input>
             </a-form-item>
           </a-col>
 
@@ -45,7 +47,7 @@
 
           <a-col :md="5" :sm="24">
             <a-form-item label="识别结果">
-              <a-select showSearch placeholder="选择识别结果"  v-model="queryParam.recResult" optionFilterProp="children" :filterOption="filterCommonOption" :options="constants.list.recResult">
+              <a-select showSearch allowClear placeholder="选择识别结果"  v-model="queryParam.recResult" optionFilterProp="children" :filterOption="filterCommonOption" :options="constants.list.recResult">
               </a-select>
             </a-form-item>
           </a-col>
@@ -113,8 +115,8 @@ import { STable } from '@/components'
 import {mixin} from '@/mixins/mixin'
 import {mapState} from 'vuex';
 import moment from 'moment';
-import selectDataCon from '@/components/Common/selectDataCon'
-import lookImg from './lookImg'
+import selectDataCon from '@/components/Common/SelectDataCon'
+import lookImg from './LookImg'
 export default {
   mixins:[mixin],
   components: {
@@ -219,6 +221,9 @@ export default {
       console.log(value)
       this.queryParam.estateName = value.name
       this.queryParam.estateId = value.value
+    },
+    clearSelected(){
+      this.queryParam.estateName = ''
     }
   }
 }

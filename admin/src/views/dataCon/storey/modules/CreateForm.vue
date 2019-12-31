@@ -94,7 +94,7 @@
 </template>
 
 <script>
-  import selectDataCon from '@/components/Common/selectDataCon'
+  import selectDataCon from '@/components/Common/SelectDataCon'
   import {mixin} from '@/mixins/mixin'
   let nameNum = 0,
     roomNum = 0,

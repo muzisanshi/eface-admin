@@ -318,7 +318,7 @@ import { STable } from '@/components'
 import EditForm from './modules/EditForm'
 import {mapState} from 'vuex';
 import {mixin} from '@/mixins/mixin'
-import selectRoom from '@/components/Common/selectRoom'
+import selectRoom from '@/components/Common/SelectRoom'
 export default {
   mixins:[mixin],
   components: {

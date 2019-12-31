@@ -495,7 +495,7 @@
   import {mixin} from '@/mixins/mixin'
   import {mapState} from 'vuex';
   import SelectLocation from '@/components/Common/SelectLocation'
-  import customAlgorithm from './customAlgorithm'
+  import customAlgorithm from './CustomAlgorithm'
   export default {
     mixins:[mixin],
     components: {
