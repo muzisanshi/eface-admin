@@ -54,8 +54,13 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
             >
-              <a-select showSearch allowClear placeholder="选择类型" optionFilterProp="children"
-                        :filterOption="filterCommonOption" :options="constants.list.managerType"
+              <a-select showSearch
+                        allowClear
+                        placeholder="选择类型"
+                        optionFilterProp="children"
+                        :filterOption="filterCommonOption"
+                        @change="manageTypeChange"
+                        :options="constants.list.managerType"
                         v-decorator="['manager.managerType', {initialValue: this.formData.managerType?this.formData.managerType:constants.list.managerType[0].value,rules: [{required: true, message: '请选择类型！'}]}]">
               </a-select>
 
@@ -84,7 +89,7 @@
         </a-row>
         <a-row :gutter="24">
 
-          <a-col :span="12">
+          <a-col :span="12" v-if="isOrgInput">
 
             <a-form-item
               label="组织"
@@ -120,9 +125,6 @@
 
             </a-form-item>
           </a-col>
-        </a-row>
-
-        <a-row :gutter="24">
 
           <a-col :span="12" v-if="formData.id">
             <a-form-item label="密码" :labelCol="labelCol" :wrapperCol="wrapperCol">
@@ -141,10 +143,6 @@
               <a-input v-decorator="['manager.email',{initialValue: this.formData.email}]"/>
             </a-form-item>
           </a-col>
-
-        </a-row>
-
-        <a-row :gutter="24">
           <a-col :span="12">
             <a-form-item label="备注" :labelCol="labelCol" :wrapperCol="wrapperCol">
               <a-input v-decorator="['manager.remark',{initialValue: this.formData.remark}]"/>
@@ -218,6 +216,7 @@
         orgList: [],
         estateList:[],
         nationalAreaCodeList:[],
+        isOrgInput:false
       }
     },
     computed: {
@@ -231,7 +230,6 @@
         this.visible = true
         this.form.resetFields()
         this.formData = {};
-
 
         this.$api.org.getAll()
           .then(res => {
@@ -259,9 +257,19 @@
               this.title = '修改'
               this.$api.manager.getById({id: item.id})
                 .then(res => {
+                  let orgIds = ''
                   this.formData = res
+                  if(res.managerType === 'ORG'){
+                    this.isOrgInput = true
+                    orgIds = res.orgId
+                  }else{
+                    this.isOrgInput = false
+                    orgIds = ''
+                  }
+                  this.getRoleList(orgIds)
                 })
             } else {
+              this.getRoleList('')
               this.title = '新增'
               this.formData.nationalAreaCodeId=this.nationalAreaCodeList[0].value
             }
@@ -271,7 +279,28 @@
 
       },
 
+      manageTypeChange(value){
+        if(value === 'ORG'){
+          this.isOrgInput = true
+          this.roleList = []
+          this.formData.orgId = ''
+          this.form.setFieldsValue({
+            rolesIds:[],
+          });
+        }else{
+          this.isOrgInput = false
+          this.getRoleList('')
+          this.form.setFieldsValue({
+            rolesIds:[],
+          });
+        }
+      },
+
       orgChange(value,option){
+        this.getRoleList(value)
+      },
+
+      getRoleList(value){
         this.$api.role.getAll({
           orgId:value
         })
