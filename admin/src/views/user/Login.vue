@@ -17,7 +17,7 @@
         <a-input
           size="large"
           type="text"
-          placeholder="用户: admin"
+          placeholder=""
           v-decorator="['username',{initialValue: this.formData.username,rules: [{ required: true, message: '请输入用户名' }], validateTrigger: 'change'}]"
         >
           <a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }"/>
@@ -29,7 +29,7 @@
           size="large"
           type="password"
           autocomplete="false"
-          placeholder="密码: 111111"
+          placeholder=""
           v-decorator="['password',{initialValue: this.formData.password,rules: [{ required: true, message: '请输入密码' }], validateTrigger: 'blur'}]"
         >
           <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }"/>

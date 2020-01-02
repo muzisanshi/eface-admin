@@ -38,7 +38,6 @@
       <s-table
         ref="table"
         size="middle"
-        bordered
         rowKey="id"
         :columns="columns"
         :data="loadData"
@@ -103,16 +102,6 @@
         // 表头
         columns: [
           {
-            title: '#',
-            dataIndex: '',
-            key: 'rowIndex',
-            width: 60,
-            align: "center",
-            customRender: function (t, r, index) {
-              return parseInt(index) + 1;
-            }
-          },
-          {
             title: '角色名称',
             align: "center",
             dataIndex: 'name'
@@ -125,14 +114,12 @@
           {
             title: '创建时间',
             dataIndex: 'createDatetime',
-            align: "center",
-            sorter: true
+            align: "center"
           },
           {
             title: '更新时间',
             dataIndex: 'updateDatetime',
-            align: "center",
-            sorter: true
+            align: "center"
           },
           {
             title: '操作',

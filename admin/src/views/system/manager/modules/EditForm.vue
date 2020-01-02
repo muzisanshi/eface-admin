@@ -50,13 +50,13 @@
           </a-col>
           <a-col :span="12">
             <a-form-item
-              label="管理员类型"
+              label="类型"
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
             >
-              <a-select showSearch allowClear placeholder="选择管理员类型" optionFilterProp="children"
+              <a-select showSearch allowClear placeholder="选择类型" optionFilterProp="children"
                         :filterOption="filterCommonOption" :options="constants.list.managerType"
-                        v-decorator="['manager.managerType', {initialValue: this.formData.managerType,rules: [{required: true, message: '请选择管理员类型！'}]}]">
+                        v-decorator="['manager.managerType', {initialValue: this.formData.managerType?this.formData.managerType:constants.list.managerType[0].value,rules: [{required: true, message: '请选择类型！'}]}]">
               </a-select>
 
             </a-form-item>
@@ -67,10 +67,23 @@
             <a-form-item label="性别" :labelCol="labelCol" :wrapperCol="wrapperCol">
               <a-select showSearch allowClear placeholder="选择性别" optionFilterProp="children"
                         :filterOption="filterCommonOption" :options="constants.list.sexual"
-                        v-decorator="['manager.sexual', {initialValue: this.formData.sexual, rules: [{required: true, message: '请选择性别！'}]}]">
+                        v-decorator="['manager.sexual', {initialValue: this.formData.sexual?this.formData.sexual:constants.list.sexual[1].value, rules: [{required: true, message: '请选择性别！'}]}]">
               </a-select>
             </a-form-item>
           </a-col>
+
+          <a-col :span="12">
+            <a-form-item label="账户状态" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <a-select showSearch allowClear placeholder="选择账户状态" optionFilterProp="children"
+                        :filterOption="filterCommonOption" :options="constants.list.accountState"
+                        v-decorator="['manager.accountState', {initialValue: this.formData.accountState?this.formData.accountState:constants.list.accountState[1].value, rules: [{required: true, message: '请选择账户状态！'}]}]">
+              </a-select>
+            </a-form-item>
+          </a-col>
+
+        </a-row>
+        <a-row :gutter="24">
+
           <a-col :span="12">
 
             <a-form-item
@@ -82,6 +95,7 @@
                 showSearch
                 placeholder="选择组织"
                 optionFilterProp="children"
+                @change="orgChange"
                 :filterOption="filterCommonOption"
                 :options="orgList"
                 v-decorator="['manager.orgId', {initialValue: this.formData.orgId?this.formData.orgId:'',rules: [{required: true, message: '请选择组织！'}]}]"
@@ -90,19 +104,9 @@
             </a-form-item>
 
           </a-col>
-        </a-row>
-        <a-row :gutter="24">
 
           <a-col :span="12">
-            <a-form-item label="账户状态" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-select showSearch allowClear placeholder="选择账户状态" optionFilterProp="children"
-                        :filterOption="filterCommonOption" :options="constants.list.accountState"
-                        v-decorator="['manager.accountState', {initialValue: this.formData.accountState, rules: [{required: true, message: '请选择账户状态！'}]}]">
-              </a-select>
-            </a-form-item>
-          </a-col>
-          <a-col :span="12">
-            <a-form-item label="角色分配" :labelCol="labelCol" :wrapperCol="wrapperCol">
+            <a-form-item label="角色" :labelCol="labelCol" :wrapperCol="wrapperCol">
 
               <a-select
                 mode="multiple"
@@ -227,17 +231,7 @@
         this.visible = true
         this.form.resetFields()
         this.formData = {};
-        this.$api.role.getAll()
-          .then(res => {
-            const l = []
-            for (let i = 0, j = res.length; i < j; i++) {
-              l.push({
-                value: res[i].id,
-                label: res[i].name
-              })
-            }
-            this.roleList = l
-          })
+
 
         this.$api.org.getAll()
           .then(res => {
@@ -275,6 +269,22 @@
           })
 
 
+      },
+
+      orgChange(value,option){
+        this.$api.role.getAll({
+          orgId:value
+        })
+          .then(res => {
+            const l = []
+            for (let i = 0, j = res.length; i < j; i++) {
+              l.push({
+                value: res[i].id,
+                label: res[i].name
+              })
+            }
+            this.roleList = l
+          })
       },
 
       handleSubmit() {

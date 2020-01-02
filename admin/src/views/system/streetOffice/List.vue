@@ -89,7 +89,7 @@ export default {
     return {
       columns: [
         {
-          title: '关联区域',
+          title: '地区',
           dataIndex: 'areaName'
         },
         {

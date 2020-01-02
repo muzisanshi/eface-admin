@@ -88,7 +88,7 @@
             pageSize: 10
           }
         },
-        description: '这是菜单管理页面',
+        description: '',
         // 表头
         columns: [
           {
