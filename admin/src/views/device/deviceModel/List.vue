@@ -34,6 +34,7 @@
         :showUploadList="false"
         :multiple="false"
         :action="importUrl"
+        :beforeUpload="beforeUploadImport"
         @change="handleImportExcel"
         :headers="tokenHeader"
       >

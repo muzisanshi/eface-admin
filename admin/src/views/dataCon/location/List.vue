@@ -43,7 +43,7 @@
 
           <a-col :md="6" :sm="24">
             <a-form-item label="房间名称">
-              <a-input v-model="queryParam.name" placeholder=""/>
+              <a-input v-model="queryParam.roomName" placeholder=""/>
             </a-form-item>
           </a-col>
 

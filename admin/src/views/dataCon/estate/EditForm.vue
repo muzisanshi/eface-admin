@@ -60,6 +60,7 @@
               label="选择地区"
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
+              :required="true"
             >
               <select-area ref="selectArea" :initArea="initCascader"
                            @selectedArea="selectedArea"></select-area>

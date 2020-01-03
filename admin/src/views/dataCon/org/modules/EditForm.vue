@@ -10,7 +10,7 @@
       <a-form :form="form">
 
         <a-row :gutter="24">
-          <a-col :span="10">
+          <a-col :span="12">
             <a-form-item
               label="头像"
               :labelCol="labelCol"
@@ -33,6 +33,7 @@
                 <a-button>
                   <a-icon type="upload"/>浏览添加
                 </a-button>
+                <a-button type="primary" v-if="topImg" style="margin-left: 10px" @click.stop="delImage">删除</a-button>
               </a-upload>
             </a-form-item>
           </a-col>
@@ -56,6 +57,7 @@
               label="选择地区"
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
+              :required="true"
             >
               <select-area ref="selectArea" :initArea="initCascader"
                            @selectedArea="selectedArea"></select-area>
@@ -167,6 +169,11 @@
           this.inputChange = area.name.join('')
         }
 
+      },
+
+      delImage(){
+        this.topImg = ''
+        this.headImageAttId = ''
       },
 
       handleChange(info) {

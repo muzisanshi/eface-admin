@@ -55,7 +55,7 @@
         :action="importUrl"
         @change="handleImportExcel"
         :headers="tokenHeader"
-        :beforeUpload="beforeUpload"
+        :beforeUpload="beforeUploadImport"
       >
         <a-button type="primary" icon="import">导入</a-button>
       </a-upload>
@@ -182,10 +182,6 @@ export default {
     selectedArea(area) {
       this.queryParam.areaId = area.value[area.value.length-1];
       this.queryParam.level = area.level[area.level.length-1];
-    },
-
-    beforeUpload (file) {
-      return true
     },
 
     handleGoodsRecord(record){

@@ -36,6 +36,7 @@
         :action="importUrl"
         @change="handleImportExcel"
         :headers="tokenHeader"
+        :beforeUpload="beforeUploadImport"
       >
         <a-button type="primary" icon="import">导入</a-button>
       </a-upload>

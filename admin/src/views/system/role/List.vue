@@ -107,7 +107,7 @@
             dataIndex: 'name'
           },
           {
-            title: '描述',
+            title: '备注',
             align: "center",
             dataIndex: 'remark'
           },

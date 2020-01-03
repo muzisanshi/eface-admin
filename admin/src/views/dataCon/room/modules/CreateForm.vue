@@ -163,11 +163,7 @@
     beforeCreate () {
       this.form = this.$form.createForm(this);
       this.form.getFieldDecorator('keys', {
-        initialValue: [{
-          no:0,
-          name:0,
-          remark:0
-        }],
+        initialValue: [],
         preserve: true
       });
     },
@@ -186,6 +182,13 @@
       },
 
       handleSubmit () {
+        if(this.formData.roomNum <1){
+          this.$notification.error({
+            message: '提示',
+            description: '该楼层房间数量已添加完，请选择其他楼层！'
+          })
+          return false
+        }
         const { form: { validateFields } } = this
         this.confirmLoading = true
         validateFields((errors, values) => {

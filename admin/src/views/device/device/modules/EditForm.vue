@@ -225,7 +225,7 @@
                       placeholder="选择相机类型"
                       optionFilterProp="children"
                       :filterOption="filterCommonOption"
-                      :options="constants.list.networkSwitchType"
+                      :options="constants.list.cameraType"
                       v-decorator="['cameraType', {initialValue: pane.content.cameraType,rules: [{required: true, message: '请选择相机类型！'}]}]">
                     </a-select>
                   </a-form-item>

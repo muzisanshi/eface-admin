@@ -39,7 +39,7 @@
             optionFilterProp="children"
             :filterOption="filterCommonOption"
             :options="orgList"
-            v-decorator="['orgId', {initialValue: this.formData.orgId?this.formData.orgId:'',rules: [{required: true, message: '请选择组织！'}]}]"
+            v-decorator="['orgId', {initialValue: this.formData.orgId?this.formData.orgId:''}]"
           >
           </a-select>
         </a-form-item>
@@ -47,8 +47,8 @@
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
-          label="描述">
-          <a-textarea :rows="5" placeholder="..." v-decorator="[ 'remark', {initialValue: this.formData.remark} ]"/>
+          label="备注">
+          <a-textarea :rows="5" placeholder=" " v-decorator="[ 'remark', {initialValue: this.formData.remark} ]"/>
         </a-form-item>
 
       </a-form>

@@ -22,7 +22,10 @@ export const mixin = {
       enable: true,
       deleted: false,
       visible: false,
-      tokenHeader: { 'authorization': Vue.ls.get(ACCESS_TOKEN) },
+      tokenHeader: {
+        'JWT-MANAGER-ACCOUNT-AUTHORIZATION': Vue.ls.get(ACCESS_TOKEN),
+        'X-clientId': SIGN.clientId
+      },
       clientHeader: {
         'X-clientId': SIGN.clientId
       },
@@ -42,11 +45,15 @@ export const mixin = {
     /*parameter加载list数据*/
     handleOk () {
       this.$refs.table.refresh()
+      this.selectedRowKeys = []
+      this.selectedRows = []
     },
 
     /*load加载list数据*/
     handleLoadOk() {
       this.loadData()
+      this.selectedRowKeys = []
+      this.selectedRows = []
     },
 
     /*重置list传参*/
@@ -167,7 +174,15 @@ export const mixin = {
           break
       }
     },
-
+    beforeUploadImport (file){
+      this.confirmLoading = true
+      this.fileData.title = file.name
+      const timestamp = new Date().getTime() + ''
+      const signature = SIGN.clientId + timestamp + SIGN.key
+      this.tokenHeader['X-timestamp'] = timestamp
+      this.tokenHeader['X-signature'] = md5(signature)
+      return true
+    },
     //上传之前
     beforeUpload (file) {
       this.confirmLoading = true

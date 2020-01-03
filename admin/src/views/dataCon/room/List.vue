@@ -66,11 +66,12 @@
         :action="importUrl"
         @change="handleImportExcel"
         :headers="tokenHeader"
+        :beforeUpload="beforeUploadImport"
       >
         <a-button type="primary" icon="import">导入</a-button>
       </a-upload>
 
-      <a-button type="primary" icon="export" @click="handleExportXls('/room/exportExcel','楼栋单元信息')">导出</a-button>
+      <a-button type="primary" icon="export" @click="handleExportXls('/room/exportExcel','房间信息')">导出</a-button>
 
       <a-button type="danger" icon="delete" @click="handleDelete" :disabled="selectedRowKeys.length < 1">删除</a-button>
 
