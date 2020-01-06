@@ -420,11 +420,6 @@ export default {
           scopedSlots: {customRender: 'status'}
         },
         {
-          title: '是否删除',
-          dataIndex: 'deleted',
-          scopedSlots: {customRender: 'status'}
-        },
-        {
           title: '备注',
           dataIndex: 'remark'
         }
@@ -475,11 +470,6 @@ export default {
         {
           title: '是否启用',
           dataIndex: 'enable',
-          scopedSlots: {customRender: 'status'}
-        },
-        {
-          title: '是否删除',
-          dataIndex: 'deleted',
           scopedSlots: {customRender: 'status'}
         },
         {
@@ -564,7 +554,7 @@ export default {
     },
 
     loadData() {
-      this.expandedRowKeys = []
+      this.data = []
       this.$api.device.getPage(Object.assign({}, this.queryParam))
         .then(res => {
           res.records.forEach(item=>{

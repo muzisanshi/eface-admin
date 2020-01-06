@@ -32,17 +32,17 @@
 
         <a-form-item label="内网端口" :labelCol="labelCol" :wrapperCol="wrapperCol">
           <a-input
-            v-decorator="['innerPort', {initialValue: this.formData.innerPort, rules: [{required: true, message: '请输入内网端口！'}]}]"/>
+            v-decorator="['innerPort', {initialValue: this.formData.innerPort, rules: [{required: true,pattern: new RegExp(/^[0-9]\d*$/, 'g'), message: '请输入内网端口！'}]}]"/>
         </a-form-item>
 
         <a-form-item label="外网端口" :labelCol="labelCol" :wrapperCol="wrapperCol">
           <a-input
-            v-decorator="['outerPort', {initialValue: this.formData.outerPort, rules: [{required: true, message: '请输入外网端口！'}]}]"/>
+            v-decorator="['outerPort', {initialValue: this.formData.outerPort, rules: [{required: true,pattern: new RegExp(/^[0-9]\d*$/, 'g'), message: '请输入外网端口！'}]}]"/>
         </a-form-item>
 
         <a-form-item label="最大连接数" :labelCol="labelCol" :wrapperCol="wrapperCol">
           <a-input
-            v-decorator="['maxConnectionsSize', {initialValue: this.formData.maxConnectionsSize, rules: [{required: true, message: '请输入最大连接数！'}]}]"/>
+            v-decorator="['maxConnectionsSize', {initialValue: this.formData.maxConnectionsSize, rules: [{required: true,pattern: new RegExp(/^[1-9]\d*$/, 'g'), message: '请输入最大连接数！'}]}]"/>
         </a-form-item>
 
         <a-form-item

@@ -12,7 +12,7 @@
 
           <a-col :md="4" :sm="24">
             <a-form-item label="内网IP">
-              <a-input v-model="queryParam.insideIp" placeholder=""/>
+              <a-input v-model="queryParam.innerIp" placeholder=""/>
             </a-form-item>
           </a-col>
 
@@ -75,7 +75,7 @@
       rowKey="id"
       :columns="columns"
       :data="loadData"
-      :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange,type:'radio'}"
+      :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
     >
       <span slot="serial" slot-scope="text, record, index">
 

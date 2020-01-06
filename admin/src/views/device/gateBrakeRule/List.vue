@@ -54,7 +54,7 @@
       rowKey="id"
       :columns="columns"
       :data="loadData"
-      :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange,type:'radio'}"
+      :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
     >
       <span slot="serial" slot-scope="text, record, index">
 

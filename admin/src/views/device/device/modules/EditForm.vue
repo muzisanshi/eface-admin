@@ -91,21 +91,21 @@
 
         <a-tab-pane tab="识别主机" ref="key2" key="2" :closable="false" class="init-sty">
           <a-form :form="form1">
-
+            <a-input
+              v-decorator="['mainEngine.id',{initialValue: this.formData.mainEngine.id}]" v-show="false"/>
             <a-card>
               <a-row :gutter="24">
                 <a-col :span="8">
                   <a-form-item label="人脸显示数量" :labelCol="labelCol" :wrapperCol="wrapperCol">
+
                     <a-input
-                      v-decorator="['mainEngine.id',{initialValue: this.formData.mainEngine.id}]" v-show="false"/>
-                    <a-input
-                      v-decorator="['mainEngine.faceShowNum', {initialValue: this.formData.mainEngine.faceShowNum, rules: [{required: true,pattern: new RegExp(/^[1-9]\d*$/, 'g'), message: '请输入为数字的数量！'}]}]"/>
+                      v-decorator="['mainEngine.faceShowNum', {initialValue: this.formData.mainEngine.faceShowNum, rules: [{required: true,pattern: new RegExp(/^[1-9]\d*$/, 'g'), message: '请输入有效的数量！'}]}]"/>
                   </a-form-item>
                 </a-col>
                 <a-col :span="8">
                   <a-form-item label="人脸显示时间" :labelCol="labelCol" :wrapperCol="wrapperCol">
                     <a-input
-                      v-decorator="['mainEngine.faceShowSeconds', {initialValue: this.formData.mainEngine.faceShowSeconds, rules: [{required: true,pattern: new RegExp(/^[1-9]\d*$/, 'g'), message: '请输入为数字的时间！'}]}]"/>
+                      v-decorator="['mainEngine.faceShowSeconds', {initialValue: this.formData.mainEngine.faceShowSeconds, rules: [{required: true,pattern: new RegExp(/^[1-9]\d*$/, 'g'), message: '请输入有效的时间！'}]}]"/>
                   </a-form-item>
                 </a-col>
                 <a-col :span="8">
@@ -142,7 +142,7 @@
                 <a-col :span="8">
                   <a-form-item label="有效分钟数" :labelCol="labelCol" :wrapperCol="wrapperCol">
                     <a-input
-                      v-decorator="['mainEngine.validMinutes', {initialValue: this.formData.mainEngine.validMinutes, rules: [{required: true, message: '请输入有效分钟数！'}]}]"/>
+                      v-decorator="['mainEngine.validMinutes', {initialValue: this.formData.mainEngine.validMinutes, rules: [{required: true,pattern: new RegExp(/^[0-9]\d*$/, 'g'), message: '请输入有效的分钟数！'}]}]"/>
                   </a-form-item>
                 </a-col>
 
@@ -198,7 +198,7 @@
                 <a-col :span="8">
                   <a-form-item label="端口" :labelCol="labelCol" :wrapperCol="wrapperCol">
                     <a-input
-                      v-decorator="['mainEngine.network.port', {initialValue: this.formData.mainEngine.network?this.formData.mainEngine.network.port:''}]"/>
+                      v-decorator="['mainEngine.network.port', {initialValue: this.formData.mainEngine.network?this.formData.mainEngine.network.port:'',rules: [{pattern: new RegExp(/^[0-9]\d*$/, 'g'), message: '请输入有效的端口！'}]}]"/>
                   </a-form-item>
                 </a-col>
               </a-row>
@@ -343,7 +343,7 @@
                 <a-col :span="8">
                   <a-form-item label="端口" :labelCol="labelCol" :wrapperCol="wrapperCol">
                     <a-input
-                      v-decorator="['network.port', {initialValue: pane.content.network.port}]"/>
+                      v-decorator="['network.port', {initialValue: pane.content.network.port,rules: [{pattern: new RegExp(/^[0-9]\d*$/, 'g'), message: '请输入有效的端口！'}]}]"/>
                   </a-form-item>
                 </a-col>
                 <a-col :span="6">
@@ -461,7 +461,7 @@
                 <a-col :span="8">
                   <a-form-item label="端口" :labelCol="labelCol" :wrapperCol="wrapperCol">
                     <a-input
-                      v-decorator="['gateBrake.network.port', {initialValue: pane.content.gateBrake.network.port}]"/>
+                      v-decorator="['gateBrake.network.port', {initialValue: pane.content.gateBrake.network.port,rules: [{pattern: new RegExp(/^[0-9]\d*$/, 'g'), message: '请输入有效的端口！'}]}]"/>
                   </a-form-item>
                 </a-col>
 
@@ -644,13 +644,13 @@
       changeNetworkEnable(value,index){
         this.panes[index].content.enable = value
       },
-      changeNetworksNR(value,index){
+      changeNetworksNR(value,index) {
         this.panes[index].content.saveNotRecRecord = value
       },
 
       next(key) {
         var that = this;
-        const { form: { validateFields } } = this
+        const { form: { validateFields } } = this;
         validateFields((errors, values) => {
           if (!errors) {
             that.activeKey = key+'';
@@ -669,9 +669,7 @@
 
       handleSubmit () {
         const { form1: { validateFields } } = this
-        this.confirmLoading = true
         validateFields((errors, values) => {
-
           if (!errors) {
             if(!values.mainEngine){
               values = {
@@ -696,7 +694,7 @@
 
             let params = Object.assign(this.formData,values)
 
-            let camerasData = []
+            let camerasData = [],isSubmit = true;
             for(let i=0;i<this.panes.length;i++){
               camerasData.push(this.panes[i].content)
               this.panes[i].form.validateFields((errors, values) => {
@@ -707,25 +705,31 @@
                     camerasData[i] = values;
                     camerasData[i].algorithm = this.panes[i].content.algorithm
                   }
+                }else{
+                  isSubmit = false
+                  return false
                 }
               })
             }
-            params.cameras = camerasData
-            console.log('---params---',params)
-            this.$api.device.saveOrUpdate(params)
-              .then(res => {
-                this.$notification.success({
-                  message: '成功',
-                  description: this.title + '成功！'
-                })
-                this.visible = false
+            if(isSubmit){
+              this.confirmLoading = true
+              params.cameras = camerasData
+              console.log('---params---',params)
+              this.$api.device.saveOrUpdate(params)
+                .then(res => {
+                  this.$notification.success({
+                    message: '成功',
+                    description: this.title + '成功！'
+                  })
+                  this.visible = false
+                  this.confirmLoading = false
+                  this.form.resetFields()
+                  this.form1.resetFields()
+                  this.$emit('ok', params)
+                }).finally(() => {
                 this.confirmLoading = false
-                this.form.resetFields()
-                this.form1.resetFields()
-                this.$emit('ok', params)
-              }).finally(() => {
-              this.confirmLoading = false
-            })
+              })
+            }
           } else {
             this.confirmLoading = false
           }

@@ -196,12 +196,7 @@
           this.unitList = [];
           this.storeyList = [];
           this.roomNum = 0
-          this.form.setFieldsValue({
-            estateId: '',
-            buildId: '',
-            unitId:'',
-            storeyList:''
-          });
+          this.form.resetFields(['estateId','buildId','unitId','storeyList']);
           this.$api.estate.getLimitPage({
             name:that.name,
             areaId:that.areaId
@@ -227,11 +222,7 @@
         this.unitList = [];
         this.storeyList = [];
         this.roomNum = 0
-        this.form.setFieldsValue({
-          buildId: '',
-          unitId:'',
-          storeyList:''
-        });
+        this.form.resetFields(['buildId','unitId','storeyList']);
         if(this.curItem>1){
           this.$api.subject.getBuildAll({
             estateId: value
@@ -254,10 +245,7 @@
         this.unitList = [];
         this.storeyList = [];
         this.roomNum = 0
-        this.form.setFieldsValue({
-          unitId:'',
-          storeyList:''
-        });
+        this.form.resetFields(['unitId','storeyList']);
         if(this.curItem>1){
           this.$api.subject.getUnitAll({
             buildingId: value
@@ -280,9 +268,7 @@
         this.currentDataName = option.componentOptions.children[0].text
         this.storeyList = [];
         this.roomNum = 0
-        this.form.setFieldsValue({
-          storeyList:''
-        });
+        this.form.resetFields(['storeyList']);
         if(this.curItem>2){
           this.$api.storey.getAll({
             unitId: value

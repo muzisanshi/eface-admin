@@ -1,6 +1,6 @@
 <template>
   <div id="userLayout" :class="['user-layout-wrapper', device]">
-    <div class="container" style="background-size: 100%" :style="{background:constants.logoData.loginBgImageToLoginPage ? (constants.logoData.loginBgImage? '#f0f2f5 url('+constants.logoData.loginBgImage.resourceFullAddress+') no-repeat' : '#f0f2f5 url('+require('@/assets/background.svg')+') no-repeat 50%'):'none'}">
+    <div class="container" style="background-size: 100%!important" :style="{background:constants.logoData.loginBgImageToLoginPage ? (constants.logoData.loginBgImage? '#f0f2f5 url('+constants.logoData.loginBgImage.resourceFullAddress+') no-repeat' : '#f0f2f5 url('+require('@/assets/background.svg')+') no-repeat 50%'):'none'}">
       <div class="top">
         <div class="header">
           <div style="text-align: center" v-if="constants.logoData.showLogoImageToLoginPage">
