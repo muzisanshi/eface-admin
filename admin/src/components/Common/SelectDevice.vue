@@ -7,6 +7,7 @@
 <template>
   <a-modal title="选择设备位置" :width="1300" :visible="visibleSelect" :confirmLoading="confirmLoadingSelect"
            @ok="handleSubmitSelect"
+           :maskClosable="false"
            @cancel="handleCancelSelect">
     <a-spin :spinning="confirmLoadingSelect">
       <device-list @selectedDevice='selectedDevice' :selectDeviceStatus='selectDeviceStatus'></device-list>

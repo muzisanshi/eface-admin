@@ -11,6 +11,7 @@
     :visible="visible"
     :confirmLoading="confirmLoading"
     @ok="handleSubmit"
+    :maskClosable="false"
     @cancel="handleCancel"
   >
     <a-spin :spinning="confirmLoading">
