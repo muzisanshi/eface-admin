@@ -100,7 +100,7 @@
         inputCodeNull: true,
         codeImgUrl: '',
         passWordChecked:false,
-        formData:{}
+        formData:{},
       }
     },
     created() {

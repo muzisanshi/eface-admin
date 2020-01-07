@@ -58,8 +58,16 @@ export const mixin = {
 
     /*重置list传参*/
     resetSearchForm () {
-      this.queryParam = {}
+      this.queryParam = {
+        page: { pageNumber: 1, pageSize: 10 }
+      }
       this.initCascader = []
+    },
+
+    tableRefresh () {
+      this.$refs.table.refresh(true)
+      this.selectedRowKeys = []
+      this.selectedRows = []
     },
 
     /*分页change方法*/

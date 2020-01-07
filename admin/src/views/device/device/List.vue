@@ -555,6 +555,8 @@ export default {
 
     loadData() {
       this.data = []
+      this.selectedRowKeys = []
+      this.selectedRows = []
       this.$api.device.getPage(Object.assign({}, this.queryParam))
         .then(res => {
           res.records.forEach(item=>{

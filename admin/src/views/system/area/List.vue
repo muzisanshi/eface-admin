@@ -57,7 +57,7 @@
       :columns="columns"
       :dataSource="data"
       :pagination="false"
-      :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
+        :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
       @expand="handleExpand"
       :expandedRowKeys="expandedRowKeys"
     >
@@ -159,7 +159,9 @@
     },
     methods: {
       loadData() {
+        this.data = []
         this.expandedRowKeys = []
+        this.selectedRows = []
         this.$api.area.getPage(Object.assign({}, this.queryParam))
           .then(res => {
             for (let i = 0, j = res.records.length; i < j; i++) {

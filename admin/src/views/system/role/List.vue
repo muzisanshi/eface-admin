@@ -9,7 +9,7 @@
     <!-- 查询区域 -->
     <div class="table-page-search-wrapper">
       <!-- 搜索区域 -->
-      <a-form layout="inline" @keyup.enter.native="$refs.table.refresh(true)">
+      <a-form layout="inline" @keyup.enter.native="tableRefresh">
         <a-row :gutter="24">
           <a-col :md="6" :sm="8">
             <a-form-item label="名称" :labelCol="{span: 5}" :wrapperCol="{span: 18, offset: 1}">
@@ -18,7 +18,7 @@
           </a-col>
           <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
             <a-col :md="6" :sm="24">
-              <a-button type="primary" @click="$refs.table.refresh(true)">查询</a-button>
+              <a-button type="primary" @click="tableRefresh">查询</a-button>
               <a-button style="margin-left: 8px" @click="resetSearchForm">重置</a-button>
             </a-col>
           </span>
