@@ -185,7 +185,7 @@
         <p style="margin: 0; border-bottom: 1px dashed #DDD; padding: 10px 0;" v-if="itemData.cameras">相机信息:</p>
 
         <div class="mainEngine-mess">
-          <div v-for="item in itemData.cameras">
+          <div v-for="item in itemData.cameras" style="margin: 0; border-bottom: 1px dashed #DDD;">
             <a-row :gutter="24">
               <a-col :span="6">
                 <a-form-item label="相机类型" :labelCol="labelCol" :wrapperCol="wrapperCol">

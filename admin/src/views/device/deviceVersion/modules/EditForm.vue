@@ -35,12 +35,12 @@
 
         <a-form-item label="版本" :labelCol="labelCol" :wrapperCol="wrapperCol">
           <a-input
-            v-decorator="['softVer', {initialValue: this.formData.softVer, rules: [{required: true, pattern: new RegExp(/^[0-9]\d*$/, 'g'), message: '请输入纯数字组成的版本！'}]}]"/>
+            v-decorator="['softVer', {initialValue: this.formData.softVer, rules: [{required: true, message: '请输入版本！'}]}]"/>
         </a-form-item>
 
         <a-form-item label="构建版本" :labelCol="labelCol" :wrapperCol="wrapperCol">
           <a-input
-            v-decorator="['buildVer', {initialValue: this.formData.buildVer, rules: [{required: true, pattern: new RegExp(/^[0-9]\d*$/, 'g'), message: '请输入纯数字组成的构建版本！'}]}]"/>
+            v-decorator="['buildVer', {initialValue: this.formData.buildVer, rules: [{required: true, message: '请输入构建版本！'}]}]"/>
         </a-form-item>
 
         <a-form-item

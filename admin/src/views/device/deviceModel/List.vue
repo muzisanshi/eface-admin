@@ -36,6 +36,7 @@
         :action="importUrl"
         :beforeUpload="beforeUploadImport"
         @change="handleImportExcel"
+        accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
         :headers="tokenHeader"
       >
         <a-button type="primary" icon="import">导入</a-button>

@@ -64,6 +64,7 @@
         :showUploadList="false"
         :multiple="false"
         :action="importUrl"
+        accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
         @change="handleImportExcel"
         :headers="tokenHeader"
         :beforeUpload="beforeUploadImport"

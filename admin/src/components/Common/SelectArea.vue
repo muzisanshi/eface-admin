@@ -98,9 +98,9 @@
       },
 
       getChildArea(){
-        for(let i=0;i<this.initCascader.length;i++){
-          this.getChildAreaList(this.initCascader[i],i);
-        }
+        this.getChildAreaList(this.initCascader[0],0);
+        this.getChildAreaList(this.initCascader[1],1);
+
       },
 
       getChildAreaList(id,index){
@@ -135,6 +135,7 @@
             }
             that.arr[index] = l
             that.num++
+            this.initCascader = [...this.initCascader]
           })
       },
 

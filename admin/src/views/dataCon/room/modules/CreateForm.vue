@@ -190,7 +190,7 @@
           return false
         }
         const { form: { validateFields } } = this
-        this.confirmLoading = true
+        // this.confirmLoading = true
         validateFields((errors, values) => {
 
           if (!errors) {
@@ -232,8 +232,9 @@
         return array;
       },
       handleAddData(data){
-        data.nameVal = this.trimSpace(data.nameVal);
-        data.noVal = this.trimSpace(data.noVal);
+        // data.nameVal = this.trimSpace(data.nameVal);
+        // data.noVal = this.trimSpace(data.noVal);
+        // data.remarkVal = this.trimSpace(data.remarkVal);
         this.goodsAttrAndOptParams = [];
         for(let i=0;i<data.nameVal.length;i++){
           let obj ={};

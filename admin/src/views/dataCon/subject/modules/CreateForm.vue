@@ -169,6 +169,9 @@
       add (item) {
         this.visible = true
         this.form.resetFields()
+        this.attrOpt = [[{
+          unit:0
+        }]];
         this.formData = {}
         if(this.form.getFieldValue('keys').length === 0){
             this.addBuildingAttr()

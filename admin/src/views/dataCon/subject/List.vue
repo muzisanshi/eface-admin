@@ -54,13 +54,14 @@
         :multiple="false"
         :action="importUrl"
         @change="handleImportExcel"
+        accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
         :headers="tokenHeader"
         :beforeUpload="beforeUploadImport"
       >
         <a-button type="primary" icon="import">导入</a-button>
       </a-upload>
 
-      <a-button type="primary" icon="export" @click="handleExportXls('/unit/exportExcel','楼栋单元信息')">导出</a-button>
+      <a-button type="primary" icon="export" @click="handleExportXls('/unit/exportExcel','主体信息')">导出</a-button>
 
       <a-button type="danger" icon="delete" @click="handleDelete" :disabled="selectedRowKeys.length < 1">删除</a-button>
       <!--http://172.16.30.246:25000/adminService/unit/importExcel-->
