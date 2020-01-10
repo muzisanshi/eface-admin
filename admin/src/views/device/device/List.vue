@@ -57,7 +57,7 @@
           <a-col :md="5" :sm="24">
             <span class="table-page-search-submitButtons">
               <a-button type="primary" @click="loadData()">查询</a-button>
-              <a-button style="margin-left: 8px" @click="resetSearchForm">重置</a-button>
+              <a-button style="margin-left: 8px" @click="resetSearchFormDevice">重置</a-button>
             </span>
           </a-col>
         </a-row>
@@ -407,7 +407,7 @@ export default {
           dataIndex: 'buildVer'
         },
         {
-          title: '配置版本',
+          title: '设备配置版本',
           dataIndex: 'configVer'
         },
         {
@@ -460,7 +460,7 @@ export default {
           dataIndex: 'buildVer'
         },
         {
-          title: '配置版本',
+          title: '设备配置版本',
           dataIndex: 'configVer'
         },
         {
@@ -487,6 +487,14 @@ export default {
     this.loadData()
   },
   methods: {
+
+    resetSearchFormDevice () {
+      this.queryParam = {
+        page: { pageNumber: 1, pageSize: 10 }
+      }
+      this.initCascader = [];
+      this.roomName = ''
+    },
 
     selectRoom(){
       this.$refs.selectRoom.add(null)

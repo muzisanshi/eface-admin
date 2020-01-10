@@ -51,7 +51,7 @@
     <div class="table-operator" v-if="!selectAdStatus">
       <a-button type="primary" icon="plus"  @click="handleEdit(null)">新增</a-button>
 
-      <!--<a-button type="danger" icon="delete" @click="handleDelete" :disabled="selectedRowKeys.length < 1">删除</a-button>-->
+      <a-button type="danger" icon="delete" @click="handleDelete" :disabled="selectedRowKeys.length < 1">删除</a-button>
 
     </div>
 

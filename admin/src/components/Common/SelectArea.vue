@@ -37,13 +37,12 @@
     },
     watch:{
       initArea(newVal){
-        this.initCascader = newVal
-        if(this.initCascader.length){
-          this.initAllArea();
+        if(this.initCascader.length && this.num === 2){
+          this.initCascader = newVal
         }
       },
       num(newVal){
-        if(newVal == this.initCascader.length){
+        if(newVal == this.initCascader.length-1){
           this.handleAreaArr()
         }
       }
@@ -135,7 +134,7 @@
             }
             that.arr[index] = l
             that.num++
-            this.initCascader = [...this.initCascader]
+            that.initCascader = [...that.initCascader]
           })
       },
 

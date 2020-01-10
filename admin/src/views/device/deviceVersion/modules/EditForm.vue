@@ -40,7 +40,7 @@
 
         <a-form-item label="构建版本" :labelCol="labelCol" :wrapperCol="wrapperCol">
           <a-input
-            v-decorator="['buildVer', {initialValue: this.formData.buildVer, rules: [{required: true, message: '请输入构建版本！'}]}]"/>
+            v-decorator="['buildVer', {initialValue: this.formData.buildVer, rules: [{required: true, pattern: new RegExp(this.REG_EXPS.PLUS_INTEGER, 'g'), message: '请输入有效的构建版本！'}]}]"/>
         </a-form-item>
 
         <a-form-item

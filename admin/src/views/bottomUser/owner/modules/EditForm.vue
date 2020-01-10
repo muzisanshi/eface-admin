@@ -44,6 +44,7 @@
                       <a-button>
                         <a-icon type="upload"/>浏览添加
                       </a-button>
+                      <a-button type="primary" v-if="topImg" style="margin-left: 10px" @click.stop="delImage">删除</a-button>
                     </a-upload>
                   </a-form-item>
                 </a-col>
@@ -106,23 +107,25 @@
                 </a-col>
 
                 <a-col :span="12" v-if="userType === 'VISITOR'">
+                  <a-input
+                    v-decorator="['visitorExtendInfo.id',{initialValue: this.formData.visitorExtendInfo?this.formData.visitorExtendInfo.id:''}]" v-show="false"/>
+                  <a-input
+                    v-decorator="['visitorExtendInfo.interviewerId',{initialValue: this.formData.visitorExtendInfo?this.formData.visitorExtendInfo.interviewerId:''}]" v-show="false"/>
                   <a-form-item
                     label="受访用户"
                     :labelCol="labelCol"
                     :wrapperCol="wrapperCol"
+                    :required="true"
                   >
-                    <a-input
-                      v-decorator="['visitorExtendInfo.id',{initialValue: this.formData.visitorExtendInfo?this.formData.visitorExtendInfo.id:''}]" v-show="false"/>
-                    <a-input
-                      v-decorator="['visitorExtendInfo.interviewerId',{initialValue: this.formData.visitorExtendInfo?this.formData.visitorExtendInfo.interviewerId:''}]" v-show="false"/>
-                    <a-input @click="selectUser()" :read-only="true" v-decorator="['visitorExtendInfo.interviewerRealName', {initialValue: this.formData.visitorExtendInfo?this.formData.visitorExtendInfo.interviewerRealName:''}]"/>
+
+                    <a-input @click="selectUser()" :read-only="true" v-decorator="['visitorExtendInfo.interviewerRealName', {initialValue: this.formData.visitorExtendInfo?this.formData.visitorExtendInfo.interviewerRealName:'', rules: [{required: true, message: '请选择受访用户！'}]}]"/>
                   </a-form-item>
                 </a-col>
 
                 <a-col :span="12" v-if="userType === 'VISITOR'">
-                  <a-form-item label="受访原因" :labelCol="labelCol" :wrapperCol="wrapperCol">
+                  <a-form-item label="访问事由" :labelCol="labelCol" :wrapperCol="wrapperCol">
                     <a-input
-                      v-decorator="['visitorExtendInfo.reason', {initialValue: this.formData.visitorExtendInfo?this.formData.visitorExtendInfo.reason:''}]"/>
+                      v-decorator="['visitorExtendInfo.reason', {initialValue: this.formData.visitorExtendInfo?this.formData.visitorExtendInfo.reason:'', rules: [{required: true, message: '请输入访问事由！'}]}]"/>
                   </a-form-item>
                 </a-col>
 
@@ -141,7 +144,7 @@
                 v-if="fileList.length>0"
                 :action="system.uploadMainUrl"
                 listType="picture"
-                :defaultFileList="fileList"
+                :fileList="fileList"
                 :remove="delUploadImg"
                 class="upload-list-inline"
               >
@@ -225,15 +228,15 @@
                 <a-col :span="9">
 
                 <a-form-item v-bind="formLayout" label="开始时间" :required="true">
-                <a-date-picker @change="value => beginDateChange(value, index, index1)" v-if="pane.content.gateBrakeLimits[index1].beginDatetime" :value="moment(pane.content.gateBrakeLimits[index1].beginDatetime,'YYYY-MM-DD HH:mm:ss')" format="YYYY-MM-DD HH:mm:ss" showTime/>
-                <a-date-picker @change="value => beginDateChange(value, index, index1)" v-if="!pane.content.gateBrakeLimits[index1].beginDatetime" format="YYYY-MM-DD HH:mm:ss" showTime/>
+                <a-date-picker @change="(value, dateString) => beginDateChange(value,dateString, index, index1)" v-if="pane.content.gateBrakeLimits[index1].beginDatetime" :value="moment(pane.content.gateBrakeLimits[index1].beginDatetime,'YYYY-MM-DD HH:mm:ss')" format="YYYY-MM-DD HH:mm:ss" showTime/>
+                <a-date-picker @change="(value, dateString) => beginDateChange(value,dateString, index, index1)" v-if="!pane.content.gateBrakeLimits[index1].beginDatetime" format="YYYY-MM-DD HH:mm:ss" showTime/>
                 </a-form-item>
                 </a-col>
 
                 <a-col :span="9">
                   <a-form-item v-bind="formLayout" label="结束时间" :required="false">
-                    <a-date-picker @change="value => endDateChange(value, index, index1)" v-if="pane.content.gateBrakeLimits[index1].endDatetime" :value="moment(pane.content.gateBrakeLimits[index1].endDatetime,'YYYY-MM-DD HH:mm:ss')" format="YYYY-MM-DD HH:mm:ss" showTime/>
-                    <a-date-picker @change="value => endDateChange(value, index, index1)" v-if="!pane.content.gateBrakeLimits[index1].endDatetime" format="YYYY-MM-DD HH:mm:ss" showTime/>
+                    <a-date-picker @change="(value, dateString) => endDateChange(value,dateString, index, index1)" v-if="pane.content.gateBrakeLimits[index1].endDatetime" :value="moment(pane.content.gateBrakeLimits[index1].endDatetime,'YYYY-MM-DD HH:mm:ss')" format="YYYY-MM-DD HH:mm:ss" showTime/>
+                    <a-date-picker @change="(value, dateString) => endDateChange(value,dateString, index, index1)" v-if="!pane.content.gateBrakeLimits[index1].endDatetime" format="YYYY-MM-DD HH:mm:ss" showTime/>
                   </a-form-item>
                 </a-col>
 
@@ -494,7 +497,6 @@
       },
 
       selectUserSuccess(value){
-        console.log(value)
         if(value.userItem){
           this.formData.visitorExtendInfo.interviewerRealName = value.userItem.realName
           this.formData.visitorExtendInfo.interviewerId = value.userItem.id
@@ -527,16 +529,25 @@
               values.id = this.formData.id
             }
             values.code = that.userType
-            if(key === '2'){
-              that.activeKey = key+'';
-              this.formData = Object.assign(this.formData,values)
-              if(this.panes[0].content.gateBrakeLimits.length === 0){
-                that.addAttr(0)
-              }
+            if(this.fileList.length === 0){
+              this.$notification.error({
+                message: '提示',
+                description: `请上传人脸照片`
+              })
+              return false
             }else{
-              that.activeKey = key+'';
-              this.formData = Object.assign(this.formData,values)
+              if(key === '2'){
+                that.activeKey = key+'';
+                this.formData = Object.assign(this.formData,values)
+                if(this.panes[0].content.gateBrakeLimits.length === 0){
+                  that.addAttr(0)
+                }
+              }else{
+                that.activeKey = key+'';
+                this.formData = Object.assign(this.formData,values)
+              }
             }
+
           }
         })
       },
@@ -623,28 +634,41 @@
       //删除人脸照片
       delUploadImg(file){
         let that = this;
-        if(file.id){
-          return new Promise((resolve, reject) => {
-            that.$confirm({
-              title: '删除',
-              content: '确定删除当前人脸图片？',
-              onOk () {
-                api.face.del({ id: file.id}).then(response => {
-                  that.$notification.success({
-                    message: '成功',
-                    description: `删除成功！`
-                  })
-                  resolve(true)
-                }).catch(error => {
-                  reject(false)
-                })
-              },
-              onCancel () {
-                reject(false)
-              }
-            })
+        if(this.fileList.length<2){
+          that.$notification.error({
+            message: '提示',
+            description: `至少保留一张人脸照片！`
           })
+          return false
+        }else{
+          if(file.id){
+            return new Promise((resolve, reject) => {
+              that.$confirm({
+                title: '删除',
+                content: '确定删除当前人脸图片？',
+                onOk () {
+                  api.face.del({ id: file.id}).then(response => {
+                    that.$notification.success({
+                      message: '成功',
+                      description: `删除成功！`
+                    })
+                    that.fileList = that.fileList.filter(pane => pane.uid !== file.uid)
+                    that.formData.faces = that.formData.faces.filter(pane => pane.id !== file.id)
+                    resolve(true)
+                  }).catch(error => {
+                    reject(false)
+                  })
+                },
+                onCancel () {
+                  reject(false)
+                }
+              })
+            })
 
+          }else{
+            this.fileList = this.fileList.filter(pane => pane.uid !== file.uid)
+            this.formData.faces = this.formData.faces.filter(pane => pane.faceAttId !== file.uid)
+          }
         }
       },
 
@@ -668,26 +692,22 @@
       },
 
       //选择开始时间
-      beginDateChange(date,index,index1) {
-        this.panes[index].content.gateBrakeLimits[index1].beginDatetime = this.formateTimeStamp(date._d);
-      },
+      beginDateChange(date,dateString,index,index1) {
+        if(dateString){
+          this.panes[index].content.gateBrakeLimits[index1].beginDatetime = dateString;
+        }else{
+          this.panes[index].content.gateBrakeLimits[index1].beginDatetime = '';
+        }
 
-      //日期处理
-      formateTimeStamp(time){
-        let date = new Date();
-        date.setTime(time.getTime());
-        let year = date.getFullYear();
-        let month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
-        let day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
-        let hour = date.getHours()< 10 ? "0" + date.getHours() : date.getHours();
-        let minute = date.getMinutes()< 10 ? "0" + date.getMinutes() : date.getMinutes();
-        let second = date.getSeconds()< 10 ? "0" + date.getSeconds() : date.getSeconds();
-        return year + "-" + month + "-" + day+" "+hour+":"+minute+":"+second;
       },
 
       //选择结束时间
-      endDateChange(date,index,index1) {
-        this.panes[index].content.gateBrakeLimits[index1].endDatetime = this.formateTimeStamp(date._d);
+      endDateChange(date,dateString,index,index1) {
+        if(dateString){
+          this.panes[index].content.gateBrakeLimits[index1].endDatetime = dateString;
+        }else{
+          this.panes[index].content.gateBrakeLimits[index1].endDatetime = '';
+        }
       },
 
       //选择地产回调
@@ -826,6 +846,12 @@
         return array;
       },
 
+      delImage(){
+        this.topImg = ''
+        this.headImageAttId = ''
+        this.formData.headImageAttId = null
+      },
+
       //提交
       handleSubmit () {
         const { form: { validateFields } } = this
@@ -853,7 +879,6 @@
                   return false
                 }
               }
-              console.log('--remarkData--',remarkData)
               camerasData[i] = this.panes[i].content
             }else{
               isSubmit =false
@@ -864,13 +889,6 @@
 
         if(isSubmit){
           this.formData.userEstates = camerasData
-          if(!this.formData.faces || this.formData.faces.length === 0){
-            this.$notification.error({
-              message: '提示',
-              description: `请上传人脸照片`
-            })
-            return
-          }
           console.log(this.formData)
           this.confirmLoading = true
           this.$api.user.saveOrUpdate(this.formData)

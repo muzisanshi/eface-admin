@@ -99,13 +99,13 @@
                   <a-form-item label="人脸显示数量" :labelCol="labelCol" :wrapperCol="wrapperCol">
 
                     <a-input
-                      v-decorator="['mainEngine.faceShowNum', {initialValue: this.formData.mainEngine.faceShowNum, rules: [{required: true,pattern: new RegExp(/^[1-9]\d*$/, 'g'), message: '请输入有效的数量！'}]}]"/>
+                      v-decorator="['mainEngine.faceShowNum', {initialValue: this.formData.mainEngine.faceShowNum, rules: [{required: true,pattern: new RegExp(this.REG_EXPS.PLUS_INTEGER, 'g'), message: '请输入有效的数量！'}]}]"/>
                   </a-form-item>
                 </a-col>
                 <a-col :span="8">
                   <a-form-item label="人脸显示时间" :labelCol="labelCol" :wrapperCol="wrapperCol">
                     <a-input
-                      v-decorator="['mainEngine.faceShowSeconds', {initialValue: this.formData.mainEngine.faceShowSeconds, rules: [{required: true,pattern: new RegExp(/^[1-9]\d*$/, 'g'), message: '请输入有效的时间！'}]}]"/>
+                      v-decorator="['mainEngine.faceShowSeconds', {initialValue: this.formData.mainEngine.faceShowSeconds, rules: [{required: true,pattern: new RegExp(this.REG_EXPS.PLUS_INTEGER, 'g'), message: '请输入有效的时间！'}]}]"/>
                   </a-form-item>
                 </a-col>
                 <a-col :span="8">
@@ -142,7 +142,7 @@
                 <a-col :span="8">
                   <a-form-item label="有效分钟数" :labelCol="labelCol" :wrapperCol="wrapperCol">
                     <a-input
-                      v-decorator="['mainEngine.validMinutes', {initialValue: this.formData.mainEngine.validMinutes, rules: [{required: true,pattern: new RegExp(/^[0-9]\d*$/, 'g'), message: '请输入有效的分钟数！'}]}]"/>
+                      v-decorator="['mainEngine.validMinutes', {initialValue: this.formData.mainEngine.validMinutes, rules: [{required: true,pattern: new RegExp(this.REG_EXPS.JUST_NUMBER, 'g'), message: '请输入有效的分钟数！'}]}]"/>
                   </a-form-item>
                 </a-col>
 
@@ -167,13 +167,13 @@
                   >
                     <a-input
                       v-decorator="['mainEngine.network.id',{initialValue: this.formData.mainEngine.network?this.formData.mainEngine.network.id:''}]" v-show="false"/>
-                    <a-input v-decorator="['mainEngine.network.ip',{initialValue: this.formData.mainEngine.network?this.formData.mainEngine.network.ip:''}]" />
+                    <a-input v-decorator="['mainEngine.network.ip',{initialValue: this.formData.mainEngine.network?this.formData.mainEngine.network.ip:'', rules: [{pattern: new RegExp(this.REG_EXPS.HAS_ENG_NUMBER, 'g'), message: '请输入有效的IP地址！'}]}]" />
                   </a-form-item>
                 </a-col>
                 <a-col :span="8">
                   <a-form-item label="子网掩码" :labelCol="labelCol" :wrapperCol="wrapperCol">
                     <a-input
-                      v-decorator="['mainEngine.network.subnetMask', {initialValue: this.formData.mainEngine.network?this.formData.mainEngine.network.subnetMask:''}]"/>
+                      v-decorator="['mainEngine.network.subnetMask', {initialValue: this.formData.mainEngine.network?this.formData.mainEngine.network.subnetMask:'', rules: [{pattern: new RegExp(this.REG_EXPS.HAS_ENG_NUMBER, 'g'), message: '请输入有效的子网掩码！'}]}]"/>
                   </a-form-item>
                 </a-col>
                 <a-col :span="8">
@@ -182,7 +182,7 @@
                     :labelCol="labelCol"
                     :wrapperCol="wrapperCol"
                   >
-                    <a-input v-decorator="['mainEngine.network.defaultGateway',{initialValue: this.formData.mainEngine.network?this.formData.mainEngine.network.defaultGateway:''}]" />
+                    <a-input v-decorator="['mainEngine.network.defaultGateway',{initialValue: this.formData.mainEngine.network?this.formData.mainEngine.network.defaultGateway:'', rules: [{pattern: new RegExp(this.REG_EXPS.HAS_ENG_NUMBER, 'g'), message: '请输入有效的默认网关！'}]}]" />
                   </a-form-item>
                 </a-col>
               </a-row>
@@ -191,14 +191,14 @@
                 <a-col :span="8">
                   <a-form-item label="MAC地址" :labelCol="labelCol" :wrapperCol="wrapperCol">
                     <a-input
-                      v-decorator="['mainEngine.network.macAddress', {initialValue: this.formData.mainEngine.network?this.formData.mainEngine.network.macAddress:''}]"/>
+                      v-decorator="['mainEngine.network.macAddress', {initialValue: this.formData.mainEngine.network?this.formData.mainEngine.network.macAddress:'', rules: [{pattern: new RegExp(this.REG_EXPS.HAS_ENG_NUMBER, 'g'), message: '请输入有效的MAC地址！'}]}]"/>
                   </a-form-item>
                 </a-col>
 
                 <a-col :span="8">
                   <a-form-item label="端口" :labelCol="labelCol" :wrapperCol="wrapperCol">
                     <a-input
-                      v-decorator="['mainEngine.network.port', {initialValue: this.formData.mainEngine.network?this.formData.mainEngine.network.port:'',rules: [{pattern: new RegExp(/^[0-9]\d*$/, 'g'), message: '请输入有效的端口！'}]}]"/>
+                      v-decorator="['mainEngine.network.port', {initialValue: this.formData.mainEngine.network?this.formData.mainEngine.network.port:'',rules: [{pattern: new RegExp(this.REG_EXPS.PLUS_INTEGER, 'g'), message: '请输入有效的端口！'}]}]"/>
                   </a-form-item>
                 </a-col>
               </a-row>
@@ -206,7 +206,7 @@
           </a-form>
         </a-tab-pane>
 
-        <a-tab-pane v-for="(pane,index) in panes" :tab="pane.title" :key="pane.key" :closable="pane.closable" class="init-sty">
+        <a-tab-pane v-for="(pane,index) in panes" :tab="pane.title" :key="pane.key" class="init-sty">
           <a-form :form="pane.form">
 
             <a-card>
@@ -239,7 +239,9 @@
                   >
                     <a-input
                       v-decorator="['locationId',{initialValue: pane.content.locationId}]" v-show="false"/>
-                    <a-input @click="selectLocation('camera',pane.key)" :read-only="true" v-decorator="['locationName', {initialValue: pane.content.locationName}]"/>
+                    <a-input @click="selectLocation('camera',pane.key)" :read-only="true" v-decorator="['locationName', {initialValue: pane.content.locationName}]">
+                      <a-icon slot="suffix" @click="clearLocation(pane.key)" type="close" style="color: rgba(0, 0, 0, 0.25);"/>
+                    </a-input>
                   </a-form-item>
                 </a-col>
 
@@ -297,13 +299,13 @@
                   >
                     <a-input
                       v-decorator="['network.id',{initialValue: pane.content.network.id}]" v-show="false"/>
-                    <a-input v-decorator="['network.ip',{initialValue: pane.content.network.ip}]" />
+                    <a-input v-decorator="['network.ip',{initialValue: pane.content.network.ip, rules: [{pattern: new RegExp(REG_EXPS.HAS_ENG_NUMBER, 'g'), message: '请输入有效的IP地址！'}]}]" />
                   </a-form-item>
                 </a-col>
                 <a-col :span="8">
                   <a-form-item label="子网掩码" :labelCol="labelCol" :wrapperCol="wrapperCol">
                     <a-input
-                      v-decorator="['network.subnetMask', {initialValue: pane.content.network.subnetMask}]"/>
+                      v-decorator="['network.subnetMask', {initialValue: pane.content.network.subnetMask, rules: [{pattern: new RegExp(REG_EXPS.HAS_ENG_NUMBER, 'g'), message: '请输入有效的子网掩码！'}]}]"/>
                   </a-form-item>
                 </a-col>
                 <a-col :span="8">
@@ -312,7 +314,7 @@
                     :labelCol="labelCol"
                     :wrapperCol="wrapperCol"
                   >
-                    <a-input v-decorator="['network.defaultGateway',{initialValue: pane.content.network.defaultGateway}]" />
+                    <a-input v-decorator="['network.defaultGateway',{initialValue: pane.content.network.defaultGateway, rules: [{pattern: new RegExp(REG_EXPS.HAS_ENG_NUMBER, 'g'), message: '请输入有效的默认网关！'}]}]" />
                   </a-form-item>
                 </a-col>
               </a-row>
@@ -321,7 +323,7 @@
                 <a-col :span="8">
                   <a-form-item label="MAC地址" :labelCol="labelCol" :wrapperCol="wrapperCol">
                     <a-input
-                      v-decorator="['network.macAddress', {initialValue: pane.content.network.macAddress}]"/>
+                      v-decorator="['network.macAddress', {initialValue: pane.content.network.macAddress, rules: [{pattern: new RegExp(REG_EXPS.HAS_ENG_NUMBER, 'g'), message: '请输入有效的MAC地址！'}]}]"/>
                   </a-form-item>
                 </a-col>
 
@@ -343,7 +345,7 @@
                 <a-col :span="8">
                   <a-form-item label="端口" :labelCol="labelCol" :wrapperCol="wrapperCol">
                     <a-input
-                      v-decorator="['network.port', {initialValue: pane.content.network.port,rules: [{pattern: new RegExp(/^[0-9]\d*$/, 'g'), message: '请输入有效的端口！'}]}]"/>
+                      v-decorator="['network.port', {initialValue: pane.content.network.port,rules: [{pattern: new RegExp(REG_EXPS.PLUS_INTEGER, 'g'), message: '请输入有效的端口！'}]}]"/>
                   </a-form-item>
                 </a-col>
                 <a-col :span="6">
@@ -429,13 +431,13 @@
                   >
                     <a-input
                       v-decorator="['gateBrake.network.id',{initialValue: pane.content.gateBrake.network.id}]" v-show="false"/>
-                    <a-input v-decorator="['gateBrake.network.ip',{initialValue: pane.content.gateBrake.network.ip}]" />
+                    <a-input v-decorator="['gateBrake.network.ip',{initialValue: pane.content.gateBrake.network.ip, rules: [{pattern: new RegExp(REG_EXPS.HAS_ENG_NUMBER, 'g'), message: '请输入有效的IP地址！'}]}]" />
                   </a-form-item>
                 </a-col>
                 <a-col :span="8">
                   <a-form-item label="子网掩码" :labelCol="labelCol" :wrapperCol="wrapperCol">
                     <a-input
-                      v-decorator="['gateBrake.network.subnetMask', {initialValue: pane.content.gateBrake.network.subnetMask}]"/>
+                      v-decorator="['gateBrake.network.subnetMask', {initialValue: pane.content.gateBrake.network.subnetMask, rules: [{pattern: new RegExp(REG_EXPS.HAS_ENG_NUMBER, 'g'), message: '请输入有效的子网掩码！'}]}]"/>
                   </a-form-item>
                 </a-col>
                 <a-col :span="8">
@@ -444,7 +446,7 @@
                     :labelCol="labelCol"
                     :wrapperCol="wrapperCol"
                   >
-                    <a-input v-decorator="['gateBrake.network.defaultGateway',{initialValue: pane.content.gateBrake.network.defaultGateway}]" />
+                    <a-input v-decorator="['gateBrake.network.defaultGateway',{initialValue: pane.content.gateBrake.network.defaultGateway, rules: [{pattern: new RegExp(REG_EXPS.HAS_ENG_NUMBER, 'g'), message: '请输入有效的默认网关！'}]}]" />
                   </a-form-item>
                 </a-col>
               </a-row>
@@ -454,14 +456,14 @@
                 <a-col :span="8">
                   <a-form-item label="MAC地址" :labelCol="labelCol" :wrapperCol="wrapperCol">
                     <a-input
-                      v-decorator="['gateBrake.network.macAddress', {initialValue: pane.content.gateBrake.network.macAddress}]"/>
+                      v-decorator="['gateBrake.network.macAddress', {initialValue: pane.content.gateBrake.network.macAddress, rules: [{pattern: new RegExp(REG_EXPS.HAS_ENG_NUMBER, 'g'), message: '请输入有效的MAC地址！'}]}]"/>
                   </a-form-item>
                 </a-col>
 
                 <a-col :span="8">
                   <a-form-item label="端口" :labelCol="labelCol" :wrapperCol="wrapperCol">
                     <a-input
-                      v-decorator="['gateBrake.network.port', {initialValue: pane.content.gateBrake.network.port,rules: [{pattern: new RegExp(/^[0-9]\d*$/, 'g'), message: '请输入有效的端口！'}]}]"/>
+                      v-decorator="['gateBrake.network.port', {initialValue: pane.content.gateBrake.network.port,rules: [{pattern: new RegExp(REG_EXPS.PLUS_INTEGER, 'g'), message: '请输入有效的端口！'}]}]"/>
                   </a-form-item>
                 </a-col>
 
@@ -621,7 +623,6 @@
                     content: item,
                     key: activeKey,
                     remark:'',
-                    closable: false
                   });
                   that.panes = panes;
                 })
@@ -805,6 +806,13 @@
 
       },
 
+      clearLocation(index){
+        let key = parseInt(index)-3
+        this.panes[key].content.locationName = '';
+        this.panes[key].content.locationId = ''
+        this.panes[key].form.setFieldsValue({ locationName: '',locationId:''})
+      },
+
       customSuccess(value){
         if(value.algorithm.checkAlive === 'true'){
           value.algorithm.checkAlive = true
@@ -829,20 +837,51 @@
             lastIndex = i - 1;
           }
         });
+        const currentPanes = that.panes.filter(pane => pane.key === targetKey);
         const panes = that.panes.filter(pane => pane.key !== targetKey);
-        if (panes.length) {
-          if (lastIndex >= 0) {
-            activeKey = panes[lastIndex].key;
-          } else {
-            activeKey = panes[0].key;
-          }
-          that.panes = panes;
-          that.activeKey = activeKey;
+       console.log(currentPanes)
+        if(currentPanes[0].content.id){
+          that.$confirm({
+            title: '删除',
+            content: '确定删除点击的相机？',
+            onOk () {
+              that.$api.device.cameraDel({ ids: [currentPanes[0].content.id]})
+                .then(res => {
+                  that.$notification.success({
+                    message: '成功',
+                    description: `删除成功！`
+                  })
+                  if (panes.length) {
+                    if (lastIndex >= 0) {
+                      activeKey = panes[lastIndex].key;
+                    } else {
+                      activeKey = panes[0].key;
+                    }
+                    that.panes = panes;
+                    that.activeKey = activeKey;
+                  }else{
+                    that.panes = [];
+                    that.activeKey = '2';
+                  }
+                })
+            },
+            onCancel () {
+            }
+          })
         }else{
-          that.panes = [];
-          that.activeKey = '2';
+          if (panes.length) {
+            if (lastIndex >= 0) {
+              activeKey = panes[lastIndex].key;
+            } else {
+              activeKey = panes[0].key;
+            }
+            that.panes = panes;
+            that.activeKey = activeKey;
+          }else{
+            that.panes = [];
+            that.activeKey = '2';
+          }
         }
-
       },
     }
   }

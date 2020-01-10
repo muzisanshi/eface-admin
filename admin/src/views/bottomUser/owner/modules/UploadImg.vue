@@ -132,7 +132,6 @@
 
       //放大/缩小
       changeScale (num) {
-        console.log('num', num)
         num = num || 1
         this.$refs.cropper.changeScale(num)
       },
@@ -264,7 +263,7 @@
       },
 
       imgLoad (msg) {
-        console.log(msg)
+        // console.log(msg)
       },
 
       handleCancelImg () {
@@ -314,4 +313,8 @@
     margin-left: 0;
   }
 
+  .ant-upload-list-picture .ant-upload-list-item-name, .ant-upload-list-picture-card .ant-upload-list-item-name{
+    line-height: 20px;
+    margin-top: 25px;
+  }
 </style>

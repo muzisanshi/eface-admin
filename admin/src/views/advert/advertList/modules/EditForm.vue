@@ -202,6 +202,7 @@
             break
           case 'done':
             if (info.file.response.success) {
+              that.confirmLoading = false
               that.headImageAttId = info.file.response.data.id
               that.topImg = info.file.response.data.resourceFullAddress
               if(that.isVideo){
@@ -220,6 +221,7 @@
       },
 
       beforeFileUpload(file) {
+        this.confirmLoading = true
         this.fileName = file.name
         const timestamp = new Date().getTime() + ''
         const signature = SIGN.clientId + timestamp + SIGN.key
@@ -237,6 +239,14 @@
           }else{
             this.formData.adItem.adFileType = 'IMAGE'
             this.form.setFieldsValue({ adItem:{adFileType:'IMAGE'}});
+            if (file.type.indexOf('image') !== -1) {
+              const isLt1M = file.size / 1024 / 1024 < 100
+              if (!isLt1M) {
+                this.$message.error('图片最大为100MB!')
+                this.confirmLoading = false
+              }
+              return isLt1M
+            }
           }
 
         }

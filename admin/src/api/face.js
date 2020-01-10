@@ -36,7 +36,6 @@ function upload (url, parameter) {
   })
 }
 
-
 export default {
   canRegister,
   save,

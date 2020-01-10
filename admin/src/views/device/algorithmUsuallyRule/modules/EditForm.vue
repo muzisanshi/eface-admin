@@ -44,7 +44,7 @@
               style="width: 300px;"
             >
               <a-input
-                v-decorator="['algorithm.recThreshold', {initialValue: this.formData.algorithm.recThreshold, rules: [{required: true,pattern: new RegExp(/^[0-9]\d*$/, 'g'), message: '请输入0-100的阀值！'}]}]"/>
+                v-decorator="['algorithm.recThreshold', {initialValue: this.formData.algorithm.recThreshold, rules: [{required: true,pattern: new RegExp(this.REG_EXPS.POSITIVE_INTEGER, 'g'), message: '请输入0-100的阀值！'}]}]"/>
             </a-form-item>
           </a-col>
           <a-col :span="12">
@@ -53,7 +53,7 @@
               style="width: 300px;"
             >
               <a-input
-                v-decorator="['algorithm.minFaceCheckSize', {initialValue: this.formData.algorithm.minFaceCheckSize, rules: [{required: true,pattern: new RegExp(/^[0-9]\d*$/, 'g'), message: '请输入检测尺寸！'}]}]"/>
+                v-decorator="['algorithm.minFaceCheckSize', {initialValue: this.formData.algorithm.minFaceCheckSize, rules: [{required: true,pattern: new RegExp(this.REG_EXPS.POSITIVE_INTEGER, 'g'), message: '请输入检测尺寸！'}]}]"/>
             </a-form-item>
 
           </a-col>
@@ -66,7 +66,7 @@
               style="width: 300px;"
             >
               <a-input
-                v-decorator="['algorithm.videoOutputSize', {initialValue: this.formData.algorithm.videoOutputSize, rules: [{required: true,pattern: new RegExp(/^[0-9]\d*$/, 'g'), message: '请输入输出尺寸！'}]}]"/>
+                v-decorator="['algorithm.videoOutputSize', {initialValue: this.formData.algorithm.videoOutputSize, rules: [{required: true,pattern: new RegExp(this.REG_EXPS.POSITIVE_INTEGER, 'g'), message: '请输入输出尺寸！'}]}]"/>
             </a-form-item>
 
           </a-col>

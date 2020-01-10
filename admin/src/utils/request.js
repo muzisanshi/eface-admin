@@ -56,7 +56,7 @@ const err = (error) => {
 // request interceptor
 service.interceptors.request.use(config => {
   const clientId = 'admin'
-  const timestamp = new Date().getTime()+''
+  const timestamp = new Date().getTime() + ''
   const signature = clientId + timestamp + 'da74588912504563e464ffe8956de784'
   const token = Vue.ls.get(ACCESS_TOKEN)
   if (token) {
@@ -94,7 +94,7 @@ service.interceptors.response.use((response) => {
     if (response.config['onFail']) {
       response.config['onFail'].call(data)
     } else {
-      if(data.errCode === 'ACCOUNT_NEED_LOGIN'){
+      if (data.errCode === 'ACCOUNT_NEED_LOGIN' || data.errCode === 'ACCOUNT_LOGIN_EXCEPTION') {
         const token = Vue.ls.get(ACCESS_TOKEN)
         if (token) {
           store.dispatch('Logout').then(() => {

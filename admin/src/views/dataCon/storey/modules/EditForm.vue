@@ -22,7 +22,8 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
         >
-          <a-input @click="selectDataCon(2)" :read-only="true" v-decorator="['unitName', {initialValue: this.formData.unitName,rules: [{required: true, message: '请选择楼栋单元！'}]}]"/>
+          <!--<a-input @click="selectDataCon(2)" :read-only="true" v-decorator="['unitName', {initialValue: this.formData.unitName,rules: [{required: true, message: '请选择楼栋单元！'}]}]"/>-->
+          <a-input :disabled="true" v-decorator="['unitName', {initialValue: this.formData.unitName,rules: [{required: true, message: '请选择楼栋单元！'}]}]"/>
         </a-form-item>
 
         <a-form-item
