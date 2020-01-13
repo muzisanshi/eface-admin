@@ -613,7 +613,7 @@
             .then(res => {
               this.formData = res
               this.enable = res.enable
-              if(res.cameras.length>0){
+              if(res.cameras && res.cameras.length>0){
                 res.cameras.map((item,index) =>{
                   const panes = that.panes;
                   const activeKey = `${that.newTabIndex++}`;
@@ -703,6 +703,8 @@
                   if(!values.gateBrake){
                     camerasData[i] = this.panes[i].content
                   }else{
+                    values.enable = this.panes[i].content.enable
+                    values.saveNotRecRecord = this.panes[i].content.saveNotRecRecord
                     camerasData[i] = values;
                     camerasData[i].algorithm = this.panes[i].content.algorithm
                   }

@@ -137,6 +137,7 @@
                 this.visible = false
                 this.confirmLoading = false
                 this.form.resetFields()
+                this.form.resetFields(['name', 'remark']);
                 this.$emit('addSuccess', res)
                 this.$emit('ok', values)
               }).finally(() => {

@@ -205,12 +205,12 @@ export const mixin = {
             }
             this.handleOk()
           } else {
-            this.$message.error(info.file.response.errCode + ':' + info.file.response.errDesc)
+            this.$message.error(info.file.response.errDesc)
           }
           this.loading = false
           break
         case 'error':
-          this.$message.error(info.file.response.status + ':' + info.file.response.error)
+          this.$message.error(info.file.response.error)
           this.loading = false
           break
       }

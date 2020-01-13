@@ -37,9 +37,13 @@
     },
     watch:{
       initArea(newVal){
-        if(this.initCascader.length && this.num === 2){
-          this.initCascader = newVal
-        }
+        // if(!newVal.length){
+        //   this.initCascader = []
+        // }
+        // if(this.initCascader.length && this.num === 2){
+        //   this.initCascader = newVal
+        // }
+        this.initCascader = newVal
       },
       num(newVal){
         if(newVal == this.initCascader.length-1){

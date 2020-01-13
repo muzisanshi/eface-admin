@@ -142,6 +142,7 @@
           attOrigin:'ADMIN',
           attType:'NORMAL'
         },
+        isClickMap:false
       }
     },
     computed: {
@@ -149,7 +150,11 @@
     },
     watch: {
       inputChange(newVal) {
-        this.addressChange(newVal)
+        if(!this.isClickMap){
+          this.addressChange(newVal)
+        }else{
+          this.isClickMap = false
+        }
       },
     },
     methods: {
@@ -276,6 +281,7 @@
 
       addressChange(val) {
         let that = this;
+        that.isClickMap = false
         if (val) {
           // if(that.isChangeClone){
           //   that.latitude = '';
@@ -369,6 +375,7 @@
         //填加鼠标点击事件
         this.map.addEventListener("click", e => {
           //alert(e.point.lng + "," + e.point.lat);
+          // debugger
           that.longitude = e.point.lng
           that.latitude = e.point.lat
 
@@ -380,7 +387,8 @@
 
           geoc.getLocation(e.point, function (rs) {
             let addComp = rs.addressComponents;
-            that.inputChange = addComp.province + addComp.city + addComp.district + addComp.street + addComp.streetNumber + ''
+            that.inputChange = addComp.province + addComp.city + addComp.district + addComp.street + addComp.streetNumber + '';
+            that.isClickMap = true
           });
         });
       },

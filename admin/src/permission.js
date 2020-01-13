@@ -72,7 +72,6 @@ router.beforeEach((to, from, next) => {
               })
             })
             .catch(() => {
-              console.log('1111----', to.path, from.path)
               notification.error({
                 message: '错误',
                 description: '请求用户菜单失败，请重试'

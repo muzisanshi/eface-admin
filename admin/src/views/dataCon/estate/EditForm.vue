@@ -167,12 +167,17 @@ export default {
       isChangeClone: true,
       orgList:[],
       visible:true,
-      zIndex:1
+      zIndex:1,
+      isClickMap:false
     }
   },
   watch: {
     inputChange(newVal) {
-      this.addressChange(newVal)
+      if(!this.isClickMap){
+        this.addressChange(newVal)
+      }else{
+        this.isClickMap = false
+      }
     },
   },
   methods: {
@@ -182,7 +187,7 @@ export default {
 
     selectSuccess(value){
       this.formData.streetOfficeName = value.name
-      this.formData.streetOfficeId = value.value
+      this.formData.streetOfficeId = value.id
       this.form.setFieldsValue({ streetOfficeName: value.name});
     },
 
@@ -255,10 +260,12 @@ export default {
     clearStreetOffice(){
       this.formData.streetOfficeName = '';
       this.formData.streetOfficeId = '';
+      this.form.resetFields(['streetOfficeName']);
     },
 
     addressChange(val) {
       let that = this;
+      that.isClickMap = false
       if (val) {
         // if(that.isChangeClone){
         //   that.latitude = '';
@@ -356,7 +363,8 @@ export default {
         geoc.getLocation(e.point, function (rs) {
           let addComp = rs.addressComponents;
           that.inputChange = '';
-          that.inputChange = addComp.province + addComp.city+ addComp.district + addComp.street + addComp.streetNumber+''
+          that.inputChange = addComp.province + addComp.city+ addComp.district + addComp.street + addComp.streetNumber+'';
+          that.isClickMap = true
         });
       });
     },

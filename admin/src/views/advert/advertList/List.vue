@@ -116,6 +116,9 @@ export default {
   },
   data () {
     return {
+      queryParam:{
+        enable: 'true'
+      },
       columns: [
         {
           title: '广告编号',

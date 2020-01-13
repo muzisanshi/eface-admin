@@ -112,6 +112,7 @@
         this.streetList = [];
         this.areaId = ''
         this.name = ''
+        console.log(this.initArea)
         if(this.initArea.length){
           this.initCascader = this.initArea
           this.areaId = this.initCascader[this.initCascader.length-1]

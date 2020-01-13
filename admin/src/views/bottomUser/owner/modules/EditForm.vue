@@ -486,7 +486,7 @@
             }else{
               this.title = '新增'
               this.formData.nationalAreaCodeId=this.nationalAreaCodeList[0].value
-              this.formData.sexual=this.constants.list.sexual[1].value
+              this.formData.sexual=this.constants.list.sexual[0].value
 
             }
           })
@@ -532,6 +532,12 @@
             if(this.formData.id){
               values.id = this.formData.id
             }
+            if(that.userType === 'VISITOR'){
+              if(this.formData.visitorExtendInfo){
+                values.visitorExtendInfo.interviewerId = this.formData.visitorExtendInfo.interviewerId
+              }
+            }
+
             values.code = that.userType
             if(this.fileList.length === 0){
               this.$notification.error({
@@ -551,12 +557,10 @@
                 this.formData = Object.assign(this.formData,values)
               }
             }
-
+            console.log('--------',this.formData)
           }
         })
       },
-
-
 
       //头像上传回调
       handleChange(info) {

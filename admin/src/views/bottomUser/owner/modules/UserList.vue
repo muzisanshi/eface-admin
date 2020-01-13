@@ -18,7 +18,7 @@
 
           <a-col :md="6" :sm="24" v-if="selectUserStatus">
             <a-form-item label="用户类型">
-              <a-select showSearch placeholder="选择用户类型"  v-model="queryParam.code" optionFilterProp="children" :filterOption="filterCommonOption" :options="constants.list.userTypeCode">
+              <a-select showSearch placeholder="选择用户类型"  v-model="queryParam.code" optionFilterProp="children" :filterOption="filterCommonOption" :options="userTypeCode">
               </a-select>
             </a-form-item>
           </a-col>
@@ -158,8 +158,17 @@ export default {
             return res
           })
       },
-      roomName:''
+      roomName:'',
+      userTypeCode:[]
     }
+  },
+  created(){
+    this.userTypeCode = [];
+    this.constants.list.userTypeCode.map((item)=>{
+      if(item.value === "OWNER" || item.value === "RENTER"){
+        this.userTypeCode.push(item)
+      }
+    })
   },
   methods: {
 

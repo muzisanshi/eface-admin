@@ -160,6 +160,8 @@
         let that = this;
         this.visible = true
         this.form.resetFields()
+        this.startDate = ''
+        this.endDate = ''
         this.formData ={
           no:(new Date()).getTime(),
           adItem:{}
@@ -314,6 +316,8 @@
                 this.visible = false
                 this.confirmLoading = false
                 this.form.resetFields()
+                this.startDate = ''
+                this.endDate = ''
                 this.$emit('ok', values)
               }).finally(() => {
               this.confirmLoading = false
