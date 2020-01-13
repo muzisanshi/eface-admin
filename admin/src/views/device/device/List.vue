@@ -632,7 +632,6 @@ export default {
                 message: '成功',
                 description: `下发底库用户成功！`
               })
-              that.handleLoadOk()
             })
         },
         onCancel () {
