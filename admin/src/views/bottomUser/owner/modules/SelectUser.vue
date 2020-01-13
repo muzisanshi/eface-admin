@@ -59,6 +59,7 @@
 
       handleCancelSelect() {
         this.visibleSelect = false
+        this.confirmLoadingSelect = false
       }
     }
   }

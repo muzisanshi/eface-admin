@@ -300,6 +300,8 @@
       <span slot="action" slot-scope="text, record">
         <template v-if="!selectDeviceStatus">
           <a @click="handleEditInit(record)">修改</a>
+          <a-divider type="vertical"/>
+          <a @click="lowerHairUser(record)">下发底库用户</a>
         </template>
       </span>
 
@@ -479,7 +481,7 @@ export default {
         {
           title: '操作',
           dataIndex: 'action',
-          width: '150px',
+          width: '180px',
           scopedSlots: { customRender: 'action' }
         }
       ]
@@ -616,6 +618,26 @@ export default {
         this.$emit('selectedDevice',selectedRows)
         this.selectAdStatus = false
       }
+    },
+
+    lowerHairUser(record){
+      let that = this;
+      that.$confirm({
+        title: '提示',
+        content: '确定下发底库用户？',
+        onOk () {
+          that.$api.device.syncUser({ id: record.id })
+            .then(res => {
+              that.$notification.success({
+                message: '成功',
+                description: `下发底库用户成功！`
+              })
+              that.handleLoadOk()
+            })
+        },
+        onCancel () {
+        }
+      })
     },
 
     handleEditInit(record){

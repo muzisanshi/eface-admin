@@ -498,11 +498,15 @@
 
       selectUserSuccess(value){
         if(value.userItem){
+          this.formData.visitorExtendInfo = {
+            interviewerRealName:'',
+            interviewerId:''
+          }
           this.formData.visitorExtendInfo.interviewerRealName = value.userItem.realName
           this.formData.visitorExtendInfo.interviewerId = value.userItem.id
           this.form.setFieldsValue({ visitorExtendInfo: {
               interviewerRealName: value.userItem.realName
-            }})
+          }})
         }
       },
 

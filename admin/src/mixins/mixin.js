@@ -126,6 +126,7 @@ export const mixin = {
     //弹窗关闭
     handleCancel () {
       this.visible = false
+      this.confirmLoading = false
     },
 
     //新增修改

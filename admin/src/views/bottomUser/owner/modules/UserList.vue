@@ -18,7 +18,7 @@
 
           <a-col :md="6" :sm="24" v-if="selectUserStatus">
             <a-form-item label="用户类型">
-              <a-select showSearch allowClear placeholder="选择用户类型"  v-model="queryParam.code" optionFilterProp="children" :filterOption="filterCommonOption" :options="constants.list.userTypeCode">
+              <a-select showSearch placeholder="选择用户类型"  v-model="queryParam.code" optionFilterProp="children" :filterOption="filterCommonOption" :options="constants.list.userTypeCode">
               </a-select>
             </a-form-item>
           </a-col>
