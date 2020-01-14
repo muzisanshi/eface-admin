@@ -12,7 +12,11 @@
       :theme="theme"
       :mode="mode"
       @select="onSelect"
-      style="padding: 16px 0px;"></s-menu>
+      style="padding: 16px 0 90px 0;"></s-menu>
+    <div style="width: 100%;height: 80px;position: absolute;bottom: 0;left: 0;background-color: #001529;text-align: center;padding: 10px 0;color: #fff;font-size: 14px;">
+          <p>前端版本 -v2.0.6</p>
+          <p>后端版本 -2.0.6</p>
+    </div>
   </a-layout-sider>
 
 </template>

@@ -165,7 +165,7 @@
                     :labelCol="labelCol"
                     :wrapperCol="wrapperCol"
                   >
-                    <a-input @click="selectDataCon(1,index)" :read-only="true" v-decorator="['estateName', {initialValue: pane.content.estateName,rules: [{required: true, message: '请选择地产！'}]}]"/>
+                    <a-input @click="selectDataCon(1,index)" :disabled="!pane.isEditEstate" :read-only="true" v-decorator="['estateName', {initialValue: pane.content.estateName,rules: [{required: true, message: '请选择地产！'}]}]"/>
                   </a-form-item>
                 </a-col>
 
@@ -223,7 +223,7 @@
 
               </a-row>
 
-              <a-row :gutter="24">
+              <a-row :gutter="24" class="init-ant-form-item">
 
                 <a-col :span="9">
 
@@ -238,6 +238,7 @@
                     <a-date-picker @change="(value, dateString) => endDateChange(value,dateString, index, index1)" v-if="pane.content.gateBrakeLimits[index1].endDatetime" :value="moment(pane.content.gateBrakeLimits[index1].endDatetime,'YYYY-MM-DD HH:mm:ss')" format="YYYY-MM-DD HH:mm:ss" showTime/>
                     <a-date-picker @change="(value, dateString) => endDateChange(value,dateString, index, index1)" v-if="!pane.content.gateBrakeLimits[index1].endDatetime" format="YYYY-MM-DD HH:mm:ss" showTime/>
                   </a-form-item>
+                  <div style="margin-bottom: 12px;color: #9a9a9a;font-size: 12px;text-align: right;"><span>如果不选择结束时间，则按照门禁闸机常用规则进行限制</span></div>
                 </a-col>
 
 
@@ -353,7 +354,7 @@
               estateId:"",
               relieve:false,
               gateBrakeLimits:[]
-            }, key: '2',remark:'',closable: false },
+            }, key: '2',remark:'',closable: false,isEditEstate:true },
         ],
       }
     },
@@ -388,32 +389,32 @@
 
       addEdit(item,userType) {
         let that = this;
-        this.visible = true
-        this.form.resetFields()
+        that.visible = true
+        that.form.resetFields()
         that.userType = userType
-        this.formData ={
+        that.formData ={
           userEstates:[],
           faces:[],
           visitorExtendInfo:{}
         }
 
-        this.panes = [
+        that.panes = [
           { title: '受访区域',form:this.$form.createForm(this), content: {
               estateId:"",
               relieve:false,
               gateBrakeLimits:[]
-            }, key: '2',remark:'',closable: false },
+            }, key: '2',remark:'',closable: false,isEditEstate:true },
         ];
-        this.panes[0].form.getFieldDecorator('keys', {
+        that.panes[0].form.getFieldDecorator('keys', {
           initialValue: [],
           preserve: true
         });
-        this.userType = userType
-        this.activeKey = '1'
-        that.fileList = []
-        this.headImageAttId = null;
-        this.topImg = null;
-        this.$api.dictValue.getRelationship()
+        that.userType = userType
+        that.activeKey = '1'
+        that.fileList = [];
+        that.headImageAttId = null;
+        that.topImg = null;
+        that.$api.dictValue.getRelationship()
           .then(res => {
             const l = []
             for (let i = 0;i<res.length; i++) {
@@ -436,17 +437,17 @@
                 label: res[i].areaCode
               })
             }
-            this.nationalAreaCodeList = l
+            that.nationalAreaCodeList = l
             if(item){
-              this.title = '修改'
-              this.$api.user.getById({
+              that.title = '修改'
+              that.$api.user.getById({
                 id: item.id,
                 code:userType
               })
                 .then(res => {
-                  this.formData = res
+                  that.formData = res
                   that.topImg = res.resourceFullAddress;
-                  this.panes = []
+                  that.panes = []
                   if(res.faces){
                     res.faces.map((item) => {
                       that.fileList.push({
@@ -461,14 +462,15 @@
                   }
 
                   res.userEstates.map((item,index) => {
+
                     let obj = {
                       title: '受访区域'+(index>0?index:''),
                       form:this.$form.createForm(this),
                       content: item,
                       key: (index+2)+'',
-                      closable: false }
-
-                    this.panes.push(obj)
+                      closable: false,
+                      isEditEstate:true
+                    }
 
                     let initialVal = []
                     item.gateBrakeLimits.map((val,inx)=>{
@@ -476,17 +478,24 @@
                         remark: inx,
                         roomName: inx,
                       })
+                      if(val.estateId){
+                        obj.isEditEstate = false
+                      }
                     })
+
                     obj.form.getFieldDecorator('keys', {
                       initialValue: initialVal,
                       preserve: true
                     });
+
+                    that.panes.push(obj)
+
                   })
                 })
             }else{
-              this.title = '新增'
-              this.formData.nationalAreaCodeId=this.nationalAreaCodeList[0].value
-              this.formData.sexual=this.constants.list.sexual[0].value
+              that.title = '新增'
+              that.formData.nationalAreaCodeId=this.nationalAreaCodeList[0].value
+              that.formData.sexual=this.constants.list.sexual[0].value
 
             }
           })
@@ -764,7 +773,8 @@
                 gateBrakeLimits: []
               },
               key: activeKey,
-              remark:''
+              remark:'',
+              isEditEstate:true
             });
             that.panes = panes;
             that.activeKey = activeKey;
@@ -946,5 +956,7 @@
   .upload-list-inline .ant-upload-animate-leave {
     animation-name: uploadAnimateInlineOut;
   }
-
+.init-ant-form-item .ant-form-item{
+  margin-bottom: 2px!important;
+}
 </style>

@@ -160,13 +160,13 @@
 
               <a-row :gutter="24">
                 <a-col :span="8">
+                  <a-input
+                    v-decorator="['mainEngine.network.id',{initialValue: this.formData.mainEngine.network?this.formData.mainEngine.network.id:''}]" v-show="false"/>
                   <a-form-item
                     label="IP地址"
                     :labelCol="labelCol"
                     :wrapperCol="wrapperCol"
                   >
-                    <a-input
-                      v-decorator="['mainEngine.network.id',{initialValue: this.formData.mainEngine.network?this.formData.mainEngine.network.id:''}]" v-show="false"/>
                     <a-input v-decorator="['mainEngine.network.ip',{initialValue: this.formData.mainEngine.network?this.formData.mainEngine.network.ip:'', rules: [{pattern: new RegExp(this.REG_EXPS.HAS_ENG_NUMBER, 'g'), message: '请输入有效的IP地址！'}]}]" />
                   </a-form-item>
                 </a-col>
@@ -232,13 +232,14 @@
 
                 </a-col>
                 <a-col :span="8">
+                  <a-input
+                    v-decorator="['locationId',{initialValue: pane.content.locationId}]" v-show="false"/>
                   <a-form-item
                     label="设备位置"
                     :labelCol="labelCol"
                     :wrapperCol="wrapperCol"
                   >
-                    <a-input
-                      v-decorator="['locationId',{initialValue: pane.content.locationId}]" v-show="false"/>
+
                     <a-input @click="selectLocation('camera',pane.key)" :read-only="true" v-decorator="['locationName', {initialValue: pane.content.locationName}]">
                       <a-icon slot="suffix" @click="clearLocation(pane.key)" type="close" style="color: rgba(0, 0, 0, 0.25);"/>
                     </a-input>
@@ -292,13 +293,13 @@
 
               <a-row :gutter="24">
                 <a-col :span="8">
+                  <a-input
+                    v-decorator="['network.id',{initialValue: pane.content.network.id}]" v-show="false"/>
                   <a-form-item
                     label="IP地址"
                     :labelCol="labelCol"
                     :wrapperCol="wrapperCol"
                   >
-                    <a-input
-                      v-decorator="['network.id',{initialValue: pane.content.network.id}]" v-show="false"/>
                     <a-input v-decorator="['network.ip',{initialValue: pane.content.network.ip, rules: [{pattern: new RegExp(REG_EXPS.HAS_ENG_NUMBER, 'g'), message: '请输入有效的IP地址！'}]}]" />
                   </a-form-item>
                 </a-col>
@@ -424,13 +425,14 @@
               </a-row>
               <a-row :gutter="24">
                 <a-col :span="8">
+                  <a-input
+                    v-decorator="['gateBrake.network.id',{initialValue: pane.content.gateBrake.network.id}]" v-show="false"/>
                   <a-form-item
                     label="IP地址"
                     :labelCol="labelCol"
                     :wrapperCol="wrapperCol"
                   >
-                    <a-input
-                      v-decorator="['gateBrake.network.id',{initialValue: pane.content.gateBrake.network.id}]" v-show="false"/>
+
                     <a-input v-decorator="['gateBrake.network.ip',{initialValue: pane.content.gateBrake.network.ip, rules: [{pattern: new RegExp(REG_EXPS.HAS_ENG_NUMBER, 'g'), message: '请输入有效的IP地址！'}]}]" />
                   </a-form-item>
                 </a-col>

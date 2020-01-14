@@ -102,8 +102,6 @@
                 </a-card>
               </a-form>
             </template>
-
-
         </a-tab-pane>
         <a-tab-pane tab="10吋以上" key="2">
           <a-row :gutter="24">
@@ -425,11 +423,11 @@
       },
 
       beforeChangeAcar(to,index){
-        if(this.windows[index].adList.length>0){
-          if(this.windows[index].adList[to].fileType === 'VIDEO'){
-            this.windows[index].isPlay = true
-          }
-        }
+        // if(this.windows[index].adList.length>0){
+        //   if(this.windows[index].adList[to].fileType === 'VIDEO'){
+        //     this.windows[index].isPlay = true
+        //   }
+        // }
       },
 
       afterCarChange(current){
@@ -443,11 +441,11 @@
       },
 
       afterChangeAcar(to,index){
-        if(this.windows[index].adList.length>0) {
-          if(this.windows[index].adList[to].fileType !== 'VIDEO'){
-            this.windows[index].isPlay = false
-          }
-        }
+        // if(this.windows[index].adList.length>0) {
+        //   if(this.windows[index].adList[to].fileType !== 'VIDEO'){
+        //     this.windows[index].isPlay = false
+        //   }
+        // }
       },
 
       selectedArea(area,index) {

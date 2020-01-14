@@ -217,10 +217,32 @@ export default {
 
     onSelectAdChange (selectedRowKeys, selectedRows) {
       this.selectedRowKeys = selectedRowKeys
-      this.selectedRows = selectedRows
-      if(this.selectAdStatus){
-        this.$emit('selectedAd',selectedRows)
+
+      let that = this;
+      let hash = {},rowsIds = [],defferentId = '';
+      that.selectedRows = [...this.selectedRows,...selectedRows]
+      that.selectedRows = that.selectedRows.reduce(function(item, next) {
+        hash[next.id] ? '' : hash[next.id] = true && item.push(next);
+        return item
+      }, [])
+
+      if(selectedRowKeys.length < that.selectedRows.length){
+        let newRows = [];
+        rowsIds = []
+        that.selectedRows.map((item)=>{
+          rowsIds.push(item.id)
+        })
+        defferentId = this.selectedRowKeys.concat(rowsIds).filter(function(v, i, arr) {
+            return arr.indexOf(v) === arr.lastIndexOf(v);
+         });
+        newRows = that.selectedRows.filter(pane => pane.id !== defferentId[0])
+        that.selectedRows = [...newRows]
       }
+
+      if(this.selectAdStatus){
+        this.$emit('selectedAd',that.selectedRows)
+      }
+
     },
 
     handleDelete () {
