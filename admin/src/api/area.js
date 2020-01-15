@@ -53,7 +53,7 @@ function getAll (parameter) {
   })
 }
 
-function logicalDelete (parameter) {
+function delLog (parameter) {
   return axios({
     url: URI.logicalDelete,
     params: parameter
@@ -64,7 +64,7 @@ export default {
   getById,
   getAll,
   getAllParent,
-  logicalDelete,
+  delLog,
   getPage,
   del,
   saveOrUpdate

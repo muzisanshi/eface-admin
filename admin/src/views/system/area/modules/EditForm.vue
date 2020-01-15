@@ -16,6 +16,16 @@
   >
     <a-spin :spinning="confirmLoading">
       <a-form :form="form">
+
+        <a-form-item
+          label="行政区划代码"
+          :labelCol="labelCol"
+          :wrapperCol="wrapperCol"
+        >
+          <a-input :disabled="hasAdd === 'UPDATE'"
+            v-decorator="['id', {initialValue: this.formData.id,rules: [{required: true,pattern: new RegExp(this.REG_EXPS.POSITIVE_INTEGER, 'g'), message: '请输入有效的行政区划代码！'}]}]"/>
+        </a-form-item>
+
         <a-form-item
           label="名称"
           :labelCol="labelCol"
@@ -97,14 +107,6 @@
           <a-switch :checked="enable" @change="changeEnable" v-decorator="['enable']"/>
         </a-form-item>
 
-        <a-form-item
-          label="是否删除"
-          :labelCol="labelCol"
-          :wrapperCol="wrapperCol"
-        >
-          <a-switch :checked="deleted" @change="changeDeleted" v-decorator="['deleted']"/>
-        </a-form-item>
-
       </a-form>
     </a-spin>
   </a-modal>
@@ -138,7 +140,8 @@
           {}
         ],
         arr:[],
-        num:0
+        num:0,
+        hasAdd:'SAVE'
       }
     },
     watch:{
@@ -174,18 +177,19 @@
             }
             that.options = l
             if (item) {
+              console.log(item)
               that.$api.area.getById({id: item.id})
                 .then(res => {
                   if (addChild != 'addChild') {
                     that.title = '修改'
                     that.formData = res
                     that.enable = that.formData.enable;
-                    that.deleted = that.formData.deleted;
+                    that.hasAdd = 'UPDATE'
                   } else {
                     that.title = '新增下级'
                     that.addChild = true;
                     that.enable = true
-                    that.deleted = false
+                    that.hasAdd = 'SAVE'
                     that.disabledSelectParent = true;
                     that.formData.level = item.level
                     that.form.setFieldsValue({ level: item.level});
@@ -199,28 +203,27 @@
                       that.getChildArea()
                       return
                     }
-                    if (res.parentArea) {
-                      that.initCascader.push(res.parentArea.id)
-                    } else {
-                      that.initCascader = [];
+                  }else{
+                    if(addChild == 'addChild'){
+                      that.initCascader.push(item.id)
                     }
                   }
 
                 })
             } else {
               that.enable = true
-              that.deleted = false
+              that.hasAdd = 'SAVE'
               that.title = '新增'
             }
           })
       },
 
       handleAreaId(res){
-        if(res.parentArea){
-          this.arr.push(res.parentArea.id)
-          let cacheData = [...this.arr]
-          this.initCascader = cacheData.reverse()
-          this.handleAreaId(res.parentArea)
+        let that = this;
+        if(res.areas && res.areas.length){
+          for (let i = res.areas.length - 1; i >= 0; i--) {
+            that.initCascader.push(res.areas[i].id)
+          }
         }
       },
 
@@ -326,14 +329,12 @@
               values.id = this.formData.id;
             }
             if (this.initCascader) {
-              values.parentArea = {id: this.initCascader[this.initCascader.length - 1]}
+              values.parentAreaId = this.initCascader[this.initCascader.length - 1]
             }
             if (!values.enable) {
               values.enable = this.enable
             }
-            if (!values.deleted) {
-              values.deleted = this.deleted
-            }
+            values.optType = this.hasAdd
             this.$api.area.saveOrUpdate(values)
               .then(res => {
                 this.$notification.success({

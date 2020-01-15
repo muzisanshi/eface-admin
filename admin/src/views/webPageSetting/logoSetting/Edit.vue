@@ -6,6 +6,7 @@
 -->
 <template>
   <a-card :bordered="false" class="content">
+    <a-spin :spinning="confirmLoading">
       <a-form :form="form">
 
         <a-form-item label="系统LOGO文字" :labelCol="labelCol" :wrapperCol="wrapperCol">
@@ -103,6 +104,7 @@
         </div>
 
       </a-form>
+    </a-spin>
   </a-card>
 </template>
 

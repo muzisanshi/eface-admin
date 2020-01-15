@@ -14,11 +14,6 @@
               <a-input v-model="queryParam.name" placeholder=""/>
             </a-form-item>
           </a-col>
-          <a-col :md="6" :sm="24">
-            <a-form-item label="父级地区">
-              <a-input v-model="queryParam.parentAreaId" placeholder=""/>
-            </a-form-item>
-          </a-col>
           <a-col :md="4" :sm="24">
             <a-form-item label="是否启用">
               <a-select
@@ -135,11 +130,6 @@
           {
             title: '是否启用',
             dataIndex: 'enable',
-            scopedSlots: {customRender: 'status'}
-          },
-          {
-            title: '是否删除',
-            dataIndex: 'deleted',
             scopedSlots: {customRender: 'status'}
           },
           {
