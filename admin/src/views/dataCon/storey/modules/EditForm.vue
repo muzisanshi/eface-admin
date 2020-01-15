@@ -31,7 +31,7 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
         >
-          <a-input
+          <a-input :maxLength="64"
             v-decorator="['name', {initialValue: this.formData.name,rules: [{required: true, message: '请输入楼层！'}]}]"/>
         </a-form-item>
 
@@ -40,7 +40,7 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
         >
-          <a-input
+          <a-input :maxLength="11"
             v-decorator="['roomNum', {initialValue: this.formData.roomNum,rules: [{required: true, message: '请输入房间数量！'}]}]"/>
         </a-form-item>
 
@@ -49,7 +49,7 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
         >
-          <a-input v-decorator="['remark',{initialValue: this.formData.remark}]"/>
+          <a-input :maxLength="255" v-decorator="['remark',{initialValue: this.formData.remark}]"/>
         </a-form-item>
 
       </a-form>

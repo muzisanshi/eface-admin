@@ -72,7 +72,7 @@
 
                 <a-col :span="12">
                   <a-form-item label="电话号码" :labelCol="labelCol" :wrapperCol="wrapperCol" class="national-code">
-                    <a-input v-decorator="['phoneNo', {initialValue: this.formData.phoneNo, rules: [{required: true, message: '请输入电话号码！'}]}]">
+                    <a-input :maxLength="32" v-decorator="['phoneNo', {initialValue: this.formData.phoneNo, rules: [{required: true, message: '请输入电话号码！'}]}]">
                       <a-select
                         showSearch
                         slot="addonBefore"
@@ -90,7 +90,7 @@
 
                 <a-col :span="12">
                   <a-form-item label="姓名" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                    <a-input
+                    <a-input :maxLength="64"
                       v-decorator="['realName', {initialValue: this.formData.realName, rules: [{required: true, message: '请输入姓名！'}]}]"/>
                   </a-form-item>
                 </a-col>
@@ -124,7 +124,7 @@
 
                 <a-col :span="12" v-if="userType === 'VISITOR'">
                   <a-form-item label="访问事由" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                    <a-input
+                    <a-input :maxLength="128"
                       v-decorator="['visitorExtendInfo.reason', {initialValue: this.formData.visitorExtendInfo?this.formData.visitorExtendInfo.reason:'', rules: [{required: true, message: '请输入访问事由！'}]}]"/>
                   </a-form-item>
                 </a-col>
@@ -202,7 +202,7 @@
 
               <a-col :span="9">
               <a-form-item :key="k.remark" v-bind="formLayout" label="备注" :required="false">
-              <a-input v-decorator="[
+              <a-input :maxLength="255" v-decorator="[
               `remarkVal[${k.remark}]`,
               {
                 initialValue: pane.content.gateBrakeLimits[index1].remark

@@ -13,7 +13,7 @@
         <a-row :gutter="24">
           <a-col :md="6" :sm="8">
             <a-form-item label="名称" :labelCol="{span: 5}" :wrapperCol="{span: 18, offset: 1}">
-              <a-input placeholder="请输入名称查询" v-model="queryParam.name"></a-input>
+              <a-input :maxLength="64" placeholder="请输入名称查询" v-model="queryParam.name"></a-input>
             </a-form-item>
           </a-col>
           <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">

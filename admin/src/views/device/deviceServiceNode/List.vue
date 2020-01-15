@@ -12,13 +12,13 @@
 
           <a-col :md="4" :sm="24">
             <a-form-item label="内网IP">
-              <a-input v-model="queryParam.innerIp" placeholder=""/>
+              <a-input :maxLength="32" v-model="queryParam.innerIp" placeholder=""/>
             </a-form-item>
           </a-col>
 
           <a-col :md="4" :sm="24">
             <a-form-item label="外网IP">
-              <a-input v-model="queryParam.outerIp" placeholder=""/>
+              <a-input :maxLength="32" v-model="queryParam.outerIp" placeholder=""/>
             </a-form-item>
           </a-col>
 

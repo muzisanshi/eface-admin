@@ -11,12 +11,12 @@
         <a-row :gutter="48">
           <a-col :md="6" :sm="24">
             <a-form-item label="任务名称">
-              <a-input v-model="queryParam.jobName"/>
+              <a-input :maxLength="64" v-model="queryParam.jobName"/>
             </a-form-item>
           </a-col>
           <a-col :md="6" :sm="24">
             <a-form-item label="任务分组">
-              <a-input v-model="queryParam.jobGroup"/>
+              <a-input :maxLength="64" v-model="queryParam.jobGroup"/>
             </a-form-item>
           </a-col>
           <a-col :md="6" :sm="24">

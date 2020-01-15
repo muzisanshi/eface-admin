@@ -27,7 +27,7 @@
         </a-form-item>
 
         <a-form-item label="名称" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <a-input
+          <a-input :maxLength="64"
             v-decorator="['name', {initialValue: this.formData.name, rules: [{required: true, message: '请输入名称！'}]}]"/>
         </a-form-item>
 
@@ -36,7 +36,7 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
         >
-          <a-input v-decorator="['remark',{initialValue: this.formData.remark}]" />
+          <a-input :maxLength="255" v-decorator="['remark',{initialValue: this.formData.remark}]" />
         </a-form-item>
 
       </a-form>

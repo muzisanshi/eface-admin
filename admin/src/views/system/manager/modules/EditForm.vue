@@ -12,7 +12,7 @@
         <a-row :gutter="24">
           <a-col :span="12">
             <a-form-item label="用户名" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input
+              <a-input :maxLength="64"
                 v-decorator="['manager.username', {initialValue: this.formData.username, rules: [{required: true, message: '请输入名称！'}]}]"/>
             </a-form-item>
           </a-col>
@@ -25,7 +25,7 @@
 
           <a-col :span="12">
             <a-form-item label="电话号码" :labelCol="labelCol" :wrapperCol="wrapperCol" class="national-code">
-              <a-input v-decorator="['manager.phoneNo', {initialValue: this.formData.phoneNo, rules: [{required: true, message: '请输入电话号码！'}]}]">
+              <a-input :maxLength="32" v-decorator="['manager.phoneNo', {initialValue: this.formData.phoneNo, rules: [{required: true, message: '请输入电话号码！'}]}]">
                 <a-select
                   showSearch
                   allowClear
@@ -44,7 +44,7 @@
         <a-row :gutter="24">
           <a-col :span="12">
             <a-form-item label="姓名" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input
+              <a-input :maxLength="64"
                 v-decorator="['manager.realName', {initialValue: this.formData.realName, rules: [{required: true, message: '请输入姓名！'}]}]"/>
             </a-form-item>
           </a-col>
@@ -128,24 +128,24 @@
 
           <a-col :span="12" v-if="formData.id">
             <a-form-item label="密码" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input v-decorator="['manager.password',{initialValue: this.formData.password}]"/>
+              <a-input :maxLength="32" v-decorator="['manager.password',{initialValue: this.formData.password}]"/>
             </a-form-item>
           </a-col>
 
           <a-col :span="12" v-else>
             <a-form-item label="密码" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input v-decorator="['manager.password',{initialValue: this.formData.password, rules: [{required: true, message: '请填写密码！'}]}]"/>
+              <a-input :maxLength="32" v-decorator="['manager.password',{initialValue: this.formData.password, rules: [{required: true, message: '请填写密码！'}]}]"/>
             </a-form-item>
           </a-col>
 
           <a-col :span="12">
             <a-form-item label="邮件" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input v-decorator="['manager.email',{initialValue: this.formData.email}]"/>
+              <a-input :maxLength="64" v-decorator="['manager.email',{initialValue: this.formData.email}]"/>
             </a-form-item>
           </a-col>
           <a-col :span="12">
             <a-form-item label="备注" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input v-decorator="['manager.remark',{initialValue: this.formData.remark}]"/>
+              <a-input :maxLength="255" v-decorator="['manager.remark',{initialValue: this.formData.remark}]"/>
             </a-form-item>
           </a-col>
         </a-row>

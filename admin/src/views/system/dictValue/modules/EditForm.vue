@@ -18,15 +18,15 @@
       <a-form :form="form">
 
         <a-form-item label="名称" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <a-input
+          <a-input :maxLength="64"
             v-decorator="['name', {initialValue: this.formData.name, rules: [{required: true, message: '请输入位置名称！'}]}]"/>
         </a-form-item>
         <a-form-item label="字典值" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <a-input
+          <a-input :maxLength="64"
             v-decorator="['value', {initialValue: this.formData.value, rules: [{required: true, message: '请输入字典值！'}]}]"/>
         </a-form-item>
         <a-form-item label="排序序号" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <a-input
+          <a-input :maxLength="11"
             v-decorator="['orderNum', {initialValue: this.formData.orderNum, rules: [{required: true, message: '请输入排序序号！'}]}]"/>
         </a-form-item>
 
@@ -44,7 +44,7 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
         >
-          <a-input v-decorator="['remark',{initialValue: this.formData.remark}]" />
+          <a-input :maxLength="255" v-decorator="['remark',{initialValue: this.formData.remark}]" />
         </a-form-item>
 
       </a-form>

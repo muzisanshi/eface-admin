@@ -33,7 +33,7 @@
 
               <a-col :span="7">
                 <a-form-item :key="k.build" v-bind="formLayout" label="楼栋" :required="false">
-                  <a-input v-decorator="[
+                  <a-input :maxLength="64" v-decorator="[
                         `buildVal[${k.build}]`,
                         {
                           rules: [{
@@ -53,7 +53,7 @@
                 <a-row :gutter="24">
                   <a-col :span="7" v-if="attrOpt.length>0" v-for="(item,index1) in attrOpt[index]">
                     <a-form-item v-bind="formItemLayout" :required="false">
-                      <a-input v-decorator="[
+                      <a-input :maxLength="64" v-decorator="[
                           `unitVal[${item.unit+''+index+'-'+index1+''}]`,
                           {
                             rules: [{

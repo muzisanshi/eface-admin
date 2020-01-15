@@ -18,32 +18,32 @@
 
           <a-col :md="6" :sm="24">
             <a-form-item label="地产名称">
-              <a-input v-model="queryParam.estateName" placeholder=""/>
+              <a-input :maxLength="64" v-model="queryParam.estateName" placeholder=""/>
             </a-form-item>
           </a-col>
 
           <a-col :md="6" :sm="24">
             <a-form-item label="楼栋名称">
-              <a-input v-model="queryParam.buildingName" placeholder=""/>
+              <a-input :maxLength="64" v-model="queryParam.buildingName" placeholder=""/>
             </a-form-item>
           </a-col>
 
           <a-col :md="6" :sm="24">
             <a-form-item label="单元名称">
-              <a-input v-model="queryParam.unitName" placeholder=""/>
+              <a-input :maxLength="64" v-model="queryParam.unitName" placeholder=""/>
             </a-form-item>
           </a-col>
         </a-row>
         <a-row :gutter="48">
           <a-col :md="6" :sm="24">
             <a-form-item label="楼层名称">
-              <a-input v-model="queryParam.storeyName" placeholder=""/>
+              <a-input :maxLength="64" v-model="queryParam.storeyName" placeholder=""/>
             </a-form-item>
           </a-col>
 
           <a-col :md="6" :sm="24">
             <a-form-item label="房间名称">
-              <a-input v-model="queryParam.roomName" placeholder=""/>
+              <a-input :maxLength="64" v-model="queryParam.roomName" placeholder=""/>
             </a-form-item>
           </a-col>
 

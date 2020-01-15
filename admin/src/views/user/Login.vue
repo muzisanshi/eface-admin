@@ -15,6 +15,7 @@
     >
       <a-form-item>
         <a-input
+          :maxLength="64"
           size="large"
           type="text"
           placeholder=""
@@ -26,6 +27,7 @@
 
       <a-form-item>
         <a-input
+          :maxLength="64"
           size="large"
           type="password"
           autocomplete="false"
@@ -40,6 +42,7 @@
         <a-col :span="14">
           <a-form-item>
             <a-input
+              :maxLength="10"
               v-decorator="['verifyCode',{rules: [{ required: true, message: '请输入密码' }]}]"
               size="large"
               type="text"

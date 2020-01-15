@@ -21,7 +21,7 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
         >
-          <a-input v-decorator="['jobName', {initialValue: this.formData.jobName, rules: [{required: true, message: '请输入任务名称！'}]}]" />
+          <a-input :maxLength="64" v-decorator="['jobName', {initialValue: this.formData.jobName, rules: [{required: true, message: '请输入任务名称！'}]}]" />
         </a-form-item>
 
         <a-form-item
@@ -29,7 +29,7 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
         >
-          <a-input v-decorator="['jobGroup', {initialValue: this.formData.jobGroup,rules: [{required: true, message: '请输入任务分组！'}]}]" />
+          <a-input :maxLength="64" v-decorator="['jobGroup', {initialValue: this.formData.jobGroup,rules: [{required: true, message: '请输入任务分组！'}]}]" />
         </a-form-item>
 
         <a-form-item
@@ -37,7 +37,7 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
         >
-          <a-input v-decorator="['serviceUrl', {initialValue: this.formData.serviceUrl,rules: [{required: true, message: '请输入服务地址！'}]}]" />
+          <a-input :maxLength="255" v-decorator="['serviceUrl', {initialValue: this.formData.serviceUrl,rules: [{required: true, message: '请输入服务地址！'}]}]" />
         </a-form-item>
 
         <a-form-item
@@ -45,7 +45,7 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
         >
-          <a-input v-decorator="['interfaceUrl', {initialValue: this.formData.interfaceUrl,rules: [{required: true, message: '请输入接口地址！'}]}]" />
+          <a-input :maxLength="255" v-decorator="['interfaceUrl', {initialValue: this.formData.interfaceUrl,rules: [{required: true, message: '请输入接口地址！'}]}]" />
         </a-form-item>
 
         <a-form-item
@@ -53,7 +53,7 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
         >
-          <a-input v-decorator="['cronExpression', {initialValue: this.formData.cronExpression,rules: [{required: true, message: '请输入任务表达式！'}]}]" />
+          <a-input :maxLength="64" v-decorator="['cronExpression', {initialValue: this.formData.cronExpression,rules: [{required: true, message: '请输入任务表达式！'}]}]" />
         </a-form-item>
 
         <a-form-item
@@ -77,7 +77,7 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
         >
-          <a-input v-decorator="['remark', {initialValue: this.formData.remark}]" />
+          <a-input :maxLength="255" v-decorator="['remark', {initialValue: this.formData.remark}]" />
         </a-form-item>
 
       </a-form>

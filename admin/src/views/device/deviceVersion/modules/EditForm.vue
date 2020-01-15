@@ -34,12 +34,12 @@
         </a-form-item>
 
         <a-form-item label="版本" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <a-input
+          <a-input :maxLength="64"
             v-decorator="['softVer', {initialValue: this.formData.softVer, rules: [{required: true, message: '请输入版本！'}]}]"/>
         </a-form-item>
 
         <a-form-item label="构建版本" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <a-input
+          <a-input :maxLength="11"
             v-decorator="['buildVer', {initialValue: this.formData.buildVer, rules: [{required: true, pattern: new RegExp(this.REG_EXPS.PLUS_INTEGER, 'g'), message: '请输入有效的构建版本！'}]}]"/>
         </a-form-item>
 
@@ -48,7 +48,7 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
         >
-          <a-textarea
+          <a-textarea  :maxLength="255"
             placeholder="内容"
             v-decorator="['content',{initialValue: this.formData.content, rules: [{required: true, message: '请输入内容！'}]}]"
             :autosize="{ minRows: 2, maxRows: 6 }"
@@ -60,7 +60,7 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
         >
-          <a-input v-decorator="['remark',{initialValue: this.formData.remark}]" />
+          <a-input :maxLength="255" v-decorator="['remark',{initialValue: this.formData.remark}]" />
         </a-form-item>
 
         <a-form-item

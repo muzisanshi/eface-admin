@@ -17,31 +17,31 @@
     <a-spin :spinning="confirmLoading">
       <a-form :form="form">
         <a-form-item label="节点ID" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <a-input
+          <a-input :maxLength="11"
             v-decorator="['workId', {initialValue: this.formData.workId, rules: [{required: true,pattern: new RegExp(this.REG_EXPS.POSITIVE_INTEGER, 'g'), message: '请输入节点ID(数字)！'}]}]"/>
         </a-form-item>
         <a-form-item label="内网IP" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <a-input
+          <a-input :maxLength="32"
             v-decorator="['innerIp', {initialValue: this.formData.insideIp, rules: [{required: true, message: '请输入名称！'}]}]"/>
         </a-form-item>
 
         <a-form-item label="外网IP" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <a-input
+          <a-input :maxLength="32"
             v-decorator="['outerIp', {initialValue: this.formData.outerIp, rules: [{required: true, message: '请输入外网IP！'}]}]"/>
         </a-form-item>
 
         <a-form-item label="内网端口" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <a-input
+          <a-input :maxLength="11"
             v-decorator="['innerPort', {initialValue: this.formData.innerPort, rules: [{required: true,pattern: new RegExp(this.REG_EXPS.PLUS_INTEGER, 'g'), message: '请输入内网端口！'}]}]"/>
         </a-form-item>
 
         <a-form-item label="外网端口" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <a-input
+          <a-input :maxLength="11"
             v-decorator="['outerPort', {initialValue: this.formData.outerPort, rules: [{required: true,pattern: new RegExp(this.REG_EXPS.PLUS_INTEGER, 'g'), message: '请输入外网端口！'}]}]"/>
         </a-form-item>
 
         <a-form-item label="最大连接数" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <a-input
+          <a-input :maxLength="11"
             v-decorator="['maxConnectionsSize', {initialValue: this.formData.maxConnectionsSize, rules: [{required: true,pattern: new RegExp(this.REG_EXPS.PLUS_INTEGER, 'g'), message: '请输入最大连接数！'}]}]"/>
         </a-form-item>
 
@@ -67,7 +67,7 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
         >
-          <a-input v-decorator="['remark',{initialValue: this.formData.remark}]" />
+          <a-input :maxLength="255" v-decorator="['remark',{initialValue: this.formData.remark}]" />
         </a-form-item>
 
       </a-form>

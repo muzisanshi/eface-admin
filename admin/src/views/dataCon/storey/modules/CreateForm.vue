@@ -33,7 +33,7 @@
 
               <a-col :span="7">
                 <a-form-item :key="k.name" v-bind="formLayout" label="楼层">
-                  <a-input v-decorator="[
+                  <a-input :maxLength="64" v-decorator="[
                         `nameVal[${k.name}]`,
                         {
                           rules: [{
@@ -51,7 +51,7 @@
 
               <a-col :span="7" >
                 <a-form-item :key="k.roomNum" v-bind="formLayout" label="房间数量">
-                  <a-input v-decorator="[
+                  <a-input :maxLength="11" v-decorator="[
                           `roomNumVal[${k.roomNum}]`,
                           {
                             rules: [{
@@ -67,7 +67,7 @@
 
               <a-col :span="7" >
                 <a-form-item :key="k.remark" v-bind="formLayout" label="备注" :required="false">
-                  <a-input v-decorator="[
+                  <a-input :maxLength="255" v-decorator="[
                           `remarkVal[${k.remark}]`]" placeholder="请输入备注" style="margin-right: 8px" >
                   </a-input>
                 </a-form-item>

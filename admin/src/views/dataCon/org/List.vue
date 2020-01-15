@@ -11,12 +11,12 @@
         <a-row :gutter="48">
           <a-col :md="6" :sm="24">
             <a-form-item label="组织名称">
-              <a-input v-model="queryParam.name"/>
+              <a-input :maxLength="64" v-model="queryParam.name"/>
             </a-form-item>
           </a-col>
           <a-col :md="6" :sm="24">
             <a-form-item label="编码">
-              <a-input v-model="queryParam.code"/>
+              <a-input  :maxLength="32" v-model="queryParam.code"/>
             </a-form-item>
           </a-col>
           <a-col :md="6" :sm="24">

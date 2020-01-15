@@ -12,13 +12,13 @@
 
           <a-col :md="4" :sm="24">
             <a-form-item label="名称">
-              <a-input v-model="queryParam.name" placeholder=""/>
+              <a-input :maxLength="64" v-model="queryParam.name" placeholder=""/>
             </a-form-item>
           </a-col>
 
           <a-col :md="4" :sm="24">
             <a-form-item label="广告编号">
-              <a-input v-model="queryParam.no" placeholder=""/>
+              <a-input :maxLength="32" v-model="queryParam.no" placeholder=""/>
             </a-form-item>
           </a-col>
 

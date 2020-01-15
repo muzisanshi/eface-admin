@@ -14,13 +14,13 @@
 
           <a-col :md="4" :sm="24">
             <a-form-item label="设备名称">
-              <a-input v-model="queryParam.deviceName" placeholder=""/>
+              <a-input :maxLength="64" v-model="queryParam.deviceName" placeholder=""/>
             </a-form-item>
           </a-col>
 
           <a-col :md="4" :sm="24">
             <a-form-item label="设备SN">
-              <a-input v-model="queryParam.deviceSn" placeholder=""/>
+              <a-input :maxLength="32" v-model="queryParam.deviceSn" placeholder=""/>
             </a-form-item>
           </a-col>
 
@@ -139,6 +139,14 @@ export default {
         {
           title: '最后执行时间',
           dataIndex: 'lastExecuteDatetime'
+        },
+        {
+          title: '开始时间',
+          dataIndex: 'createDatetime'
+        },
+        {
+          title: '更新时间',
+          dataIndex: 'updateDatetime'
         }
       ],
       loadData: parameter => {

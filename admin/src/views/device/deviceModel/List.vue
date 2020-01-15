@@ -12,7 +12,7 @@
 
           <a-col :md="4" :sm="24">
             <a-form-item label="名称">
-              <a-input v-model="queryParam.name" placeholder=""/>
+              <a-input :maxLength="64" v-model="queryParam.name" placeholder=""/>
             </a-form-item>
           </a-col>
 

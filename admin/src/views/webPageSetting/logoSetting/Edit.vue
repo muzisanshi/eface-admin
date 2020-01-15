@@ -10,12 +10,12 @@
       <a-form :form="form">
 
         <a-form-item label="系统LOGO文字" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <a-input
+          <a-input :maxLength="64"
             v-decorator="['logoText', {initialValue: this.formData.logoText, rules: [{required: true, message: '请输入系统LOGO文字！'}]}]"/>
         </a-form-item>
 
         <a-form-item label="系统LOGO文字-子标题" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <a-input
+          <a-input :maxLength="64"
             v-decorator="['logoSubTitle', {initialValue: this.formData.logoSubTitle, rules: [{required: true, message: '请输入名称！'}]}]"/>
         </a-form-item>
 

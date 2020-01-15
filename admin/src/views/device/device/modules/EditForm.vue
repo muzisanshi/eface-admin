@@ -42,13 +42,13 @@
               </a-col>
               <a-col :span="8">
                 <a-form-item label="名称" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                  <a-input
+                  <a-input :maxLength="32"
                     v-decorator="['name', {initialValue: this.formData.name, rules: [{required: true, message: '请输入名称！'}]}]"/>
                 </a-form-item>
               </a-col>
               <a-col :span="8">
                 <a-form-item label="SN" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                  <a-input
+                  <a-input :maxLength="64"
                     v-decorator="['sn', {initialValue: this.formData.sn, rules: [{required: true, message: '请输入SN！'}]}]"/>
                 </a-form-item>
               </a-col>
@@ -72,7 +72,7 @@
                   :labelCol="labelCol"
                   :wrapperCol="wrapperCol"
                 >
-                  <a-input v-decorator="['remark',{initialValue: this.formData.remark}]" />
+                  <a-input :maxLength="255" v-decorator="['remark',{initialValue: this.formData.remark}]" />
                 </a-form-item>
               </a-col>
               <a-col :span="8">
@@ -98,13 +98,13 @@
                 <a-col :span="8">
                   <a-form-item label="人脸显示数量" :labelCol="labelCol" :wrapperCol="wrapperCol">
 
-                    <a-input
+                    <a-input :maxLength="11"
                       v-decorator="['mainEngine.faceShowNum', {initialValue: this.formData.mainEngine.faceShowNum, rules: [{required: true,pattern: new RegExp(this.REG_EXPS.PLUS_INTEGER, 'g'), message: '请输入有效的数量！'}]}]"/>
                   </a-form-item>
                 </a-col>
                 <a-col :span="8">
                   <a-form-item label="人脸显示时间" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                    <a-input
+                    <a-input :maxLength="11"
                       v-decorator="['mainEngine.faceShowSeconds', {initialValue: this.formData.mainEngine.faceShowSeconds, rules: [{required: true,pattern: new RegExp(this.REG_EXPS.PLUS_INTEGER, 'g'), message: '请输入有效的时间！'}]}]"/>
                   </a-form-item>
                 </a-col>
@@ -141,7 +141,7 @@
 
                 <a-col :span="8">
                   <a-form-item label="有效分钟数" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                    <a-input
+                    <a-input :maxLength="11"
                       v-decorator="['mainEngine.validMinutes', {initialValue: this.formData.mainEngine.validMinutes, rules: [{required: true,pattern: new RegExp(this.REG_EXPS.JUST_NUMBER, 'g'), message: '请输入有效的分钟数！'}]}]"/>
                   </a-form-item>
                 </a-col>
@@ -152,7 +152,7 @@
                     :labelCol="labelCol"
                     :wrapperCol="wrapperCol"
                   >
-                    <a-input v-decorator="['mainEngine.remark',{initialValue: this.formData.mainEngine.remark}]" />
+                    <a-input :maxLength="255" v-decorator="['mainEngine.remark',{initialValue: this.formData.mainEngine.remark}]" />
                   </a-form-item>
                 </a-col>
 
@@ -167,12 +167,12 @@
                     :labelCol="labelCol"
                     :wrapperCol="wrapperCol"
                   >
-                    <a-input v-decorator="['mainEngine.network.ip',{initialValue: this.formData.mainEngine.network?this.formData.mainEngine.network.ip:'', rules: [{pattern: new RegExp(this.REG_EXPS.HAS_ENG_NUMBER, 'g'), message: '请输入有效的IP地址！'}]}]" />
+                    <a-input :maxLength="32" v-decorator="['mainEngine.network.ip',{initialValue: this.formData.mainEngine.network?this.formData.mainEngine.network.ip:'', rules: [{pattern: new RegExp(this.REG_EXPS.HAS_ENG_NUMBER, 'g'), message: '请输入有效的IP地址！'}]}]" />
                   </a-form-item>
                 </a-col>
                 <a-col :span="8">
                   <a-form-item label="子网掩码" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                    <a-input
+                    <a-input :maxLength="32"
                       v-decorator="['mainEngine.network.subnetMask', {initialValue: this.formData.mainEngine.network?this.formData.mainEngine.network.subnetMask:'', rules: [{pattern: new RegExp(this.REG_EXPS.HAS_ENG_NUMBER, 'g'), message: '请输入有效的子网掩码！'}]}]"/>
                   </a-form-item>
                 </a-col>
@@ -182,7 +182,7 @@
                     :labelCol="labelCol"
                     :wrapperCol="wrapperCol"
                   >
-                    <a-input v-decorator="['mainEngine.network.defaultGateway',{initialValue: this.formData.mainEngine.network?this.formData.mainEngine.network.defaultGateway:'', rules: [{pattern: new RegExp(this.REG_EXPS.HAS_ENG_NUMBER, 'g'), message: '请输入有效的默认网关！'}]}]" />
+                    <a-input :maxLength="32" v-decorator="['mainEngine.network.defaultGateway',{initialValue: this.formData.mainEngine.network?this.formData.mainEngine.network.defaultGateway:'', rules: [{pattern: new RegExp(this.REG_EXPS.HAS_ENG_NUMBER, 'g'), message: '请输入有效的默认网关！'}]}]" />
                   </a-form-item>
                 </a-col>
               </a-row>
@@ -190,14 +190,14 @@
               <a-row :gutter="24">
                 <a-col :span="8">
                   <a-form-item label="MAC地址" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                    <a-input
+                    <a-input :maxLength="32"
                       v-decorator="['mainEngine.network.macAddress', {initialValue: this.formData.mainEngine.network?this.formData.mainEngine.network.macAddress:'', rules: [{pattern: new RegExp(this.REG_EXPS.HAS_ENG_NUMBER, 'g'), message: '请输入有效的MAC地址！'}]}]"/>
                   </a-form-item>
                 </a-col>
 
                 <a-col :span="8">
                   <a-form-item label="端口" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                    <a-input
+                    <a-input :maxLength="11"
                       v-decorator="['mainEngine.network.port', {initialValue: this.formData.mainEngine.network?this.formData.mainEngine.network.port:'',rules: [{pattern: new RegExp(this.REG_EXPS.PLUS_INTEGER, 'g'), message: '请输入有效的端口！'}]}]"/>
                   </a-form-item>
                 </a-col>
@@ -259,7 +259,7 @@
                     :labelCol="labelCol"
                     :wrapperCol="wrapperCol"
                   >
-                    <a-input v-decorator="['streamAddress',{initialValue: pane.content.streamAddress}]" />
+                    <a-input :maxLength="255" v-decorator="['streamAddress',{initialValue: pane.content.streamAddress}]" />
                   </a-form-item>
                 </a-col>
                 <a-col :span="8">
@@ -286,7 +286,7 @@
                     :labelCol="labelCol"
                     :wrapperCol="wrapperCol"
                   >
-                    <a-input v-decorator="['remark',{initialValue: pane.content.remark}]" />
+                    <a-input :maxLength="255" v-decorator="['remark',{initialValue: pane.content.remark}]" />
                   </a-form-item>
                 </a-col>
               </a-row>
@@ -300,12 +300,12 @@
                     :labelCol="labelCol"
                     :wrapperCol="wrapperCol"
                   >
-                    <a-input v-decorator="['network.ip',{initialValue: pane.content.network.ip, rules: [{pattern: new RegExp(REG_EXPS.HAS_ENG_NUMBER, 'g'), message: '请输入有效的IP地址！'}]}]" />
+                    <a-input :maxLength="32" v-decorator="['network.ip',{initialValue: pane.content.network.ip, rules: [{pattern: new RegExp(REG_EXPS.HAS_ENG_NUMBER, 'g'), message: '请输入有效的IP地址！'}]}]" />
                   </a-form-item>
                 </a-col>
                 <a-col :span="8">
                   <a-form-item label="子网掩码" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                    <a-input
+                    <a-input :maxLength="32"
                       v-decorator="['network.subnetMask', {initialValue: pane.content.network.subnetMask, rules: [{pattern: new RegExp(REG_EXPS.HAS_ENG_NUMBER, 'g'), message: '请输入有效的子网掩码！'}]}]"/>
                   </a-form-item>
                 </a-col>
@@ -315,7 +315,7 @@
                     :labelCol="labelCol"
                     :wrapperCol="wrapperCol"
                   >
-                    <a-input v-decorator="['network.defaultGateway',{initialValue: pane.content.network.defaultGateway, rules: [{pattern: new RegExp(REG_EXPS.HAS_ENG_NUMBER, 'g'), message: '请输入有效的默认网关！'}]}]" />
+                    <a-input :maxLength="32" v-decorator="['network.defaultGateway',{initialValue: pane.content.network.defaultGateway, rules: [{pattern: new RegExp(REG_EXPS.HAS_ENG_NUMBER, 'g'), message: '请输入有效的默认网关！'}]}]" />
                   </a-form-item>
                 </a-col>
               </a-row>
@@ -323,21 +323,21 @@
               <a-row :gutter="24">
                 <a-col :span="8">
                   <a-form-item label="MAC地址" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                    <a-input
+                    <a-input :maxLength="32"
                       v-decorator="['network.macAddress', {initialValue: pane.content.network.macAddress, rules: [{pattern: new RegExp(REG_EXPS.HAS_ENG_NUMBER, 'g'), message: '请输入有效的MAC地址！'}]}]"/>
                   </a-form-item>
                 </a-col>
 
                 <a-col :span="8">
                   <a-form-item label="视频输入宽度" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                    <a-input
+                    <a-input :maxLength="11"
                       v-decorator="['videoInputWidth', {initialValue: pane.content.videoInputWidth}]"/>
                   </a-form-item>
                 </a-col>
 
                 <a-col :span="8">
                   <a-form-item label="视频输入高度" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                    <a-input
+                    <a-input :maxLength="11"
                       v-decorator="['videoInputHeight', {initialValue: pane.content.videoInputHeight}]"/>
                   </a-form-item>
                 </a-col>
@@ -345,7 +345,7 @@
               <a-row :gutter="24">
                 <a-col :span="8">
                   <a-form-item label="端口" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                    <a-input
+                    <a-input :maxLength="11"
                       v-decorator="['network.port', {initialValue: pane.content.network.port,rules: [{pattern: new RegExp(REG_EXPS.PLUS_INTEGER, 'g'), message: '请输入有效的端口！'}]}]"/>
                   </a-form-item>
                 </a-col>
@@ -419,7 +419,7 @@
                     :labelCol="labelCol"
                     :wrapperCol="wrapperCol"
                   >
-                    <a-input v-decorator="['gateBrake.remark',{initialValue: pane.content.gateBrake.remark}]" />
+                    <a-input :maxLength="255" v-decorator="['gateBrake.remark',{initialValue: pane.content.gateBrake.remark}]" />
                   </a-form-item>
                 </a-col>
               </a-row>
@@ -433,12 +433,12 @@
                     :wrapperCol="wrapperCol"
                   >
 
-                    <a-input v-decorator="['gateBrake.network.ip',{initialValue: pane.content.gateBrake.network.ip, rules: [{pattern: new RegExp(REG_EXPS.HAS_ENG_NUMBER, 'g'), message: '请输入有效的IP地址！'}]}]" />
+                    <a-input :maxLength="32" v-decorator="['gateBrake.network.ip',{initialValue: pane.content.gateBrake.network.ip, rules: [{pattern: new RegExp(REG_EXPS.HAS_ENG_NUMBER, 'g'), message: '请输入有效的IP地址！'}]}]" />
                   </a-form-item>
                 </a-col>
                 <a-col :span="8">
                   <a-form-item label="子网掩码" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                    <a-input
+                    <a-input :maxLength="32"
                       v-decorator="['gateBrake.network.subnetMask', {initialValue: pane.content.gateBrake.network.subnetMask, rules: [{pattern: new RegExp(REG_EXPS.HAS_ENG_NUMBER, 'g'), message: '请输入有效的子网掩码！'}]}]"/>
                   </a-form-item>
                 </a-col>
@@ -448,7 +448,7 @@
                     :labelCol="labelCol"
                     :wrapperCol="wrapperCol"
                   >
-                    <a-input v-decorator="['gateBrake.network.defaultGateway',{initialValue: pane.content.gateBrake.network.defaultGateway, rules: [{pattern: new RegExp(REG_EXPS.HAS_ENG_NUMBER, 'g'), message: '请输入有效的默认网关！'}]}]" />
+                    <a-input :maxLength="32" v-decorator="['gateBrake.network.defaultGateway',{initialValue: pane.content.gateBrake.network.defaultGateway, rules: [{pattern: new RegExp(REG_EXPS.HAS_ENG_NUMBER, 'g'), message: '请输入有效的默认网关！'}]}]" />
                   </a-form-item>
                 </a-col>
               </a-row>
@@ -457,14 +457,14 @@
 
                 <a-col :span="8">
                   <a-form-item label="MAC地址" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                    <a-input
+                    <a-input :maxLength="32"
                       v-decorator="['gateBrake.network.macAddress', {initialValue: pane.content.gateBrake.network.macAddress, rules: [{pattern: new RegExp(REG_EXPS.HAS_ENG_NUMBER, 'g'), message: '请输入有效的MAC地址！'}]}]"/>
                   </a-form-item>
                 </a-col>
 
                 <a-col :span="8">
                   <a-form-item label="端口" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                    <a-input
+                    <a-input :maxLength="11"
                       v-decorator="['gateBrake.network.port', {initialValue: pane.content.gateBrake.network.port,rules: [{pattern: new RegExp(REG_EXPS.PLUS_INTEGER, 'g'), message: '请输入有效的端口！'}]}]"/>
                   </a-form-item>
                 </a-col>

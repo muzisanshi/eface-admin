@@ -18,12 +18,12 @@
       <a-form :form="form">
 
         <a-form-item label="名称" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <a-input
+          <a-input :maxLength="64"
             v-decorator="['name', {initialValue: this.formData.name, rules: [{required: true, message: '请输入位置名称！'}]}]"/>
         </a-form-item>
 
         <a-form-item label="有效分钟数" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <a-input
+          <a-input :maxLength="11"
             v-decorator="['validMinutes', {initialValue: this.formData.validMinutes, rules: [{required: true, message: '请输入有效分钟数！'}]}]"/>
         </a-form-item>
 
@@ -40,7 +40,7 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
         >
-          <a-input v-decorator="['remark',{initialValue: this.formData.remark}]" />
+          <a-input :maxLength="255" v-decorator="['remark',{initialValue: this.formData.remark}]" />
         </a-form-item>
 
       </a-form>

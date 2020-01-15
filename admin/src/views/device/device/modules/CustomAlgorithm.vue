@@ -51,7 +51,7 @@
             <a-form-item
               style="width: 300px;"
             >
-              <a-input
+              <a-input :maxLength="11"
                 :disabled="isEdit"
                 v-decorator="['algorithm.recThreshold', {initialValue: this.formData.algorithm.recThreshold, rules: [{required: true,pattern: new RegExp(this.REG_EXPS.POSITIVE_INTEGER, 'g'), message: '请输入0-100的阀值！'}]}]"/>
             </a-form-item>
@@ -61,7 +61,7 @@
             <a-form-item
               style="width: 300px;"
             >
-              <a-input
+              <a-input :maxLength="11"
                 :disabled="isEdit"
                 v-decorator="['algorithm.minFaceCheckSize', {initialValue: this.formData.algorithm.minFaceCheckSize, rules: [{required: true,pattern: new RegExp(this.REG_EXPS.POSITIVE_INTEGER, 'g'), message: '请输入检测尺寸！'}]}]"/>
             </a-form-item>
@@ -75,7 +75,7 @@
             <a-form-item
               style="width: 300px;"
             >
-              <a-input
+              <a-input :maxLength="11"
                 :disabled="isEdit"
                 v-decorator="['algorithm.videoOutputSize', {initialValue: this.formData.algorithm.videoOutputSize, rules: [{required: true,pattern: new RegExp(this.REG_EXPS.POSITIVE_INTEGER, 'g'), message: '请输入输出尺寸！'}]}]"/>
             </a-form-item>
@@ -86,7 +86,7 @@
             <a-form-item
               style="width: 300px;"
             >
-              <a-input
+              <a-input :maxLength="11"
                 :disabled="isEdit"
                 v-decorator="['algorithm.strangerTimeoutWarnSeconds', {initialValue: this.formData.algorithm.strangerTimeoutWarnSeconds, rules: [{required: true, message: '请输入警告时间！'}]}]"/>
             </a-form-item>
@@ -140,7 +140,7 @@
             <a-form-item
               style="width: 300px;"
             >
-              <a-input
+              <a-input :maxLength="11"
                 :disabled="isEdit"
                 v-decorator="['algorithm.showLevel',
             {initialValue: this.formData.algorithm.showLevel, rules: [{required: true, message: '请输入提示信息！'}]}]"/>
@@ -152,7 +152,7 @@
             <a-form-item
               style="width: 300px;"
             >
-              <a-input
+              <a-input :maxLength="11"
                 :disabled="isEdit"
                 v-decorator="['algorithm.recNum',
             {initialValue: this.formData.algorithm.recNum, rules: [{required: true, message: '请输入人数！'}]}]"/>
@@ -167,7 +167,7 @@
             <a-form-item
               style="width: 300px;"
             >
-              <a-input
+              <a-input :maxLength="11"
                 :disabled="isEdit"
                 v-decorator="['algorithm.videoRotate',
             {initialValue: this.formData.algorithm.videoRotate, rules: [{required: true, message: '请输入旋转角度！'}]}]"/>
@@ -180,7 +180,7 @@
             <a-form-item
               style="width: 300px;"
             >
-              <a-input
+              <a-input :maxLength="11"
                 :disabled="isEdit"
                 v-decorator="['algorithm.videoFlip',
             {initialValue: this.formData.algorithm.videoFlip, rules: [{required: true, message: '请输入视频镜像！'}]}]"/>
@@ -194,7 +194,7 @@
             <a-form-item
               style="width: 300px;"
             >
-              <a-input
+              <a-input :maxLength="11"
                 :disabled="isEdit"
                 v-decorator="['algorithm.captureLevel',
             {initialValue: this.formData.algorithm.captureLevel, rules: [{required: true, message: '请输入抓拍等级！'}]}]"/>
@@ -205,7 +205,7 @@
             <a-form-item
               style="width: 300px;"
             >
-              <a-input
+              <a-input :maxLength="11"
                 :disabled="isEdit"
                 v-decorator="['algorithm.graphicCardIndexNum',
             {initialValue: this.formData.algorithm.graphicCardIndexNum, rules: [{required: true, message: '请输入显卡序号！'}]}]"/>
@@ -220,7 +220,7 @@
               <a-row :gutter="24">
                 <a-col :span="12">
                   <a-form-item label="X1" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                    <a-input
+                    <a-input :maxLength="11"
                       :disabled="isEdit"
                       v-decorator="['algorithm.roiX1', {initialValue: this.formData.algorithm.roiX1, rules: [{required: true, message: '请输入X1！'}]}]"/>
                   </a-form-item>
@@ -228,7 +228,7 @@
 
                 <a-col :span="12">
                   <a-form-item label="X2" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                    <a-input
+                    <a-input :maxLength="11"
                       :disabled="isEdit"
                       v-decorator="['algorithm.roiX2', {initialValue: this.formData.algorithm.roiX2, rules: [{required: true, message: '请输入X2！'}]}]"/>
                   </a-form-item>
@@ -238,7 +238,7 @@
               <a-row :gutter="24">
                 <a-col :span="12">
                   <a-form-item label="Y1" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                    <a-input
+                    <a-input :maxLength="11"
                       :disabled="isEdit"
                       v-decorator="['algorithm.roiY1', {initialValue: this.formData.algorithm.roiY1, rules: [{required: true, message: '请输入Y1！'}]}]"/>
                   </a-form-item>
@@ -246,7 +246,7 @@
 
                 <a-col :span="12">
                   <a-form-item label="Y2" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                    <a-input
+                    <a-input :maxLength="11"
                       :disabled="isEdit"
                       v-decorator="['algorithm.roiY2', {initialValue: this.formData.algorithm.roiY2, rules: [{required: true, message: '请输入Y2！'}]}]"/>
                   </a-form-item>
@@ -261,7 +261,7 @@
               <a-row :gutter="24">
                 <a-col :span="8">
                   <a-form-item label="R" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                    <a-input
+                    <a-input :maxLength="11"
                       :disabled="isEdit"
                       v-decorator="['algorithm.strangerR', {initialValue: this.formData.algorithm.strangerR, rules: [{required: true, message: '请输入R！'}]}]"/>
                   </a-form-item>
@@ -269,14 +269,14 @@
 
                 <a-col :span="8">
                   <a-form-item label="G" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                    <a-input
+                    <a-input :maxLength="11"
                       :disabled="isEdit"
                       v-decorator="['algorithm.strangerG', {initialValue: this.formData.algorithm.strangerG, rules: [{required: true, message: '请输入G！'}]}]"/>
                   </a-form-item>
                 </a-col>
                 <a-col :span="8">
                   <a-form-item label="B" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                    <a-input
+                    <a-input :maxLength="11"
                       :disabled="isEdit"
                       v-decorator="['algorithm.strangerB', {initialValue: this.formData.algorithm.strangerB, rules: [{required: true, message: '请输入B！'}]}]"/>
                   </a-form-item>

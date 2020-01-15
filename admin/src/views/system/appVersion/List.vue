@@ -26,13 +26,13 @@
 
           <a-col :md="4" :sm="24">
             <a-form-item label="框架版本">
-              <a-input v-model="queryParam.frameVer" placeholder=""/>
+              <a-input :maxLength="32" v-model="queryParam.frameVer" placeholder=""/>
             </a-form-item>
           </a-col>
 
           <a-col :md="4" :sm="24">
             <a-form-item label="内核版本">
-              <a-input v-model="queryParam.rootVer" placeholder=""/>
+              <a-input :maxLength="11" v-model="queryParam.rootVer" placeholder=""/>
             </a-form-item>
           </a-col>
 

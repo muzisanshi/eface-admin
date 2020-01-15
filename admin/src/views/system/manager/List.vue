@@ -11,12 +11,12 @@
         <a-row :gutter="48">
           <a-col :md="6" :sm="24">
             <a-form-item label="用户名">
-              <a-input v-model="queryParam.username"/>
+              <a-input :maxLength="64" v-model="queryParam.username"/>
             </a-form-item>
           </a-col>
           <a-col :md="6" :sm="24">
             <a-form-item label="电话号码">
-              <a-input v-model="queryParam.phoneNo"/>
+              <a-input :maxLength="32" v-model="queryParam.phoneNo"/>
             </a-form-item>
           </a-col>
           <a-col :md="6" :sm="24">

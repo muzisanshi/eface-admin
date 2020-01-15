@@ -15,7 +15,7 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
         >
-          <a-input v-decorator="['code', {initialValue: this.formData.code, rules: [{required: true, message: '请输入编码！'}]}]" />
+          <a-input :maxLength="32" v-decorator="['code', {initialValue: this.formData.code, rules: [{required: true, message: '请输入编码！'}]}]" />
         </a-form-item>
 
         <a-form-item
@@ -23,7 +23,7 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
         >
-          <a-input v-decorator="['name', {initialValue: this.formData.name, rules: [{required: true, message: '请输入名称！'}]}]" />
+          <a-input :maxLength="64" v-decorator="['name', {initialValue: this.formData.name, rules: [{required: true, message: '请输入名称！'}]}]" />
         </a-form-item>
 
         <a-form-item
@@ -31,7 +31,7 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
         >
-          <a-input v-decorator="['shortMark', {initialValue: this.formData.shortMark, rules: [{required: true, message: '请输入简写标志！'}]}]" />
+          <a-input :maxLength="32" v-decorator="['shortMark', {initialValue: this.formData.shortMark, rules: [{required: true, message: '请输入简写标志！'}]}]" />
         </a-form-item>
 
         <a-form-item
@@ -39,7 +39,7 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
         >
-          <a-input v-decorator="['fullMark', {initialValue: this.formData.fullMark,rules: [{required: true, message: '请输入全写标志！'}]}]" />
+          <a-input :maxLength="64" v-decorator="['fullMark', {initialValue: this.formData.fullMark,rules: [{required: true, message: '请输入全写标志！'}]}]" />
         </a-form-item>
 
         <a-form-item
@@ -47,7 +47,7 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
         >
-          <a-input v-decorator="['nationalAreaCode.areaCode', {initialValue: this.formData.nationalAreaCode.areaCode,rules: [{required: true, message: '请输入国际电话区号！'}]}]" />
+          <a-input :maxLength="8" v-decorator="['nationalAreaCode.areaCode', {initialValue: this.formData.nationalAreaCode.areaCode,rules: [{required: true, message: '请输入国际电话区号！'}]}]" />
         </a-form-item>
 
         <a-form-item
@@ -63,7 +63,7 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
         >
-          <a-input v-decorator="['nationalAreaCode.orderNum', {initialValue: this.formData.nationalAreaCode.orderNum,rules: [{required: true, message: '请输入排序序号！'}]}]" />
+          <a-input :maxLength="11" v-decorator="['nationalAreaCode.orderNum', {initialValue: this.formData.nationalAreaCode.orderNum,rules: [{required: true, message: '请输入排序序号！'}]}]" />
         </a-form-item>
 
         <a-form-item

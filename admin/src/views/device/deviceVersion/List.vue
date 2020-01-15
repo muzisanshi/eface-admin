@@ -12,13 +12,13 @@
 
           <a-col :md="4" :sm="24">
             <a-form-item label="设备型号">
-              <a-input v-model="queryParam.deviceModelName" placeholder=""/>
+              <a-input :maxLength="64" v-model="queryParam.deviceModelName" placeholder=""/>
             </a-form-item>
           </a-col>
 
           <a-col :md="4" :sm="24">
             <a-form-item label="版本">
-              <a-input v-model="queryParam.softVer" placeholder=""/>
+              <a-input :maxLength="64" v-model="queryParam.softVer" placeholder=""/>
             </a-form-item>
           </a-col>
 

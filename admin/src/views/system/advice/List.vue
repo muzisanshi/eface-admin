@@ -12,7 +12,7 @@
 
           <a-col :md="4" :sm="24">
             <a-form-item label="电话号码">
-              <a-input v-model="queryParam.phoneNo" placeholder=""/>
+              <a-input :maxLength="32" v-model="queryParam.phoneNo" placeholder=""/>
             </a-form-item>
           </a-col>
 

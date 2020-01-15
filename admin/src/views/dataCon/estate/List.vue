@@ -11,7 +11,7 @@
         <a-row :gutter="48">
           <a-col :md="4" :sm="24">
             <a-form-item label="名称">
-              <a-input v-model="queryParam.name"/>
+              <a-input :maxLength="64" v-model="queryParam.name"/>
             </a-form-item>
           </a-col>
           <a-col :md="3" :sm="24">

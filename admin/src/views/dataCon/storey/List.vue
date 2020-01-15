@@ -18,25 +18,25 @@
 
           <a-col :md="4" :sm="24">
             <a-form-item label="地产名称">
-              <a-input v-model="queryParam.estateName" placeholder=""/>
+              <a-input :maxLength="64" v-model="queryParam.estateName" placeholder=""/>
             </a-form-item>
           </a-col>
 
           <a-col :md="4" :sm="24">
             <a-form-item label="楼栋名称">
-              <a-input v-model="queryParam.buildingName" placeholder=""/>
+              <a-input :maxLength="64" v-model="queryParam.buildingName" placeholder=""/>
             </a-form-item>
           </a-col>
 
           <a-col :md="4" :sm="24">
             <a-form-item label="单元名称">
-              <a-input v-model="queryParam.unitName" placeholder=""/>
+              <a-input :maxLength="64" v-model="queryParam.unitName" placeholder=""/>
             </a-form-item>
           </a-col>
 
           <a-col :md="4" :sm="24">
             <a-form-item label="楼层名称">
-              <a-input v-model="queryParam.name" placeholder=""/>
+              <a-input :maxLength="64" v-model="queryParam.name" placeholder=""/>
             </a-form-item>
           </a-col>
 

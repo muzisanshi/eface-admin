@@ -25,13 +25,13 @@
 
           <a-col :md="5" :sm="24">
             <a-form-item label="真实姓名">
-              <a-input v-model="queryParam.realName" placeholder=""/>
+              <a-input :maxLength="64" v-model="queryParam.realName" placeholder=""/>
             </a-form-item>
           </a-col>
 
           <a-col :md="5" :sm="24">
             <a-form-item label="电话号码">
-              <a-input v-model="queryParam.phoneNo" placeholder=""/>
+              <a-input :maxLength="32" v-model="queryParam.phoneNo" placeholder=""/>
             </a-form-item>
           </a-col>
 

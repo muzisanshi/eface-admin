@@ -42,12 +42,12 @@
         <a-row :gutter="24">
           <a-col :span="12">
             <a-form-item label="编码" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input v-decorator="['code', {initialValue: this.formData.code, rules: [{required: true, message: '请输入编码！'}]}]"/>
+              <a-input :maxLength="32" v-decorator="['code', {initialValue: this.formData.code, rules: [{required: true, message: '请输入编码！'}]}]"/>
             </a-form-item>
           </a-col>
           <a-col :span="12">
             <a-form-item label="名称" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input v-decorator="['name', {initialValue: this.formData.name, rules: [{required: true, message: '请输入组织名称！'}]}]"/>
+              <a-input :maxLength="64" v-decorator="['name', {initialValue: this.formData.name, rules: [{required: true, message: '请输入组织名称！'}]}]"/>
             </a-form-item>
           </a-col>
         </a-row>
@@ -65,7 +65,7 @@
           </a-col>
           <a-col :span="12">
             <a-form-item label="详细地址" :labelCol="labelCol" :wrapperCol="wrapperCol" :required="true">
-              <a-input id="detailAddress" class="ant-input" v-model="inputChange"/>
+              <a-input  :maxLength="255" id="detailAddress" class="ant-input" v-model="inputChange"/>
             </a-form-item>
           </a-col>
         </a-row>
@@ -86,7 +86,7 @@
         <a-row :gutter="24">
           <a-col :span="12">
             <a-form-item label="备注" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input v-decorator="['remark',{initialValue: this.formData.remark}]"/>
+              <a-input  :maxLength="255" v-decorator="['remark',{initialValue: this.formData.remark}]"/>
             </a-form-item>
           </a-col>
         </a-row>

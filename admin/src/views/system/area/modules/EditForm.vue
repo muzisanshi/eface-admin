@@ -22,7 +22,7 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
         >
-          <a-input :disabled="hasAdd === 'UPDATE'"
+          <a-input :maxLength="11" :disabled="hasAdd === 'UPDATE'"
             v-decorator="['id', {initialValue: this.formData.id,rules: [{required: true,pattern: new RegExp(this.REG_EXPS.POSITIVE_INTEGER, 'g'), message: '请输入有效的行政区划代码！'}]}]"/>
         </a-form-item>
 
@@ -31,7 +31,7 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
         >
-          <a-input
+          <a-input :maxLength="64"
             v-decorator="['name', {initialValue: this.formData.name,rules: [{required: true, message: '请输入名称！'}]}]"/>
         </a-form-item>
 
@@ -70,7 +70,7 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
         >
-          <a-input
+          <a-input :maxLength="16"
             v-decorator="['postCode', {initialValue: this.formData.postCode,rules: [{required: true, message: '请输入邮政编码！'}]}]"/>
         </a-form-item>
 
@@ -79,7 +79,7 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
         >
-          <a-input
+          <a-input :maxLength="64"
             v-decorator="['shortName', {initialValue: this.formData.shortName,rules: [{required: true, message: '请输入简写名称！'}]}]"/>
         </a-form-item>
 
@@ -88,7 +88,7 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
         >
-          <a-input v-decorator="['pinyinName',{initialValue: this.formData.pinyinName}]"/>
+          <a-input :maxLength="128" v-decorator="['pinyinName',{initialValue: this.formData.pinyinName}]"/>
         </a-form-item>
 
         <a-form-item
@@ -96,7 +96,7 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
         >
-          <a-input v-decorator="['pinyinShortName',{initialValue: this.formData.pinyinShortName}]"/>
+          <a-input :maxLength="64" v-decorator="['pinyinShortName',{initialValue: this.formData.pinyinShortName}]"/>
         </a-form-item>
 
         <a-form-item

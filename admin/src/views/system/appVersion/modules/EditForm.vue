@@ -50,12 +50,12 @@
         </a-form-item>
 
         <a-form-item label="框架版本" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <a-input
+          <a-input :maxLength="32"
             v-decorator="['frameVer', {initialValue: this.formData.frameVer, rules: [{required: true, message: '请输入框架版本！'}]}]"/>
         </a-form-item>
 
         <a-form-item label="内核版本" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <a-input
+          <a-input :maxLength="11"
             v-decorator="['rootVer', {initialValue: this.formData.rootVer, rules: [{required: true, message: '请输入内核版本！'}]}]"/>
         </a-form-item>
 
@@ -77,7 +77,7 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
         >
-          <a-input v-decorator="['remark',{initialValue: this.formData.remark}]" />
+          <a-input :maxLength="255" v-decorator="['remark',{initialValue: this.formData.remark}]" />
         </a-form-item>
 
         <a-form-item

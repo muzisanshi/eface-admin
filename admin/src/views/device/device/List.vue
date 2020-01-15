@@ -17,25 +17,25 @@
 
           <a-col :md="5" :sm="24">
             <a-form-item label="SN">
-              <a-input v-model="queryParam.sn" placeholder=""/>
+              <a-input :maxLength="64" v-model="queryParam.sn" placeholder=""/>
             </a-form-item>
           </a-col>
           <a-col :md="5" :sm="24">
             <a-form-item label="型号名称">
-              <a-input v-model="queryParam.deviceModelName" placeholder=""/>
+              <a-input :maxLength="64" v-model="queryParam.deviceModelName" placeholder=""/>
             </a-form-item>
           </a-col>
 
           <a-col :md="5" :sm="24">
             <a-form-item label="设备名称">
-              <a-input v-model="queryParam.name" placeholder=""/>
+              <a-input :maxLength="32" v-model="queryParam.name" placeholder=""/>
             </a-form-item>
           </a-col>
         </a-row>
         <a-row :gutter="48">
           <a-col :md="5" :sm="24">
             <a-form-item label="位置名称">
-              <a-input v-model="queryParam.locationName" placeholder=""/>
+              <a-input :maxLength="64" v-model="queryParam.locationName" placeholder=""/>
             </a-form-item>
           </a-col>
 

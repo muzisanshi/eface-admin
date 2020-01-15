@@ -18,14 +18,14 @@
       <a-form :form="form">
 
         <a-form-item label="广告编号" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <a-input
+          <a-input :maxLength="32"
             v-decorator="['adItem.id',{initialValue: this.formData.adItem.id}]" v-show="false"/>
           <a-input
             v-decorator="['no', {initialValue: this.formData.no, rules: [{required: true, message: '请输入位置名称！'}]}]"/>
         </a-form-item>
 
         <a-form-item label="名称" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <a-input
+          <a-input :maxLength="64"
             v-decorator="['name', {initialValue: this.formData.name, rules: [{required: true, message: '请输入名称！'}]}]"/>
         </a-form-item>
 

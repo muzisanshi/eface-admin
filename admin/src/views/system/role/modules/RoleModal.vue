@@ -24,7 +24,7 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
           label="角色名称">
-          <a-input placeholder="请输入角色名称"
+          <a-input :maxLength="64" placeholder="请输入角色名称"
                    v-decorator="[ 'name', {initialValue: this.formData.name,rules: [{required: true, message: '请输入角色名称！'}]}]"/>
         </a-form-item>
 
@@ -48,7 +48,7 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
           label="备注">
-          <a-textarea :rows="5" placeholder=" " v-decorator="[ 'remark', {initialValue: this.formData.remark} ]"/>
+          <a-textarea :maxLength="255" :rows="5" placeholder=" " v-decorator="[ 'remark', {initialValue: this.formData.remark} ]"/>
         </a-form-item>
 
       </a-form>
