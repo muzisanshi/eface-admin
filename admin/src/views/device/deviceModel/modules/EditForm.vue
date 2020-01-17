@@ -39,12 +39,12 @@
         </a-form-item>
 
         <a-form-item label="序号" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <a-input :maxLength="11"
+          <a-input :maxLength="9"
             v-decorator="['serialNo', {initialValue: this.formData.serialNo, rules: [{required: true, message: '请输入序号！'}]}]"/>
         </a-form-item>
 
         <a-form-item label="屏幕大小" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <a-input :maxLength="11"
+          <a-input :maxLength="9"
             v-decorator="['screenSize', {initialValue: this.formData.screenSize, rules: [{required: true, message: '请输入屏幕大小！'}]}]"/>
         </a-form-item>
 

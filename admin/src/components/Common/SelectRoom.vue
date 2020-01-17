@@ -172,7 +172,7 @@
       this.form = this.$form.createForm(this);
     },
     methods: {
-      add (item) {
+      add (item,value) {
         let that = this;
         this.visible = true
         this.form.resetFields()
@@ -180,6 +180,18 @@
         if(this.estateId){
           this.formData.estateId = this.estateId
           this.getBuildList(this.estateId)
+        }
+        if(value){
+          this.formData.roomName = value.roomName
+          if(value.buildingId){
+            this.getUnitList(value.buildingId,null,true)
+          }
+          if(value.unitId){
+            this.getStoreyList(value.unitId,null,true)
+          }
+          if(value.storeyId){
+            this.getRoomList(value.storeyId,null,true)
+          }
         }
       },
 
@@ -206,8 +218,10 @@
           })
       },
 
-      getUnitList(value,option){
-        this.formData.roomName=option.componentOptions.children[0].text
+      getUnitList(value,option,status){
+        if(option){
+          this.formData.roomName=option.componentOptions.children[0].text
+        }
         this.$api.subject.getUnitAll({
           buildingId: value
         })
@@ -220,11 +234,16 @@
               })
             }
             this.unitList = l
+            if(status){
+              this.form.setFieldsValue({ buildingId: value});
+            }
           })
       },
 
-      getStoreyList(value,option){
-        this.formData.roomName=option.componentOptions.children[0].text
+      getStoreyList(value,option,status){
+        if(option){
+          this.formData.roomName=option.componentOptions.children[0].text
+        }
         this.$api.storey.getAll({
           unitId: value
         })
@@ -237,11 +256,16 @@
               })
             }
             this.storeyList = l
+            if(status){
+              this.form.setFieldsValue({ unitId: value});
+            }
           })
       },
 
-      getRoomList(value,option){
-        this.formData.roomName=option.componentOptions.children[0].text
+      getRoomList(value,option,status){
+        if(option){
+          this.formData.roomName=option.componentOptions.children[0].text
+        }
         this.$api.room.getAll({
           storeyId: value
         })
@@ -254,6 +278,9 @@
               })
             }
             this.roomList = l
+            if(status){
+              this.form.setFieldsValue({ storeyId: value});
+            }
           })
       },
 

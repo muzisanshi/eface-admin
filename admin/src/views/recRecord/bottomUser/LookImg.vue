@@ -39,13 +39,12 @@
       }
     },
     methods: {
-      add(item, startDate, endDate) {
+      add(item) {
         let that = this
         that.imgUrl = ''
         that.$api.recRecord.getRecImage({
           id: item.id,
-          beginDatetime:startDate,
-          endDatetime:endDate
+          recDatetime:item.recDatetime,
         })
           .then(res => {
             if(!res.recImageResourceFullAddress && !res.recImageBase64){

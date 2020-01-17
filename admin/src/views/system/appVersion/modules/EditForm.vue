@@ -55,7 +55,7 @@
         </a-form-item>
 
         <a-form-item label="内核版本" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <a-input :maxLength="11"
+          <a-input :maxLength="9"
             v-decorator="['rootVer', {initialValue: this.formData.rootVer, rules: [{required: true, message: '请输入内核版本！'}]}]"/>
         </a-form-item>
 

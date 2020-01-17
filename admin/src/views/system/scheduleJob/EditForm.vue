@@ -73,6 +73,14 @@
         </a-form-item>
 
         <a-form-item
+          label="是否负载均衡"
+          :labelCol="labelCol"
+          :wrapperCol="wrapperCol"
+        >
+          <a-switch :checked="loadBalanced" @change="changeLoadBalanced" v-decorator="['loadBalanced']"/>
+        </a-form-item>
+
+        <a-form-item
           label="备注"
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
@@ -104,6 +112,7 @@ export default {
 
       uploadFileId: '',
       formData: {},
+      loadBalanced:true,
       title: '',
       form: this.$form.createForm(this)
     }
@@ -122,14 +131,21 @@ export default {
           this.$api.scheduleJob.getById({ id: item.id })
           .then(res => {
             this.formData = res
+            this.loadBalanced = this.formData.loadBalanced;
           })
         }else{
           this.title = '新增'
-        }
+          this.loadBalanced = true
+      }
     },
     filterCountryOption(input, option) {
         return option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0
     },
+
+    changeLoadBalanced(checked) {
+      this.loadBalanced = checked
+    },
+
     handleSubmit () {
       const { form: { validateFields } } = this
       this.confirmLoading = true
@@ -137,6 +153,9 @@ export default {
         if (!errors) {
           if(this.formData.id){
             values.id = this.formData.id;
+          }
+          if (!values.loadBalanced) {
+            values.loadBalanced = this.loadBalanced
           }
           this.$api.scheduleJob.saveOrUpdate(values)
             .then(res => {

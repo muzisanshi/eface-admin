@@ -42,7 +42,7 @@
         <a-col :span="14">
           <a-form-item>
             <a-input
-              :maxLength="10"
+              :maxLength="9"
               v-decorator="['verifyCode',{rules: [{ required: true, message: '请输入密码' }]}]"
               size="large"
               type="text"

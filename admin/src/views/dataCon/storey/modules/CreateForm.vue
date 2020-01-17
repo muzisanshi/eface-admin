@@ -51,7 +51,7 @@
 
               <a-col :span="7" >
                 <a-form-item :key="k.roomNum" v-bind="formLayout" label="房间数量">
-                  <a-input :maxLength="11" v-decorator="[
+                  <a-input :maxLength="9" v-decorator="[
                           `roomNumVal[${k.roomNum}]`,
                           {
                             rules: [{

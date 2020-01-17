@@ -107,6 +107,11 @@ export default {
           dataIndex: 'triggerState'
         },
         {
+          title: '是否负载均衡',
+          dataIndex: 'loadBalanced',
+          scopedSlots: {customRender: 'status'}
+        },
+        {
           title: '详细备注',
           dataIndex: 'remark'
         },

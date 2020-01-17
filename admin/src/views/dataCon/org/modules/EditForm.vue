@@ -253,6 +253,14 @@
             values.lat = this.latitude;
             values.lng = this.longitude;
             values.address = this.inputChange;
+            if(!values.address){
+              this.$notification.error({
+                message: '提示',
+                description: '请填写详细地址！'
+              })
+              this.confirmLoading = false
+              return false
+            }
             values.headImageAttId = this.headImageAttId
             if (this.initCascader.length > 0) {
               values.areaId = this.initCascader[this.initCascader.length - 1]

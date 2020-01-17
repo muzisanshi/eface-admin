@@ -23,7 +23,7 @@
         </a-form-item>
 
         <a-form-item label="有效分钟数" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <a-input :maxLength="11"
+          <a-input :maxLength="9"
             v-decorator="['validMinutes', {initialValue: this.formData.validMinutes, rules: [{required: true, message: '请输入有效分钟数！'}]}]"/>
         </a-form-item>
 

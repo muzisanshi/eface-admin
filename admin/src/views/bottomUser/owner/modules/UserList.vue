@@ -52,7 +52,7 @@
           <a-col :md="4" :sm="24">
             <span class="table-page-search-submitButtons">
               <a-button type="primary" @click="tableRefresh">查询</a-button>
-              <a-button style="margin-left: 8px" @click="resetSearchForm">重置</a-button>
+              <a-button style="margin-left: 8px" @click="resetUserSearchForm">重置</a-button>
             </span>
           </a-col>
         </a-row>
@@ -140,12 +140,6 @@ export default {
         {
           title: '性别',
           dataIndex: 'sexualName'
-        },
-        {
-          title: '操作',
-          dataIndex: 'action',
-          width: '150px',
-          scopedSlots: { customRender: 'action' }
         }
       ],
       loadData: parameter => {
@@ -171,6 +165,19 @@ export default {
     })
   },
   methods: {
+
+    resetUserSearchForm(){
+      this.queryParam = {
+        code:'OWNER',
+        page: { pageNumber: 1, pageSize: 10 }
+      }
+      this.initCascader = []
+    },
+
+    //选择受访区域~
+    selectRoom(){
+      this.$refs.selectRoom.add(null)
+    },
 
     onSelectUserChange (selectedRowKeys, selectedRows) {
       this.selectedRowKeys = selectedRowKeys

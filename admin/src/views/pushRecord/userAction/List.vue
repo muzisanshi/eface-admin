@@ -10,8 +10,6 @@
       <a-form layout="inline">
         <a-row :gutter="48">
 
-
-
           <a-col :md="4" :sm="24">
             <a-form-item label="设备名称">
               <a-input :maxLength="64" v-model="queryParam.deviceName" placeholder=""/>
@@ -141,12 +139,8 @@ export default {
           dataIndex: 'lastExecuteDatetime'
         },
         {
-          title: '开始时间',
+          title: '创建时间',
           dataIndex: 'createDatetime'
-        },
-        {
-          title: '更新时间',
-          dataIndex: 'updateDatetime'
         }
       ],
       loadData: parameter => {

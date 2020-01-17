@@ -39,7 +39,7 @@
         </a-form-item>
 
         <a-form-item label="下标" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <a-input :maxLength="11"
+          <a-input :maxLength="9"
             v-decorator="['indexNum', {initialValue: this.formData.indexNum, rules: [{required: true,pattern: new RegExp(this.REG_EXPS.HAS_ENG_NUMBER, 'g'), message: '请输入有效的下标！'}]}]"/>
         </a-form-item>
 

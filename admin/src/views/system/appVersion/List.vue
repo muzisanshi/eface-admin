@@ -32,7 +32,7 @@
 
           <a-col :md="4" :sm="24">
             <a-form-item label="内核版本">
-              <a-input :maxLength="11" v-model="queryParam.rootVer" placeholder=""/>
+              <a-input :maxLength="9" v-model="queryParam.rootVer" placeholder=""/>
             </a-form-item>
           </a-col>
 

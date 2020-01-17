@@ -55,7 +55,7 @@
         </a-form-item>
 
         <a-form-item label="排序序号" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <a-input :maxLength="11"
+          <a-input :maxLength="9"
             v-decorator="['orderNum', {initialValue: this.formData.orderNum, rules: [{required: true, message: '请输入排序序号！'}]}]"/>
         </a-form-item>
 

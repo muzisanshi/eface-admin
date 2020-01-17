@@ -98,13 +98,13 @@
                 <a-col :span="8">
                   <a-form-item label="人脸显示数量" :labelCol="labelCol" :wrapperCol="wrapperCol">
 
-                    <a-input :maxLength="11"
+                    <a-input :maxLength="9"
                       v-decorator="['mainEngine.faceShowNum', {initialValue: this.formData.mainEngine.faceShowNum, rules: [{required: true,pattern: new RegExp(this.REG_EXPS.PLUS_INTEGER, 'g'), message: '请输入有效的数量！'}]}]"/>
                   </a-form-item>
                 </a-col>
                 <a-col :span="8">
                   <a-form-item label="人脸显示时间" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                    <a-input :maxLength="11"
+                    <a-input :maxLength="9"
                       v-decorator="['mainEngine.faceShowSeconds', {initialValue: this.formData.mainEngine.faceShowSeconds, rules: [{required: true,pattern: new RegExp(this.REG_EXPS.PLUS_INTEGER, 'g'), message: '请输入有效的时间！'}]}]"/>
                   </a-form-item>
                 </a-col>
@@ -141,7 +141,7 @@
 
                 <a-col :span="8">
                   <a-form-item label="有效分钟数" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                    <a-input :maxLength="11"
+                    <a-input :maxLength="9"
                       v-decorator="['mainEngine.validMinutes', {initialValue: this.formData.mainEngine.validMinutes, rules: [{required: true,pattern: new RegExp(this.REG_EXPS.JUST_NUMBER, 'g'), message: '请输入有效的分钟数！'}]}]"/>
                   </a-form-item>
                 </a-col>
@@ -197,7 +197,7 @@
 
                 <a-col :span="8">
                   <a-form-item label="端口" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                    <a-input :maxLength="11"
+                    <a-input :maxLength="9"
                       v-decorator="['mainEngine.network.port', {initialValue: this.formData.mainEngine.network?this.formData.mainEngine.network.port:'',rules: [{pattern: new RegExp(this.REG_EXPS.PLUS_INTEGER, 'g'), message: '请输入有效的端口！'}]}]"/>
                   </a-form-item>
                 </a-col>
@@ -330,14 +330,14 @@
 
                 <a-col :span="8">
                   <a-form-item label="视频输入宽度" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                    <a-input :maxLength="11"
+                    <a-input :maxLength="9"
                       v-decorator="['videoInputWidth', {initialValue: pane.content.videoInputWidth}]"/>
                   </a-form-item>
                 </a-col>
 
                 <a-col :span="8">
                   <a-form-item label="视频输入高度" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                    <a-input :maxLength="11"
+                    <a-input :maxLength="9"
                       v-decorator="['videoInputHeight', {initialValue: pane.content.videoInputHeight}]"/>
                   </a-form-item>
                 </a-col>
@@ -345,7 +345,7 @@
               <a-row :gutter="24">
                 <a-col :span="8">
                   <a-form-item label="端口" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                    <a-input :maxLength="11"
+                    <a-input :maxLength="9"
                       v-decorator="['network.port', {initialValue: pane.content.network.port,rules: [{pattern: new RegExp(REG_EXPS.PLUS_INTEGER, 'g'), message: '请输入有效的端口！'}]}]"/>
                   </a-form-item>
                 </a-col>
@@ -464,7 +464,7 @@
 
                 <a-col :span="8">
                   <a-form-item label="端口" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                    <a-input :maxLength="11"
+                    <a-input :maxLength="9"
                       v-decorator="['gateBrake.network.port', {initialValue: pane.content.gateBrake.network.port,rules: [{pattern: new RegExp(REG_EXPS.PLUS_INTEGER, 'g'), message: '请输入有效的端口！'}]}]"/>
                   </a-form-item>
                 </a-col>

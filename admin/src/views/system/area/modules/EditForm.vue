@@ -22,7 +22,7 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
         >
-          <a-input :maxLength="11" :disabled="hasAdd === 'UPDATE'"
+          <a-input :maxLength="9" :disabled="hasAdd === 'UPDATE'"
             v-decorator="['id', {initialValue: this.formData.id,rules: [{required: true,pattern: new RegExp(this.REG_EXPS.POSITIVE_INTEGER, 'g'), message: '请输入有效的行政区划代码！'}]}]"/>
         </a-form-item>
 

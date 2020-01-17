@@ -63,7 +63,7 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
         >
-          <a-input :maxLength="11" v-decorator="['nationalAreaCode.orderNum', {initialValue: this.formData.nationalAreaCode.orderNum,rules: [{required: true, message: '请输入排序序号！'}]}]" />
+          <a-input :maxLength="9" v-decorator="['nationalAreaCode.orderNum', {initialValue: this.formData.nationalAreaCode.orderNum,rules: [{required: true, message: '请输入排序序号！'}]}]" />
         </a-form-item>
 
         <a-form-item

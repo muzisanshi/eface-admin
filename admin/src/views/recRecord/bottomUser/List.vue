@@ -58,6 +58,7 @@
                 :defaultValue="[moment().startOf('day').subtract(0, 'days'), moment().endOf('day')]"
                 @change="onChange"
                 :allowClear="false"
+                :disabledDate="disabledDate"
                 format="YYYY-MM-DD HH:mm:ss"
                 :showTime="{ defaultValue: moment('00:00:00', 'HH:mm:ss') }"
               />
@@ -205,7 +206,7 @@ export default {
     moment,
 
     handleLookEdit (record) {
-      this.$refs.editModal.add(record, this.startDate?this.startDate:this.moment().startOf('day').subtract(0, 'days').format(this.dateFormat), this.endDate?this.endDate:this.moment().endOf('day').format(this.dateFormat))
+      this.$refs.editModal.add(record)
     },
 
     onChange(dates) {
@@ -214,7 +215,7 @@ export default {
     },
 
     disabledDate(current) {
-      return current && current > moment().endOf('day');
+      return current && current > moment().endOf('day').add(1, 'days');
     },
 
     selectSuccess(value){

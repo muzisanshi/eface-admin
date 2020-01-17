@@ -326,6 +326,7 @@
         confirmLoading: false,
         formData: {
           userEstates:[],
+          faceDeletedIds:[],
           faces:[],
           visitorExtendInfo:{}
         },
@@ -394,6 +395,7 @@
         that.userType = userType
         that.formData ={
           userEstates:[],
+          faceDeletedIds:[],
           faces:[],
           visitorExtendInfo:{}
         }
@@ -446,6 +448,7 @@
               })
                 .then(res => {
                   that.formData = res
+                  that.formData.faceDeletedIds = []
                   that.topImg = res.resourceFullAddress;
                   that.panes = []
                   if(res.faces){
@@ -548,6 +551,7 @@
             }
 
             values.code = that.userType
+            values.faceDeletedIds = that.formData.faceDeletedIds
             if(this.fileList.length === 0){
               this.$notification.error({
                 message: '提示',
@@ -659,27 +663,17 @@
           return false
         }else{
           if(file.id){
-            return new Promise((resolve, reject) => {
-              that.$confirm({
-                title: '删除',
-                content: '确定删除当前人脸图片？',
-                onOk () {
-                  api.face.del({ id: file.id}).then(response => {
-                    that.$notification.success({
-                      message: '成功',
-                      description: `删除成功！`
-                    })
-                    that.fileList = that.fileList.filter(pane => pane.uid !== file.uid)
-                    that.formData.faces = that.formData.faces.filter(pane => pane.id !== file.id)
-                    resolve(true)
-                  }).catch(error => {
-                    reject(false)
-                  })
-                },
-                onCancel () {
-                  reject(false)
-                }
-              })
+            that.$confirm({
+              title: '删除',
+              content: '确定删除当前人脸图片？',
+              onOk () {
+                that.formData.faceDeletedIds.push(file.id)
+                that.fileList = that.fileList.filter(pane => pane.uid !== file.uid)
+                that.formData.faces = that.formData.faces.filter(pane => pane.id !== file.id)
+              },
+              onCancel () {
+                return false
+              }
             })
 
           }else{
@@ -692,8 +686,9 @@
       //选择受访区域
       selectRoom(itemIndex){
         this.itemIndex = itemIndex
+        console.log(this.panes[this.curPaneIndex].content.gateBrakeLimits[itemIndex])
         if(this.panes[this.curPaneIndex].content.estateId){
-          this.$refs.selectRoom.add(null)
+          this.$refs.selectRoom.add(null,this.panes[this.curPaneIndex].content.gateBrakeLimits[itemIndex])
         }else{
           this.$notification.error({
             message: '提示',

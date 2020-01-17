@@ -40,7 +40,7 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
         >
-          <a-input :maxLength="11"
+          <a-input :maxLength="9"
             v-decorator="['roomNum', {initialValue: this.formData.roomNum,rules: [{required: true, message: '请输入房间数量！'}]}]"/>
         </a-form-item>
 
