@@ -11,7 +11,7 @@
     :visible="visible"
     :confirmLoading="confirmLoading"
     @ok="finish('blob')"
-    :maskClosable="false"
+    :maskClosable="false" :keyboard="false"
     @cancel="handleCancelImg"
   >
     <a-spin :spinning="confirmLoading">

@@ -5,7 +5,7 @@
  * @desc 新增（组织管理）
 -->
 <template>
-  <a-modal :title="title" :width="1040" :visible="visible" :confirmLoading="confirmLoading" :zIndex="zIndex" :maskClosable="false" @ok="handleSubmit" @cancel="handleCancel">
+  <a-modal :title="title" :width="1040" :visible="visible" :confirmLoading="confirmLoading" :zIndex="zIndex" :maskClosable="false" :keyboard="false" @ok="handleSubmit" @cancel="handleCancel">
     <a-spin :spinning="confirmLoading">
       <a-form :form="form">
 
@@ -172,6 +172,11 @@
         if(area.value.length){
           this.initCascader = area.value;
           this.inputChange = area.name.join('')
+        }else{
+          this.initCascader = [];
+          this.inputChange = '';
+          this.latitude = '';
+          this.longitude = '';
         }
 
       },
@@ -252,6 +257,17 @@
             }
             values.lat = this.latitude;
             values.lng = this.longitude;
+
+            if (this.initCascader.length > 0) {
+              values.areaId = this.initCascader[this.initCascader.length - 1]
+            }else{
+              this.$notification.error({
+                message: '提示',
+                description: '请选择地区！'
+              })
+              this.confirmLoading = false
+              return false
+            }
             values.address = this.inputChange;
             if(!values.address){
               this.$notification.error({
@@ -262,9 +278,7 @@
               return false
             }
             values.headImageAttId = this.headImageAttId
-            if (this.initCascader.length > 0) {
-              values.areaId = this.initCascader[this.initCascader.length - 1]
-            }
+
             this.$api.org.saveOrUpdate(values)
               .then(res => {
                 this.$notification.success({

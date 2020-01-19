@@ -10,7 +10,7 @@
     :width="340"
     :visible="visible"
     :confirmLoading="confirmLoading"
-    :maskClosable="false"
+    :maskClosable="false" :keyboard="false"
     @cancel="handleCancel"
   >
     <a-spin :spinning="confirmLoading">

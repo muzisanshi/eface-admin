@@ -7,7 +7,7 @@
 <template>
   <a-card :bordered="false" class="content">
     <div class="table-page-search-wrapper">
-      <a-form layout="inline">
+      <a-form layout="inline" :form="form">
         <a-row :gutter="48">
 
           <a-col :md="5" :sm="24">
@@ -53,9 +53,9 @@
           </a-col>
 
           <a-col :span="8" style="padding-left: 10px">
-            <a-form-item label="结束时间" :required="false">
+            <a-form-item label="选择时间段" :required="false">
               <a-range-picker
-                :defaultValue="[moment().startOf('day').subtract(0, 'days'), moment().endOf('day')]"
+                v-decorator="['rangeTimePicker',{initialValue: this.defaultDate}]"
                 @change="onChange"
                 :allowClear="false"
                 :disabledDate="disabledDate"
@@ -68,7 +68,7 @@
           <a-col :md="4" :sm="24">
             <span class="table-page-search-submitButtons">
               <a-button type="primary" @click="tableRefresh">查询</a-button>
-              <a-button style="margin-left: 8px" @click="resetSearchForm">重置</a-button>
+              <a-button style="margin-left: 8px" @click="resetSearchBUForm">重置</a-button>
             </span>
           </a-col>
 
@@ -126,11 +126,15 @@ export default {
   computed: {
     ...mapState(['constants']),
   },
+  beforeCreate () {
+    this.form = this.$form.createForm(this);
+  },
   data () {
     return {
       queryParam:{
         estateName:'',
       },
+      defaultDate:[moment().startOf('day').subtract(0, 'days'), moment().endOf('day')],
       labelCol: {
         xs: { span: 24 },
         sm: { span: 1 },
@@ -207,6 +211,21 @@ export default {
 
     handleLookEdit (record) {
       this.$refs.editModal.add(record)
+    },
+
+    resetSearchBUForm(){
+      // this.defaultDate = [moment().startOf('day').subtract(0, 'days'), moment().endOf('day')];
+      this.form.setFieldsValue({
+        rangeTimePicker:[moment().startOf('day').subtract(0, 'days'), moment().endOf('day')]
+      });
+      this.startDate = this.moment().startOf('day').subtract(0, 'days').format(this.dateFormat)
+      this.endDate = this.moment().endOf('day').format(this.dateFormat)
+      this.queryParam = {
+        beginDatetime:this.startDate?this.startDate:this.moment().startOf('day').subtract(0, 'days').format(this.dateFormat),
+        endDatetime:this.endDate?this.endDate:this.moment().endOf('day').format(this.dateFormat),
+        page: { pageNumber: 1, pageSize: 10 }
+      }
+      this.initCascader = []
     },
 
     onChange(dates) {

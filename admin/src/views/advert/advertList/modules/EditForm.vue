@@ -11,7 +11,7 @@
     :visible="visible"
     :confirmLoading="confirmLoading"
     @ok="handleSubmit"
-    :maskClosable="false"
+    :maskClosable="false" :keyboard="false"
     @cancel="handleCancel"
   >
     <a-spin :spinning="confirmLoading">
@@ -267,6 +267,8 @@
       },
 
       changeFileType(value,option){
+        this.fileName = ''
+        this.headImageAttId = ''
         if(value === 'IMAGE' || value === 'GIF'){
           this.fileType = 'image/png,image/jpg,image/gif';
           this.isVideo = false

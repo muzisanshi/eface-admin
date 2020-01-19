@@ -12,7 +12,7 @@
     :confirmLoading="confirmLoading"
     @ok="handleSubmit"
     :zIndex="zIndex"
-    :maskClosable="false"
+    :maskClosable="false" :keyboard="false"
     @cancel="handleCancel"
   >
     <a-spin :spinning="confirmLoading">
@@ -254,8 +254,16 @@ export default {
     },
 
     selectedArea(area) {
-      this.initCascader = area.value;
-      this.inputChange = area.name.join('')
+
+      if(area.value.length){
+        this.initCascader = area.value;
+        this.inputChange = area.name.join('')
+      }else{
+        this.initCascader = [];
+        this.inputChange = '';
+        this.latitude = '';
+        this.longitude = '';
+      }
     },
 
     clearStreetOffice(){
@@ -380,10 +388,28 @@ export default {
           }
           values.lat = this.latitude;
           values.lng = this.longitude;
-          values.fullAddress = this.inputChange;
+
           if (this.initCascader.length > 0) {
             values.areaId = this.initCascader[this.initCascader.length - 1]
+          }else{
+            this.$notification.error({
+              message: '提示',
+              description: '请选择地区！'
+            })
+            this.confirmLoading = false
+            return false
           }
+
+          values.fullAddress = this.inputChange;
+          if(!values.fullAddress){
+            this.$notification.error({
+              message: '提示',
+              description: '请填写详细地址！'
+            })
+            this.confirmLoading = false
+            return false
+          }
+
           if(this.formData.streetOfficeId){
             values.streetOfficeId = this.formData.streetOfficeId
           }

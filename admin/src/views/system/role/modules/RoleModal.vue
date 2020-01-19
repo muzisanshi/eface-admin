@@ -13,7 +13,7 @@
     @ok="handleOk"
     @cancel="handleCancel"
     cancelText="关闭"
-    :maskClosable="false"
+    :maskClosable="false" :keyboard="false"
     wrapClassName="ant-modal-cust-warp"
     style="top:5%;height: 85%;overflow-y: hidden">
 

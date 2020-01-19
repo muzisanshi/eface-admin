@@ -5,7 +5,7 @@
  * @desc 新增（账号管理）
 -->
 <template>
-  <a-modal :title="title+'用户'" :width="840" :visible="visible" :confirmLoading="confirmLoading" :maskClosable="false" @ok="handleSubmit"
+  <a-modal :title="title+'用户'" :width="840" :visible="visible" :confirmLoading="confirmLoading" :maskClosable="false" :keyboard="false" @ok="handleSubmit"
            @cancel="handleCancel">
     <a-spin :spinning="confirmLoading">
       <a-form :form="form">

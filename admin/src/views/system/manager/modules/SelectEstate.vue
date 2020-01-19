@@ -5,7 +5,7 @@
  * @desc 绑定地产
 -->
 <template>
-  <a-modal title="绑定地产" :width="1240" :visible="visible" :confirmLoading="confirmLoading" :maskClosable="false" @ok="handleSubmit"
+  <a-modal title="绑定地产" :width="1240" :visible="visible" :confirmLoading="confirmLoading" :maskClosable="false" :keyboard="false" @ok="handleSubmit"
            @cancel="handleCancel">
     <a-spin :spinning="confirmLoading" v-if="visible">
         <a-collapse @change="changeActiveKey">
