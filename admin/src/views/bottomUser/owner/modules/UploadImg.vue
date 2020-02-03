@@ -26,7 +26,7 @@
           <input type="button" class="oper" style="height:32px;width:35px;font-size:18px;margin:3px 5px;background-color: #1890ff;color: #fff;border-radius: 4px;line-height: 26px;cursor: pointer;outline-offset: -4px;" value="↓" title="下载" @click="down('blob')"/>
           <div class="line" style="margin-top: 85px;text-align: left">
             <div class="cropper-content" style="margin-top:-60px;">
-              <div class="cropper">
+              <div class="cropper" :style="{'width':autoWidth+'px','height':autoHeight+'px'}">
                 <vueCropper
                   v-if="isCropper"
                   ref="cropper"
@@ -35,19 +35,20 @@
                   :outputType="option.outputType"
                   :info="true"
                   :full="option.full"
-                  :canMove="option.canMove"
+                  :canMove="true"
                   :canMoveBox="option.canMoveBox"
                   :original="option.original"
                   :autoCrop="option.autoCrop"
                   :autoCropWidth="option.autoCropWidth"
                   :autoCropHeight="option.autoCropHeight"
                   :fixedBox="option.fixedBox"
+                  :enlarge="4"
                   @realTime="realTime"
                   @imgLoad="imgLoad"
                 ></vueCropper>
               </div>
               <div style="margin-left:20px;">
-                <div class="show-preview" :style="{'width': '150px', 'height':'155px',  'overflow': 'hidden', 'margin': '5px'}">
+                <div class="show-preview" :style="{'width': option.autoCropWidth+'px', 'height':option.autoCropHeight+'px',  'overflow': 'hidden', 'margin': '5px'}">
                   <div :style="previews.div" class="preview">
                     <img :src="previews.url" :style="previews.img">
                   </div>
@@ -93,7 +94,9 @@
         downImg: '#',
         imgFile: '',
         uploadImgRelaPath: '', //上传后的图片的地址（不带服务器域名）
-        isCropper: false
+        isCropper: false,
+        autoWidth: 400,
+        autoHeight: 400,
       }
     },
     components: {
@@ -121,10 +124,12 @@
           original: false,
           canMoveBox: true,
           autoCrop: true,
-          autoCropWidth: 150,
-          autoCropHeight: 150,
+          autoCropWidth: 200,
+          autoCropHeight: 200,
           fixedBox: true
         }
+        this.autoWidth = 400;
+        this.autoHeight = 400;
         this.uploadImgRelaPath = ''
         this.imgFile = ''
         this.fileName = ''
@@ -162,6 +167,7 @@
             that.confirmLoading = true
             reader.onload = function (e) {
               base64 = e.target.result
+              console.log(base64)
               that.$api.face.canRegister({
                 imageBase64: base64
               })
@@ -243,6 +249,28 @@
 
           let data
 
+          // 创建对象
+          let img = new Image();
+          let width = _this.autoWidth;  //图片宽度
+          let height = _this.autoHeight; //图片高度
+          let _URL = window.URL || window.webkitURL;
+          let image = new Image();
+          image.src = _URL.createObjectURL(file);
+          image.onload = function() {
+            // 打印数据
+            if(image.width>image.height){
+              _this.autoWidth = 400;
+              _this.autoHeight = _this.autoWidth * image.height / image.width
+              _this.option.autoCropWidth = 200;
+              _this.option.autoCropHeight = parseInt(_this.autoHeight/2)
+            }else{
+              _this.autoHeight = 400;
+              _this.autoWidth = _this.autoHeight * image.width / image.height
+              _this.option.autoCropHeight = 200;
+              _this.option.autoCropWidth = parseInt(_this.autoWidth/2)
+            }
+          };
+
           if (typeof e.target.result === 'object') {
             // 把Array Buffer转化为blob 如果是base64不需要
             data = window.URL.createObjectURL(new Blob([e.target.result]))
@@ -250,6 +278,7 @@
           else {
             data = e.target.result
           }
+
           if (num === 1) {
             _this.option.img = data
           } else if (num === 2) {
@@ -290,8 +319,8 @@
     margin-left: 20px;
     display: -webkit-flex;
     .cropper {
-      width: 250px;
-      height: 250px;
+      width: 300px;
+      height: 300px;
     }
     .show-preview {
       flex: 1;
