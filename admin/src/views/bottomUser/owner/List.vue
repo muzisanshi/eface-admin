@@ -80,6 +80,9 @@
       </span>
 
       <a-avatar size="large" shape="square" :src="record | resourceFullAddressFilter" slot="resourceFullAddress" slot-scope="record"/>
+
+      <a-avatar size="large" shape="square" :src="record | faceFullAddressFilter" slot="faceFullAddress" slot-scope="record"/>
+
       <span slot="status" slot-scope="text">
         <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />
       </span>
@@ -145,6 +148,14 @@ export default {
           dataIndex: 'realName'
         },
         {
+          title: '头像',
+          scopedSlots: { customRender: 'resourceFullAddress' }
+        },
+        {
+          title: '底库照片',
+          scopedSlots: { customRender: 'faceFullAddress' }
+        },
+        {
           title: '年龄级别',
           dataIndex: 'ageLevelName'
         },
@@ -172,6 +183,7 @@ export default {
               res.records.forEach(item=>{
                 item.ageLevelName = this.constants.data.ageLevel?this.constants.data.ageLevel[item.ageLevel]['name']:''
                 item.sexualName = this.constants.data.sexual?this.constants.data.sexual[item.sexual]['name']:''
+                item.faceFullAddress = item.faces[0].resourceFullAddress
               });
               return res
             }

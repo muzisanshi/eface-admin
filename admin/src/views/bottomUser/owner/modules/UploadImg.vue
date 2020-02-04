@@ -97,6 +97,8 @@
         isCropper: false,
         autoWidth: 400,
         autoHeight: 400,
+        fileData:{},
+        uploadNum:0
       }
     },
     components: {
@@ -133,6 +135,8 @@
         this.uploadImgRelaPath = ''
         this.imgFile = ''
         this.fileName = ''
+        this.fileData = {}
+        this.uploadNum = 0
       },
 
       //放大/缩小
@@ -167,25 +171,33 @@
             that.confirmLoading = true
             reader.onload = function (e) {
               base64 = e.target.result
-              console.log(base64)
+              console.log(img,data)
               that.$api.face.canRegister({
                 imageBase64: base64
               })
                 .then(resRes => {
-                  formData.append('file', data, that.fileName)
-                  formData.append('attOrigin', 'ADMIN')
-                  formData.append('attType', 'FACE')
-                  that.$api.face.upload(that.system.uploadMainUrl, formData)
-                    .then(resUpl => {
-                      that.$notification.success({
-                        message: '成功',
-                        description: `上传成功`
-                      })
-                      that.visible = false
-                      that.$emit('uploadFace', resUpl)
-                      that.isCropper = false
-                      that.confirmLoading = false
-                    })
+                  that.fileData.faceImageBase64s = base64
+                  that.uploadNum++
+                  that.fileData.uid = that.uploadNum
+                  that.visible = false
+                  that.$emit('uploadFace', that.fileData)
+                  that.isCropper = false
+                  that.confirmLoading = false
+
+                  // formData.append('file', data, that.fileName)
+                  // formData.append('attOrigin', 'ADMIN')
+                  // formData.append('attType', 'FACE')
+                  // that.$api.face.upload(that.system.uploadMainUrl, formData)
+                  //   .then(resUpl => {
+                  //     that.$notification.success({
+                  //       message: '成功',
+                  //       description: `上传成功`
+                  //     })
+                  //     that.visible = false
+                  //     that.$emit('uploadFace', resUpl)
+                  //     that.isCropper = false
+                  //     that.confirmLoading = false
+                  //   })
                 }).catch(resRes => {
                 that.confirmLoading = false
               })
@@ -277,6 +289,12 @@
           }
           else {
             data = e.target.result
+          }
+
+          _this.fileData = {
+            origFilename: file.name,
+            type:file.type,
+            resourceFullAddress:data
           }
 
           if (num === 1) {

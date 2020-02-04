@@ -24,7 +24,7 @@
         confirmLoadingSelect: false,
         userList: [],
         selectUserStatus: true,
-        isShow:false
+        isShow:false,
       }
     },
     components: {
@@ -59,6 +59,7 @@
 
       handleCancelSelect() {
         this.visibleSelect = false
+        this.selectUserStatus = false
         this.confirmLoadingSelect = false
       }
     }

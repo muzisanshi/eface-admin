@@ -7,6 +7,7 @@ const URI = {
   updateInfo: '/manager/update',
   getById: '/user/getById',
   page: '/user/getPage',
+  getVisitorPage: '/user/getVisitorPage',
   saveOrUpdate: '/user/saveOrUpdate',
   del: '/user/delete'
 }
@@ -45,6 +46,13 @@ function getPage (parameter) {
   })
 }
 
+function getVisitorPage (parameter) {
+  return axios({
+    url: URI.getVisitorPage,
+    params: parameter
+  })
+}
+
 function getById (parameter) {
   return axios({
     url: URI.getById,
@@ -73,6 +81,7 @@ export default {
   genVerifyCode,
   getById,
   getPage,
+  getVisitorPage,
   del,
   saveOrUpdate
 }

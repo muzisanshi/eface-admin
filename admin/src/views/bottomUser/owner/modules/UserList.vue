@@ -18,7 +18,7 @@
 
           <a-col :md="6" :sm="24" v-if="selectUserStatus">
             <a-form-item label="用户类型">
-              <a-select showSearch placeholder="选择用户类型"  v-model="queryParam.code" optionFilterProp="children" :filterOption="filterCommonOption" :options="userTypeCode">
+              <a-select showSearch placeholder="选择用户类型"  v-model="code" optionFilterProp="children" :filterOption="filterCommonOption" :options="userTypeCode">
               </a-select>
             </a-form-item>
           </a-col>
@@ -107,8 +107,10 @@ export default {
     selectUserStatus(newVal){
       if(newVal){
         this.selectedRowKeys = [];
+        this.code = null;
+        this.queryParam.code = null
       }
-    }
+    },
   },
   data () {
     return {
@@ -117,8 +119,9 @@ export default {
           pageNumber: 1,
           pageSize: 10
         },
-        code:'OWNER'
+        code:null
       },
+      code:null,
       columns: [
 
         {
@@ -143,7 +146,12 @@ export default {
         }
       ],
       loadData: parameter => {
-        return this.$api.user.getPage(Object.assign(parameter, this.queryParam))
+        if(!this.code){
+          this.queryParam.code = null
+        }else{
+          this.queryParam.code = this.code
+        }
+        return this.$api.user.getVisitorPage(Object.assign(parameter, this.queryParam))
           .then(res => {
             res.records.forEach(item=>{
               item.ageLevelName = this.constants.data.ageLevel?this.constants.data.ageLevel[item.ageLevel]['name']:''
@@ -153,11 +161,17 @@ export default {
           })
       },
       roomName:'',
-      userTypeCode:[]
+      userTypeCode:[{
+        value:null,
+        label:'全部'
+      }]
     }
   },
   created(){
-    this.userTypeCode = [];
+    this.userTypeCode = [{
+      value:'',
+      label:'全部'
+    }];
     this.constants.list.userTypeCode.map((item)=>{
       if(item.value === "OWNER" || item.value === "RENTER"){
         this.userTypeCode.push(item)

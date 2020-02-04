@@ -328,6 +328,7 @@
           userEstates:[],
           faceDeletedIds:[],
           faces:[],
+          faceImageBase64s:[],
           visitorExtendInfo:{}
         },
         title: '',
@@ -397,6 +398,7 @@
           userEstates:[],
           faceDeletedIds:[],
           faces:[],
+          faceImageBase64s:[],
           visitorExtendInfo:{}
         }
 
@@ -447,6 +449,7 @@
                 code:userType
               })
                 .then(res => {
+                  console.log('---res---',res)
                   that.formData = res
                   that.formData.faceDeletedIds = []
                   that.topImg = res.resourceFullAddress;
@@ -633,18 +636,18 @@
 
       //上传人脸成功回调
       uploadFaceSuccess(imgData){
-        if(imgData.id){
-          this.formData.faces = this.formData.faces?this.formData.faces:[]
-          this.formData.faces.push({
-            faceAttId:imgData.id
-          })
+        if(imgData.faceImageBase64s){
+          this.formData.faceImageBase64s = this.formData.faceImageBase64s?this.formData.faceImageBase64s:[]
+          this.formData.faceImageBase64s.push(imgData.faceImageBase64s)
           this.fileList.push({
-            uid: imgData.id,
+            uid: imgData.uid,
             name: imgData.origFilename,
             status: 'done',
             url: imgData.resourceFullAddress,
-            thumbUrl:imgData.resourceFullAddress
+            thumbUrl:imgData.resourceFullAddress,
+            base64:imgData.faceImageBase64s
           })
+          console.log(this.formData)
         }
       },
 
@@ -678,8 +681,9 @@
 
           }else{
             this.fileList = this.fileList.filter(pane => pane.uid !== file.uid)
-            this.formData.faces = this.formData.faces.filter(pane => pane.faceAttId !== file.uid)
+            this.formData.faceImageBase64s = this.formData.faceImageBase64s.filter(pane => pane !== file.base64)
           }
+          console.log(this.formData.faces)
         }
       },
 

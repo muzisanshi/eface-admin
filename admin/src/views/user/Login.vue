@@ -130,7 +130,7 @@
         this.$api.user.genVerifyCode()
           .then(res => {
             this.codeImgUrl = res.bufferedImage
-            this.form.uniqueId = res.uniqueId;
+          this.form.uniqueId = res.uniqueId;
           }).finally(() => {
         })
       },
