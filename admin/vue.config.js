@@ -21,7 +21,7 @@ module.exports = {
     }
   },
   */
-  // publicPath:'./',
+  publicPath:'./',
   configureWebpack: {
     externals: {
       'BMap': 'BMap'

@@ -467,6 +467,8 @@
                     })
                   }
 
+                  that.newTabIndex = res.userEstates.length+2;
+
                   res.userEstates.map((item,index) => {
 
                     let obj = {
@@ -500,9 +502,9 @@
                 })
             }else{
               that.title = '新增'
+              that.newTabIndex = 3;
               that.formData.nationalAreaCodeId=this.nationalAreaCodeList[0].value
               that.formData.sexual=this.constants.list.sexual[0].value
-
             }
           })
       },
@@ -618,7 +620,6 @@
             that.$api.user.saveOrUpdate(values)
               .then(res => {
                 this.$notification.success({
-                  message: '成功',
                   description: `保存成功`
                 })
                 that.formData.id = res

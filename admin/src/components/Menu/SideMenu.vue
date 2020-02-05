@@ -14,8 +14,8 @@
       @select="onSelect"
       style="padding: 16px 0 90px 0;"></s-menu>
     <div style="width: 100%;height: 80px;position: absolute;bottom: 0;left: 0;background-color: #001529;text-align: left;padding: 10px 20px;color: #fff;font-size: 12px;">
-          <p>前端版本 -v2.0.7</p>
-          <p>后端版本 -v2.0.7</p>
+          <p>前端版本 -v2.0.9</p>
+          <p>后端版本 -v2.0.9</p>
     </div>
   </a-layout-sider>
 
