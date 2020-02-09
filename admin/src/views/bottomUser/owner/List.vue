@@ -62,6 +62,8 @@
     <div class="table-operator" v-if="!selectUserStatus">
       <a-button type="primary" icon="plus"  @click="handleEditUser(null)">新增</a-button>
 
+      <a-button type="primary" icon="upload"  @click="importFile()">导入</a-button>
+
       <a-button type="danger" icon="delete" @click="handleDelete" :disabled="selectedRowKeys.length < 1">删除</a-button>
 
     </div>
@@ -95,6 +97,7 @@
 
     </s-table>
     <edit-form  v-if="!selectUserStatus" ref="editModal" @ok="handleOk"/>
+    <import-file  v-if="!selectUserStatus" ref="importFile" @ok="handleOk"/>
     <select-room ref="selectRoom" @selectRoom="selectRoomSuccess"></select-room>
   </a-card>
 </template>
@@ -102,6 +105,7 @@
 <script>
 import { STable } from '@/components'
 import EditForm from './modules/EditForm'
+import ImportFile from './modules/importFile'
 import {mixin} from '@/mixins/mixin'
 import {mapState} from 'vuex';
 import selectRoom from '@/components/Common/SelectRoom'
@@ -110,7 +114,8 @@ export default {
   components: {
     STable,
     EditForm,
-    selectRoom
+    selectRoom,
+    ImportFile
   },
   props:{
     userType:{
@@ -208,6 +213,10 @@ export default {
 
     handleEditUser(record){
       this.$refs.editModal.addEdit(record,this.userType)
+    },
+
+    importFile(){
+      this.$refs.importFile.add(this.userType)
     },
 
     selectRoomSuccess(value){

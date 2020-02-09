@@ -177,6 +177,9 @@
         this.visible = true
         this.form.resetFields()
         this.formData ={}
+        this.unitList = [];
+        this.storeyList = [];
+        this.roomList = [];
         if(this.estateId){
           this.formData.estateId = this.estateId
           this.getBuildList(this.estateId)
@@ -190,8 +193,10 @@
             this.getStoreyList(value.unitId,null,true)
           }
           if(value.storeyId){
-            this.getRoomList(value.storeyId,null,true)
+            this.getRoomList(value.storeyId,null,true,value.roomId)
           }
+
+
         }
       },
 
@@ -262,7 +267,7 @@
           })
       },
 
-      getRoomList(value,option,status){
+      getRoomList(value,option,status,roomId){
         if(option){
           this.formData.roomName=option.componentOptions.children[0].text
         }
@@ -280,6 +285,9 @@
             this.roomList = l
             if(status){
               this.form.setFieldsValue({ storeyId: value});
+            }
+            if(roomId){
+              this.form.setFieldsValue({ roomId: roomId});
             }
           })
       },

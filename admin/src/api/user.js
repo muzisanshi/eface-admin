@@ -9,6 +9,7 @@ const URI = {
   page: '/user/getPage',
   getVisitorPage: '/user/getVisitorPage',
   saveOrUpdate: '/user/saveOrUpdate',
+  importUser: '/user/importUser',
   del: '/user/delete'
 }
 
@@ -67,6 +68,14 @@ function saveOrUpdate (parameter) {
   })
 }
 
+function importUser (parameter) {
+  return axios({
+    url: URI.importUser,
+    enctype: 'application/x-www-form-urlencoded',
+    params: parameter
+  })
+}
+
 function del (parameter) {
   return axios({
     url: URI.del,
@@ -83,5 +92,6 @@ export default {
   getPage,
   getVisitorPage,
   del,
-  saveOrUpdate
+  saveOrUpdate,
+  importUser
 }
