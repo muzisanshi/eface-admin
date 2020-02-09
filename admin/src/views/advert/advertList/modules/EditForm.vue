@@ -134,8 +134,10 @@
           adItem:{}
         },
         imgData: {
-          attOrigin:'ADMIN',
-          attType:'AD'
+          jsonParam:JSON.stringify({
+            attOrigin:'ADMIN',
+            attType:'AD'
+          })
         },
         title: '',
         topImg:'',

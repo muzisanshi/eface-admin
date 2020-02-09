@@ -139,8 +139,10 @@
         headImageAttId: null,
         zIndex: 1,
         imgData:{
-          attOrigin:'ADMIN',
-          attType:'NORMAL'
+          jsonParam:JSON.stringify({
+            attOrigin:'ADMIN',
+            attType:'NORMAL'
+          })
         },
         isClickMap:false
       }

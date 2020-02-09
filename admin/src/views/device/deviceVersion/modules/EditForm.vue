@@ -116,8 +116,10 @@
         topImgName:'',
         headImageAttId: null,
         imgData:{
-          attOrigin:'ADMIN',
-          attType:'NORMAL'
+          jsonParam:JSON.stringify({
+            attOrigin:'ADMIN',
+            attType:'NORMAL'
+          })
         },
       }
     },

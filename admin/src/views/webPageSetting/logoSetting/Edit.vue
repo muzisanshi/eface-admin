@@ -140,8 +140,10 @@
         loginBgImageToLoginPage:true,
         fileType:'image/*',
         imgData:{
-          attOrigin:'ADMIN',
-          attType:'NORMAL'
+          jsonParam:JSON.stringify({
+            attOrigin:'ADMIN',
+            attType:'NORMAL'
+          })
         },
       }
     },

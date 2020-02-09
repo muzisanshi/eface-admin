@@ -63,8 +63,10 @@ export default {
         'X-clientId': SIGN.clientId
       },
       data: {
-        attOrigin:'ADMIN',
-        attType:'NORMAL'
+        jsonParam:JSON.stringify({
+          attOrigin:'ADMIN',
+          attType:'NORMAL'
+        })
       },
       config: {
         imageCompressionParams: {

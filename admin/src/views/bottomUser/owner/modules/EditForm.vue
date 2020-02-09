@@ -346,8 +346,10 @@
         itemIndex:0,
         curPaneIndex:0,
         data:{
-          attOrigin:'ADMIN',
-          attType:'NORMAL'
+          jsonParam:JSON.stringify({
+            attOrigin:'ADMIN',
+            attType:'NORMAL'
+          })
         },
         fileList:[
         ],
