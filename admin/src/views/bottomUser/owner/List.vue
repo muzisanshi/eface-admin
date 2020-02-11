@@ -188,7 +188,9 @@ export default {
               res.records.forEach(item=>{
                 item.ageLevelName = this.constants.data.ageLevel?this.constants.data.ageLevel[item.ageLevel]['name']:''
                 item.sexualName = this.constants.data.sexual?this.constants.data.sexual[item.sexual]['name']:''
-                item.faceFullAddress = item.faces[0].resourceFullAddress
+                if(item.faces && item.faces.length){
+                  item.faceFullAddress = item.faces[0].resourceFullAddress
+                }
               });
               return res
             }

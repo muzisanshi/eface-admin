@@ -348,7 +348,7 @@
         data:{
           jsonParam:JSON.stringify({
             attOrigin:'ADMIN',
-            attType:'NORMAL'
+            attType:'HEAD_IMAGE'
           })
         },
         fileList:[
@@ -456,6 +456,7 @@
                   that.formData.faceDeletedIds = []
                   that.topImg = res.resourceFullAddress;
                   that.panes = []
+                  that.newTabIndex = res.userEstates.length+2;
                   if(res.faces){
                     res.faces.map((item) => {
                       that.fileList.push({
@@ -468,8 +469,6 @@
                       })
                     })
                   }
-
-                  that.newTabIndex = res.userEstates.length+2;
 
                   res.userEstates.map((item,index) => {
 
@@ -734,6 +733,23 @@
         this.panes[this.curPaneIndex].content.estateId = value.value
         this.panes[this.curPaneIndex].content.estateName = value.name
         this.panes[this.curPaneIndex].form.setFieldsValue({ estateName: value.name});
+        this.panes[this.curPaneIndex].content.gateBrakeLimits = [{
+          estateId:'',
+          buildingId:"",
+          unitId:'',
+          storeyId:'',
+          roomId:"",
+          id:'',
+          beginDatetime:'',
+          endDatetime:'',
+          remark:'',
+          roomName:'',
+          enable:true
+        }]
+        this.panes[this.curPaneIndex].form.getFieldDecorator('keys', {
+          initialValue: [],
+          preserve: true
+        });
       },
 
       //解绑change
@@ -764,7 +780,8 @@
         validateFields((errors, values) => {
           if (!errors) {
             const panes = this.panes;
-            const activeKey = `${this.newTabIndex++}`;
+            this.newTabIndex = parseInt(this.panes[this.panes.length-1].title.split('域')[1]?this.panes[this.panes.length-1].title.split('域')[1]:0)+3;
+            const activeKey = this.newTabIndex++;
             panes.push({
               title: `受访区域 ${activeKey-2}`,
               form:this.$form.createForm(this),
@@ -774,12 +791,12 @@
                 id:'',
                 gateBrakeLimits: []
               },
-              key: activeKey,
+              key: activeKey+'',
               remark:'',
               isEditEstate:true
             });
             that.panes = panes;
-            that.activeKey = activeKey;
+            that.activeKey = activeKey+'';
             that.panes[that.panes.length-1].form.getFieldDecorator('keys', {
               initialValue: [],
               preserve: true
@@ -807,6 +824,13 @@
           } else {
             activeKey = panes[0].key;
           }
+          panes.map((item,index) => {
+            if(index !== 0){
+              item.title = '受访区域'+index
+              item.key = (index+2)+'';
+            }
+          })
+          that.newTabIndex = panes.length+2
           that.panes = panes;
           that.activeKey = activeKey;
         }
@@ -909,6 +933,7 @@
 
         if(isSubmit){
           this.formData.userEstates = camerasData
+          this.formData.code = this.userType
           console.log(this.formData)
           this.confirmLoading = true
           this.$api.user.saveOrUpdate(this.formData)

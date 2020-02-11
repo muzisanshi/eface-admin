@@ -141,7 +141,7 @@
         imgData:{
           jsonParam:JSON.stringify({
             attOrigin:'ADMIN',
-            attType:'NORMAL'
+            attType:'HEAD_IMAGE'
           })
         },
         isClickMap:false

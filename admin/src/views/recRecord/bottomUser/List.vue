@@ -93,7 +93,7 @@
         {{ index + 1 }}
       </span>
 
-      <a-avatar size="large" shape="square" :src="record | resourceFullAddressFilter" slot="resourceFullAddress" slot-scope="record"/>
+      <a-avatar size="large" shape="square" :src="record | tImageResourceAddressFilter" slot="tImageResourceAddress" slot-scope="record"/>
       <span slot="status" slot-scope="text">
         <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />
       </span>
@@ -167,6 +167,18 @@ export default {
         {
           title: '相似度',
           dataIndex: 'similarity'
+        },
+        {
+          title: '摄氏度',
+          dataIndex: 't'
+        },
+        {
+          title: '华氏度',
+          dataIndex: 'fahrenheit'
+        },
+        {
+          title: '体温资源路径',
+          scopedSlots: { customRender: 'tImageResourceAddress' }
         },
         {
           title: '识别结果',

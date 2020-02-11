@@ -27,6 +27,10 @@ const resourceFullAddressFilter = function (record) {
   return record.resourceFullAddress
 }
 
+const tImageResourceAddressFilter = function (record) {
+  return record.tImageResourceAddress
+}
+
 const faceFullAddressFilter = function (record) {
   return record.faceFullAddress
 }
@@ -45,5 +49,6 @@ export {
   resourceFullAddressFilter,
   faceFullAddressFilter,
   frameAttResourceAddressFilter,
-  rootAttResourceAddressFilter
+  rootAttResourceAddressFilter,
+  tImageResourceAddressFilter
 }

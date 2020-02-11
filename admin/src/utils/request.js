@@ -64,7 +64,7 @@ service.interceptors.request.use(config => {
   }
   config.baseURL = process.env.VUE_APP_ADMIN_SERVICE_BASE_URL
   config.method = 'post'
-  config.timeout = 5000
+  config.timeout = 100000
   if (config.enctype) {
     config.headers['Content-Type'] = config.enctype
   } else {

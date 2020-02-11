@@ -145,21 +145,28 @@
       },
 
       beforeFileUpload(file) {
-        console.log(file)
-        if(file.type.split('/')[1].indexOf(this.fileType) === -1){
+        if(file.type){
+          if(file.type.split('/')[1].indexOf(this.fileType) === -1){
+            this.$notification.error({
+              message: '提示',
+              description: '上传文件和选择文件类型不对应'
+            })
+            return false
+          }
+        }else{
           this.$notification.error({
             message: '提示',
             description: '上传文件和选择文件类型不对应'
           })
           return false
         }
+
         this.fileImgName = file.name
         const timestamp = new Date().getTime() + ''
         const signature = SIGN.clientId + timestamp + SIGN.key
         this.clientHeader['X-timestamp'] = timestamp
         this.clientHeader['X-signature'] = md5(signature)
         this.file = file;
-
         return false
       },
 
