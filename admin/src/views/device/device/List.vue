@@ -80,13 +80,13 @@
 
       <!--<a-button type="primary" icon="export" @click="handleExportXls('/device/exportExcel','设备信息')">导出</a-button>-->
 
-      <a-button type="primary" @click="recoverDevice" v-if="selectedRows.length === 1 && selectedRows[0].deviceStatus === '离线'">上线</a-button>
+<!--      <a-button type="primary" @click="recoverDevice" v-if="selectedRows.length === 1 && selectedRows[0].deviceStatus === '离线'">上线</a-button>-->
 
       <a-button type="primary" @click="resetDevice" v-if="selectedRows.length === 1 && selectedRows[0].deviceStatus === '在线'">重置</a-button>
 
       <a-button type="primary" @click="openGateBrake" v-if="selectedRows.length === 1 && selectedRows[0].deviceStatus === '在线'">开启闸机</a-button>
 
-      <a-button type="primary" @click="distributionUser" v-if="selectedRows.length === 1 && selectedRows[0].deviceStatus === '在线'">同步底库用户</a-button>
+      <a-button type="primary" @click="lowerHairUser(selectedRows[0].id)" v-if="selectedRows.length === 1 && selectedRows[0].deviceStatus === '在线'">同步底库用户</a-button>
 
       <a-button type="primary" @click="rejectDevice" v-if="selectedRows.length === 1 && selectedRows[0].deviceStatus === '在线'">下线</a-button>
 
@@ -301,7 +301,7 @@
         <template v-if="!selectDeviceStatus">
           <a @click="handleEditInit(record)">修改</a>
           <a-divider type="vertical"/>
-          <a @click="lowerHairUser(record)">下发底库用户</a>
+          <a @click="lowerHairUser(record)">同步底库用户</a>
         </template>
       </span>
 
@@ -524,17 +524,6 @@ export default {
         })
     },
 
-    syncUser(){
-      this.$api.device.syncUser({ id: this.selectedRows[0].id })
-        .then(res => {
-          this.$notification.success({
-            message: '成功',
-            description: `同步底库用户成功！`
-          })
-          this.handleLoadOk()
-        })
-    },
-
     openGateBrake(){
       this.$api.device.openGateBrake({ deviceSn: this.selectedRows[0].sn })
         .then(res => {
@@ -620,13 +609,14 @@ export default {
       }
     },
 
-    lowerHairUser(record){
+    lowerHairUser(id){
+      console.log(id)
       let that = this;
       that.$confirm({
         title: '提示',
         content: '确定下发底库用户？',
         onOk () {
-          that.$api.device.syncUser({ id: record.id })
+          that.$api.device.syncUser({ id: id })
             .then(res => {
               that.$notification.success({
                 message: '成功',

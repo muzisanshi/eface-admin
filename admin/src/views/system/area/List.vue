@@ -111,6 +111,10 @@
             dataIndex: 'parentAreaName'
           },
           {
+            title: '行政区划代码',
+            dataIndex: 'id'
+          },
+          {
             title: '邮政编码',
             dataIndex: 'postCode'
           },

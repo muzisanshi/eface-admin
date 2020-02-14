@@ -77,6 +77,7 @@
     </div>
 
     <div class="table-operator">
+      <a-button type="danger" icon="delete" @click="handleDelete" :disabled="selectedRowKeys.length < 1">删除</a-button>
     </div>
 
     <s-table
@@ -86,16 +87,26 @@
       :scroll="{ x: 1500 }"
       :columns="columns"
       :data="loadData"
-      :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange,type:'radio'}"
+      :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectUserChange}"
     >
       <span slot="serial" slot-scope="text, record, index">
 
         {{ index + 1 }}
       </span>
-
-      <a-avatar size="large" shape="square" :src="record | tImageResourceAddressFilter" slot="tImageResourceAddress" slot-scope="record"/>
+      <a-avatar size="large" shape="square" :src="record | resourceFullAddressFilter" slot="resourceFullAddress" slot-scope="record"/>
       <span slot="status" slot-scope="text">
         <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />
+      </span>
+
+      <span slot="temperature" slot-scope="text, record">
+        <template>
+          <div>
+            <span v-if="parseFloat(record.t) <36" class="tImgColor" style="color: #5286F2">{{record.t+'℃/'+record.fahrenheit+'℉'}}</span>
+            <span v-if="parseFloat(record.t) <37.2 && parseFloat(record.t) >=36" class="tImgColor" style="color: #aeea68">{{record.t+'℃/'+record.fahrenheit+'℉'}}</span>
+            <span v-if="parseFloat(record.t) >=37.2 && parseFloat(record.t) <37.6" class="tImgColor" style="color: #FFB94E">{{record.t+'℃/'+record.fahrenheit+'℉'}}</span>
+            <span v-if="parseFloat(record.t) >37.6" class="tImgColor" style="color: #EA2E45">{{record.t+'℃/'+record.fahrenheit+'℉'}}</span>
+          </div>
+        </template>
       </span>
 
       <span slot="action" slot-scope="text, record">
@@ -169,16 +180,13 @@ export default {
           dataIndex: 'similarity'
         },
         {
-          title: '摄氏度',
-          dataIndex: 't'
+          title: '体温检查',
+          scopedSlots: { customRender: 'resourceFullAddress' }
         },
         {
-          title: '华氏度',
-          dataIndex: 'fahrenheit'
-        },
-        {
-          title: '体温资源路径',
-          scopedSlots: { customRender: 'tImageResourceAddress' }
+          title: '体温（℃/℉）',
+          dataIndex: 'temperature',
+          scopedSlots: { customRender: 'temperature' }
         },
         {
           title: '识别结果',
@@ -212,6 +220,8 @@ export default {
             res.records.forEach(item=>{
               item.recResultName = this.constants.data.recResult?this.constants.data.recResult[item.recResult]['name']:''
               item.qualityLevel = item.qualityLevel === 0?'优秀':item.qualityLevel === 1?'良好':item.qualityLevel === 2?'中':'差'
+              item.temperature = '';
+              item.resourceFullAddress = item.tImageResourceAddress?item.tImageResourceAddress:'';
             });
             return res
           })
@@ -256,7 +266,68 @@ export default {
     },
     clearSelected(){
       this.queryParam.estateName = ''
-    }
+    },
+
+    onSelectUserChange (selectedRowKeys, selectedRows) {
+      this.selectedRowKeys = selectedRowKeys
+
+      let that = this;
+      let hash = {},rowsIds = [],defferentId = '';
+      that.selectedRows = [...this.selectedRows,...selectedRows]
+      that.selectedRows = that.selectedRows.reduce(function(item, next) {
+        hash[next.id] ? '' : hash[next.id] = true && item.push(next);
+        return item
+      }, [])
+
+      if(selectedRowKeys.length < that.selectedRows.length){
+        let newRows = [];
+        rowsIds = []
+        that.selectedRows.map((item)=>{
+          rowsIds.push(item.id)
+        })
+        defferentId = this.selectedRowKeys.concat(rowsIds).filter(function(v, i, arr) {
+          return arr.indexOf(v) === arr.lastIndexOf(v);
+        });
+        newRows = that.selectedRows.filter(pane => pane.id !== defferentId[0])
+        that.selectedRows = [...newRows]
+      }
+
+      if(this.selectAdStatus){
+        this.$emit('selectedAd',that.selectedRows)
+      }
+
+    },
+
+    handleDelete () {
+      const that = this
+      that.$confirm({
+        title: '删除',
+        content: '确定删除勾选的记录？',
+        onOk () {
+          let params = []
+          if(that.selectedRows.length){
+            that.selectedRows.forEach((item,index)=>{
+              let obj = {
+                id:item.id,
+                recDatetime:item.recDatetime
+              }
+              params.push(obj)
+            })
+          }
+          that.$api.recRecord.del({ deleteParams: params })
+            .then(res => {
+              that.$notification.success({
+                message: '成功',
+                description: `删除成功！`
+              })
+              that.handleOk()
+            })
+        },
+        onCancel () {
+        }
+      })
+    },
+
   }
 }
 </script>

@@ -249,13 +249,13 @@
 
 
       delLogoImage(){
-        this.showLogoImageToLoginPage = ''
+        // this.showLogoImageToLoginPage = false
         this.logoImage = ''
         this.logoImageId = ''
       },
 
       delLogoBgImage(){
-        this.showLogoImageToIndexPage = ''
+        // this.loginBgImageToLoginPage = false
         this.loginBgImage = ''
         this.loginBgImageId = ''
       },

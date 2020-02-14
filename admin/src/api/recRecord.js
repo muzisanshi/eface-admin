@@ -2,6 +2,7 @@ import { axios } from '@/utils/request'
 
 const URI = {
   page: '/recRecord/getPage',
+  del: '/recRecord/delete',
   getRecImage: '/recRecord/getRecImage'
 }
 
@@ -19,7 +20,15 @@ function getRecImage (parameter) {
   })
 }
 
+function del (parameter) {
+  return axios({
+    url: URI.del,
+    params: parameter
+  })
+}
+
 export default {
   getPage,
-  getRecImage
+  getRecImage,
+  del
 }

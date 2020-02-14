@@ -22,7 +22,7 @@
         </a-form-item>
         <a-form-item label="内网IP" :labelCol="labelCol" :wrapperCol="wrapperCol">
           <a-input :maxLength="32"
-            v-decorator="['innerIp', {initialValue: this.formData.insideIp, rules: [{required: true, message: '请输入名称！'}]}]"/>
+            v-decorator="['innerIp', {initialValue: this.formData.insideIp, rules: [{required: true, message: '请输入内网IP！'}]}]"/>
         </a-form-item>
 
         <a-form-item label="外网IP" :labelCol="labelCol" :wrapperCol="wrapperCol">

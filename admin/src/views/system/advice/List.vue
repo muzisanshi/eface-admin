@@ -55,10 +55,7 @@
 
       <span slot="action" slot-scope="text, record">
           <a-dropdown :trigger="['click']" :disabled="record.handleState !== 'NOT_HANDLE'">
-            <span class="ant-dropdown-link" v-if="record.handleState !== 'NOT_HANDLE'">
-              不能操作
-            </span>
-            <a class="ant-dropdown-link" v-if="record.handleState === 'NOT_HANDLE'">
+            <a class="ant-dropdown-link" :class="{'not-edit': record.handleState !== 'NOT_HANDLE'}">
               操作
               <a-icon type="down"/>
             </a>
@@ -67,7 +64,7 @@
                 <a href="javascript:;" @click="handleState('RESOLVED',record.id)">已解决</a>
               </a-menu-item>
               <a-menu-item>
-                <a href="javascript:;" @click="handleState('RESOLVED',record.id)">忽略</a>
+                <a href="javascript:;" @click="handleState('IGNORE',record.id)">忽略</a>
               </a-menu-item>
             </a-menu>
           </a-dropdown>
@@ -163,4 +160,7 @@ export default {
 .table-page-search-wrapper .ant-col-sm-24{
   padding: 0 10px!important;
 }
+  .not-edit{
+    color: #cccccc;
+  }
 </style>

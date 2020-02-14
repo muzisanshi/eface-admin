@@ -99,6 +99,10 @@ export default {
     return {
       columns: [
         {
+          title: '姓名',
+          dataIndex: 'userRealName'
+        },
+        {
           title: '用户电话',
           dataIndex: 'userPhoneNo'
         },

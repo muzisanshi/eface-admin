@@ -91,6 +91,10 @@ export default {
           dataIndex: 'accountStateName'
         },
         {
+          title: '创建时间',
+          dataIndex: 'createDatetime'
+        },
+        {
           title: '上次登录时间',
           dataIndex: 'lastLoginDatetime'
         }
