@@ -102,8 +102,8 @@
         <template>
           <div>
             <span v-if="parseFloat(record.t) <36" class="tImgColor" style="color: #5286F2">{{record.t+'℃/'+record.fahrenheit+'℉'}}</span>
-            <span v-if="parseFloat(record.t) <37.2 && parseFloat(record.t) >=36" class="tImgColor" style="color: #aeea68">{{record.t+'℃/'+record.fahrenheit+'℉'}}</span>
-            <span v-if="parseFloat(record.t) >=37.2 && parseFloat(record.t) <37.6" class="tImgColor" style="color: #FFB94E">{{record.t+'℃/'+record.fahrenheit+'℉'}}</span>
+            <span v-if="parseFloat(record.t) <37.3 && parseFloat(record.t) >=36" class="tImgColor" style="color: #AEEA68">{{record.t+'℃/'+record.fahrenheit+'℉'}}</span>
+            <span v-if="parseFloat(record.t) >=37.3 && parseFloat(record.t) <37.6" class="tImgColor" style="color: #FFB94E">{{record.t+'℃/'+record.fahrenheit+'℉'}}</span>
             <span v-if="parseFloat(record.t) >37.6" class="tImgColor" style="color: #EA2E45">{{record.t+'℃/'+record.fahrenheit+'℉'}}</span>
           </div>
         </template>

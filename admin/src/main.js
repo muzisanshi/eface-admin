@@ -15,6 +15,7 @@ import './permission'
 import hasPermission from '@/utils/hasPermission'
 import './utils/filter'
 import Api from './api/index'
+import echarts from 'echarts'
 
 import * as filters from '@/filters/index'
 
@@ -25,6 +26,7 @@ Object.keys(filters).forEach(key => {
 Vue.config.productionTip = false
 Vue.prototype.$api = Api
 Vue.prototype.$store = store
+Vue.prototype.$echarts = echarts
 
 Vue.use(VueAxios)
 Vue.use(hasPermission)
