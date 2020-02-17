@@ -1,15 +1,19 @@
 <!--
- * @name EpidemicSituation.vue
+ * @name BodyTemperature.vue
  * @author lw
  * @date 2020.2.17
- * @desc 四川省发热检测分布图
+ * @desc 成都市公共区域体温实时状态
 -->
 <template>
   <div class="es-main">
     <header>
       <div class="header">
         <div class="header-box">
-          <div class="title">四川省发热检测分布图</div>
+          <div class="title">
+            <span style="display: inline-block;width: 35px;height: 35px;background-color: blue"></span>
+            成都市公共区域体温实时状态
+            <span style="font-size:24px;color:rgba(112,123,145,1);line-height:33px;padding-top: 48px;display: block;float: right;">（近14天）</span>
+          </div>
           <div class="time">
             <span style="padding-right: 20px">2020-02-15 16:58:59</span>
             <span><img style="width: 50px;" src="@/assets/es/btn_fullscreen@2x.png" alt=""></span>
@@ -22,55 +26,31 @@
         <div class="map-box">
           <div id="sichuan"></div>
           <div class="testing-statistics">
-            <div class="normal-color">
-              <div class="title">累计检测人次 <span>2095</span></div>
-              <div class="people-num">68,9680</div>
+            <div class="tabs">
+              <div class="active">实时检测<div class="three-box"></div></div>
+              <div>高热人群</div>
             </div>
-
-            <div class="normal-color red-color" style="margin: 60px 0">
-              <div class="title">累计检测人次 <span>2095</span></div>
-              <div class="people-num">68,9680</div>
+            <div class="tabs-content">
+              <div class="content-list">
+                <div class="tem-mess" v-for="(item,index) in testList" :class="{'red-back':item.temperature >37.2}">
+                  <div class="top-img"><img :src="item.imgUrl" alt=""></div>
+                  <div class="peo-mess">
+                    <p class="name">{{item.name}}</p>
+                    <p class="time">{{item.date}}</p>
+                    <p class="address">{{item.address}}</p>
+                  </div>
+                  <div class="temperature" :class="{'white-color':item.temperature >37.2}">{{item.temperature}}℃</div>
+                  <div class="icon"><img v-if="item.temperature >37.2" src="@/assets/es/btn_enter@2x.png" alt=""></div>
+                  <div class="three-box" v-if="item.temperature <= 37.2"></div>
+                </div>
+              </div>
             </div>
-
-            <div class="normal-color green-color">
-              <div class="title">累计检测人次 <span>2095</span></div>
-              <div class="people-num ">68,9680</div>
-            </div>
-          </div>
-          <div class="marshalling">
-            <img style="height: 60px;" src="@/assets/es/marshalling@2x.png" alt="">
           </div>
         </div>
         <div class="data-box">
           <div class="title">
-            <h2>高热人群走势</h2>
-            <p>体温异常人群</p>
-          </div>
-          <div class="today-box">
-            <div class="statistics">
-              <div class="status-img"><img src="@/assets/es/icon_grqst_red@2x.png" alt=""></div>
-              <div class="content">
-                <p class="content-title">今日高热人数</p>
-                <p class="content-num">582</p>
-              </div>
-            </div>
-
-            <div class="statistics">
-              <div class="status-img"><img src="@/assets/es/icon_grqst_blue@2x.png" alt=""></div>
-              <div class="content">
-                <p class="content-title">今日新增检测</p>
-                <p class="content-num">582</p>
-              </div>
-            </div>
-
-            <div class="statistics">
-              <div class="status-img"><img src="@/assets/es/icon_grqst_green@2x.png" alt=""></div>
-              <div class="content">
-                <p class="content-title">今日体温正常</p>
-                <p class="content-num">582</p>
-              </div>
-            </div>
-
+            <h2>体温高热趋势图</h2>
+            <p>体温异常人数</p>
           </div>
 
           <div class="ecahrt-line">
@@ -79,8 +59,8 @@
 
           <div class="peo-distribution">
             <div class="title">
-              <h2>四川省高热人群分布</h2>
-              <p>全省体温异常者</p>
+              <h2>体温高热人数分布</h2>
+              <p>全市体温异常者</p>
             </div>
             <div class="content-table">
               <div class="table-box">
@@ -179,64 +159,63 @@
           }
 
         ],
-        mapData:[
-
+        testList:[
           {
-            'name':'标点1',
-            'value':[103.964268, 30.727162, 37.5]
-          },
-
-          {
-            'name':'标点2',
-            'value':[104.04993, 30.738585, 37.5]
-          },
-
-          {
-            'name':'标点3',
-            'value':[104.08385, 30.71077, 37.5]
-          },
-
-          {
-            'name':'标点4',
-            'value':[104.122944, 30.659308, 37.5]
-          },
-
-          {
-            'name':'标点5',
-            'value':[104.08155, 30.610586, 37.5]
-          },
-        ],
-        dataList:[
-          {
-            cityName:'成都市',
-            totalHot:2598,
-            newAddNum:28
+            imgUrl:'',
+            name:'广晨辉',
+            date:'2020.2.13 14:58:57',
+            address:'四川省成都市天津路58号',
+            temperature:36.9
           },
           {
-            cityName:'绵阳市',
-            totalHot:598,
-            newAddNum:8
+            imgUrl:'',
+            name:'陌生人',
+            date:'2020.2.13 14:58:57',
+            address:'四川省成都市北京大道826号',
+            temperature:37.1
           },
           {
-            cityName:'攀枝花市',
-            totalHot:98,
-            newAddNum:5
+            imgUrl:'',
+            name:'陌生人',
+            date:'2020.2.13 14:58:57',
+            address:'四川省成都市双流区双楠国际小区',
+            temperature:38.1
           },
           {
-            cityName:'凉山彝族自治州',
-            totalHot:29,
-            newAddNum:0
+            imgUrl:'',
+            name:'宿成飞',
+            date:'2020.2.13 14:58:57',
+            address:'四川省成都市高新区软件园E区',
+            temperature:38.3
           },
           {
-            cityName:'甘孜藏族自治州',
-            totalHot:25,
-            newAddNum:1
+            imgUrl:'',
+            name:'陌生人',
+            date:'2020.2.13 14:58:57',
+            address:'四川省成都市双流机场小区',
+            temperature:37.2
           },
           {
-            cityName:'阿坝藏族羌族自治州',
-            totalHot:20,
-            newAddNum:0
-          }
+            imgUrl:'',
+            name:'陌生人',
+            date:'2020.2.13 14:58:57',
+            address:'四川省成都市双流区双楠国际小区',
+            temperature:37.9
+          },
+          {
+            imgUrl:'',
+            name:'洪翰',
+            date:'2020.2.13 14:58:57',
+            address:'四川省成都市双流区双楠国际小区',
+            temperature:35.9
+          },
+          {
+            imgUrl:'',
+            name:'宿成飞',
+            date:'2020.2.13 14:58:57',
+            address:'四川省成都市高新区软件园E区',
+            temperature:38.1
+          },
         ]
       }
     },
@@ -446,7 +425,7 @@
     },
     mounted(){
       this.$nextTick(function() {
-        this.showProvince('sichuan')
+        // this.showProvince('sichuan')
         this.showLine();
         this.charts.on('click', function (params) {
             console.log(params);
@@ -495,7 +474,7 @@
       display: flex;
       justify-content:space-between;
       .title{
-        width:500px;
+        width:820px;
         font-size:46px;
         font-family:AlibabaPuHuiTiM;
         color:#395CA8;
@@ -525,56 +504,98 @@
             height: 100%;
           }
           .testing-statistics{
-            width: 300px;
+            width: 425px;
             height: 460px;
-            padding: 30px 25px;
-            background:rgba(7,24,51,1);
-            opacity:0.9;
-            border:1px solid rgba(79,88,108,1);
             position: absolute;
             left: 10px;
-            top: 56px;
+            top: 20px;
             z-index: 10;
-            .normal-color{
-              .title{
-                width:250px;
-                height:32px;
-                background:rgba(11,32,64,1);
+            .tabs{
+              display: flex;
+              justify-content:flex-start;
+              div{
+                width:100px;
+                height:40px;
+                background:rgba(7,33,78,1);
                 border:1px solid;
-                border-image:linear-gradient(135deg, rgba(0,111,171,1), rgba(11,32,64,1), rgba(11,32,64,1), rgba(0,109,169,1)) 1 1;
-                font-size:20px;
-                color:rgba(220,220,245,1);
-                line-height:27px;
-                span{
-                  font-size:14px;
-                  color:rgba(159,159,226,1);
-                  line-height:20px;
-                }
+                border-color: rgba(7,33,78,1);
+                font-size:14px;
+                text-align: center;
+                color:rgba(112,123,145,1);
+                line-height:40px;
               }
-              .people-num{
-                font-size:40px;
-                color:rgba(194,203,222,1);
-                line-height:55px;
+              div.active{
+                background:rgba(1,20,58,1);
+                color:rgba(45,127,206,1);
+                border-color: rgba(45,127,206,1);
               }
             }
-            .red-color{
-              .title{
-                span{
-                  color:rgba(231,55,77,1);
+            .tabs-content{
+              .content-list{
+                .tem-mess{
+                  width: 100%;
+                  height: 90px;
+                  display: flex;
+                  justify-content:space-between;
+                  border:1px solid rgba(45,127,206,1);
+                  padding: 8px 12px;
+                  position: relative;
+                  margin-bottom: 10px;
+                  .top-img{
+                    width: 70px;
+                    height: 70px;
+                    background-color: blue;
+                    img{
+                      width: 100%;
+                      height: 100%;
+                    }
+                  }
+                  .peo-mess{
+                    width: 210px;
+                    padding-left: 8px;
+                    .name{
+                      font-size:27px;
+                      color:rgba(248,248,248,1);
+                      line-height:36px;
+                    }
+                    .time,.address{
+                      font-size:12px;
+                      color:#f2f2f2;
+                      line-height:18px;
+                    }
+                  }
+                  .temperature{
+                    font-size:27px;
+                    line-height: 70px;
+                    color:rgba(132,213,43,1);
+                  }
+                  .temperature.white-color{
+                    color:rgba(255,255,255,1);
+                  }
+                  .three-box{
+                    position: absolute;
+                    right: 0;
+                    top: 0;
+                    width: 0;
+                    height: 0;
+                    border-color: transparent #2D7FCE;
+                    border-width: 0 40px 20px 0;
+                    border-style: solid;
+                  }
+                  .icon{
+                    width: 26px;
+                    height: 26px;
+                    margin-top: 24px;
+                    img{
+                      width: 100%;
+                      height: 100%;
+                    }
+                  }
                 }
-              }
-              .people-num{
-                color:rgba(231,55,77,1);
-              }
-            }
-            .green-color{
-              .title{
-                span{
-                  color:rgba(132,213,43,1);
+                .tem-mess.red-back{
+                  border:1px solid #E7374D;
+                  background-color: #E7374D;
                 }
-              }
-              .people-num{
-                color:rgba(132,213,43,1);
               }
             }
           }
@@ -596,35 +617,6 @@
               font-size:16px;
               color:rgba(201,201,203,1);
               line-height:22px;
-            }
-          }
-          .today-box{
-            display: flex;
-            justify-content: space-between;
-            .statistics{
-              display: flex;
-              justify-content:space-between;
-              .status-img{
-                padding-top: 2px;
-                width: 48px;
-                height: 50px;
-                img{
-                  width: 100%;
-                  height: 100%;
-                }
-              }
-              .content{
-                .content-title{
-                  font-size:16px;
-                  color:rgba(255,255,255,1);
-                  line-height:22px;
-                }
-                .content-num{
-                  font-size:30px;
-                  color:rgba(255,255,255,1);
-                  line-height:42px;
-                }
-              }
             }
           }
           .ecahrt-line{

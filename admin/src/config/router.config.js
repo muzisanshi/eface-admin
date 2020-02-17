@@ -36,5 +36,13 @@ export const constantRouterMap = [
   {
     path: '/404',
     component: () => import('@/views/exception/404')
+  },
+  {
+    path: '/epidemicSituation',
+    component: () => import('@/views/esManage/EpidemicSituation')
+  },
+  {
+    path: '/bodyTemperature',
+    component: () => import('@/views/esManage/BodyTemperature')
   }
 ]
