@@ -372,7 +372,7 @@
           grid: {
             left: '10%',
             top: '10%',
-            bottom: '10%',
+            bottom: '12%',
             right: '5%',
           },
           tooltip: {},
@@ -545,10 +545,12 @@
                 font-size:20px;
                 color:rgba(220,220,245,1);
                 line-height:27px;
+                padding-left: 5px;
                 span{
                   font-size:14px;
                   color:rgba(159,159,226,1);
                   line-height:20px;
+                  padding-left: 5px;
                 }
               }
               .people-num{

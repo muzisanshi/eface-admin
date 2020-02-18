@@ -24,7 +24,7 @@
     <section>
       <div class="content-box clearfix">
         <div class="map-box">
-          <div id="sichuan"></div>
+          <div id="allmap" class="Map" />
           <div class="testing-statistics">
             <div class="tabs">
               <div class="active">实时检测<div class="three-box"></div></div>
@@ -46,6 +46,17 @@
               </div>
             </div>
           </div>
+
+          <div class="select-city-box">
+            <div class="select-city" @click="selectCity">
+              <div class="before-icon"><img style="width: 24px" height="24px" src="" alt=""></div>
+              <div>成都市</div>
+              <div class="before-icon"><img style="width: 24px" height="24px" src="" alt=""></div>
+            </div>
+            <div class="data-list" v-for="(item,index) in areaList" v-if="hasAreaList">
+              <div :class="{'active': index === nowIndex }"  @click="changeCity(item,index)">{{item.label}}</div>
+            </div>
+          </div>
         </div>
         <div class="data-box">
           <div class="title" style="padding-bottom: 0">
@@ -54,7 +65,7 @@
           </div>
 
           <div class="ecahrt-line">
-            <div id="hotLine"></div>
+            <div id="hotLine" />
           </div>
 
           <div class="peo-distribution">
@@ -102,13 +113,17 @@
 
   </div>
 </template>
-
 <script>
+  import {mixin} from '@/mixins/mixin'
   export default {
+    mixins:[mixin],
     data() {
       return {
         charts: '',
         charts2: '',
+        districtLoading:0,
+        nowIndex:0,
+        hasAreaList:false,
         data:[
           {
             name: '成都市',
@@ -175,6 +190,16 @@
             value: 8
           }
 
+        ],
+        areaList:[
+          {
+            label:'成都',
+            value: '1'
+          },
+          {
+            label:'绵阳',
+            value: '2'
+          }
         ],
         testList:[
           {
@@ -311,6 +336,13 @@
       }
     },
     methods: {
+
+      selectCity(){
+        this.hasAreaList != this.hasAreaList;
+      },
+      changeCity(item,index){
+        this.nowIndex = index;
+      },
       showProvince(id){
         let that = this;
         var name = 'sichuan';
@@ -513,6 +545,141 @@
       //         this.showCity('chengdu')
       //     },5000)
       // }
+
+      createMap(){
+        let that = this;
+        var map = new BMap.Map("allmap");   //初始化map, 绑定id=allmap
+        var point = new BMap.Point(104.321768, 30.88748);   // 初始化point, 给定一个默认x,y值
+        map.centerAndZoom(point, 10);        // 将point点放入map中，展示在页面中心展示，10=缩放程度
+        map.enableScrollWheelZoom();         // 开启滚动鼠标滑轮
+
+        var mapStyle ={
+          features: ["road","building","water","land"],//隐藏地图上的"poi",
+          style : 'dark',
+        };
+
+        map.setMapStyle(mapStyle);
+
+        that.addDistrict(map);
+      },
+
+      addPoint(map){
+        let that = this;
+        // 如有多个point去展示，可根据后端接口传入为主
+        let data = [
+          { x: 104.297047, y: 30.479542, name: '双楠国际小区',isHot:true },
+          { x: 104.221768, y: 30.58748, name: '金都花园小区',isHot:false },
+          { x: 104.294243, y: 30.656539, name: '国色天乡小区',isHot:true }
+        ]
+
+        data.forEach((e, i) => {
+          // 创建point, 将x,y值传入
+          let pointNumber = new BMap.Point(e.x, e.y)
+          let icon = null;
+          if(e.isHot){
+            icon = new BMap.Icon(require("@/assets/es/img_mapred.png"),new BMap.Size(73,73));
+          }else{
+            icon = new BMap.Icon(require("@/assets/es/img_mapgreen.png"),new BMap.Size(73,73));
+          }
+
+          var content = "<table>";
+          content = content + "<tr><td> 编号：001</td></tr>";
+          content = content + "<tr><td> 地点："+e.name+"</td></tr>";
+          content = content + "<tr><td> 时间：2018-1-3</td></tr>";
+          content += "</table>";
+
+          // 创建信息窗口对象
+          let infoWindow = new BMap.InfoWindow(content);
+
+          // 将data中的name加入地图中
+          var label = new BMap.Label(e.name, {
+            offset: new BMap.Size(0, -22)
+          });
+
+          label.setStyle({
+            padding:'2px 5px',
+            backgroundColor:'rgba(216,216,216,0.2)',
+            border:'1px solid rgba(45,127,206,1)',
+            color:'rgba(236,236,244,1)'
+          });
+
+          that.markerFun(pointNumber, infoWindow, label,icon,map)
+        })
+
+        // 获取当前地理位置
+        var geolocation = new BMap.Geolocation();
+        geolocation.getCurrentPosition(function (r) {
+          if (this.getStatus() == BMAP_STATUS_SUCCESS) {
+            var mk = new BMap.Marker(r.point);
+            map.addOverlay(mk);
+            map.panTo(r.point);
+            // alert('您的位置：' + r.point.lng + ',' + r.point.lat);
+          } else {
+            // alert('failed' + this.getStatus());
+          }
+        });
+      },
+
+      markerFun(points, infoWindows, label,icon,map){
+        let markers = new BMap.Marker(points,{icon:icon});
+        map.addOverlay(markers);  // 将标注添加到地图中
+        markers.setLabel(label);  // 将data中的name添加到地图中
+        // 标注的点击事件
+        markers.addEventListener("click", function (event) {
+          map.openInfoWindow(infoWindows, points);//参数：窗口、点  根据点击的点出现对应的窗口
+        });
+      },
+
+      addDistrict(map){
+        let that = this;
+        var bdary = new BMap.Boundary();
+        bdary.get("成都市", function(rs){       //获取行政区域
+          map.clearOverlays();        //清除地图覆盖物
+          var count = rs.boundaries.length; //行政区域的点有多少个
+          if (count === 0) {
+            alert('未能获取当前输入行政区域');
+            return ;
+          }
+          var pointArray = [];
+          for (var i = 0; i < count; i++) {
+            var ply = new BMap.Polygon(rs.boundaries[i], {strokeWeight: 2, strokeColor: "rgba(3,20,47,1)",fillColor: 'rgba(3,20,47,1)'}); //建立多边形覆盖物
+            map.addOverlay(ply);  //添加覆盖物
+            pointArray = pointArray.concat(ply.getPath());
+          }
+          if (that.districtLoading == 0) {
+            //全加载完成后画端点
+            that.addPoint(map)
+          }
+          that.districtLoading++;
+          map.setViewport(pointArray);    //调整视野
+          that.addlabel(map);
+        });
+      },
+
+      addlabel(map){
+        var pointArray = [
+          new BMap.Point(121.716076,23.703799),
+          new BMap.Point(112.121885,14.570616),
+          new BMap.Point(123.776573,25.695422)];
+        var optsArray = [{},{},{}];
+        var labelArray = [];
+        var contentArray = [
+          "台湾是中国的！",
+          "南海是中国的！",
+          "钓鱼岛是中国的！"];
+        for(var i = 0;i < pointArray.length; i++) {
+          optsArray[i].position = pointArray[i];
+          labelArray[i] = new BMap.Label(contentArray[i],optsArray[i]);
+          labelArray[i].setStyle({
+            color : "red",
+            fontSize : "12px",
+            height : "20px",
+            lineHeight : "20px",
+            fontFamily:"微软雅黑"
+          });
+          map.addOverlay(labelArray[i]);
+        }
+      }
     },
     mounted(){
       this.$nextTick(function() {
@@ -523,8 +690,12 @@
         // });
 
       })
+
+      this.createMap();
+
       // this.timer()
     },
+
     destroyed() {
       // clearInterval(this.timer)
     }
@@ -532,7 +703,8 @@
   }
 </script>
 
-<style lang="scss" type="text/scss" scoped>
+<style lang="scss" type="text/scss" >
+
   *{
     margin: 0;
     padding: 0;
@@ -590,7 +762,7 @@
           width: calc(100% - 440px);
           min-height: 400px;
           position: relative;
-          #sichuan{
+          #allmap{
             width: 100%;
             height: 100%;
           }
@@ -629,6 +801,7 @@
                   display: flex;
                   justify-content:space-between;
                   border:1px solid rgba(45,127,206,1);
+                  background:rgba(3,20,47,1);
                   padding: 8px 12px;
                   position: relative;
                   margin-bottom: 10px;
@@ -690,10 +863,37 @@
               }
             }
           }
-          .marshalling{
+          .select-city{
             position: absolute;
             right: 40px;
-            bottom: 14px;
+            top: 14px;
+            width:180px;
+            height:60px;
+            .before-icon{
+              position: absolute;
+              left: 5px;
+              top: 24px;
+            }
+            .ant-select{
+              width: 100%;
+              height: 100%;
+              .ant-select-selection--single{
+                width: 100%;
+                height: 100%;
+                background:rgba(32,45,70,1);
+                border-radius:3px;
+                border:2px solid rgba(64,71,94,1);
+                .ant-select-selection__rendered{
+                  margin-left: 30px;
+                  line-height: 60px;
+                  .ant-select-selection-selected-value{
+                    font-size: 18px;
+                    color:rgba(242,242,242,1);
+                  }
+                }
+              }
+            }
+
           }
         }
         .data-box{
