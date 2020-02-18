@@ -44,5 +44,9 @@ export const constantRouterMap = [
   {
     path: '/bodyTemperature',
     component: () => import('@/views/esManage/BodyTemperature')
+  },
+  {
+    path: '/memberTrail',
+    component: () => import('@/views/esManage/MemberTrail')
   }
 ]
