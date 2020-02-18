@@ -462,7 +462,7 @@
   }
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" type="text/scss" scoped>
   *{
     margin: 0;
     padding: 0;
@@ -631,7 +631,7 @@
             padding: 5px 0 15px;
             #hotLine{
               width: 100%;
-              height: 250px;
+              height: 230px;
             }
           }
           .peo-distribution{
@@ -658,7 +658,7 @@
                   }
                 }
                 .tr-list{
-                  height: 300px;
+                  height: 260px;
                   overflow: auto;
                   .table-td{
                     display: flex;

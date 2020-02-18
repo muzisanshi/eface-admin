@@ -11,7 +11,7 @@
         <div class="header-box">
           <div class="title">
             <span style="display: inline-block;width: 35px;height: 35px;background-color: blue"></span>
-            成都市公共区域体温实时状态
+            <span style="padding-left: 5px">成都市公共区域体温实时状态</span>
             <span style="font-size:24px;color:rgba(112,123,145,1);line-height:33px;padding-top: 48px;display: block;float: right;">（近14天）</span>
           </div>
           <div class="time">
@@ -22,7 +22,7 @@
       </div>
     </header>
     <section>
-      <div class="content-box">
+      <div class="content-box clearfix">
         <div class="map-box">
           <div id="sichuan"></div>
           <div class="testing-statistics">
@@ -48,8 +48,8 @@
           </div>
         </div>
         <div class="data-box">
-          <div class="title">
-            <h2>体温高热趋势图</h2>
+          <div class="title" style="padding-bottom: 0">
+            <h2><img src="@/assets/es/icon_grqst@2x (1).png" alt="">体温高热趋势图</h2>
             <p>体温异常人数</p>
           </div>
 
@@ -59,26 +59,43 @@
 
           <div class="peo-distribution">
             <div class="title">
-              <h2>体温高热人数分布</h2>
+              <h2><img src="@/assets/es/icon_grrsfb@2x.png" alt="">体温高热人数分布</h2>
               <p>全市体温异常者</p>
             </div>
-            <div class="content-table">
-              <div class="table-box">
-                <div class="table-th">
-                  <div class="city">城市</div>
-                  <div class="total-hot">累计发热</div>
-                  <div class="today-num">今日新增</div>
+            <div class="content-are-box">
+              <div class="area-list">
+                <div class="area-num-mess" v-for="(item,index) in areaNumList">
+                  <p><span>{{item.areaName}} </span><span>{{item.temHotNum}}</span></p>
                 </div>
-                <div class="tr-list">
-                  <div class="table-td" v-for="(item,index) in dataList">
-                    <div class="city">{{item.cityName}}</div>
-                    <div class="total-hot">{{item.totalHot}}</div>
-                    <div class="today-num" :class="{'red-color':item.newAddNum != 0}">{{item.newAddNum}}</div>
-                  </div>
+              </div>
+              <div class="change-area-data">
+                <img src="@/assets/es/btn_next@2x.png" alt="">
+              </div>
+            </div>
+          </div>
+
+          <div class="peo-distribution">
+            <div class="title">
+              <h2><img src="@/assets/es/icon_hyyq@2x.png" alt="">行业疫情</h2>
+            </div>
+            <div class="content-work-es">
+              <div class="unit-list">
+                <div class="unit-mess" v-for="(item,index) in unitList">
+                  <span>{{item.areaName}}</span>
+                  <span style="padding-left: 15px"><span class="num">{{item.temNum}}</span>例</span>
+                  <div class="three-box"></div>
+                </div>
+              </div>
+              <div class="dividing-line"><img src="@/assets/es/img_line@2x.png" alt=""></div>
+              <div class="peo-num-list">
+                <div class="peo-num" v-for="(item,index) in peoNumList">
+                  <span>{{item.areaName}}</span>
+                  <span><span class="num">{{item.temNum}}</span>人</span>
                 </div>
               </div>
             </div>
           </div>
+
         </div>
       </div>
     </section>
@@ -209,13 +226,87 @@
             address:'四川省成都市双流区双楠国际小区',
             temperature:35.9
           },
+          // {
+          //   imgUrl:'',
+          //   name:'宿成飞',
+          //   date:'2020.2.13 14:58:57',
+          //   address:'四川省成都市高新区软件园E区',
+          //   temperature:38.1
+          // },
+        ],
+        areaNumList:[
           {
-            imgUrl:'',
-            name:'宿成飞',
-            date:'2020.2.13 14:58:57',
-            address:'四川省成都市高新区软件园E区',
-            temperature:38.1
+            areaName:'高新区',
+            temHotNum:19
           },
+          {
+            areaName:'成华区',
+            temHotNum:15
+          },
+          {
+            areaName:'武侯区',
+            temHotNum:14
+          },
+          {
+            areaName:'金牛区',
+            temHotNum:11
+          },
+          {
+            areaName:'天府新区',
+            temHotNum:10
+          },
+          {
+            areaName:'锦江区',
+            temHotNum:10
+          },
+          {
+            areaName:'金堂县',
+            temHotNum:8
+          },
+          {
+            areaName:'大邑县',
+            temHotNum:7
+          },
+          {
+            areaName:'郫都区',
+            temHotNum:7
+          }
+        ],
+        unitList:[
+          {
+            areaName:'社区',
+            temNum:32
+          },
+          {
+            areaName:'餐饮',
+            temNum:39
+          },
+          {
+            areaName:'楼宇',
+            temNum:8
+          },
+          {
+            areaName:'学校',
+            temNum:5
+          }
+        ],
+        peoNumList:[
+          {
+            areaName:'低温人数',
+            temNum:32
+          },
+          {
+            areaName:'内容常温人数',
+            temNum:39
+          },
+          {
+            areaName:'低热人数',
+            temNum:8
+          },
+          {
+            areaName:'高温人数',
+            temNum:5
+          }
         ]
       }
     },
@@ -351,7 +442,7 @@
           grid: {
             left: '10%',
             top: '10%',
-            bottom: '10%',
+            bottom: '12%',
             right: '5%',
           },
           tooltip: {},
@@ -427,9 +518,9 @@
       this.$nextTick(function() {
         // this.showProvince('sichuan')
         this.showLine();
-        this.charts.on('click', function (params) {
-            console.log(params);
-        });
+        // this.charts.on('click', function (params) {
+        //     console.log(params);
+        // });
 
       })
       // this.timer()
@@ -441,7 +532,7 @@
   }
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" type="text/scss" scoped>
   *{
     margin: 0;
     padding: 0;
@@ -449,6 +540,7 @@
   p{
     margin: 0;
   }
+
   .user-layout-login {
     label {
       font-size: 14px;
@@ -464,7 +556,7 @@
   .es-main{
     width: 100%;
     height: 100%;
-    padding: 18px 50px;
+    padding: 18px 25px;
     background:rgba(3,20,47,1);
     .header-box{
       width: 100%;
@@ -474,12 +566,11 @@
       display: flex;
       justify-content:space-between;
       .title{
-        width:820px;
+        width:782px;
         font-size:46px;
-        font-family:AlibabaPuHuiTiM;
         color:#395CA8;
         line-height:63px;
-        padding: 48px 0 0 20px;
+        padding: 45px 0 0 17px;
       }
       .time{
         padding: 55px 20px 0 0;
@@ -496,7 +587,7 @@
         display: flex;
         justify-content:space-between;
         .map-box{
-          width: calc(100% - 560px);
+          width: calc(100% - 440px);
           min-height: 400px;
           position: relative;
           #sichuan{
@@ -606,12 +697,18 @@
           }
         }
         .data-box{
+          width: 430px;
           .title{
-            padding: 12px 0 25px;
+            padding: 8px 0 12px;
             h2{
               font-size:27px;
               color:rgba(255,255,255,1);
               line-height:37px;
+              img{
+                height: 25px;
+                margin:7px 5px 0 0;
+                float: left;
+              }
             }
             p{
               font-size:16px;
@@ -623,78 +720,104 @@
             padding: 5px 0 15px;
             #hotLine{
               width: 100%;
-              height: 250px;
+              height: 190px;
             }
           }
           .peo-distribution{
             color: #fff;
-            .content-table{
-              .table-box{
-                .table-th{
+            .content-work-es{
+              display: flex;
+              justify-content:space-between;
+              .unit-list{
+                width: 150px;
+                .unit-mess{
+                  width: 100%;
+                  height: 50px;
+                  background:rgba(32,45,70,1);
+                  border:1px solid rgba(64,71,94,1);
+                  position: relative;
+                  padding-left: 15px;
+                  span{
+                    font-size:18px;
+                    color:rgba(204,235,246,1);
+                    line-height:46px;
+                    .num{
+                      font-size:24px;
+                    }
+                  }
+                  .three-box{
+                    position: absolute;
+                    right: 0;
+                    top: 0;
+                    width: 0;
+                    height: 0;
+                    border-color: transparent rgba(125,125,143,1);
+                    border-width: 0 24px 16px 0;
+                    border-style: solid;
+                  }
+                }
+                .unit-mess+.unit-mess{
+                  margin-top: 12px;
+                }
+              }
+              .dividing-line{
+                width: 66px;
+                padding: 0 20px;
+                img{
+                  width: 26px;
+                }
+              }
+              .peo-num-list{
+                width: 196px;
+                .peo-num{
+                  width: 100%;
+                  height: 60px;
+                  padding: 0 20px 0 24px;
+                  background: url("~@/assets/es/bg_wdrs@2x.png") no-repeat;
+                  background-size: 100%;
                   display: flex;
                   justify-content:space-between;
-                  border-bottom: 1px solid #2D7FCE;
-                  padding-bottom: 15px;
-                  div{
-                    line-height:22px;
-                    padding-left: 5px;
-                  }
-                  .city{
-                    width: 200px;
-                  }
-                  .total-hot{
-                    width: 150px;
-                  }
-                  .today-num{
-                    width: 100px;
-                  }
-                }
-                .tr-list{
-                  height: 300px;
-                  overflow: auto;
-                  .table-td{
-                    display: flex;
-                    justify-content:space-between;
-                    border-bottom: 1px solid #2D7FCE;
-                    padding: 15px 0;
-                    div{
-                      line-height:22px;
-                      padding-left: 5px;
-                      font-size: 20px;
-                    }
-                    .city{
-                      width: 200px;
-                    }
-                    .total-hot{
-                      width: 150px;
-                    }
-                    .today-num{
-                      width: 90px;
-                    }
-                    .red-color{
-                      color: #E7374D;
+                  span{
+                    font-size:14px;
+                    color:rgba(204,235,246,1);
+                    line-height: 60px;
+                    .num{
+                      font-size:20px;
                     }
                   }
                 }
-                .tr-list::-webkit-scrollbar{
-                  width:9px;
-                  height:10px;
-                  /**/
+              }
+            }
+          }
+          .content-are-box{
+            display: flex;
+            justify-content:space-between;
+            .area-list{
+              display: flex;
+              flex-wrap: wrap;
+              width: 390px;
+              .area-num-mess{
+                width:106px;
+                height: 45px;
+                border-bottom:3px solid rgba(245,154,35,1);
+                margin: 0 12px;
+                p{
+                  padding: 5px 0 14px;
+                  font-size:18px;
+                  color:rgba(255,255,255,1);
+                  line-height:27px;
                 }
-                .tr-list::-webkit-scrollbar-track{
-                  background: rgba(46,62,87,1);
-                  border-radius:2px;
-                }
-                .tr-list::-webkit-scrollbar-thumb{
-                  background: #bfbfbf;
-                  border-radius:10px;
-                }
-                .tr-list::-webkit-scrollbar-thumb:hover{
-                  background: #333;
-                }
-                .tr-list::-webkit-scrollbar-corner{
-                  background: #179a16;
-                }
+              }
+            }
+            .change-area-data{
+              width:32px;
+              height:160px;
+              background:rgba(12,33,65,1);
+              cursor: pointer;
+              img{
+                width: 32px;
+                height: 32px;
+                margin-top: 70px;
               }
             }
           }
