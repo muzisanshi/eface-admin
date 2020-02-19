@@ -39,6 +39,8 @@ import deviceVersion from './deviceVersion'
 import appVersion from './appVersion'
 import userAction from './userAction'
 import advice from './advice'
+import provinceCheck from './provinceCheck'
+import cityCheck from './cityCheck'
 
 export default {
   constants,
@@ -80,5 +82,7 @@ export default {
   deviceVersion,
   appVersion,
   userAction,
-  advice
+  advice,
+  provinceCheck,
+  cityCheck
 }
