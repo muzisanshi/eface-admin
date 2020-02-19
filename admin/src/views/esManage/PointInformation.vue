@@ -280,11 +280,6 @@
         if(this.pageNumber>0){
           this.pageNumber--
           this.getUserHeatData()
-        }else{
-          this.$notification.error({
-            message: '提示',
-            description: `已到最首页`
-          })
         }
       },
 
@@ -292,11 +287,6 @@
         if(this.hasNext){
           this.pageNumber++
           this.getUserHeatData()
-        }else{
-          this.$notification.error({
-            message: '提示',
-            description: `没有更多数据了`
-          })
         }
       },
 
