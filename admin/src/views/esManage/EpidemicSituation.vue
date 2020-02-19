@@ -23,20 +23,32 @@
           <div id="sichuan"></div>
           <div class="testing-statistics">
             <div class="normal-color">
-              <div class="title">累计检测人次 <span>2095</span></div>
-              <div class="people-num">68,9680</div>
+              <div class="title">累计检测人次 <span><img style="margin-top: -4px" src="@/assets/es/img_upb.png" alt=""></span><span>{{toThousands(statistics.temperatureCheckTodayTotal)}}</span></div>
+              <div class="people-num">{{toFourth(statistics.temperatureCheckTotal)}}</div>
             </div>
 
             <div class="normal-color red-color" style="margin: 60px 0">
-              <div class="title">累计检测人次 <span>2095</span></div>
-              <div class="people-num">68,9680</div>
+              <div class="title">累计检测人次 <span><img style="margin-top: -4px" src="@/assets/es/img_upb.png" alt=""></span><span>{{toThousands(statistics.temperatureHeatTodayTotal)}}</span></div>
+              <div class="people-num">{{toFourth(statistics.temperatureHeatTotal)}}</div>
             </div>
 
             <div class="normal-color green-color">
-              <div class="title">累计检测人次 <span>2095</span></div>
-              <div class="people-num ">68,9680</div>
+              <div class="title">累计检测人次 <span><img style="margin-top: -4px" src="@/assets/es/img_upg.png" alt=""></span><span>{{toThousands(statistics.temperatureNormalTodayTotal)}}</span></div>
+              <div class="people-num ">{{toFourth(statistics.temperatureNormalTotal)}}</div>
             </div>
           </div>
+
+          <div class="select-city-box">
+            <div class="select-city" @click="selectCity">
+              <div class="before-icon"><img style="width: 24px;height: 24px" src="@/assets/es/icon_map.png" alt=""></div>
+              <div class="select-value">{{areaVal}}</div>
+              <div class="after-icon"><img style="width: 21px;height: 13px" src="@/assets/es/btn_pull_down.png" alt=""></div>
+            </div>
+            <div class="data-list tr-list" v-if="hasAreaList">
+              <div class="option" v-for="(item,index) in areaList" :class="{'active': index === nowIndex }"  @click="changeCity(item,index)">{{item.name}}</div>
+            </div>
+          </div>
+
           <div class="marshalling">
             <img style="height: 60px;" src="@/assets/es/marshalling@2x.png" alt="">
           </div>
@@ -51,7 +63,7 @@
               <div class="status-img"><img src="@/assets/es/icon_grqst_red@2x.png" alt=""></div>
               <div class="content">
                 <p class="content-title">今日高热人数</p>
-                <p class="content-num">582</p>
+                <p class="content-num">{{temperatureCheckData.temperatureHeatTodayTotal}}</p>
               </div>
             </div>
 
@@ -59,7 +71,7 @@
               <div class="status-img"><img src="@/assets/es/icon_grqst_blue@2x.png" alt=""></div>
               <div class="content">
                 <p class="content-title">今日新增检测</p>
-                <p class="content-num">582</p>
+                <p class="content-num">{{temperatureCheckData.temperatureCheckTodayTotal}}</p>
               </div>
             </div>
 
@@ -67,7 +79,7 @@
               <div class="status-img"><img src="@/assets/es/icon_grqst_green@2x.png" alt=""></div>
               <div class="content">
                 <p class="content-title">今日体温正常</p>
-                <p class="content-num">582</p>
+                <p class="content-num">{{temperatureCheckData.temperatureNormalTodayTotal}}</p>
               </div>
             </div>
 
@@ -91,9 +103,9 @@
                 </div>
                 <div class="tr-list">
                   <div class="table-td" v-for="(item,index) in dataList">
-                    <div class="city">{{item.cityName}}</div>
-                    <div class="total-hot">{{item.totalHot}}</div>
-                    <div class="today-num" :class="{'red-color':item.newAddNum != 0}">{{item.newAddNum}}</div>
+                    <div class="city">{{item.areaName}}</div>
+                    <div class="total-hot">{{item.temperatureHeatTotal}}</div>
+                    <div class="today-num" :class="{'red-color':item.temperatureHeatTodayAddTotal != 0}">{{item.temperatureHeatTodayAddTotal}}</div>
                   </div>
                 </div>
               </div>
@@ -107,140 +119,116 @@
 </template>
 
 <script>
+  import {mixin} from '@/mixins/mixin'
   export default {
+    mixins:[mixin],
     data() {
       return {
         charts: '',
         charts2: '',
-        data:[
-          {
-            name: '成都市',
-            value: 139
-          }, {
-            name: '绵阳市',
-            value: 22
-          }, {
-            name: '自贡市',
-            value: 9
-          }, {
-            name: '攀枝花市',
-            value: 13
-          }, {
-            name: '泸州市',
-            value: 19
-          }, {
-            name: '德阳市',
-            value: 17
-          }, {
-            name: '广元市',
-            value: 6
-          }, {
-            name: '遂宁市',
-            value: 10
-          }, {
-            name: '内江市',
-            value: 22
-          }, {
-            name: '乐山市',
-            value: 3
-          }, {
-            name: '资阳市',
-            value: 3
-          }, {
-            name: '宜宾市',
-            value: 11
-          }, {
-            name: '南充市',
-            value: 35
-          }, {
-            name: '达州市',
-            value: 36
-          }, {
-            name: '雅安市',
-            value: 7
-          }, {
-            name: '阿坝藏族羌族自治州',
-            value: 1
-          }, {
-            name: '甘孜藏族自治州',
-            value: 44
-          }, {
-            name: '凉山彝族自治州',
-            value: 11
-          }, {
-            name: '广安市',
-            value: 30
-          }, {
-            name: '巴中市',
-            value: 24
-          }, {
-            name: '眉山市',
-            value: 8
-          }
+        data:[],
+        dataList:[],
+        nowIndex:-1,
+        hasAreaList:false,
+        areaVal:'四川省',
+        areaList:[],
+        temperatureCheckData:{
 
-        ],
-        mapData:[
-
-          {
-            'name':'标点1',
-            'value':[103.964268, 30.727162, 37.5]
-          },
-
-          {
-            'name':'标点2',
-            'value':[104.04993, 30.738585, 37.5]
-          },
-
-          {
-            'name':'标点3',
-            'value':[104.08385, 30.71077, 37.5]
-          },
-
-          {
-            'name':'标点4',
-            'value':[104.122944, 30.659308, 37.5]
-          },
-
-          {
-            'name':'标点5',
-            'value':[104.08155, 30.610586, 37.5]
-          },
-        ],
-        dataList:[
-          {
-            cityName:'成都市',
-            totalHot:2598,
-            newAddNum:28
-          },
-          {
-            cityName:'绵阳市',
-            totalHot:598,
-            newAddNum:8
-          },
-          {
-            cityName:'攀枝花市',
-            totalHot:98,
-            newAddNum:5
-          },
-          {
-            cityName:'凉山彝族自治州',
-            totalHot:29,
-            newAddNum:0
-          },
-          {
-            cityName:'甘孜藏族自治州',
-            totalHot:25,
-            newAddNum:1
-          },
-          {
-            cityName:'阿坝藏族羌族自治州',
-            totalHot:20,
-            newAddNum:0
-          }
-        ]
+        },
+        AxData:[],
+        serData:[],
+        statistics:{}
       }
     },
+    created(){
+      this.getHeatDistributeStatistics();
+    },
     methods: {
+
+      getHeatDistributeStatistics(){
+        let that = this;
+
+        that.$api.provinceCheck.statistics({areaId: '510000'})
+          .then(res => {
+            that.statistics = res
+          })
+
+        that.$api.provinceCheck.mapStatistics({areaId: '510000'})
+          .then(res => {
+            that.dataList = res
+            if(res.length){
+              res.forEach((item)=>{
+                let obj = {
+                  name:item.areaName,
+                  value:item.temperatureHeatTotal,
+                  areaId:item.areaId
+                };
+                that.data.push(obj)
+
+                let objArea = {
+                  name:item.areaName,
+                  value:item.areaId,
+                  areaId:item.areaId
+                };
+
+                that.areaList.push(objArea)
+              })
+
+              that.showProvince('sichuan')
+
+              that.$nextTick(function() {
+
+                that.charts.on('click', function (params) {
+                  if(params.data.areaId === '510100'){
+                    that.nextPage(params)
+                  }
+
+                });
+
+              })
+
+            }
+          })
+
+        that.$api.provinceCheck.heatTrendStatistics({areaId: '510000'})
+          .then(res => {
+            that.temperatureCheckData = res
+            if(res.dateStatistics.length){
+              res.dateStatistics.forEach((item)=>{
+                let dateStr = item.date.substring(item.date.length-4).replace("-", "/");
+                that.AxData.push(dateStr)
+                that.serData.push(item.temperatureHeatTotal)
+              })
+
+              that.showLine();
+            }
+          })
+
+
+
+        that.$api.provinceCheck.heatDistributeStatistics({areaId: '510000'})
+          .then(res => {
+              that.dataList = res
+          })
+
+      },
+
+      selectCity(){
+        this.hasAreaList = !this.hasAreaList;
+      },
+
+      changeCity(item,index){
+        // this.nowIndex = index;
+        // this.areaVal = item.name
+      },
+
+      nextPage(item){
+        this.$router.push({
+          name: 'bodyTemperature',
+          params: item
+        })
+      },
+
       showProvince(id){
         let that = this;
         var name = 'sichuan';
@@ -363,6 +351,7 @@
       },
 
       showLine(){
+
         let hotLineChart = this.$echarts.init(document.getElementById('hotLine'))
         // 绘制图表
         hotLineChart.setOption({
@@ -395,11 +384,12 @@
                 lineHeight: 22
               }
             },
-            data: ['02.01', '02.03', '02.05', '02.07', '02.09', '02.11', '02.13'],
+            data: this.AxData,
           },
           yAxis: {
             type: 'value',
             position: 'left',
+            minInterval: 1,
             lineStyle: {
               color: '#fff',
             },
@@ -429,7 +419,7 @@
             name: '新增确诊',
             type: "line",
             yAxisIndex: 0,
-            data: [11, 20, 18, 11, 14, 8, 16],
+            data: this.serData,
             itemStyle: {
               normal: {
                 borderWidth: 10,
@@ -445,14 +435,7 @@
       // }
     },
     mounted(){
-      this.$nextTick(function() {
-        this.showProvince('sichuan')
-        this.showLine();
-        this.charts.on('click', function (params) {
-            console.log(params);
-        });
 
-      })
       // this.timer()
     },
     destroyed() {
@@ -487,6 +470,25 @@
     height: 100%;
     padding: 18px 50px;
     background:rgba(3,20,47,1);
+    .tr-list::-webkit-scrollbar{
+      width:9px;
+      height:10px;
+      /**/
+    }
+    .tr-list::-webkit-scrollbar-track{
+      background: rgba(46,62,87,1);
+      border-radius:2px;
+    }
+    .tr-list::-webkit-scrollbar-thumb{
+      background: #bfbfbf;
+      border-radius:10px;
+    }
+    .tr-list::-webkit-scrollbar-thumb:hover{
+      background: #333;
+    }
+    .tr-list::-webkit-scrollbar-corner{
+      background: #179a16;
+    }
     .header-box{
       width: 100%;
       height: 133px;
@@ -577,6 +579,64 @@
               }
               .people-num{
                 color:rgba(132,213,43,1);
+              }
+            }
+          }
+          .select-city-box{
+            position: absolute;
+            right: -20px;
+            top: 60px;
+            width:140px;
+            border-radius:3px;
+            border:2px solid rgba(64,71,94,1);
+            .select-city{
+              background:rgba(32,45,70,1);
+              border-radius:3px;
+              height:40px;
+              display: flex;
+              justify-content:space-between;
+              padding: 5px 10px 5px 5px;
+              cursor: pointer;
+              .before-icon{
+                width: 24px;
+                height: 24px;
+              }
+              .after-icon{
+                width: 21px;
+                height: 13px;
+              }
+              .select-value{
+                width: 100px;
+                padding-left: 5px;
+                color:rgba(242,242,242,1);
+                line-height: 26px;
+              }
+              .ant-select{
+                width: 100%;
+                height: 100%;
+              }
+
+            }
+            .data-list{
+              background:rgba(1,20,58,1);
+              height: 200px;
+              overflow-y: auto;
+              .option{
+                height: 36px;
+                line-height: 36px;
+                color:rgba(112,123,145,1);
+                padding-left: 10px;
+                cursor: pointer;
+              }
+              .option.active{
+                background:rgba(5,34,92,1);
+                border-bottom:2px solid rgba(64,71,94,1);
+                color:rgba(45,127,206,1);
+              }
+              .option:hover{
+                background:rgba(5,34,92,1);
+                border-bottom:2px solid rgba(64,71,94,1);
+                color:rgba(45,127,206,1);
               }
             }
           }
@@ -685,25 +745,6 @@
                       color: #E7374D;
                     }
                   }
-                }
-                .tr-list::-webkit-scrollbar{
-                  width:9px;
-                  height:10px;
-                  /**/
-                }
-                .tr-list::-webkit-scrollbar-track{
-                  background: rgba(46,62,87,1);
-                  border-radius:2px;
-                }
-                .tr-list::-webkit-scrollbar-thumb{
-                  background: #bfbfbf;
-                  border-radius:10px;
-                }
-                .tr-list::-webkit-scrollbar-thumb:hover{
-                  background: #333;
-                }
-                .tr-list::-webkit-scrollbar-corner{
-                  background: #179a16;
                 }
               }
             }

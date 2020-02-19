@@ -39,6 +39,8 @@ import deviceVersion from './deviceVersion'
 import appVersion from './appVersion'
 import userAction from './userAction'
 import advice from './advice'
+import provinceCheck from './provinceCheck'
+import cityCheck from './cityCheck'
 
 import trail from './trail'
 
@@ -83,6 +85,11 @@ export default {
   appVersion,
   userAction,
   advice,
+<<<<<<< HEAD
   
   trail,
+=======
+  provinceCheck,
+  cityCheck
+>>>>>>> 500ca4f50de2c87099313d2b174a06eb74d98e94
 }

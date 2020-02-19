@@ -39,18 +39,22 @@ export const constantRouterMap = [
   },
   {
     path: '/epidemicSituation',
+    name: 'epidemicSituation',
     component: () => import('@/views/esManage/EpidemicSituation')
   },
   {
     path: '/bodyTemperature',
+    name: 'bodyTemperature',
     component: () => import('@/views/esManage/BodyTemperature')
   },
   {
     path: '/pointInformation',
+    name: 'pointInformation',
     component: () => import('@/views/esManage/PointInformation')
   },
   {
     path: '/memberTrail',
+    name: 'memberTrail',
     component: () => import('@/views/esManage/MemberTrail')
   },
   {

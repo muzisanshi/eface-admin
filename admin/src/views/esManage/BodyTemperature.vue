@@ -10,7 +10,7 @@
       <div class="header">
         <div class="header-box">
           <div class="title">
-            <span style="display: inline-block;width: 35px;height: 35px;background-color: blue"></span>
+            <span style="display: inline-block;width: 41px;height: 40px;"><img style="width: 100%;height: 100%;margin-top: -8px" src="@/assets/es/btn_back_top.png" alt=""></span>
             <span style="padding-left: 5px">成都市公共区域体温实时状态</span>
             <span style="font-size:24px;color:rgba(112,123,145,1);line-height:33px;padding-top: 48px;display: block;float: right;">（近14天）</span>
           </div>
@@ -32,12 +32,12 @@
             </div>
             <div class="tabs-content">
               <div class="content-list">
-                <div class="tem-mess" v-for="(item,index) in testList" :class="{'red-back':item.temperature >37.2}">
-                  <div class="top-img"><img :src="item.imgUrl" alt=""></div>
+                <div class="tem-mess" v-for="(item,index) in testList" @click="toTrail(item)" :class="{'red-back':item.temperature >37.2}">
+                  <div class="top-img"><img :src="item.headImageRemoteUrl" alt=""></div>
                   <div class="peo-mess">
-                    <p class="name">{{item.name}}</p>
-                    <p class="time">{{item.date}}</p>
-                    <p class="address">{{item.address}}</p>
+                    <p class="name">{{item.userRealName?item.userRealName:'陌生人'}}</p>
+                    <p class="time">{{item.recDatetime}}</p>
+                    <p class="address">{{item.fullAddress}}</p>
                   </div>
                   <div class="temperature" :class="{'white-color':item.temperature >37.2}">{{item.temperature}}℃</div>
                   <div class="icon"><img v-if="item.temperature >37.2" src="@/assets/es/btn_enter@2x.png" alt=""></div>
@@ -49,20 +49,21 @@
 
           <div class="select-city-box">
             <div class="select-city" @click="selectCity">
-              <div class="before-icon"><img style="width: 24px" height="24px" src="" alt=""></div>
-              <div>成都市</div>
-              <div class="before-icon"><img style="width: 24px" height="24px" src="" alt=""></div>
+              <div class="before-icon"><img style="width: 24px;height: 24px" src="@/assets/es/icon_map.png" alt=""></div>
+              <div class="select-value">{{areaVal}}</div>
+              <div class="after-icon"><img style="width: 21px;height: 13px" src="@/assets/es/btn_pull_down.png" alt=""></div>
             </div>
-            <div class="data-list" v-for="(item,index) in areaList" v-if="hasAreaList">
-              <div :class="{'active': index === nowIndex }"  @click="changeCity(item,index)">{{item.label}}</div>
+            <div class="data-list" v-if="hasAreaList">
+              <div class="option" v-for="(item,index) in areaList" :class="{'active': index === nowIndex }"  @click="changeCity(item,index)">{{item.label}}</div>
             </div>
           </div>
         </div>
         <div class="data-box">
+
           <div class="title" style="padding-bottom: 0">
-            <h2><img src="@/assets/es/icon_grqst@2x (1).png" alt="">体温高热趋势图</h2>
-            <p>体温异常人数</p>
-          </div>
+          <h2><img src="@/assets/es/icon_grqst@2x (1).png" alt="">体温高热趋势图</h2>
+          <p>体温异常人数</p>
+        </div>
 
           <div class="ecahrt-line">
             <div id="hotLine" />
@@ -76,17 +77,17 @@
             <div class="content-are-box">
               <div class="area-list">
                 <div class="area-num-mess" v-for="(item,index) in areaNumList">
-                  <p><span>{{item.areaName}} </span><span>{{item.temHotNum}}</span></p>
+                  <p><span>{{item.areaName}} </span><span>{{item.temperatureHeatTotal}}</span></p>
                 </div>
               </div>
-              <div class="change-area-data">
+              <div class="change-area-data" @click="changeAreaData">
                 <img src="@/assets/es/btn_next@2x.png" alt="">
               </div>
             </div>
           </div>
 
           <div class="peo-distribution">
-            <div class="title">
+            <div class="title" style="margin: 5px 0">
               <h2><img src="@/assets/es/icon_hyyq@2x.png" alt="">行业疫情</h2>
             </div>
             <div class="content-work-es">
@@ -124,6 +125,8 @@
         districtLoading:0,
         nowIndex:0,
         hasAreaList:false,
+        areaVal:'成都市',
+        areaId: '510100',
         data:[
           {
             name: '成都市',
@@ -193,126 +196,36 @@
         ],
         areaList:[
           {
-            label:'成都',
+            label:'成都市',
             value: '1'
           },
           {
-            label:'绵阳',
+            label:'绵阳市',
             value: '2'
           }
         ],
-        testList:[
-          {
-            imgUrl:'',
-            name:'广晨辉',
-            date:'2020.2.13 14:58:57',
-            address:'四川省成都市天津路58号',
-            temperature:36.9
-          },
-          {
-            imgUrl:'',
-            name:'陌生人',
-            date:'2020.2.13 14:58:57',
-            address:'四川省成都市北京大道826号',
-            temperature:37.1
-          },
-          {
-            imgUrl:'',
-            name:'陌生人',
-            date:'2020.2.13 14:58:57',
-            address:'四川省成都市双流区双楠国际小区',
-            temperature:38.1
-          },
-          {
-            imgUrl:'',
-            name:'宿成飞',
-            date:'2020.2.13 14:58:57',
-            address:'四川省成都市高新区软件园E区',
-            temperature:38.3
-          },
-          {
-            imgUrl:'',
-            name:'陌生人',
-            date:'2020.2.13 14:58:57',
-            address:'四川省成都市双流机场小区',
-            temperature:37.2
-          },
-          {
-            imgUrl:'',
-            name:'陌生人',
-            date:'2020.2.13 14:58:57',
-            address:'四川省成都市双流区双楠国际小区',
-            temperature:37.9
-          },
-          {
-            imgUrl:'',
-            name:'洪翰',
-            date:'2020.2.13 14:58:57',
-            address:'四川省成都市双流区双楠国际小区',
-            temperature:35.9
-          },
-          // {
-          //   imgUrl:'',
-          //   name:'宿成飞',
-          //   date:'2020.2.13 14:58:57',
-          //   address:'四川省成都市高新区软件园E区',
-          //   temperature:38.1
-          // },
-        ],
-        areaNumList:[
-          {
-            areaName:'高新区',
-            temHotNum:19
-          },
-          {
-            areaName:'成华区',
-            temHotNum:15
-          },
-          {
-            areaName:'武侯区',
-            temHotNum:14
-          },
-          {
-            areaName:'金牛区',
-            temHotNum:11
-          },
-          {
-            areaName:'天府新区',
-            temHotNum:10
-          },
-          {
-            areaName:'锦江区',
-            temHotNum:10
-          },
-          {
-            areaName:'金堂县',
-            temHotNum:8
-          },
-          {
-            areaName:'大邑县',
-            temHotNum:7
-          },
-          {
-            areaName:'郫都区',
-            temHotNum:7
-          }
-        ],
+        testList:[],
+        areaPointList:[],
+        AxData:[],
+        serData:[],
+        areaNumAllList:[],
+        areaNumList:[],
         unitList:[
           {
             areaName:'社区',
-            temNum:32
+            temNum:0
           },
           {
             areaName:'餐饮',
-            temNum:39
+            temNum:0
           },
           {
             areaName:'楼宇',
-            temNum:8
+            temNum:0
           },
           {
             areaName:'学校',
-            temNum:5
+            temNum:0
           }
         ],
         peoNumList:[
@@ -335,133 +248,120 @@
         ]
       }
     },
+    created(){
+      if(this.$route.params.data){
+        this.areaId = this.$route.params.data.areaId
+      }
+      this.getData()
+    },
     methods: {
 
+      toTrail(item){
+        this.$router.push({
+          name:'memberTrail',
+          params:item
+        })
+      },
+
+      getData(){
+        let that = this;
+        that.$api.cityCheck.getRecRecordPage(
+          {
+            areaId: that.areaId,
+            page:{
+              pageNumber: 1,
+              pageSize: 7
+            }
+          })
+          .then(res => {
+            that.testList= res.data
+          })
+
+
+        that.$api.cityCheck.getEstates(
+          {
+            areaId: that.areaId
+          })
+          .then(res => {
+            that.areaPointList= res
+          })
+
+        that.$api.cityCheck.heatTrendStatistics(
+          {
+            areaId: that.areaId
+          })
+          .then(res => {
+            if(res.length){
+              res.forEach((item)=>{
+                let dateStr = item.date.substring(item.date.length-4).replace("-", "/");
+                that.AxData.push(dateStr)
+                that.serData.push(item.temperatureHeatTotal)
+              })
+
+              that.showLine();
+            }
+          })
+
+        that.$api.cityCheck.heatDistributeStatistics(
+          {
+            areaId: that.areaId
+          })
+          .then(res => {
+            that.areaNumAllList= res
+            if(that.nowIndex === 0){
+              that.getAreaLookList(0)
+            }
+          })
+
+        that.$api.cityCheck.industryEpidemicStatistics(
+          {
+            areaId: that.areaId
+          })
+          .then(res => {
+            that.unitList[0].temNum= res
+            console.log(res)
+          })
+
+      },
+
+      getAreaLookList(idx){
+        let that = this;
+        that.areaNumList= []
+        if(idx === 0){
+          this.areaNumAllList.forEach((item,index)=>{
+            if(index<9){
+              that.areaNumList.push(item)
+            }
+          })
+        }else if(idx === 1){
+          this.areaNumAllList.forEach((item,index)=>{
+            if(index>=9 && index<18){
+              that.areaNumList.push(item)
+            }
+          })
+        }else{
+          this.areaNumAllList.forEach((item,index)=>{
+            if(index>=18){
+              that.areaNumList.push(item)
+            }
+          })
+        }
+
+      },
+
+      changeAreaData(){
+        if(this.areaNumList.length<9){
+          this.nowIndex = 0;
+        }else{
+          this.nowIndex++;
+        }
+        this.getAreaLookList(this.nowIndex)
+      },
+
       selectCity(){
-        this.hasAreaList != this.hasAreaList;
+        this.hasAreaList = !this.hasAreaList;
       },
       changeCity(item,index){
-        this.nowIndex = index;
-      },
-      showProvince(id){
-        let that = this;
-        var name = 'sichuan';
-
-        this.charts = this.$echarts.init(document.getElementById(id))
-
-        let geoJson = require('@/utils/json/sichuan.json');
-
-        this.$echarts.registerMap(name, geoJson);
-
-        this.charts.setOption({
-          backgroundColor: "rgba(3,20,47,1)",
-          title: {
-            show:false,
-            text: '2月15日四川省新型肺炎疫情地图',
-            left: 'center', //标题位置
-            textStyle: {
-              fontSize: 32,
-              fontWeight: 'bolder',
-              color: 'black' // 主标题文字颜色
-            }
-          },
-          color: ['white'],
-
-          legend: {
-            show:false,
-            orient: 'vertical',
-            left: 'left',
-
-            textStyle: {
-              fontSize: 20,
-              color: 'black' // 图例文字颜色
-            },
-            //data: ['地市']
-            // 图例位置
-          },
-          tooltip: {
-
-            trigger: 'item',
-            backgroundColor: 'rgba(0,0,0,0.8)',
-            extraCssText: 'box-shadow: 0 0 3px rgba(255, 255, 255, 0.6);',
-            textStyle:{
-              align:'left'
-            }
-          },
-          visualMap: {
-            min: 0,
-            max: 10000,
-            left: 'left',
-            icon: "diamond",
-            bottom:'2%',
-            // 文本，默认为数值文本
-            //calculable: true,
-            //color: ['blue', 'blue']
-            //图例颜色
-            pieces: [{
-              min: 100,
-              max: 500,
-              label: "100-500人",
-              color: "#A50002"
-            }, {
-              min: 11,
-              max: 99,
-              label: "11-99人",
-              color: "#dc6c5c"
-            }, {
-              min: 1,
-              max: 10,
-              label: "1-10人",
-              color: "#f2ad8b"
-            }, {
-              min: 0,
-              max: 0,
-              label: "0人",
-              color: "#ffffff"
-
-            }],
-            orient: 'vertical',
-            itemWidth: 25,
-            itemHeight: 15,
-            showLabel: true,
-            seriesIndex: [0],
-            textStyle: {
-              color: '#fff'
-            }
-          },
-          toolbox: {
-            show: false,
-            orient: 'vertical',
-            left: 'right',
-            top: 'center',
-            feature: {
-              dataView: {
-                readOnly: false
-              },
-              restore: {},
-              saveAsImage: {}
-            }
-          },
-          series: [{
-            name: '感染人数统计',
-            type: 'map',
-            mapType: name,
-            left:'35%',
-            top: 80,
-            bottom: 120,
-            label: {
-              normal: {
-                show: true,
-              },
-              emphasis: {
-                textStyle: {
-                  color: 'rgba(0, 0, 0, 1)'
-                }
-              }
-            },
-            data: that.data
-          }]
-        });
       },
 
       showLine(){
@@ -497,11 +397,12 @@
                 lineHeight: 22
               }
             },
-            data: ['02.01', '02.03', '02.05', '02.07', '02.09', '02.11', '02.13'],
+            data: this.AxData,
           },
           yAxis: {
             type: 'value',
             position: 'left',
+            minInterval: 1,
             lineStyle: {
               color: '#fff',
             },
@@ -531,7 +432,7 @@
             name: '新增确诊',
             type: "line",
             yAxisIndex: 0,
-            data: [11, 20, 18, 11, 14, 8, 16],
+            data: this.serData,
             itemStyle: {
               normal: {
                 borderWidth: 10,
@@ -553,6 +454,8 @@
         map.centerAndZoom(point, 10);        // 将point点放入map中，展示在页面中心展示，10=缩放程度
         map.enableScrollWheelZoom();         // 开启滚动鼠标滑轮
 
+        map.setZoom(14);
+
         var mapStyle ={
           features: ["road","building","water","land"],//隐藏地图上的"poi",
           style : 'dark',
@@ -566,17 +469,13 @@
       addPoint(map){
         let that = this;
         // 如有多个point去展示，可根据后端接口传入为主
-        let data = [
-          { x: 104.297047, y: 30.479542, name: '双楠国际小区',isHot:true },
-          { x: 104.221768, y: 30.58748, name: '金都花园小区',isHot:false },
-          { x: 104.294243, y: 30.656539, name: '国色天乡小区',isHot:true }
-        ]
+        let data = that.areaPointList
 
         data.forEach((e, i) => {
           // 创建point, 将x,y值传入
-          let pointNumber = new BMap.Point(e.x, e.y)
+          let pointNumber = new BMap.Point(e.lng, e.lat)
           let icon = null;
-          if(e.isHot){
+          if(e.temperatureAbnormalNum>0){
             icon = new BMap.Icon(require("@/assets/es/img_mapred.png"),new BMap.Size(73,73));
           }else{
             icon = new BMap.Icon(require("@/assets/es/img_mapgreen.png"),new BMap.Size(73,73));
@@ -593,7 +492,7 @@
 
           // 将data中的name加入地图中
           var label = new BMap.Label(e.name, {
-            offset: new BMap.Size(0, -22)
+            offset: new BMap.Size(20, -2)
           });
 
           label.setStyle({
@@ -652,34 +551,8 @@
           }
           that.districtLoading++;
           map.setViewport(pointArray);    //调整视野
-          that.addlabel(map);
         });
       },
-
-      addlabel(map){
-        var pointArray = [
-          new BMap.Point(121.716076,23.703799),
-          new BMap.Point(112.121885,14.570616),
-          new BMap.Point(123.776573,25.695422)];
-        var optsArray = [{},{},{}];
-        var labelArray = [];
-        var contentArray = [
-          "台湾是中国的！",
-          "南海是中国的！",
-          "钓鱼岛是中国的！"];
-        for(var i = 0;i < pointArray.length; i++) {
-          optsArray[i].position = pointArray[i];
-          labelArray[i] = new BMap.Label(contentArray[i],optsArray[i]);
-          labelArray[i].setStyle({
-            color : "red",
-            fontSize : "12px",
-            height : "20px",
-            lineHeight : "20px",
-            fontFamily:"微软雅黑"
-          });
-          map.addOverlay(labelArray[i]);
-        }
-      }
     },
     mounted(){
       this.$nextTick(function() {
@@ -709,7 +582,7 @@
     margin: 0;
     padding: 0;
   }
-  p{
+  p,h2{
     margin: 0;
   }
 
@@ -863,43 +736,68 @@
               }
             }
           }
-          .select-city{
+          .select-city-box{
             position: absolute;
             right: 40px;
             top: 14px;
-            width:180px;
-            height:60px;
-            .before-icon{
-              position: absolute;
-              left: 5px;
-              top: 24px;
-            }
-            .ant-select{
-              width: 100%;
-              height: 100%;
-              .ant-select-selection--single{
+            width:140px;
+            border-radius:3px;
+            border:2px solid rgba(64,71,94,1);
+            .select-city{
+              background:rgba(32,45,70,1);
+              border-radius:3px;
+              height:40px;
+              display: flex;
+              justify-content:space-between;
+              padding: 5px 10px 5px 5px;
+              cursor: pointer;
+              .before-icon{
+                width: 24px;
+                height: 24px;
+              }
+              .after-icon{
+                width: 21px;
+                height: 13px;
+              }
+              .select-value{
+                width: 100px;
+                padding-left: 5px;
+                color:rgba(242,242,242,1);
+                line-height: 26px;
+              }
+              .ant-select{
                 width: 100%;
                 height: 100%;
-                background:rgba(32,45,70,1);
-                border-radius:3px;
-                border:2px solid rgba(64,71,94,1);
-                .ant-select-selection__rendered{
-                  margin-left: 30px;
-                  line-height: 60px;
-                  .ant-select-selection-selected-value{
-                    font-size: 18px;
-                    color:rgba(242,242,242,1);
-                  }
-                }
+              }
+
+            }
+            .data-list{
+              background:rgba(1,20,58,1);
+              .option{
+                height: 36px;
+                line-height: 36px;
+                color:rgba(112,123,145,1);
+                padding-left: 10px;
+                cursor: pointer;
+              }
+              .option.active{
+                background:rgba(5,34,92,1);
+                border-bottom:2px solid rgba(64,71,94,1);
+                color:rgba(45,127,206,1);
+              }
+              .option:hover{
+                background:rgba(5,34,92,1);
+                border-bottom:2px solid rgba(64,71,94,1);
+                color:rgba(45,127,206,1);
               }
             }
-
           }
+
         }
         .data-box{
           width: 430px;
           .title{
-            padding: 8px 0 12px;
+            padding: 8px 0 14px;
             h2{
               font-size:27px;
               color:rgba(255,255,255,1);
@@ -920,7 +818,7 @@
             padding: 5px 0 15px;
             #hotLine{
               width: 100%;
-              height: 190px;
+              height: 180px;
             }
           }
           .peo-distribution{
@@ -932,7 +830,7 @@
                 width: 150px;
                 .unit-mess{
                   width: 100%;
-                  height: 50px;
+                  height: 46px;
                   background:rgba(32,45,70,1);
                   border:1px solid rgba(64,71,94,1);
                   position: relative;
@@ -940,7 +838,7 @@
                   span{
                     font-size:18px;
                     color:rgba(204,235,246,1);
-                    line-height:46px;
+                    line-height:42px;
                     .num{
                       font-size:24px;
                     }
@@ -957,21 +855,23 @@
                   }
                 }
                 .unit-mess+.unit-mess{
-                  margin-top: 12px;
+                  margin-top: 11px;
                 }
               }
               .dividing-line{
                 width: 66px;
+                height: 220px;
                 padding: 0 20px;
                 img{
                   width: 26px;
+                  height: 100%;
                 }
               }
               .peo-num-list{
                 width: 196px;
                 .peo-num{
                   width: 100%;
-                  height: 60px;
+                  height: 55px;
                   padding: 0 20px 0 24px;
                   background: url("~@/assets/es/bg_wdrs@2x.png") no-repeat;
                   background-size: 100%;
@@ -980,7 +880,7 @@
                   span{
                     font-size:14px;
                     color:rgba(204,235,246,1);
-                    line-height: 60px;
+                    line-height: 55px;
                     .num{
                       font-size:20px;
                     }
@@ -1011,7 +911,7 @@
             }
             .change-area-data{
               width:32px;
-              height:160px;
+              height:150px;
               background:rgba(12,33,65,1);
               cursor: pointer;
               img{
