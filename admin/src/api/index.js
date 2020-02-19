@@ -40,6 +40,8 @@ import appVersion from './appVersion'
 import userAction from './userAction'
 import advice from './advice'
 
+import trail from './trail'
+
 export default {
   constants,
   system,
@@ -80,5 +82,7 @@ export default {
   deviceVersion,
   appVersion,
   userAction,
-  advice
+  advice,
+  
+  trail,
 }

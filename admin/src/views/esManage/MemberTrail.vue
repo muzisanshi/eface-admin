@@ -167,12 +167,28 @@
           }
         ],
         map:null,
+        
+        estates:[],
       }
     },
     computed:{
 
     },
     methods:{
+      
+      // 加载小区数据
+      getEstates(data){
+        this.$api.trail.getEstates(data)
+        .then((r) => {
+          console.log(JSON.stringify(r))
+        });
+      },
+      
+      // 加载行为轨迹
+      getBehaviorTracks(data){
+        
+      },
+      
       before(block,id){
         if(block.curPage > 1){
           block.curPage --;
