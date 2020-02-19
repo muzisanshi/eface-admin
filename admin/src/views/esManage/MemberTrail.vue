@@ -2,11 +2,6 @@
 <template>
   <div class="member-trail">
 
-    <!-- 地图 -->
-    <div class="map" style="height: 100%;position: absolute;z-index: 0;width: 100%">
-      <div id="allmap" class="Map" style="width: 100%;height: 100%"/>
-    </div>
-
     <!-- 人员信息 -->
     <div class="member-info">
 
@@ -65,6 +60,11 @@
            </div>
         </div>
 
+        <!-- 地图 -->
+        <div class="map">
+          <div id="allmap" class="Map"/>
+        </div>
+        
         <div class="trail">
           <div class="wrapper">
 
@@ -138,6 +138,7 @@
   export default {
     data(){
       return {
+        districtLoading:0,
         pageWidth:0,
         blocks:[
           {
@@ -165,7 +166,7 @@
             ]
           }
         ],
-
+        map:null,
       }
     },
     computed:{
@@ -191,19 +192,20 @@
 
       createMap(){
         let that = this;
-        var map = new BMap.Map("allmap");   //初始化map, 绑定id=allmap
+        that.map = null;
+        that.map = new BMap.Map("allmap");   //初始化map, 绑定id=allmap
         var point = new BMap.Point(104.321768, 30.88748);   // 初始化point, 给定一个默认x,y值
-        map.centerAndZoom(point, 10);        // 将point点放入map中，展示在页面中心展示，10=缩放程度
-        map.enableScrollWheelZoom();         // 开启滚动鼠标滑轮
+        that.map.centerAndZoom(point, 10);        // 将point点放入map中，展示在页面中心展示，10=缩放程度
+        that.map.enableScrollWheelZoom();         // 开启滚动鼠标滑轮
 
         var mapStyle ={
           features: ["road","building","water","land"],//隐藏地图上的"poi",
           style : 'dark',
         };
 
-        map.setMapStyle(mapStyle);
+        that.map.setMapStyle(mapStyle);
 
-        that.addDistrict(map);
+        that.addDistrict(that.map);
       },
 
       addPoint(map){
@@ -235,18 +237,24 @@
           let infoWindow = new BMap.InfoWindow(content);
 
           // 将data中的name加入地图中
-          var label = new BMap.Label(e.name, {
-            offset: new BMap.Size(0, -22)
+          let number = '<span style="position:absolute;color:white;left:-22px;top:12px;">'+
+                          (i + 1)
+                      +'</span>';
+          let angle = '<img style="width:12px;position:absolute;top:0px;right:0px;" src="' + require('../../assets/es/img_angle.png') + '"/>';
+          var label = new BMap.Label(e.name + number + '<br>2020-02-20 22:56:23', {
+            offset: new BMap.Size(54,14)
           });
 
           label.setStyle({
-            padding:'2px 5px',
+            padding:'5px 8px',
             backgroundColor:'rgba(216,216,216,0.2)',
             border:'1px solid rgba(45,127,206,1)',
-            color:'rgba(236,236,244,1)'
+            color:'rgba(236,236,244,1)',
+            lineHeight:'20px',
           });
 
-          that.markerFun(pointNumber, infoWindow, label,icon,map)
+          that.markerFun(pointNumber, infoWindow, label, icon, map);
+          
         })
 
         // 获取当前地理位置
@@ -295,44 +303,36 @@
           }
           that.districtLoading++;
           map.setViewport(pointArray);    //调整视野
-          that.addlabel(map);
+          
         });
       },
-
-      addlabel(map){
-        var pointArray = [
-          new BMap.Point(121.716076,23.703799),
-          new BMap.Point(112.121885,14.570616),
-          new BMap.Point(123.776573,25.695422)];
-        var optsArray = [{},{},{}];
-        var labelArray = [];
-        var contentArray = [
-          "台湾是中国的！",
-          "南海是中国的！",
-          "钓鱼岛是中国的！"];
-        for(var i = 0;i < pointArray.length; i++) {
-          optsArray[i].position = pointArray[i];
-          labelArray[i] = new BMap.Label(contentArray[i],optsArray[i]);
-          labelArray[i].setStyle({
-            color : "red",
-            fontSize : "12px",
-            height : "20px",
-            lineHeight : "20px",
-            fontFamily:"微软雅黑"
-          });
-          map.addOverlay(labelArray[i]);
-        }
-      }
-
+      
+      calcMap(){
+        // 计算地图高度
+        let conHeight = $('.member-trail').height();
+        let headHeight = $('.header').outerHeight(true);
+        let mapHeight = conHeight - headHeight - 25;
+        $('.map').height(mapHeight);
+      },
+      
     },
     mounted(){
-      this.createMap();
+      
+      window.onresize = () => {
+        this.calcMap();
+      }
+      
       if($){
         let pw = $('.list-main').width();
         if(pw){
           this.pageWidth = pw;
         }
+        this.createMap();
+        setTimeout(() => {
+          this.calcMap();
+        },100)
       }
+      
     }
   }
 </script>
@@ -400,12 +400,14 @@
       .body{
         margin-top: 10px;
         position: relative;
+        
         .excep-member{
           position: relative;
           width: 300px;
           border:1px solid #2359BA;
           color: white;
           background-color: #071832;
+          z-index: 1;
           .status{
             color: #FA4F65;
             font-size: 1.4rem;
@@ -464,7 +466,19 @@
           }
         }
 
-
+        .map{
+          height: 100%;
+          width: calc(100% - 460px);
+          position: absolute;
+          z-index: 0;
+          top:0px;
+          
+          .Map{
+            width: 100%;
+            height: 100%;
+          }
+        }
+        
         .trail{
           width: 460px;
           position: absolute;

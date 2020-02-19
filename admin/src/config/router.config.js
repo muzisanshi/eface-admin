@@ -52,5 +52,9 @@ export const constantRouterMap = [
   {
     path: '/memberTrail',
     component: () => import('@/views/esManage/MemberTrail')
+  },
+  {
+    path: '/tempStatus',
+    component: () => import('@/views/esManage/TempStatus')
   }
 ]
