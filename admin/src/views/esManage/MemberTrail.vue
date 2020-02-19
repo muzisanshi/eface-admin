@@ -10,13 +10,13 @@
          <img class="bg-img" src="../../assets/es/img_titlebg@2x.png"/>
 
          <div class="left">
-           <img class="back" src="../../assets/es/btn_back.png"/>
+           <img @click="back" class="back" src="../../assets/es/btn_back.png"/>
            <span class="title">东方天呈点位体温实时状态</span>
            <!-- <span class="late">（近14天）</span> -->
          </div>
 
          <div class="right">
-           <span class="time">2020-02-15 16:58:59</span>
+           <span class="time">{{curDate}}</span>
            <img class="full-screen" src="../../assets/es/btn_fullscreen@2x.png"/>
          </div>
 
@@ -30,13 +30,16 @@
            <img class="angle" src="../../assets/es/img_angle.png"/>
 
            <div style="padding: 25px;">
-             <div class="status">异常人员</div>
+             <div class="status" :style="{color: memberData.temperature > 37.3 ? '#FA4F65':'#7CCB27'}">
+              {{memberData.temperature > 37.3 ? '异常人员' : '正常人员'}}
+             </div>
              <div class="pic">
-               <img />
+               <img :src="memberData.headImageRemoteUrl"/>
              </div>
              <div class="member-temp">
-               <span class="name">广晨辉</span>
-               <span class="temp">37.8℃</span>
+               <span class="name">{{memberData.userRealName || '陌生人'}}</span>
+               <span class="temp" :style="{color: memberData.temperature > 37.3 ? '#FA4F65':'#7CCB27'}">
+               {{memberData.temperature}}℃</span>
              </div>
            </div>
 
@@ -45,15 +48,15 @@
              <div style="padding: 25px;">
                <div class="detail-item">
                  <span class="n">名称：</span>
-                 <span class="v">双楠国际小区</span>
+                 <span class="v">{{memberData.estateName}}</span>
                </div>
                <div class="detail-item">
                  <span class="n">时间：</span>
-                 <span class="v">2020.2.13 14:58:57</span>
+                 <span class="v">{{memberData.recDatetime}}</span>
                </div>
                <div class="detail-item">
                  <span class="n">位置：</span>
-                 <span class="v">成都市双流区双楠国际小区南门门禁</span>
+                 <span class="v">{{memberData.fullAddress}}</span>
                </div>
              </div>
 
@@ -74,17 +77,17 @@
 
             <div class="blocks">
 
-              <div class="block" v-for="(it,id) in blocks" :key="id">
+              <div class="block" v-for="(it,id) in trailData" :key="id">
 
                 <div class="t">
                   <div class="l">
                     <img class="pos" src="../../assets/es/icon_map@2x.png"/>
-                    <span>双楠国际小区</span>
+                    <span>{{it.name}}</span>
                   </div>
                   <div class="r">
                     <span>在此出现过的人：</span>
-                    <span>81人正常</span>
-                    <span>3人异常</span>
+                    <span>{{it.temperatureAbnormalNum}}人正常</span>
+                    <span>{{it.temperatureNormalNum}}人异常</span>
                   </div>
                 </div>
 
@@ -94,24 +97,26 @@
                         <img class="b" src="../../assets/es/btn_enter@2x.png"/>
                       </div>
                       <div class="list-main" :id="'listmain'+id">
+                        
                         <div class="page" v-for="(t,i) in it.pages" :key="i">
 
-                          <div class="item" v-for="(tt,ii) in t.items" :key="ii">
+                          <div class="item" v-for="(tt,ii) in it.pages[i]" :key="ii">
                             <div class="member" :class="ii===0?'excep':'ok'">
                               <div class="top">
-                                <img class="av"/>
-                                <span class="temp">38.5°C</span>
+                                <img class="av" :src="tt.headImageRemoteUrl"/>
+                                <span class="temp">{{tt.temperature.toFixed(1)}}°C</span>
                               </div>
                               <div class="name">
-                                檀欢秋
+                                {{tt.userRealName || '陌生人'}}
                               </div>
                               <div class="date">
-                                2020-02-22 20:28
+                                {{tt.recDatetime}}
                               </div>
                             </div>
                           </div>
 
                         </div>
+                        
                       </div>
                       <div class="next" @click="next(it,id)">
                         <img class="n" src="../../assets/es/btn_enter@2x.png"/>
@@ -138,6 +143,19 @@
   export default {
     data(){
       return {
+        timerId:'',
+        curDate:'',
+        memberData:{
+          id:'',
+          userRealName:'',
+          temperature:'',
+          recDatetime:'',
+          lastRecDatetime:'',
+          fullAddress:'',
+          headImageRemoteUrl:'',
+          estateId:'',
+          estateName:''
+        },
         districtLoading:0,
         pageWidth:0,
         blocks:[
@@ -168,7 +186,8 @@
         ],
         map:null,
         
-        estates:[],
+        mapData:[],
+        trailData:[],
       }
     },
     computed:{
@@ -176,17 +195,92 @@
     },
     methods:{
       
+      getDateStr(){
+        let date = new Date();
+        let y = date.getFullYear();
+        let m = date.getMonth() + 1;
+        m = m < 10 ? ('0'+m) : m;
+        let d = date.getDate();
+        d = d < 10 ? ('0'+d) : d;
+        
+        let h = date.getHours();
+        h = h < 10 ? ('0'+h) : h;
+        let f = date.getMinutes();
+        f = f < 10 ? ('0'+f) : f;
+        let s = date.getSeconds();
+        s = s < 10 ? ('0'+s) : s;
+        
+        return y + '-' + m + '-' + d + ' ' + h + ':' + f + ':' + s;
+      },
+      
+      // 定时器
+      startTimer(){
+        this.curDate = this.getDateStr();
+        this.timerId = setInterval(() => {
+          this.curDate = this.getDateStr();
+        },1000);
+      },
+      closeTimer(){
+        clearInterval(this.timerId);
+      },
+      
+      back(){
+        this.$router.go(-1);
+      },
+      
       // 加载小区数据
       getEstates(data){
         this.$api.trail.getEstates(data)
         .then((r) => {
-          console.log(JSON.stringify(r))
+          if(r && r.length > 0){
+            // 在地图上渲染数据
+            let md = [];
+            r.map((it) => {
+              md.push({
+                x:it.lng,
+                y:it.lat,
+                name:it.name,
+                isHot:it.temperatureAbnormalNum > 0,
+                num:it.temperatureAbnormalNum,
+                date:it.recDatetime,
+              })
+            })
+            this.mapData = md;
+            
+            this.addPoint(this.mapData,this.map);
+            
+          }
         });
       },
       
       // 加载行为轨迹
       getBehaviorTracks(data){
-        
+        this.$api.trail.getBehaviorTracks(data)
+        .then(r => {
+          if(r && r.trackItems.length > 0){
+            // 处理数据
+            r.trackItems.map((it,id) => {
+              
+              let d = [Math.ceil(it.recRecords.length / 8.0)];
+              for(let i = 0;i < d.length;i++){
+                d[i] = [];
+              }
+              
+              it.recRecords.map((tt,ii) => {
+                
+                let index = ii / 8;
+                d[index].push(tt);
+                
+              })
+              
+              it.pages = d;
+              
+            })
+            
+            this.trailData = r.trackItems;
+            
+          }
+        })
       },
       
       before(block,id){
@@ -224,15 +318,9 @@
         that.addDistrict(that.map);
       },
 
-      addPoint(map){
+      addPoint(data,map){
         let that = this;
         // 如有多个point去展示，可根据后端接口传入为主
-        let data = [
-          { x: 104.297047, y: 30.479542, name: '双楠国际小区',isHot:true },
-          { x: 104.221768, y: 30.58748, name: '金都花园小区',isHot:false },
-          { x: 104.294243, y: 30.656539, name: '国色天乡小区',isHot:true }
-        ]
-
         data.forEach((e, i) => {
           // 创建point, 将x,y值传入
           let pointNumber = new BMap.Point(e.x, e.y)
@@ -243,21 +331,21 @@
             icon = new BMap.Icon(require("@/assets/es/img_mapgreen.png"),new BMap.Size(73,73));
           }
 
-          var content = "<table>";
-          content = content + "<tr><td> 编号：001</td></tr>";
-          content = content + "<tr><td> 地点："+e.name+"</td></tr>";
-          content = content + "<tr><td> 时间：2018-1-3</td></tr>";
-          content += "</table>";
+          // var content = "<table>";
+          // content = content + "<tr><td> 编号：001</td></tr>";
+          // content = content + "<tr><td> 地点："+e.name+"</td></tr>";
+          // content = content + "<tr><td> 时间：2018-1-3</td></tr>";
+          // content += "</table>";
 
           // 创建信息窗口对象
-          let infoWindow = new BMap.InfoWindow(content);
+          // let infoWindow = new BMap.InfoWindow(content);
 
           // 将data中的name加入地图中
-          let number = '<span style="position:absolute;color:white;left:-22px;top:12px;">'+
-                          (i + 1)
+          let number = '<span style="position:absolute;color:white;left:-55px;top:12px;display:inline-block;width:73px;text-align:center;">'+
+                          (e.num)
                       +'</span>';
           let angle = '<img style="width:12px;position:absolute;top:0px;right:0px;" src="' + require('../../assets/es/img_angle.png') + '"/>';
-          var label = new BMap.Label(e.name + number + '<br>2020-02-20 22:56:23', {
+          var label = new BMap.Label(e.name + number + '<br>' + e.date, {
             offset: new BMap.Size(54,14)
           });
 
@@ -269,7 +357,7 @@
             lineHeight:'20px',
           });
 
-          that.markerFun(pointNumber, infoWindow, label, icon, map);
+          that.markerFun(pointNumber, null, label, icon, map);
           
         })
 
@@ -293,7 +381,9 @@
         markers.setLabel(label);  // 将data中的name添加到地图中
         // 标注的点击事件
         markers.addEventListener("click", function (event) {
-          map.openInfoWindow(infoWindows, points);//参数：窗口、点  根据点击的点出现对应的窗口
+          if(infoWindows){
+            map.openInfoWindow(infoWindows, points);//参数：窗口、点  根据点击的点出现对应的窗口
+          }
         });
       },
 
@@ -314,8 +404,15 @@
             pointArray = pointArray.concat(ply.getPath());
           }
           if (that.districtLoading == 0) {
-            //全加载完成后画端点
-            that.addPoint(map)
+            //全加载完成后加载数据渲染
+            // that.addPoint(mapData,map)
+            
+            // 加载数据
+            that.getEstates({
+              recDatetime:that.memberData.recDatetime,
+              recRecordId:that.memberData.id,
+            });
+            
           }
           that.districtLoading++;
           map.setViewport(pointArray);    //调整视野
@@ -334,6 +431,15 @@
     },
     mounted(){
       
+      // 处理params参数
+      let localData = localStorage.getItem('memberData');
+      localData = localData ? JSON.parse(localData) : {};
+      
+      this.memberData = this.$route.params.id ? this.$route.params : localData;
+      
+      // 备份数据到本地
+      localStorage.setItem('memberData',JSON.stringify(this.memberData));
+      
       window.onresize = () => {
         this.calcMap();
       }
@@ -349,6 +455,18 @@
         },100)
       }
       
+      // 启动定时器
+      this.startTimer();
+      
+      // 加载轨迹数据
+      this.getBehaviorTracks({
+        recDatetime:this.memberData.recDatetime,
+        recRecordId:this.memberData.id,
+      });
+      
+    },
+    beforeDestroy(){
+      this.closeTimer();
     }
   }
 </script>
@@ -436,7 +554,7 @@
             img{
               width: 240px;
               height: 240px;
-              background-color: lightgray;
+              background-color: transparent;
             }
           }
           .member-temp{
