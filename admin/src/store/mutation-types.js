@@ -14,6 +14,7 @@ export const USER_AUTH = 'LOGIN_USER_BUTTON_AUTH'
 export const SYS_BUTTON_AUTH = 'SYS_BUTTON_AUTH'
 export const UPDATE_LOGO_DATA = 'UPDATE_LOGO_DATA'
 export const SAVE_PASSWORD = 'SAVE_PASSWORD'
+export const POINT_ITEM = 'POINT_ITEM'
 
 export const CONTENT_WIDTH_TYPE = {
   Fluid: 'Fluid',

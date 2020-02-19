@@ -59,7 +59,6 @@
           </div>
         </div>
         <div class="data-box">
-
           <div class="title" style="padding-bottom: 0">
           <h2><img src="@/assets/es/icon_grqst@2x (1).png" alt="">体温高热趋势图</h2>
           <p>体温异常人数</p>
@@ -231,19 +230,19 @@
         peoNumList:[
           {
             areaName:'低温人数',
-            temNum:32
+            temNum:0
           },
           {
             areaName:'内容常温人数',
-            temNum:39
+            temNum:0
           },
           {
             areaName:'低热人数',
-            temNum:8
+            temNum:0
           },
           {
             areaName:'高温人数',
-            temNum:5
+            temNum:0
           }
         ]
       }
@@ -318,8 +317,11 @@
             areaId: that.areaId
           })
           .then(res => {
-            that.unitList[0].temNum= res
-            console.log(res)
+            that.unitList[0].temNum = res.communitiesNum
+            that.peoNumList[0].temNum = res.lowTemperatureNum
+            that.peoNumList[1].temNum = res.normalTemperatureNum
+            that.peoNumList[2].temNum = res.lowFeverTemperatureNum
+            that.peoNumList[3].temNum = res.highFeverTemperatureNum
           })
 
       },
@@ -454,7 +456,7 @@
         map.centerAndZoom(point, 10);        // 将point点放入map中，展示在页面中心展示，10=缩放程度
         map.enableScrollWheelZoom();         // 开启滚动鼠标滑轮
 
-        map.setZoom(14);
+        map.setZoom(20);
 
         var mapStyle ={
           features: ["road","building","water","land"],//隐藏地图上的"poi",
@@ -481,15 +483,6 @@
             icon = new BMap.Icon(require("@/assets/es/img_mapgreen.png"),new BMap.Size(73,73));
           }
 
-          var content = "<table>";
-          content = content + "<tr><td> 编号：001</td></tr>";
-          content = content + "<tr><td> 地点："+e.name+"</td></tr>";
-          content = content + "<tr><td> 时间：2018-1-3</td></tr>";
-          content += "</table>";
-
-          // 创建信息窗口对象
-          let infoWindow = new BMap.InfoWindow(content);
-
           // 将data中的name加入地图中
           var label = new BMap.Label(e.name, {
             offset: new BMap.Size(20, -2)
@@ -502,7 +495,7 @@
             color:'rgba(236,236,244,1)'
           });
 
-          that.markerFun(pointNumber, infoWindow, label,icon,map)
+          that.markerFun(pointNumber, label,icon,map,e)
         })
 
         // 获取当前地理位置
@@ -519,13 +512,18 @@
         });
       },
 
-      markerFun(points, infoWindows, label,icon,map){
+      markerFun(points, label,icon,map,item){
+        let that = this;
         let markers = new BMap.Marker(points,{icon:icon});
         map.addOverlay(markers);  // 将标注添加到地图中
         markers.setLabel(label);  // 将data中的name添加到地图中
         // 标注的点击事件
         markers.addEventListener("click", function (event) {
-          map.openInfoWindow(infoWindows, points);//参数：窗口、点  根据点击的点出现对应的窗口
+          console.log(item)
+          that.$router.push({
+            name:'pointInformation',
+            params:item
+          })
         });
       },
 
@@ -576,7 +574,7 @@
   }
 </script>
 
-<style lang="scss" type="text/scss" >
+<style lang="scss" type="text/scss" scoped>
 
   *{
     margin: 0;
@@ -681,7 +679,6 @@
                   .top-img{
                     width: 70px;
                     height: 70px;
-                    background-color: blue;
                     img{
                       width: 100%;
                       height: 100%;
