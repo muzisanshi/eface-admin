@@ -551,8 +551,19 @@
       // 备份数据到本地
       localStorage.setItem('memberData',JSON.stringify(this.memberData));
       
+      // let i = 1;
       window.onresize = () => {
-        this.calcMap();
+        
+        // i++;
+        
+        // setTimeout(() => {
+          // this.calcMap();
+        // },100 * i);
+        
+        // if(i == 10){
+        //   i = 0;
+        // }
+        
       }
       
       if($){
@@ -563,7 +574,7 @@
         this.createMap();
         setTimeout(() => {
           this.calcMap();
-        },100)
+        },500)
       }
       
       // 启动定时器
