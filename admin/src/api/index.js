@@ -41,6 +41,7 @@ import userAction from './userAction'
 import advice from './advice'
 import provinceCheck from './provinceCheck'
 import cityCheck from './cityCheck'
+import localtionCheck from './localtionCheck'
 
 import trail from './trail'
 
@@ -87,5 +88,6 @@ export default {
   advice,
   trail,
   provinceCheck,
-  cityCheck
+  cityCheck,
+  localtionCheck
 }

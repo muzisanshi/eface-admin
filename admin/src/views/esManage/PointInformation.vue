@@ -10,7 +10,7 @@
       <div class="header">
         <div class="header-box">
           <div class="title">
-            <span style="display: inline-block;width: 35px;height: 35px;background-color: blue"></span>
+            <span style="display: inline-block;width: 41px;height: 40px;"><img style="width: 100%;height: 100%;margin-top: -8px" src="@/assets/es/btn_back_top.png" alt=""></span>
             <span style="padding-left: 5px">东方天呈点位体温实时状态</span>
           </div>
           <div class="time">
@@ -25,18 +25,18 @@
         <div class="map-box">
           <div id="allmap" class="Map" />
           <div class="testing-statistics">
-            <div class="tabs">
-              <div class="active">实时检测<div class="three-box"></div></div>
-              <div>高热人群</div>
-            </div>
+            <!--<div class="tabs">-->
+              <!--<div class="active">实时检测<div class="three-box"></div></div>-->
+              <!--<div>高热人群</div>-->
+            <!--</div>-->
             <div class="tabs-content">
               <div class="content-list">
-                <div class="tem-mess" v-for="(item,index) in testList" :class="{'red-back':item.temperature >37.2}">
-                  <div class="top-img"><img :src="item.imgUrl" alt=""></div>
+                <div class="tem-mess" v-for="(item,index) in testList" @click="toTrail(item)" :class="{'red-back':item.temperature >37.2}">
+                  <div class="top-img"><img :src="item.headImageRemoteUrl" alt=""></div>
                   <div class="peo-mess">
-                    <p class="name">{{item.name}}</p>
-                    <p class="time">{{item.date}}</p>
-                    <p class="address">{{item.address}}</p>
+                    <p class="name">{{item.userRealName?item.userRealName:'陌生人'}}</p>
+                    <p class="time">{{item.recDatetime}}</p>
+                    <p class="address">{{item.fullAddress}}</p>
                   </div>
                   <div class="temperature" :class="{'white-color':item.temperature >37.2}">{{item.temperature}}℃</div>
                   <div class="icon"><img v-if="item.temperature >37.2" src="@/assets/es/btn_enter@2x.png" alt=""></div>
@@ -54,12 +54,12 @@
                 <div class="statistics-list" style="margin-bottom: 44px">
                   <div class="normal-color">
                     <div class="title">累计检测人次</div>
-                    <div class="people-num">68,9680</div>
+                    <div class="people-num">{{toFourth(statistics.temperatureCheckTotal)}}</div>
                   </div>
 
                   <div class="normal-color">
                     <div class="title">累计高热总人数</div>
-                    <div class="people-num">2,6805</div>
+                    <div class="people-num">{{toFourth(statistics.temperatureHeatTotal)}}</div>
                   </div>
 
                 </div>
@@ -68,18 +68,18 @@
 
                   <div class="normal-color">
                     <div class="title">今日检测人次</div>
-                    <div class="people-num">1,2956</div>
+                    <div class="people-num">{{toFourth(statistics.temperatureCheckTodayTotal)}}</div>
                   </div>
 
                   <div class="normal-color">
                     <div class="title">今日高热人数</div>
-                    <div class="people-num">680</div>
+                    <div class="people-num">{{toFourth(statistics.temperatureHeatTodayTotal)}}</div>
                   </div>
 
                 </div>
 
               </div>
-              <div class="data-right">
+              <div class="data-right" style="display: none">
                 <div class="content">
                   <p class="content-title">本月安全指数</p>
                   <p class="content-num"><span>56.6</span>%</p>
@@ -108,19 +108,19 @@
             <div class="hot-title">
               <h2>体温异常人员</h2>
               <div class="change-data-btn">
-                <a href=""><img src="@/assets/es/btn_next_1@2x.png" alt=""></a>
-                <a href=""><img src="@/assets/es/btn_next_2@2x.png" alt=""></a>
+                <a href="javascript:void(0);" @click="preUserHeat"><img src="@/assets/es/btn_next_1@2x.png" alt=""></a>
+                <a href="javascript:void(0);" @click="nextUserHeat"><img src="@/assets/es/btn_next_2@2x.png" alt=""></a>
               </div>
             </div>
             <div class="hot-list">
-              <div class="hot-mess" v-for="(item,index) in temHotList">
+              <div class="hot-mess" v-for="(item,index) in temHotList" @click="toTrail(item)">
                 <div class="user-mess">
-                  <div class="top-img"><img :src="item.imgUrl" alt=""></div>
-                  <p class="hot-name">{{item.hotName}}</p>
-                  <p class="hot-date">{{item.time}}</p>
+                  <div class="top-img"><img :src="item.headImageRemoteUrl" alt=""></div>
+                  <p class="hot-name">{{item.userRealName?item.userRealName:'陌生人'}}</p>
+                  <p class="hot-date">{{item.lastRecDatetime}}</p>
                 </div>
                 <div class="tem-num-box">
-                  <p class="tem-num">{{item.num}}℃</p>
+                  <p class="tem-num">{{item.temperature}}℃</p>
                   <img src="@/assets/es/btn_next@2x.png" alt="">
                 </div>
               </div>
@@ -136,7 +136,11 @@
   </div>
 </template>
 <script>
+  import Vue from 'vue'
+  import {POINT_ITEM} from '@/store/mutation-types'
+  import {mixin} from '@/mixins/mixin'
   export default {
+    mixins:[mixin],
     data() {
       return {
         charts: '',
@@ -208,64 +212,7 @@
           }
 
         ],
-        testList:[
-          {
-            imgUrl:'',
-            name:'广晨辉',
-            date:'2020.2.13 14:58:57',
-            address:'四川省成都市天津路58号',
-            temperature:36.9
-          },
-          {
-            imgUrl:'',
-            name:'陌生人',
-            date:'2020.2.13 14:58:57',
-            address:'四川省成都市北京大道826号',
-            temperature:37.1
-          },
-          {
-            imgUrl:'',
-            name:'陌生人',
-            date:'2020.2.13 14:58:57',
-            address:'四川省成都市双流区双楠国际小区',
-            temperature:38.1
-          },
-          {
-            imgUrl:'',
-            name:'宿成飞',
-            date:'2020.2.13 14:58:57',
-            address:'四川省成都市高新区软件园E区',
-            temperature:38.3
-          },
-          {
-            imgUrl:'',
-            name:'陌生人',
-            date:'2020.2.13 14:58:57',
-            address:'四川省成都市双流机场小区',
-            temperature:37.2
-          },
-          {
-            imgUrl:'',
-            name:'陌生人',
-            date:'2020.2.13 14:58:57',
-            address:'四川省成都市双流区双楠国际小区',
-            temperature:37.9
-          },
-          {
-            imgUrl:'',
-            name:'洪翰',
-            date:'2020.2.13 14:58:57',
-            address:'四川省成都市双流区双楠国际小区',
-            temperature:35.9
-          },
-          // {
-          //   imgUrl:'',
-          //   name:'宿成飞',
-          //   date:'2020.2.13 14:58:57',
-          //   address:'四川省成都市高新区软件园E区',
-          //   temperature:38.1
-          // },
-        ],
+        testList:[],
         temHotList:[
           {
             imgUrl:'',
@@ -304,9 +251,105 @@
             num:37.8
           },
         ],
+        pointItem:{},
+        AxData:[],
+        serData:[],
+        statistics:{},
+        pageNumber:1,
+        pageSize:6,
+        hasNext:true
       }
     },
+    created(){
+      if(this.$route.params.id){
+        Vue.ls.set(POINT_ITEM, this.$route.params)
+      }
+      this.pointItem = Vue.ls.get(POINT_ITEM)
+      this.getData();
+    },
     methods: {
+
+      toTrail(item){
+        this.$router.push({
+          name:'memberTrail',
+          params:item
+        })
+      },
+
+      preUserHeat(){
+        if(this.pageNumber>0){
+          this.pageNumber--
+          this.getUserHeatData()
+        }
+      },
+
+      nextUserHeat(){
+        if(this.hasNext){
+          this.pageNumber++
+          this.getUserHeatData()
+        }
+      },
+
+      getData(){
+        let that = this;
+        that.$api.localtionCheck.getRecRecordPage(
+          {
+            areaId: '510100',
+            estateId:that.pointItem.id,
+            page:{
+              pageNumber: 1,
+              pageSize: 8
+            }
+          })
+          .then(res => {
+            that.testList= res.data
+          })
+
+        that.$api.localtionCheck.statistics(
+          {
+            estateId:that.pointItem.id
+          })
+          .then(res => {
+            that.statistics = res
+          })
+
+        that.getUserHeatData()
+
+        that.$api.localtionCheck.heatTrendStatistics(
+          {
+            estateId:that.pointItem.id
+          })
+          .then(res => {
+            if(res.length){
+              res.forEach((item)=>{
+                let dateStr = item.date.substring(item.date.length-4).replace("-", "/");
+                that.AxData.push(dateStr)
+                that.serData.push(item.temperatureHeatTotal)
+              })
+
+              that.showLine();
+            }
+          })
+
+
+      },
+
+      getUserHeatData(){
+        let that = this;
+        that.$api.localtionCheck.getHeatUserPage(
+          {
+            areaId: '510100',
+            estateId:that.pointItem.id,
+            page:{
+              pageNumber: that.pageNumber,
+              pageSize: that.pageSize
+            }
+          })
+          .then(res => {
+            that.hasNext = res.hasNext
+            that.temHotList= res.data
+          })
+      },
 
       showLine(){
         let hotLineChart = this.$echarts.init(document.getElementById('hotLine'))
@@ -341,7 +384,7 @@
                 lineHeight: 22
               }
             },
-            data: ['02.01', '02.03', '02.05', '02.07', '02.09', '02.11', '02.13'],
+            data: this.AxData,
           },
           yAxis: {
             type: 'value',
@@ -375,7 +418,7 @@
             name: '新增确诊',
             type: "line",
             yAxisIndex: 0,
-            data: [11, 20, 18, 11, 14, 8, 16],
+            data: this.serData,
             itemStyle: {
               normal: {
                 borderWidth: 10,
@@ -469,15 +512,6 @@
       }
     },
     mounted(){
-      this.$nextTick(function() {
-        this.showLine();
-        // this.charts.on('click', function (params) {
-        //     console.log(params);
-        // });
-
-      })
-
-      // this.createMap();
 
       // this.timer()
     },
@@ -593,7 +627,6 @@
                   .top-img{
                     width: 70px;
                     height: 70px;
-                    background-color: blue;
                     img{
                       width: 100%;
                       height: 100%;
@@ -603,7 +636,7 @@
                     width: 210px;
                     padding-left: 8px;
                     .name{
-                      font-size:27px;
+                      font-size:24px;
                       color:rgba(248,248,248,1);
                       line-height:36px;
                     }
@@ -662,7 +695,7 @@
           background:rgba(1,20,58,1);
           opacity:0.9;
           border:1px solid rgba(45,127,206,1);
-          padding: 40px;
+          padding: 30px 40px;
           .count-test-num{
             display: flex;
             justify-content:space-between;
@@ -802,7 +835,6 @@
                   .top-img{
                     width:144px;
                     height:144px;
-                    background-color: blue;
                     img{
                       width: 100%;
                       height: 100%;
