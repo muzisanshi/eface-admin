@@ -132,6 +132,9 @@
       return {
         charts: '',
         charts2: '',
+        timerId:'',
+        getStatisticsTime:'',
+        getDataFirTime:'',
         curDate:'',
         data:[],
         dataList:[],
@@ -150,21 +153,19 @@
     },
     created(){
       this.getHeatDistributeStatistics();
+      this.getStatistics();
     },
     methods: {
 
       getHeatDistributeStatistics(){
         let that = this;
 
-        that.$api.provinceCheck.statistics({areaId: '510000'})
-          .then(res => {
-            that.statistics = res
-          })
-
         that.$api.provinceCheck.mapStatistics({areaId: '510000'})
           .then(res => {
             that.dataList = res
             if(res.length){
+              that.data = []
+              that.areaList = []
               res.forEach((item)=>{
                 let obj = {
                   name:item.areaName,
@@ -198,10 +199,26 @@
             }
           })
 
+        that.$api.provinceCheck.heatDistributeStatistics({areaId: '510000'})
+          .then(res => {
+              that.dataList = res
+          })
+
+      },
+
+      getStatistics(){
+        let that = this
+        that.$api.provinceCheck.statistics({areaId: '510000'})
+          .then(res => {
+            that.statistics = res
+          })
+
         that.$api.provinceCheck.heatTrendStatistics({areaId: '510000'})
           .then(res => {
             that.temperatureCheckData = res
             if(res.dateStatistics.length){
+              that.AxData = [];
+              that.serData = [];
               res.dateStatistics.forEach((item)=>{
                 let dateStr = item.date.substring(item.date.length-4).replace("-", "/");
                 that.AxData.push(dateStr)
@@ -211,15 +228,30 @@
               that.showLine();
             }
           })
-
-
-
-        that.$api.provinceCheck.heatDistributeStatistics({areaId: '510000'})
-          .then(res => {
-              that.dataList = res
-          })
-
       },
+
+      // 3秒定时器
+      startGetStatisticsTimer(){
+        this.getStatisticsTime = setInterval(() => {
+          this.getStatistics();
+        },3000);
+      },
+
+      closeGetStatisticsTimer(){
+        clearInterval(this.getStatisticsTime);
+      },
+
+      // 3秒定时器
+      startGetDataFirTimer(){
+        this.getDataFirTime = setInterval(() => {
+          this.getHeatDistributeStatistics();
+        },5000);
+      },
+
+      closeGetDataFirTimer(){
+        clearInterval(this.getDataFirTime);
+      },
+
 
       // 时间定时器
       startTimer(){
@@ -447,11 +479,6 @@
           },]
         });
       },
-      // timer() {
-      //     return setInterval(()=>{
-      //         this.showCity('chengdu')
-      //     },5000)
-      // }
 
       togglefullScreen(){
 
@@ -488,10 +515,13 @@
     mounted(){
       // 启动定时器
       this.startTimer();
-      // this.timer()
+      this.startGetDataFirTimer();
+      this.startGetStatisticsTimer();
     },
     beforeDestroy(){
       this.closeTimer();
+      this.closeGetStatisticsTimer();
+      this.closeGetDataFirTimer();
     }
 
   }

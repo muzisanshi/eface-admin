@@ -122,6 +122,8 @@
         charts: '',
         charts2: '',
         curDate:'',
+        timerId:'',
+        thirdTimerId:'',
         districtLoading:0,
         nowIndex:0,
         hasAreaList:false,
@@ -254,6 +256,7 @@
         this.areaId = this.$route.params.data.areaId
       }
       this.getData()
+      this.getAreaHeatData()
     },
     methods: {
 
@@ -268,7 +271,7 @@
         this.$router.go(-1);
       },
 
-      getData(){
+      getgetRecRecord(){
         let that = this;
         that.$api.cityCheck.getRecRecordPage(
           {
@@ -281,42 +284,10 @@
           .then(res => {
             that.testList= res.data
           })
+      },
 
-
-        that.$api.cityCheck.getEstates(
-          {
-            areaId: that.areaId
-          })
-          .then(res => {
-            that.areaPointList= res
-          })
-
-        that.$api.cityCheck.heatTrendStatistics(
-          {
-            areaId: that.areaId
-          })
-          .then(res => {
-            if(res.length){
-              res.forEach((item)=>{
-                let dateStr = item.date.substring(item.date.length-4).replace("-", "/");
-                that.AxData.push(dateStr)
-                that.serData.push(item.temperatureHeatTotal)
-              })
-
-              that.showLine();
-            }
-          })
-
-        that.$api.cityCheck.heatDistributeStatistics(
-          {
-            areaId: that.areaId
-          })
-          .then(res => {
-            that.areaNumAllList= res
-            if(that.nowIndex === 0){
-              that.getAreaLookList(0)
-            }
-          })
+      getData(){
+        let that = this;
 
         that.$api.cityCheck.industryEpidemicStatistics(
           {
@@ -330,6 +301,46 @@
             that.peoNumList[3].temNum = res.highFeverTemperatureNum
           })
 
+      },
+
+      getAreaHeatData(){
+        let that = this;
+        that.$api.cityCheck.heatDistributeStatistics(
+          {
+            areaId: that.areaId
+          })
+          .then(res => {
+            that.areaNumAllList= res
+            if(that.nowIndex === 0){
+              that.getAreaLookList(0)
+            }
+          })
+
+        that.$api.cityCheck.heatTrendStatistics(
+          {
+            areaId: that.areaId
+          })
+          .then(res => {
+            if(res.length){
+              that.AxData = [];
+              that.serData = [];
+              res.forEach((item)=>{
+                let dateStr = item.date.substring(item.date.length-4).replace("-", "/");
+                that.AxData.push(dateStr)
+                that.serData.push(item.temperatureHeatTotal)
+              })
+
+              that.showLine();
+            }
+          })
+
+        that.$api.cityCheck.getEstates(
+          {
+            areaId: that.areaId
+          })
+          .then(res => {
+            that.areaPointList= res
+          })
       },
 
       getAreaLookList(idx){
@@ -459,10 +470,8 @@
         let that = this;
         var map = new BMap.Map("allmap");   //初始化map, 绑定id=allmap
         var point = new BMap.Point(104.321768, 30.88748);   // 初始化point, 给定一个默认x,y值
-        map.centerAndZoom(point, 10);        // 将point点放入map中，展示在页面中心展示，10=缩放程度
+        map.centerAndZoom(point, 18);        // 将point点放入map中，展示在页面中心展示，10=缩放程度
         map.enableScrollWheelZoom();         // 开启滚动鼠标滑轮
-
-        map.setZoom(20);
 
         var mapStyle ={
           features: ["road","building","water","land"],//隐藏地图上的"poi",
@@ -558,11 +567,22 @@
         });
       },
 
+      // 3s定时器
+      startThirdTimer(){
+        this.thirdTimerId = setInterval(() => {
+          this.getAreaHeatData()
+        },3000);
+      },
+      closeThirdTimer(){
+        clearInterval(this.thirdTimerId);
+      },
+
       // 时间定时器
       startTimer(){
         this.curDate = this.getDateStr();
         this.timerId = setInterval(() => {
           this.curDate = this.getDateStr();
+          this.getgetRecRecord()
         },1000);
       },
       closeTimer(){
@@ -605,10 +625,12 @@
       // 启动定时器
       this.startTimer();
       this.createMap();
+      this.startThirdTimer()
       // this.timer()
     },
     beforeDestroy(){
       this.closeTimer();
+      this.closeThirdTimer();
     }
 
   }

@@ -201,6 +201,10 @@ export default {
           dataIndex: 'fullAddress'
         },
         {
+          title: '用户类型',
+          dataIndex: 'userTypeCodeName'
+        },
+        {
           title: '操作',
           dataIndex: 'action',
           fixed:'right',
@@ -222,6 +226,8 @@ export default {
               item.qualityLevel = item.qualityLevel === 0?'优秀':item.qualityLevel === 1?'良好':item.qualityLevel === 2?'中':'差'
               item.temperature = '';
               item.resourceFullAddress = item.tImageResourceAddress?item.tImageResourceAddress:'';
+              item.userTypeCodeName = this.constants.data.userTypeCode?this.constants.data.userTypeCode[item.userTypeCode]['name']:''
+
             });
             return res
           })

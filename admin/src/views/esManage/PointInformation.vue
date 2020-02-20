@@ -146,6 +146,8 @@
         charts: '',
         charts2: '',
         curDate:'',
+        timerId:'',
+        thirdTimerId:'',
         data:[
           {
             name: '成都市',
@@ -298,6 +300,12 @@
 
       getData(){
         let that = this;
+
+        that.getUserHeatData()
+
+      },
+      getStatistics(){
+        let that = this;
         that.$api.localtionCheck.getRecRecordPage(
           {
             areaId: '510100',
@@ -310,7 +318,10 @@
           .then(res => {
             that.testList= res.data
           })
+      },
 
+      getAreaHeatData(){
+        let that = this;
         that.$api.localtionCheck.statistics(
           {
             estateId:that.pointItem.id
@@ -319,14 +330,14 @@
             that.statistics = res
           })
 
-        that.getUserHeatData()
-
         that.$api.localtionCheck.heatTrendStatistics(
           {
             estateId:that.pointItem.id
           })
           .then(res => {
             if(res.length){
+              that.AxData = [];
+              that.serData = [];
               res.forEach((item)=>{
                 let dateStr = item.date.substring(item.date.length-4).replace("-", "/");
                 that.AxData.push(dateStr)
@@ -336,8 +347,6 @@
               that.showLine();
             }
           })
-
-
       },
 
       getUserHeatData(){
@@ -434,11 +443,22 @@
         });
       },
 
+      // 3s定时器
+      startThirdTimer(){
+        this.thirdTimerId = setInterval(() => {
+          this.getAreaHeatData()
+        },3000);
+      },
+      closeThirdTimer(){
+        clearInterval(this.thirdTimerId);
+      },
+
       // 时间定时器
       startTimer(){
         this.curDate = this.getDateStr();
         this.timerId = setInterval(() => {
           this.curDate = this.getDateStr();
+          this.getUserHeatData();
         },1000);
       },
       closeTimer(){
@@ -485,10 +505,12 @@
     mounted(){
       // 启动定时器
       this.startTimer();
+      this.startThirdTimer();
       // this.timer()
     },
     beforeDestroy(){
       this.closeTimer();
+      this.closeThirdTimer();
     }
   }
 </script>

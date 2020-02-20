@@ -15,9 +15,15 @@
     @cancel="handleCancel"
   >
     <a-spin :spinning="confirmLoading">
-      <div @click="add" style="position: absolute;right: 0; top: 0;z-index: 10">
-        <a-button>添加相机</a-button>
+      <div style="position: absolute;right: 0; top: 0;z-index: 10">
+        <a-button @click="add">添加相机</a-button>
+
+        <a-button @click="addTemCheck" style="margin-left: 10px" v-if="!isTemCheck">添加体温检测</a-button>
+
       </div>
+
+      </div>
+
       <a-tabs hideAdd @change="callback" :activeKey='activeKey' type="editable-card" @edit="onEdit">
         <a-tab-pane tab="基本信息" ref="key1" key="1" :closable="false">
           <a-form :form="form">
@@ -476,6 +482,144 @@
           </a-form>
         </a-tab-pane>
 
+        <a-tab-pane tab="体温检测" v-if="isTemCheck" ref="key3" :closable="this.thermograph.id ? false : true" :key="(panes.length+3) + ''" class="init-sty">
+          <a-form :form="formTem">
+            <a-input
+              v-decorator="['mainEngine.id',{initialValue: this.formData.mainEngine.id}]" v-show="false"/>
+            <a-card>
+              <a-row :gutter="24">
+                <a-col :span="8">
+                  <a-form-item label="开门触发蓝牙锁" :labelCol="labelCo1" :wrapperCol="wrapperCo1">
+                    <a-select
+                      size="default"
+                      placeholder="请选择"
+                      :disabled="true"
+                      optionFilterProp="children"
+                      v-decorator="['thermograph.triggerBtLockMode', {initialValue: this.thermograph.triggerBtLockMode, rules: [{required: true, message: '请选择访客注册！'}]}]"
+                    >
+                      <a-select-option value="OPEN">开启</a-select-option>
+                      <a-select-option value="CLOSE">关闭</a-select-option>
+                    </a-select>
+                  </a-form-item>
+                </a-col>
+                <a-col :span="8">
+                  <a-form-item label="体温校验模式" :labelCol="labelCo1" :wrapperCol="wrapperCo1">
+                    <a-select
+                      size="default"
+                      placeholder="请选择"
+                      :disabled="true"
+                      optionFilterProp="children"
+                      v-decorator="['thermograph.temperatureCheckMode', {initialValue: this.thermograph.temperatureCheckMode, rules: [{required: true, message: '请选择访客注册！'}]}]"
+                    >
+                      <a-select-option value="OPEN">开启</a-select-option>
+                      <a-select-option value="CLOSE">关闭</a-select-option>
+                    </a-select>
+                  </a-form-item>
+                </a-col>
+                <a-col :span="8">
+                  <a-form-item
+                    label="低温阈值"
+                    :labelCol="labelCo1"
+                    :wrapperCol="wrapperCo1"
+                  >
+                    <a-input :maxLength="255" :disabled="true" v-decorator="['thermograph.lowTemperatureThreshold',{initialValue: this.thermograph.lowTemperatureThreshold}]" />
+                  </a-form-item>
+                </a-col>
+              </a-row>
+
+              <a-row :gutter="24">
+
+                <a-col :span="8">
+                  <a-form-item
+                    label="高温阈值"
+                    :labelCol="labelCo1"
+                    :wrapperCol="wrapperCo1"
+                  >
+                    <a-input :maxLength="255" :disabled="true" v-decorator="['thermograph.highTemperatureThreshold',{initialValue: this.thermograph.highTemperatureThreshold}]" />
+                  </a-form-item>
+                </a-col>
+
+                <a-col :span="8">
+                  <a-form-item label="热成像模块辐射率" :labelCol="labelCo1" :wrapperCol="wrapperCo1">
+                    <a-input :maxLength="9" :disabled="true"
+                             v-decorator="['thermograph.thermalImagingEmissivity', {initialValue: this.thermograph.thermalImagingEmissivity, rules: [{required: true, message: '请输热成像模块辐射率！'}]}]"/>
+                  </a-form-item>
+                </a-col>
+
+                <a-col :span="8">
+                  <a-form-item
+                    label="热成像模块补偿率"
+                    :labelCol="labelCo1"
+                    :wrapperCol="wrapperCo1"
+                  >
+                    <a-input :maxLength="255" :disabled="true" v-decorator="['thermograph.thermalImagingCompRate',{initialValue: this.thermograph.thermalImagingCompRate}]" />
+                  </a-form-item>
+                </a-col>
+
+              </a-row>
+
+              <a-row :gutter="24">
+                <a-col :span="8">
+                  <a-form-item label="热敏温度映射模式" :labelCol="labelCo1" :wrapperCol="wrapperCo1">
+                    <a-select
+                      size="default"
+                      placeholder="请选择"
+                      :disabled="true"
+                      optionFilterProp="children"
+                      v-decorator="['thermograph.temperatureMappingMode', {initialValue: this.thermograph.temperatureMappingMode, rules: [{required: true, message: '请选择热敏温度映射模式！'}]}]"
+                    >
+                      <a-select-option value="NONE">无映射</a-select-option>
+                      <a-select-option value="false">关闭</a-select-option>
+                    </a-select>
+                  </a-form-item>
+                </a-col>
+                <a-col :span="8">
+                  <a-form-item label="请靠近语音开关" :labelCol="labelCo1" :wrapperCol="wrapperCo1">
+                    <a-select
+                      size="default"
+                      placeholder="请选择"
+                      optionFilterProp="children"
+                      v-decorator="['thermograph.closeToVoiceMode', {initialValue: this.thermograph.closeToVoiceMode, rules: [{required: true, message: '请选择请靠近语音开关！'}]}]"
+                    >
+                      <a-select-option value="OPEN">开启</a-select-option>
+                      <a-select-option value="CLOSE">关闭</a-select-option>
+                    </a-select>
+                  </a-form-item>
+                </a-col>
+                <a-col :span="8">
+                  <a-form-item label="播报温度数字开关" :labelCol="labelCo1" :wrapperCol="wrapperCo1">
+                    <a-select
+                      size="default"
+                      placeholder="请选择"
+                      optionFilterProp="children"
+                      v-decorator="['thermograph.bcstTemperatureNumMode', {initialValue: this.thermograph.bcstTemperatureNumMode, rules: [{required: true, message: '请选择播报温度数字开关！'}]}]"
+                    >
+                      <a-select-option value="OPEN">开启</a-select-option>
+                      <a-select-option value="CLOSE">关闭</a-select-option>
+                    </a-select>
+                  </a-form-item>
+                </a-col>
+              </a-row>
+
+              <a-row :gutter="24">
+                <a-col :span="8">
+                  <a-form-item label="是否启用" :labelCol="labelCo1" :wrapperCol="wrapperCo1">
+                    <a-select
+                      size="default"
+                      placeholder="请选择"
+                      optionFilterProp="children"
+                      v-decorator="['thermograph.enable', {initialValue: this.thermograph.enable+'', rules: [{required: true, message: '请选择启用！'}]}]"
+                    >
+                      <a-select-option value="true">是</a-select-option>
+                      <a-select-option value="false">否</a-select-option>
+                    </a-select>
+                  </a-form-item>
+                </a-col>
+              </a-row>
+            </a-card>
+          </a-form>
+        </a-tab-pane>
+
       </a-tabs>
 
     </a-spin>
@@ -555,6 +699,20 @@
         ],
         activeKey: '1',
         newTabIndex: 3,
+        isTemCheck:false,
+        thermograph:{
+          bcstTemperatureNumMode:"OPEN",
+          closeToVoiceMode:"OPEN",
+          enable:true,
+          highTemperatureThreshold:37.30,
+          lowTemperatureThreshold:35.50,
+          temperatureCheckMode:"CLOSE",
+          temperatureMappingMode:"NONE",
+          thermalImagingCompRate:1000,
+          thermalImagingEmissivity:950,
+          triggerBtLockMode:"OPEN",
+          id:''
+        }
       }
     },
     computed: {
@@ -563,11 +721,18 @@
     beforeCreate () {
       this.form = this.$form.createForm(this);
       this.form1 = this.$form.createForm(this);
+      this.formTem = this.$form.createForm(this);
     },
     methods: {
+
+      addTemCheck(){
+        this.isTemCheck = !this.isTemCheck;
+        this.callback((this.panes.length+3) + '')
+      },
       addEdit (item) {
         let that = this;
         this.visible = true
+        this.isTemCheck = false
         this.activeKey = '1';
         this.form.resetFields()
         this.form1.resetFields()
@@ -628,6 +793,25 @@
                   });
                   that.panes = panes;
                 })
+              }
+              if(res.thermograph && res.thermograph.id){
+                that.isTemCheck = true
+                that.thermograph = res.thermograph
+              }else{
+                that.isTemCheck = false
+                that.thermograph = {
+                    bcstTemperatureNumMode :"OPEN",
+                    closeToVoiceMode : "OPEN",
+                    enable : true,
+                    highTemperatureThreshold:37.30,
+                    lowTemperatureThreshold:35.50,
+                    temperatureCheckMode:"CLOSE",
+                    temperatureMappingMode:"NONE",
+                    thermalImagingCompRate:1000,
+                    thermalImagingEmissivity:950,
+                    triggerBtLockMode:"OPEN",
+                    id:''
+                }
               }
             })
         }else{
@@ -717,7 +901,23 @@
               })
             }
             if(isSubmit){
-              this.confirmLoading = true
+
+              if(this.isTemCheck){
+                let that = this;
+                const { formTem: { validateFields } } = this
+                validateFields((errors, valuesTem) => {
+                  if (!errors) {
+                    params.thermograph = valuesTem.thermograph
+                    if(that.thermograph.id){
+                      params.thermograph.id = that.thermograph.id;
+                    }
+                  }
+                })
+              }else{
+                delete params.thermograph
+              }
+
+              // this.confirmLoading = true
               params.cameras = camerasData
               console.log('---params---',params)
               this.$api.device.saveOrUpdate(params)
@@ -834,58 +1034,68 @@
 
       remove(targetKey) {
         const that = this
-        let activeKey = that.activeKey;
-        let lastIndex;
-        that.panes.forEach((pane, i) => {
-          if (pane.key === targetKey) {
-            lastIndex = i - 1;
+        let allTabsNum = that.panes.length+3
+        if(parseInt(targetKey) === allTabsNum){
+          this.isTemCheck = false
+          if(parseInt(that.activeKey) === allTabsNum){
+            that.activeKey = (parseInt(targetKey)-1)+'';
           }
-        });
-        const currentPanes = that.panes.filter(pane => pane.key === targetKey);
-        const panes = that.panes.filter(pane => pane.key !== targetKey);
-       console.log(currentPanes)
-        if(currentPanes[0].content.id){
-          that.$confirm({
-            title: '删除',
-            content: '确定删除点击的相机？',
-            onOk () {
-              that.$api.device.cameraDel({ ids: [currentPanes[0].content.id]})
-                .then(res => {
-                  that.$notification.success({
-                    message: '成功',
-                    description: `删除成功！`
-                  })
-                  if (panes.length) {
-                    if (lastIndex >= 0) {
-                      activeKey = panes[lastIndex].key;
-                    } else {
-                      activeKey = panes[0].key;
-                    }
-                    that.panes = panes;
-                    that.activeKey = activeKey;
-                  }else{
-                    that.panes = [];
-                    that.activeKey = '2';
-                  }
-                })
-            },
-            onCancel () {
-            }
-          })
         }else{
-          if (panes.length) {
-            if (lastIndex >= 0) {
-              activeKey = panes[lastIndex].key;
-            } else {
-              activeKey = panes[0].key;
+          let activeKey = that.activeKey;
+          let lastIndex;
+          that.panes.forEach((pane, i) => {
+            if (pane.key === targetKey) {
+              lastIndex = i - 1;
             }
-            that.panes = panes;
-            that.activeKey = activeKey;
+          });
+          const currentPanes = that.panes.filter(pane => pane.key === targetKey);
+          const panes = that.panes.filter(pane => pane.key !== targetKey);
+          console.log(currentPanes)
+          if(currentPanes[0].content.id){
+            that.$confirm({
+              title: '删除',
+              content: '确定删除点击的相机？',
+              onOk () {
+                that.$api.device.cameraDel({ ids: [currentPanes[0].content.id]})
+                  .then(res => {
+                    that.$notification.success({
+                      message: '成功',
+                      description: `删除成功！`
+                    })
+                    if (panes.length) {
+                      if (lastIndex >= 0) {
+                        activeKey = panes[lastIndex].key;
+                      } else {
+                        activeKey = panes[0].key;
+                      }
+                      that.panes = panes;
+                      that.activeKey = activeKey;
+                    }else{
+                      that.panes = [];
+                      that.activeKey = '2';
+                    }
+                  })
+              },
+              onCancel () {
+              }
+            })
           }else{
-            that.panes = [];
-            that.activeKey = '2';
+            if (panes.length) {
+              if (lastIndex >= 0) {
+                activeKey = panes[lastIndex].key;
+              } else {
+                activeKey = panes[0].key;
+              }
+              that.panes = panes;
+              that.activeKey = activeKey;
+            }else{
+              that.panes = [];
+              that.activeKey = '2';
+            }
           }
         }
+
+
       },
     }
   }

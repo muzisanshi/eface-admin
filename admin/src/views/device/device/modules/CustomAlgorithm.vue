@@ -167,10 +167,25 @@
             <a-form-item
               style="width: 300px;"
             >
-              <a-input :maxLength="9"
+              <!--<a-input :maxLength="9"-->
+                <!--:disabled="isEdit"-->
+                <!--v-decorator="['algorithm.videoRotate',-->
+            <!--{initialValue: this.formData.algorithm.videoRotate, rules: [{required: true, message: '请输入旋转角度！'}]}]"/>-->
+
+              <a-select
+                size="default"
+                placeholder="请选择"
                 :disabled="isEdit"
-                v-decorator="['algorithm.videoRotate',
-            {initialValue: this.formData.algorithm.videoRotate, rules: [{required: true, message: '请输入旋转角度！'}]}]"/>
+                style="width: 300px"
+                optionFilterProp="children"
+                v-decorator="['algorithm.videoRotate', {initialValue: this.formData.algorithm.videoRotate+'', rules: [{required: true, message: '请选择视频旋转角度！'}]}]"
+              >
+                <a-select-option value="0">0</a-select-option>
+                <a-select-option value="90">90</a-select-option>
+                <a-select-option value="-90">-90</a-select-option>
+                <a-select-option value="180">180</a-select-option>
+              </a-select>
+
             </a-form-item>
 
 
@@ -180,10 +195,25 @@
             <a-form-item
               style="width: 300px;"
             >
-              <a-input :maxLength="9"
+              <!--<a-input :maxLength="9"-->
+                <!--:disabled="isEdit"-->
+                <!--v-decorator="['algorithm.videoFlip',-->
+            <!--{initialValue: this.formData.algorithm.videoFlip, rules: [{required: true, message: '请输入视频镜像！'}]}]"/>-->
+
+              <a-select
+                size="default"
+                placeholder="请选择"
                 :disabled="isEdit"
-                v-decorator="['algorithm.videoFlip',
-            {initialValue: this.formData.algorithm.videoFlip, rules: [{required: true, message: '请输入视频镜像！'}]}]"/>
+                style="width: 300px"
+                optionFilterProp="children"
+                v-decorator="['algorithm.videoFlip', {initialValue: this.formData.algorithm.videoFlip+'', rules: [{required: true, message: '请选择视频翻转！'}]}]"
+              >
+                <a-select-option value="0">不翻转</a-select-option>
+                <a-select-option value="1">水平翻转</a-select-option>
+                <a-select-option value="-1">垂直翻转</a-select-option>
+              </a-select>
+
+
             </a-form-item>
           </a-col>
         </a-row>
@@ -194,10 +224,25 @@
             <a-form-item
               style="width: 300px;"
             >
-              <a-input :maxLength="9"
+              <!--<a-input :maxLength="9"-->
+                <!--:disabled="isEdit"-->
+                <!--v-decorator="['algorithm.captureLevel',-->
+            <!--{initialValue: this.formData.algorithm.captureLevel, rules: [{required: true, message: '请输入抓拍等级！'}]}]"/>-->
+
+              <a-select
+                size="default"
+                placeholder="请选择"
                 :disabled="isEdit"
-                v-decorator="['algorithm.captureLevel',
-            {initialValue: this.formData.algorithm.captureLevel, rules: [{required: true, message: '请输入抓拍等级！'}]}]"/>
+                style="width: 300px"
+                optionFilterProp="children"
+                v-decorator="['algorithm.captureLevel', {initialValue: this.formData.algorithm.captureLevel+'', rules: [{required: true, message: '请选择抓拍等级！'}]}]"
+              >
+                <a-select-option value="0">正脸</a-select-option>
+                <a-select-option value="1">正脸+侧脸</a-select-option>
+                <a-select-option value="2">正脸+侧脸+遮挡</a-select-option>
+                <a-select-option value="3">全部输出</a-select-option>
+              </a-select>
+
             </a-form-item>
           </a-col>
           <a-col :span="12">
