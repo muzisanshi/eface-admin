@@ -10,13 +10,13 @@
       <div class="header">
         <div class="header-box">
           <div class="title">
-            <span style="display: inline-block;width: 41px;height: 40px;"><img style="width: 100%;height: 100%;margin-top: -8px" src="@/assets/es/btn_back_top.png" alt=""></span>
+            <span  @click="back" style="display: inline-block;width: 41px;height: 40px;"><img style="width: 100%;height: 100%;margin-top: -8px" src="@/assets/es/btn_back_top.png" alt=""></span>
             <span style="padding-left: 5px">成都市公共区域体温实时状态</span>
             <span style="font-size:24px;color:rgba(112,123,145,1);line-height:33px;padding-top: 48px;display: block;float: right;">（近14天）</span>
           </div>
           <div class="time">
-            <span style="padding-right: 20px">2020-02-15 16:58:59</span>
-            <span><img style="width: 50px;" src="@/assets/es/btn_fullscreen@2x.png" alt=""></span>
+            <span style="padding-right: 20px">{{curDate}}</span>
+            <span @click="togglefullScreen"><img style="width: 50px;" src="@/assets/es/btn_fullscreen@2x.png" alt=""></span>
           </div>
         </div>
       </div>
@@ -26,10 +26,10 @@
         <div class="map-box">
           <div id="allmap" class="Map" />
           <div class="testing-statistics">
-            <div class="tabs">
-              <div class="active">实时检测<div class="three-box"></div></div>
-              <div>高热人群</div>
-            </div>
+            <!--<div class="tabs">-->
+              <!--<div class="active">实时检测<div class="three-box"></div></div>-->
+              <!--<div>高热人群</div>-->
+            <!--</div>-->
             <div class="tabs-content">
               <div class="content-list">
                 <div class="tem-mess" v-for="(item,index) in testList" @click="toTrail(item)" :class="{'red-back':item.temperature >37.2}">
@@ -121,6 +121,9 @@
       return {
         charts: '',
         charts2: '',
+        curDate:'',
+        timerId:'',
+        thirdTimerId:'',
         districtLoading:0,
         nowIndex:0,
         hasAreaList:false,
@@ -244,7 +247,8 @@
             areaName:'高温人数',
             temNum:0
           }
-        ]
+        ],
+        isFullScreen:false,
       }
     },
     created(){
@@ -252,6 +256,7 @@
         this.areaId = this.$route.params.data.areaId
       }
       this.getData()
+      this.getAreaHeatData()
     },
     methods: {
 
@@ -262,7 +267,11 @@
         })
       },
 
-      getData(){
+      back(){
+        this.$router.go(-1);
+      },
+
+      getgetRecRecord(){
         let that = this;
         that.$api.cityCheck.getRecRecordPage(
           {
@@ -275,42 +284,10 @@
           .then(res => {
             that.testList= res.data
           })
+      },
 
-
-        that.$api.cityCheck.getEstates(
-          {
-            areaId: that.areaId
-          })
-          .then(res => {
-            that.areaPointList= res
-          })
-
-        that.$api.cityCheck.heatTrendStatistics(
-          {
-            areaId: that.areaId
-          })
-          .then(res => {
-            if(res.length){
-              res.forEach((item)=>{
-                let dateStr = item.date.substring(item.date.length-4).replace("-", "/");
-                that.AxData.push(dateStr)
-                that.serData.push(item.temperatureHeatTotal)
-              })
-
-              that.showLine();
-            }
-          })
-
-        that.$api.cityCheck.heatDistributeStatistics(
-          {
-            areaId: that.areaId
-          })
-          .then(res => {
-            that.areaNumAllList= res
-            if(that.nowIndex === 0){
-              that.getAreaLookList(0)
-            }
-          })
+      getData(){
+        let that = this;
 
         that.$api.cityCheck.industryEpidemicStatistics(
           {
@@ -324,6 +301,46 @@
             that.peoNumList[3].temNum = res.highFeverTemperatureNum
           })
 
+      },
+
+      getAreaHeatData(){
+        let that = this;
+        that.$api.cityCheck.heatDistributeStatistics(
+          {
+            areaId: that.areaId
+          })
+          .then(res => {
+            that.areaNumAllList= res
+            if(that.nowIndex === 0){
+              that.getAreaLookList(0)
+            }
+          })
+
+        that.$api.cityCheck.heatTrendStatistics(
+          {
+            areaId: that.areaId
+          })
+          .then(res => {
+            if(res.length){
+              that.AxData = [];
+              that.serData = [];
+              res.forEach((item)=>{
+                let dateStr = item.date.substring(item.date.length-4).replace("-", "/");
+                that.AxData.push(dateStr)
+                that.serData.push(item.temperatureHeatTotal)
+              })
+
+              that.showLine();
+            }
+          })
+
+        that.$api.cityCheck.getEstates(
+          {
+            areaId: that.areaId
+          })
+          .then(res => {
+            that.areaPointList= res
+          })
       },
 
       getAreaLookList(idx){
@@ -453,10 +470,8 @@
         let that = this;
         var map = new BMap.Map("allmap");   //初始化map, 绑定id=allmap
         var point = new BMap.Point(104.321768, 30.88748);   // 初始化point, 给定一个默认x,y值
-        map.centerAndZoom(point, 10);        // 将point点放入map中，展示在页面中心展示，10=缩放程度
+        map.centerAndZoom(point, 18);        // 将point点放入map中，展示在页面中心展示，10=缩放程度
         map.enableScrollWheelZoom();         // 开启滚动鼠标滑轮
-
-        map.setZoom(20);
 
         var mapStyle ={
           features: ["road","building","water","land"],//隐藏地图上的"poi",
@@ -551,24 +566,71 @@
           map.setViewport(pointArray);    //调整视野
         });
       },
+
+      // 3s定时器
+      startThirdTimer(){
+        this.thirdTimerId = setInterval(() => {
+          this.getAreaHeatData()
+        },3000);
+      },
+      closeThirdTimer(){
+        clearInterval(this.thirdTimerId);
+      },
+
+      // 时间定时器
+      startTimer(){
+        this.curDate = this.getDateStr();
+        this.timerId = setInterval(() => {
+          this.curDate = this.getDateStr();
+          this.getgetRecRecord()
+        },1000);
+      },
+      closeTimer(){
+        clearInterval(this.timerId);
+      },
+
+      togglefullScreen(){
+
+        let e = document.documentElement;
+
+        if(!this.isFullScreen){
+          if(e.requestFullscreen) {
+            e.requestFullscreen();
+          } else if (e.mozRequestFullScreen){	// 兼容火狐
+            e.mozRequestFullScreen();
+          } else if(e.webkitRequestFullscreen) {	// 兼容谷歌
+            e.webkitRequestFullscreen();
+          } else if (e.msRequestFullscreen) {	// 兼容IE
+            e.msRequestFullscreen();
+          }
+          this.isFullScreen = true;
+        }else{
+          //	退出全屏
+          if(document.exitFullscreen) {
+            document.exitFullscreen();
+          } else if (document.mozCancelFullScreen) {
+            document.mozCancelFullScreen();
+          } else if (document.webkitCancelFullScreen) {
+            document.webkitCancelFullScreen();
+          } else if (document.msExitFullscreen) {
+            document.msExitFullscreen();
+          }
+          this.isFullScreen = false;
+        }
+
+      },
+
     },
     mounted(){
-      this.$nextTick(function() {
-        // this.showProvince('sichuan')
-        this.showLine();
-        // this.charts.on('click', function (params) {
-        //     console.log(params);
-        // });
-
-      })
-
+      // 启动定时器
+      this.startTimer();
       this.createMap();
-
+      this.startThirdTimer()
       // this.timer()
     },
-
-    destroyed() {
-      // clearInterval(this.timer)
+    beforeDestroy(){
+      this.closeTimer();
+      this.closeThirdTimer();
     }
 
   }
@@ -610,7 +672,7 @@
       justify-content:space-between;
       .title{
         width:782px;
-        font-size:46px;
+        font-size:2rem;
         color:#395CA8;
         line-height:63px;
         padding: 45px 0 0 17px;

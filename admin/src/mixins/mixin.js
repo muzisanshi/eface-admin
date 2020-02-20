@@ -266,7 +266,25 @@ export const mixin = {
         if (!(counter % 4) && i != 0) { result.unshift(','); }
       }
       return result.join('');
-    }
+    },
+
+    getDateStr(){
+      let date = new Date();
+      let y = date.getFullYear();
+      let m = date.getMonth() + 1;
+      m = m < 10 ? ('0'+m) : m;
+      let d = date.getDate();
+      d = d < 10 ? ('0'+d) : d;
+
+      let h = date.getHours();
+      h = h < 10 ? ('0'+h) : h;
+      let f = date.getMinutes();
+      f = f < 10 ? ('0'+f) : f;
+      let s = date.getSeconds();
+      s = s < 10 ? ('0'+s) : s;
+
+      return y + '-' + m + '-' + d + ' ' + h + ':' + f + ':' + s;
+    },
 
   }
 

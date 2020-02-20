@@ -8,13 +8,19 @@
   <div class="es-main">
     <header>
       <div class="header">
-        <div class="header-box">
-          <div class="title">四川省发热检测分布图</div>
-          <div class="time">
-            <span style="padding-right: 20px">2020-02-15 16:58:59</span>
-            <span><img style="width: 50px;" src="@/assets/es/btn_fullscreen@2x.png" alt=""></span>
-          </div>
+
+        <img class="bg-img" src="@/assets/es/img_titlebg@2x.png"/>
+
+        <div class="left">
+          <span class="title">四川省发热检测分布图</span>
+          <!-- <span class="late">（近14天）</span> -->
         </div>
+
+        <div class="right">
+          <span class="time">{{curDate}}</span>
+          <img @click="togglefullScreen"  class="full-screen" src="@/assets/es/btn_fullscreen@2x.png"/>
+        </div>
+
       </div>
     </header>
     <section>
@@ -126,6 +132,10 @@
       return {
         charts: '',
         charts2: '',
+        timerId:'',
+        getStatisticsTime:'',
+        getDataFirTime:'',
+        curDate:'',
         data:[],
         dataList:[],
         nowIndex:-1,
@@ -137,26 +147,25 @@
         },
         AxData:[],
         serData:[],
-        statistics:{}
+        statistics:{},
+        isFullScreen:false,
       }
     },
     created(){
       this.getHeatDistributeStatistics();
+      this.getStatistics();
     },
     methods: {
 
       getHeatDistributeStatistics(){
         let that = this;
 
-        that.$api.provinceCheck.statistics({areaId: '510000'})
-          .then(res => {
-            that.statistics = res
-          })
-
         that.$api.provinceCheck.mapStatistics({areaId: '510000'})
           .then(res => {
             that.dataList = res
             if(res.length){
+              that.data = []
+              that.areaList = []
               res.forEach((item)=>{
                 let obj = {
                   name:item.areaName,
@@ -190,10 +199,26 @@
             }
           })
 
+        that.$api.provinceCheck.heatDistributeStatistics({areaId: '510000'})
+          .then(res => {
+              that.dataList = res
+          })
+
+      },
+
+      getStatistics(){
+        let that = this
+        that.$api.provinceCheck.statistics({areaId: '510000'})
+          .then(res => {
+            that.statistics = res
+          })
+
         that.$api.provinceCheck.heatTrendStatistics({areaId: '510000'})
           .then(res => {
             that.temperatureCheckData = res
             if(res.dateStatistics.length){
+              that.AxData = [];
+              that.serData = [];
               res.dateStatistics.forEach((item)=>{
                 let dateStr = item.date.substring(item.date.length-4).replace("-", "/");
                 that.AxData.push(dateStr)
@@ -203,14 +228,40 @@
               that.showLine();
             }
           })
+      },
+
+      // 3秒定时器
+      startGetStatisticsTimer(){
+        this.getStatisticsTime = setInterval(() => {
+          this.getStatistics();
+        },3000);
+      },
+
+      closeGetStatisticsTimer(){
+        clearInterval(this.getStatisticsTime);
+      },
+
+      // 3秒定时器
+      startGetDataFirTimer(){
+        this.getDataFirTime = setInterval(() => {
+          this.getHeatDistributeStatistics();
+        },5000);
+      },
+
+      closeGetDataFirTimer(){
+        clearInterval(this.getDataFirTime);
+      },
 
 
-
-        that.$api.provinceCheck.heatDistributeStatistics({areaId: '510000'})
-          .then(res => {
-              that.dataList = res
-          })
-
+      // 时间定时器
+      startTimer(){
+        this.curDate = this.getDateStr();
+        this.timerId = setInterval(() => {
+          this.curDate = this.getDateStr();
+        },1000);
+      },
+      closeTimer(){
+        clearInterval(this.timerId);
       },
 
       selectCity(){
@@ -428,18 +479,49 @@
           },]
         });
       },
-      // timer() {
-      //     return setInterval(()=>{
-      //         this.showCity('chengdu')
-      //     },5000)
-      // }
+
+      togglefullScreen(){
+
+        let e = document.documentElement;
+
+        if(!this.isFullScreen){
+          if(e.requestFullscreen) {
+            e.requestFullscreen();
+          } else if (e.mozRequestFullScreen){	// 兼容火狐
+            e.mozRequestFullScreen();
+          } else if(e.webkitRequestFullscreen) {	// 兼容谷歌
+            e.webkitRequestFullscreen();
+          } else if (e.msRequestFullscreen) {	// 兼容IE
+            e.msRequestFullscreen();
+          }
+          this.isFullScreen = true;
+        }else{
+          //	退出全屏
+          if(document.exitFullscreen) {
+            document.exitFullscreen();
+          } else if (document.mozCancelFullScreen) {
+            document.mozCancelFullScreen();
+          } else if (document.webkitCancelFullScreen) {
+            document.webkitCancelFullScreen();
+          } else if (document.msExitFullscreen) {
+            document.msExitFullscreen();
+          }
+          this.isFullScreen = false;
+        }
+
+      },
+
     },
     mounted(){
-
-      // this.timer()
+      // 启动定时器
+      this.startTimer();
+      this.startGetDataFirTimer();
+      this.startGetStatisticsTimer();
     },
-    destroyed() {
-      // clearInterval(this.timer)
+    beforeDestroy(){
+      this.closeTimer();
+      this.closeGetStatisticsTimer();
+      this.closeGetDataFirTimer();
     }
 
   }
@@ -455,21 +537,21 @@
   }
   .user-layout-login {
     label {
-      font-size: 14px;
+      font-size: 0.875rem;
     }
     button.login-button {
       padding: 0 15px;
-      font-size: 16px;
+      font-size: 1rem;
       height: 40px;
       width: 100%;
     }
   }
 
   .es-main{
-    width: 100%;
-    height: 100%;
     padding: 18px 50px;
     background:rgba(3,20,47,1);
+    min-width: 1200px;
+    height: 100%;
     .tr-list::-webkit-scrollbar{
       width:9px;
       height:10px;
@@ -489,26 +571,55 @@
     .tr-list::-webkit-scrollbar-corner{
       background: #179a16;
     }
-    .header-box{
-      width: 100%;
-      height: 133px;
-      background: url("~@/assets/es/img_titlebg@2x.png") no-repeat;
-      background-size: 100%;
-      display: flex;
-      justify-content:space-between;
-      .title{
-        width:500px;
-        font-size:46px;
-        font-family:AlibabaPuHuiTiM;
-        color:#395CA8;
-        line-height:63px;
-        padding: 48px 0 0 20px;
+    .header{
+      position: relative;
+      .bg-img{
+        position: relative;
+        width: 100%;
       }
-      .time{
-        padding: 55px 20px 0 0;
-        font-size:24px;
-        color:rgba(45,127,206,1);
-        line-height:33px;
+      .left{
+        position: absolute;
+        width: 50%;
+        color: #2D7FCE;
+        font-size: 2rem;
+        height: 26px;
+        top:calc(50% - 13px);
+        .back{
+          width: 26px;
+          height: 26px;
+          position: absolute;
+          left: 5px;
+          cursor: pointer;
+        }
+        .title{
+          position: absolute;
+          height: 26px;
+          line-height: 26px;
+          left: 25px;
+        }
+      }
+      .right{
+        position: absolute;
+        width: 50%;
+        height: 18px;
+        color: #2D7FCE;
+        text-align: right;
+        font-size: 1.2rem;
+        right: 18px;
+        line-height: 18px;
+        top:calc(50% - 9px);
+        .time{
+          position: relative;
+          top: -11px;
+          margin-right: 20px;
+        }
+        .full-screen{
+          position: relative;
+          width: 40px;
+          height: 40px;
+          top:-11px;
+          cursor: pointer;
+        }
       }
     }
     section{
@@ -519,9 +630,10 @@
         display: flex;
         justify-content:space-between;
         .map-box{
-          width: calc(100% - 560px);
+          width: calc(100% - 500px);
           min-height: 400px;
           position: relative;
+          overflow: hidden;
           #sichuan{
             width: 100%;
             height: 100%;
@@ -544,19 +656,19 @@
                 background:rgba(11,32,64,1);
                 border:1px solid;
                 border-image:linear-gradient(135deg, rgba(0,111,171,1), rgba(11,32,64,1), rgba(11,32,64,1), rgba(0,109,169,1)) 1 1;
-                font-size:20px;
+                font-size:1.25rem;
                 color:rgba(220,220,245,1);
                 line-height:27px;
                 padding-left: 5px;
                 span{
-                  font-size:14px;
+                  font-size:0.875rem;
                   color:rgba(159,159,226,1);
                   line-height:20px;
                   padding-left: 5px;
                 }
               }
               .people-num{
-                font-size:40px;
+                font-size:2.5rem;
                 color:rgba(194,203,222,1);
                 line-height:55px;
               }
@@ -584,7 +696,7 @@
           }
           .select-city-box{
             position: absolute;
-            right: -20px;
+            right: 20px;
             top: 60px;
             width:140px;
             border-radius:3px;
@@ -647,15 +759,16 @@
           }
         }
         .data-box{
+          width: 460px;
           .title{
             padding: 12px 0 25px;
             h2{
-              font-size:27px;
+              font-size:1.6875rem;
               color:rgba(255,255,255,1);
               line-height:37px;
             }
             p{
-              font-size:16px;
+              font-size:1rem;
               color:rgba(201,201,203,1);
               line-height:22px;
             }
@@ -677,12 +790,12 @@
               }
               .content{
                 .content-title{
-                  font-size:16px;
+                  font-size:1rem;
                   color:rgba(255,255,255,1);
                   line-height:22px;
                 }
                 .content-num{
-                  font-size:30px;
+                  font-size:1.875rem;
                   color:rgba(255,255,255,1);
                   line-height:42px;
                 }
@@ -698,8 +811,11 @@
           }
           .peo-distribution{
             color: #fff;
+            height: calc(100% - 410px);
             .content-table{
+              height: calc(100% - 96px);
               .table-box{
+                height: 100%;
                 .table-th{
                   display: flex;
                   justify-content:space-between;
@@ -720,7 +836,9 @@
                   }
                 }
                 .tr-list{
-                  height: 260px;
+                  height: calc(100% - 38px);
+                  max-height: 260px;
+                  min-height: 100px;
                   overflow: auto;
                   .table-td{
                     display: flex;
@@ -730,7 +848,7 @@
                     div{
                       line-height:22px;
                       padding-left: 5px;
-                      font-size: 20px;
+                      font-size: 1.25rem;
                     }
                     .city{
                       width: 200px;
