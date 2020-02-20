@@ -830,6 +830,13 @@
 
                   .list-main::-webkit-scrollbar { height: 0px !important;}
                   .list-main{
+                    
+                    scrollbar-color: transparent transparent;
+                    scrollbar-track-color: transparent;
+                    
+                    -ms-overflow-style:none;
+                    -ms-scrollbar-track-color: transparent;
+                    
                     position: relative;
                     border-radius: 4px;
                     z-index: 0;
