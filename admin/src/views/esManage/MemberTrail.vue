@@ -228,6 +228,10 @@
           this.isFullScreen = false;
         }
         
+        // setTimeout(() => {
+        //   this.calcMap();
+        // },2000)
+        
       },
       
       getDateStr(){

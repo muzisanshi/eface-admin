@@ -34,6 +34,9 @@
   }
 </script>
 <style>
+  .anchorBL{
+    display: none!important;
+  }
   #app {
     height: 100%;
   }
