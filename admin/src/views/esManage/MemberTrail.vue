@@ -228,10 +228,6 @@
           this.isFullScreen = false;
         }
         
-        // setTimeout(() => {
-        //   this.calcMap();
-        // },2000)
-        
       },
       
       getDateStr(){
@@ -539,7 +535,7 @@
         // 计算地图高度
         let conHeight = $('.member-trail').height();
         let headHeight = $('.header').outerHeight(true);
-        let mapHeight = conHeight - headHeight - 25;
+        let mapHeight = conHeight - headHeight - 30;
         $('.map').height(mapHeight);
       },
       
@@ -555,19 +551,8 @@
       // 备份数据到本地
       localStorage.setItem('memberData',JSON.stringify(this.memberData));
       
-      // let i = 1;
       window.onresize = () => {
-        
-        // i++;
-        
-        // setTimeout(() => {
-          // this.calcMap();
-        // },100 * i);
-        
-        // if(i == 10){
-        //   i = 0;
-        // }
-        
+        this.calcMap();
       }
       
       if($){
