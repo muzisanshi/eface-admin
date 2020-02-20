@@ -17,7 +17,7 @@
 
          <div class="right">
            <span class="time">{{curDate}}</span>
-           <img class="full-screen" src="../../assets/es/btn_fullscreen@2x.png"/>
+           <img @click="togglefullScreen" class="full-screen" src="../../assets/es/btn_fullscreen@2x.png"/>
          </div>
 
        </div>
@@ -101,7 +101,7 @@
                         <div class="page" v-for="(t,i) in it.pages" :key="i">
 
                           <div class="item" v-for="(tt,ii) in it.pages[i]" :key="ii">
-                            <div class="member" :class="ii===0?'excep':'ok'">
+                            <div class="member" :class="tt.isHot ? 'excep' : 'ok'">
                               <div class="top">
                                 <img class="av" :src="tt.headImageRemoteUrl"/>
                                 <span class="temp">{{tt.temperature.toFixed(1)}}°C</span>
@@ -188,12 +188,45 @@
         
         mapData:[],
         trailData:[],
+        
+        isFullScreen:false,
       }
     },
     computed:{
 
     },
     methods:{
+      
+      togglefullScreen(){
+        
+        let e = document.documentElement;
+        
+        if(!this.isFullScreen){
+          if(e.requestFullscreen) {
+            e.requestFullscreen();
+          } else if (e.mozRequestFullScreen){	// 兼容火狐
+            e.mozRequestFullScreen();
+          } else if(e.webkitRequestFullscreen) {	// 兼容谷歌
+            e.webkitRequestFullscreen();
+          } else if (e.msRequestFullscreen) {	// 兼容IE
+            e.msRequestFullscreen();
+          }
+          this.isFullScreen = true;
+        }else{
+          //	退出全屏
+          if(document.exitFullscreen) {
+            document.exitFullscreen();
+          } else if (document.mozCancelFullScreen) {
+            document.mozCancelFullScreen();
+          } else if (document.webkitCancelFullScreen) {
+            document.webkitCancelFullScreen();
+          } else if (document.msExitFullscreen) {
+            document.msExitFullscreen();
+          }
+          this.isFullScreen = false;
+        }
+        
+      },
       
       getDateStr(){
         let date = new Date();
@@ -261,12 +294,19 @@
             // 处理数据
             r.trackItems.map((it,id) => {
               
+              it.curPage = 1;
+              it.totalWidth = 0;
+              
               let d = [Math.ceil(it.recRecords.length / 8.0)];
               for(let i = 0;i < d.length;i++){
                 d[i] = [];
               }
               
               it.recRecords.map((tt,ii) => {
+                
+                if(tt.temperature > 37.3){
+                  tt.isHot = true;
+                }
                 
                 let index = ii / 8;
                 d[index].push(tt);
