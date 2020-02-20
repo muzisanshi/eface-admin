@@ -98,9 +98,11 @@
                       </div>
                       <div class="list-main" :id="'listmain'+id">
                         
-                        <div class="page" v-for="(t,i) in it.pages" :key="i">
+                        <!-- <div class="page" v-for="(t,i) in it.pages" :key="i"> -->
+                        <div class="page">
 
-                          <div class="item" v-for="(tt,ii) in it.pages[i]" :key="ii">
+                          <!-- <div class="item" v-for="(tt,ii) in it.pages[i]" :key="ii"> -->
+                          <div class="item" v-for="(tt,ii) in it.recRecordPageData.records" :key="ii">
                             <div class="member" :class="tt.isHot ? 'excep' : 'ok'">
                               <div class="top">
                                 <img class="av" :src="tt.headImageRemoteUrl"/>
@@ -246,6 +248,26 @@
         return y + '-' + m + '-' + d + ' ' + h + ':' + f + ':' + s;
       },
       
+      refresh(){
+        this.timerId2 = setInterval(() => {
+          
+          this.getEstates({
+            recDatetime:this.memberData.recDatetime,
+            recRecordId:this.memberData.id,
+          });
+          
+          this.getBehaviorTracks({
+            page:{
+              pageNumber:1,
+              pageSize:8,
+            },
+            recDatetime:this.memberData.recDatetime,
+            recRecordId:this.memberData.id,
+          });
+          
+        },1000);
+      },
+      
       // 定时器
       startTimer(){
         this.curDate = this.getDateStr();
@@ -255,6 +277,7 @@
       },
       closeTimer(){
         clearInterval(this.timerId);
+        clearInterval(this.timerId2);
       },
       
       back(){
@@ -290,30 +313,38 @@
       getBehaviorTracks(data){
         this.$api.trail.getBehaviorTracks(data)
         .then(r => {
+          console.log('getBehaviorTracks:' + JSON.stringify(r))
           if(r && r.trackItems.length > 0){
             // 处理数据
             r.trackItems.map((it,id) => {
               
-              it.curPage = 1;
-              it.totalWidth = 0;
+              // it.curPage = 1;
               
-              let d = [Math.ceil(it.recRecords.length / 8.0)];
-              for(let i = 0;i < d.length;i++){
-                d[i] = [];
-              }
-              
-              it.recRecords.map((tt,ii) => {
-                
-                if(tt.temperature > 37.3){
-                  tt.isHot = true;
-                }
-                
-                let index = ii / 8;
-                d[index].push(tt);
-                
+              it.recRecordPageData.records.map((tt,ii) => {
+                  if(tt.temperature > 37.3){
+                    tt.isHot = true;
+                  }
               })
               
-              it.pages = d;
+              // it.totalWidth = 0;
+              
+              // let d = [Math.ceil(it.recRecords.length / 8.0)];
+              // for(let i = 0;i < d.length;i++){
+              //   d[i] = [];
+              // }
+              
+              // it.recRecords.map((tt,ii) => {
+                
+              //   if(tt.temperature > 37.3){
+              //     tt.isHot = true;
+              //   }
+                
+              //   let index = ii / 8;
+              //   d[index].push(tt);
+                
+              // })
+              
+              // it.pages = d;
               
             })
             
@@ -322,21 +353,60 @@
           }
         })
       },
-      
+      // 加载小区分页数据
+      getRecRecordPage(data,id){
+        this.$api.trail.getRecRecordPage(data)
+        .then(r => {
+          if(r){
+            this.trailData[id].recRecordPageData = r;
+          }
+        })
+      },
       before(block,id){
-        if(block.curPage > 1){
-          block.curPage --;
-          $('#listmain'+id).animate({
-            scrollLeft:((block.curPage - 1) * this.pageWidth) + 'px'
-          },300);
+        // if(block.curPage > 1){
+        
+        if(block.recRecordPageData.hasPrevious){
+          
+          // 加载对应小区的分页数据
+          this.getRecRecordPage({
+            areaId:'510100',
+            estateId:this.memberData.estateId,
+            page:{
+              pageSize:8,
+              pageNumber:(block.recRecordPageData.pageNumber - 1),
+              pageNumber:1,
+            },
+            recDatetime:this.memberData.recDatetime,
+          },id);
+          
+          // block.curPage --;
+          // $('#listmain'+id).animate({
+          //   scrollLeft:((block.curPage - 1) * this.pageWidth) + 'px'
+          // },300);
+          
         }
       },
       next(block,id){
-        if(block.curPage < block.pages.length){
-          $('#listmain'+id).animate({
-            scrollLeft:(block.curPage * this.pageWidth) + 'px'
-          },300);
-          block.curPage ++;
+        // if(block.curPage < block.pages.length){
+        
+        if(block.recRecordPageData.hasNext){
+          
+          this.getRecRecordPage({
+            areaId:'510100',
+            estateId:this.memberData.estateId,
+            page:{
+              pageSize:8,
+              pageNumber:(block.recRecordPageData.pageNumber + 1),
+              pageNumber:1,
+            },
+            recDatetime:this.memberData.recDatetime,
+          },id);
+        
+          // $('#listmain'+id).animate({
+          //   scrollLeft:(block.curPage * this.pageWidth) + 'px'
+          // },300);
+          // block.curPage ++;
+          
         }
       },
 
@@ -384,7 +454,7 @@
           let number = '<span style="position:absolute;color:white;left:-55px;top:12px;display:inline-block;width:73px;text-align:center;">'+
                           (e.num)
                       +'</span>';
-          let angle = '<img style="width:12px;position:absolute;top:0px;right:0px;" src="' + require('../../assets/es/img_angle.png') + '"/>';
+          let angle = '<img style="width:12px;position:absolute;top:0px;right:0px;z-index:999;" src="' + require('../../assets/es/img_angle.png') + '"/>';
           var label = new BMap.Label(e.name + number + '<br>' + e.date, {
             offset: new BMap.Size(54,14)
           });
@@ -417,6 +487,7 @@
 
       markerFun(points, infoWindows, label,icon,map){
         let markers = new BMap.Marker(points,{icon:icon});
+        map.clearOverlays();
         map.addOverlay(markers);  // 将标注添加到地图中
         markers.setLabel(label);  // 将data中的name添加到地图中
         // 标注的点击事件
@@ -500,9 +571,16 @@
       
       // 加载轨迹数据
       this.getBehaviorTracks({
+        page:{
+          pageNumber:1,
+          pageSize:8,
+        },
         recDatetime:this.memberData.recDatetime,
         recRecordId:this.memberData.id,
       });
+      
+      // 定时刷新数据
+      this.refresh();
       
     },
     beforeDestroy(){

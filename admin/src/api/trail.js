@@ -4,6 +4,7 @@ import { axios } from '@/utils/request'
 const URI = {
   getEstates: '/userTrack/getEstates',
   getBehaviorTracks: '/userTrack/getBehaviorTracks',
+  getRecRecordPage: '/userTrack/getRecRecordPage',
 }
 
 function getEstates (data) {
@@ -20,7 +21,15 @@ function getBehaviorTracks (data) {
   })
 }
 
+function getRecRecordPage (data) {
+  return axios({
+    url: URI.getRecRecordPage,
+    params: data
+  })
+}
+
 export default {
   getEstates,
   getBehaviorTracks,
+  getRecRecordPage,
 }
