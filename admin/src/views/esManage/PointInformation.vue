@@ -10,12 +10,12 @@
       <div class="header">
         <div class="header-box">
           <div class="title">
-            <span style="display: inline-block;width: 41px;height: 40px;"><img style="width: 100%;height: 100%;margin-top: -8px" src="@/assets/es/btn_back_top.png" alt=""></span>
-            <span style="padding-left: 5px">东方天呈点位体温实时状态</span>
+            <span @click="back" style="display: inline-block;width: 41px;height: 40px;"><img style="width: 100%;height: 100%;margin-top: -8px" src="@/assets/es/btn_back_top.png" alt=""></span>
+            <span style="padding-left: 5px">{{pointItem.name}}点位体温实时状态</span>
           </div>
           <div class="time">
-            <span style="padding-right: 20px">2020-02-15 16:58:59</span>
-            <span><img style="width: 50px;" src="@/assets/es/btn_fullscreen@2x.png" alt=""></span>
+            <span style="padding-right: 20px">{{curDate}}</span>
+            <span @click="togglefullScreen"><img style="width: 50px;" src="@/assets/es/btn_fullscreen@2x.png" alt=""></span>
           </div>
         </div>
       </div>
@@ -145,6 +145,7 @@
       return {
         charts: '',
         charts2: '',
+        curDate:'',
         data:[
           {
             name: '成都市',
@@ -257,7 +258,8 @@
         statistics:{},
         pageNumber:1,
         pageSize:6,
-        hasNext:true
+        hasNext:true,
+        isFullScreen:false,
       }
     },
     created(){
@@ -281,6 +283,10 @@
           this.pageNumber--
           this.getUserHeatData()
         }
+      },
+
+      back(){
+        this.$router.go(-1);
       },
 
       nextUserHeat(){
@@ -427,99 +433,63 @@
           },]
         });
       },
+
+      // 时间定时器
+      startTimer(){
+        this.curDate = this.getDateStr();
+        this.timerId = setInterval(() => {
+          this.curDate = this.getDateStr();
+        },1000);
+      },
+      closeTimer(){
+        clearInterval(this.timerId);
+      },
+
+      togglefullScreen(){
+
+        let e = document.documentElement;
+
+        if(!this.isFullScreen){
+          if(e.requestFullscreen) {
+            e.requestFullscreen();
+          } else if (e.mozRequestFullScreen){	// 兼容火狐
+            e.mozRequestFullScreen();
+          } else if(e.webkitRequestFullscreen) {	// 兼容谷歌
+            e.webkitRequestFullscreen();
+          } else if (e.msRequestFullscreen) {	// 兼容IE
+            e.msRequestFullscreen();
+          }
+          this.isFullScreen = true;
+        }else{
+          //	退出全屏
+          if(document.exitFullscreen) {
+            document.exitFullscreen();
+          } else if (document.mozCancelFullScreen) {
+            document.mozCancelFullScreen();
+          } else if (document.webkitCancelFullScreen) {
+            document.webkitCancelFullScreen();
+          } else if (document.msExitFullscreen) {
+            document.msExitFullscreen();
+          }
+          this.isFullScreen = false;
+        }
+
+      },
+
       // timer() {
       //     return setInterval(()=>{
       //         this.showCity('chengdu')
       //     },5000)
       // }
-
-      createMap(){
-        var map = new BMap.Map("allmap");   //初始化map, 绑定id=allmap
-        var point = new BMap.Point(104.321768, 30.88748);   // 初始化point, 给定一个默认x,y值
-        map.centerAndZoom(point, 10);        // 将point点放入map中，展示在页面中心展示，10=缩放程度
-        map.enableScrollWheelZoom();         // 开启滚动鼠标滑轮
-
-        var mapStyle ={
-          features: ["road","building","water","land"],//隐藏地图上的"poi",
-          style : 'dark',
-        };
-
-        map.setMapStyle(mapStyle);
-
-        // 如有多个point去展示，可根据后端接口传入为主
-        let data = [
-          { x: 104.297047, y: 30.979542, name: '双楠国际小区',isHot:true },
-          { x: 104.321768, y: 30.88748, name: '金都花园小区',isHot:false },
-          { x: 104.494243, y: 30.756539, name: '国色天乡小区',isHot:true }
-        ]
-
-        data.forEach((e, i) => {
-          // 创建point, 将x,y值传入
-          let pointNumber = new BMap.Point(e.x, e.y)
-          let icon = null;
-          if(e.isHot){
-            icon = new BMap.Icon(require("@/assets/es/icon_grrsfb@2x.png"),new BMap.Size(100,100));
-          }else{
-            icon = new BMap.Icon(require("@/assets/es/icon_hyyq@2x.png"),new BMap.Size(100,100));
-          }
-
-          var content = "<table>";
-          content = content + "<tr><td> 编号：001</td></tr>";
-          content = content + "<tr><td> 地点："+e.name+"</td></tr>";
-          content = content + "<tr><td> 时间：2018-1-3</td></tr>";
-          content += "</table>";
-
-          // 创建信息窗口对象
-          let infoWindow = new BMap.InfoWindow(content);
-
-          // 将data中的name加入地图中
-          var label = new BMap.Label(e.name, {
-            offset: new BMap.Size(0, -22)
-          });
-
-          label.setStyle({
-             padding:'2px 5px',
-             backgroundColor:'rgba(216,216,216,0.2)',
-             border:'1px solid rgba(45,127,206,1)',
-             color:'rgba(236,236,244,1)'
-          });
-
-          markerFun(pointNumber, infoWindow, label,icon)
-        })
-
-        function markerFun(points, infoWindows, label,icon) {
-          let markers = new BMap.Marker(points,{icon:icon});
-          map.addOverlay(markers);  // 将标注添加到地图中
-          markers.setLabel(label);  // 将data中的name添加到地图中
-          // 标注的点击事件
-          markers.addEventListener("click", function (event) {
-            map.openInfoWindow(infoWindows, points);//参数：窗口、点  根据点击的点出现对应的窗口
-          });
-        }
-
-        // 获取当前地理位置
-        var geolocation = new BMap.Geolocation();
-        geolocation.getCurrentPosition(function (r) {
-          if (this.getStatus() == BMAP_STATUS_SUCCESS) {
-            var mk = new BMap.Marker(r.point);
-            map.addOverlay(mk);
-            map.panTo(r.point);
-            // alert('您的位置：' + r.point.lng + ',' + r.point.lat);
-          } else {
-            // alert('failed' + this.getStatus());
-          }
-        });
-      }
     },
     mounted(){
-
+      // 启动定时器
+      this.startTimer();
       // this.timer()
     },
-
-    destroyed() {
-      // clearInterval(this.timer)
+    beforeDestroy(){
+      this.closeTimer();
     }
-
   }
 </script>
 
@@ -559,7 +529,7 @@
       justify-content:space-between;
       .title{
         width:782px;
-        font-size:46px;
+        font-size:2rem;
         color:#395CA8;
         line-height:63px;
         padding: 45px 0 0 17px;

@@ -10,13 +10,13 @@
       <div class="header">
         <div class="header-box">
           <div class="title">
-            <span style="display: inline-block;width: 41px;height: 40px;"><img style="width: 100%;height: 100%;margin-top: -8px" src="@/assets/es/btn_back_top.png" alt=""></span>
+            <span  @click="back" style="display: inline-block;width: 41px;height: 40px;"><img style="width: 100%;height: 100%;margin-top: -8px" src="@/assets/es/btn_back_top.png" alt=""></span>
             <span style="padding-left: 5px">成都市公共区域体温实时状态</span>
             <span style="font-size:24px;color:rgba(112,123,145,1);line-height:33px;padding-top: 48px;display: block;float: right;">（近14天）</span>
           </div>
           <div class="time">
-            <span style="padding-right: 20px">2020-02-15 16:58:59</span>
-            <span><img style="width: 50px;" src="@/assets/es/btn_fullscreen@2x.png" alt=""></span>
+            <span style="padding-right: 20px">{{curDate}}</span>
+            <span @click="togglefullScreen"><img style="width: 50px;" src="@/assets/es/btn_fullscreen@2x.png" alt=""></span>
           </div>
         </div>
       </div>
@@ -26,10 +26,10 @@
         <div class="map-box">
           <div id="allmap" class="Map" />
           <div class="testing-statistics">
-            <div class="tabs">
-              <div class="active">实时检测<div class="three-box"></div></div>
-              <div>高热人群</div>
-            </div>
+            <!--<div class="tabs">-->
+              <!--<div class="active">实时检测<div class="three-box"></div></div>-->
+              <!--<div>高热人群</div>-->
+            <!--</div>-->
             <div class="tabs-content">
               <div class="content-list">
                 <div class="tem-mess" v-for="(item,index) in testList" @click="toTrail(item)" :class="{'red-back':item.temperature >37.2}">
@@ -121,6 +121,7 @@
       return {
         charts: '',
         charts2: '',
+        curDate:'',
         districtLoading:0,
         nowIndex:0,
         hasAreaList:false,
@@ -244,7 +245,8 @@
             areaName:'高温人数',
             temNum:0
           }
-        ]
+        ],
+        isFullScreen:false,
       }
     },
     created(){
@@ -260,6 +262,10 @@
           name:'memberTrail',
           params:item
         })
+      },
+
+      back(){
+        this.$router.go(-1);
       },
 
       getData(){
@@ -551,24 +557,58 @@
           map.setViewport(pointArray);    //调整视野
         });
       },
+
+      // 时间定时器
+      startTimer(){
+        this.curDate = this.getDateStr();
+        this.timerId = setInterval(() => {
+          this.curDate = this.getDateStr();
+        },1000);
+      },
+      closeTimer(){
+        clearInterval(this.timerId);
+      },
+
+      togglefullScreen(){
+
+        let e = document.documentElement;
+
+        if(!this.isFullScreen){
+          if(e.requestFullscreen) {
+            e.requestFullscreen();
+          } else if (e.mozRequestFullScreen){	// 兼容火狐
+            e.mozRequestFullScreen();
+          } else if(e.webkitRequestFullscreen) {	// 兼容谷歌
+            e.webkitRequestFullscreen();
+          } else if (e.msRequestFullscreen) {	// 兼容IE
+            e.msRequestFullscreen();
+          }
+          this.isFullScreen = true;
+        }else{
+          //	退出全屏
+          if(document.exitFullscreen) {
+            document.exitFullscreen();
+          } else if (document.mozCancelFullScreen) {
+            document.mozCancelFullScreen();
+          } else if (document.webkitCancelFullScreen) {
+            document.webkitCancelFullScreen();
+          } else if (document.msExitFullscreen) {
+            document.msExitFullscreen();
+          }
+          this.isFullScreen = false;
+        }
+
+      },
+
     },
     mounted(){
-      this.$nextTick(function() {
-        // this.showProvince('sichuan')
-        this.showLine();
-        // this.charts.on('click', function (params) {
-        //     console.log(params);
-        // });
-
-      })
-
+      // 启动定时器
+      this.startTimer();
       this.createMap();
-
       // this.timer()
     },
-
-    destroyed() {
-      // clearInterval(this.timer)
+    beforeDestroy(){
+      this.closeTimer();
     }
 
   }
@@ -610,7 +650,7 @@
       justify-content:space-between;
       .title{
         width:782px;
-        font-size:46px;
+        font-size:2rem;
         color:#395CA8;
         line-height:63px;
         padding: 45px 0 0 17px;
