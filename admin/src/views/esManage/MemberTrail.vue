@@ -591,9 +591,11 @@
     background-color: #071832;
     height: 100%;
     min-width: 1200px;
+    min-height: 900px;
 
     .member-info{
       padding: 15px 40px;
+      
       .header{
         position: relative;
         .bg-img{
