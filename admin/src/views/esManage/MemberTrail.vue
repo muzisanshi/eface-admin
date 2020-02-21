@@ -478,9 +478,6 @@
             var mk = new BMap.Marker(r.point);
             // map.addOverlay(mk);
             map.panTo(r.point);
-            // alert('您的位置：' + r.point.lng + ',' + r.point.lat);
-          } else {
-            // alert('failed' + this.getStatus());
           }
         });
       },
@@ -758,7 +755,8 @@
             padding-bottom: 5px;
             border-bottom: 1px solid #454F63;
           }
-
+          
+          .blocks::-webkit-scrollbar { width: 0px !important;}
           .blocks{
 
             height: 660px;
