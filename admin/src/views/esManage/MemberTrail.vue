@@ -39,7 +39,7 @@
              <div class="member-temp">
                <span class="name">{{memberData.userRealName || '陌生人'}}</span>
                <span class="temp" :style="{color: memberData.temperature > 37.3 ? '#FA4F65':'#7CCB27'}">
-               {{memberData.temperature}}℃</span>
+               {{(memberData.temperature ? memberData.temperature : 0).toFixed(1)}}℃</span>
              </div>
            </div>
 
@@ -313,7 +313,7 @@
       getBehaviorTracks(data){
         this.$api.trail.getBehaviorTracks(data)
         .then(r => {
-          console.log('getBehaviorTracks:' + JSON.stringify(r))
+          
           if(r && r.trackItems.length > 0){
             // 处理数据
             r.trackItems.map((it,id) => {
