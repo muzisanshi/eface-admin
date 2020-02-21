@@ -22,7 +22,7 @@
       </div>
     </header>
     <section>
-      <div class="content-box clearfix">
+      <div class="content-box clearfix" :style="{'margin-top':isFullScreen?'calc(50% - 870px)':'0'}">
         <div class="map-box">
           <div id="allmap" class="Map" />
           <div class="testing-statistics">
@@ -33,16 +33,16 @@
             <div class="tabs-content">
               <div class="content-list">
                 <div class="tem-mess" v-for="(item,index) in testList" @click="toTrail(item)" :class="{'red-back':item.temperature >37.2}">
-                  <div class="top-img"><img :src="item.headImageRemoteUrl" alt=""></div>
-                  <div class="peo-mess">
-                    <p class="name">{{item.userRealName?item.userRealName:'陌生人'}}</p>
-                    <p class="time">{{item.recDatetime}}</p>
-                    <p class="address">{{item.fullAddress}}</p>
+                    <div class="top-img"><img :src="item.headImageRemoteUrl" alt=""></div>
+                    <div class="peo-mess">
+                      <p class="name">{{item.userRealName?item.userRealName:'陌生人'}}</p>
+                      <p class="time">{{item.recDatetime}}</p>
+                      <p class="address">{{item.fullAddress}}</p>
+                    </div>
+                    <div class="temperature" :class="{'white-color':item.temperature >37.2}">{{item.temperature}}℃</div>
+                    <div class="icon"><img v-if="item.temperature >37.2" src="@/assets/es/btn_enter@2x.png" alt=""></div>
+                    <div class="three-box" v-if="item.temperature <= 37.2"></div>
                   </div>
-                  <div class="temperature" :class="{'white-color':item.temperature >37.2}">{{item.temperature}}℃</div>
-                  <div class="icon"><img v-if="item.temperature >37.2" src="@/assets/es/btn_enter@2x.png" alt=""></div>
-                  <div class="three-box" v-if="item.temperature <= 37.2"></div>
-                </div>
               </div>
             </div>
           </div>
@@ -115,6 +115,8 @@
 </template>
 <script>
   import {mixin} from '@/mixins/mixin'
+  import Vue from 'vue'
+  import {POINT_ITEM} from '@/store/mutation-types'
   export default {
     mixins:[mixin],
     data() {
@@ -261,10 +263,17 @@
     methods: {
 
       toTrail(item){
-        this.$router.push({
-          name:'memberTrail',
-          params:item
-        })
+
+        localStorage.setItem('memberData',JSON.stringify(item));
+
+        let routes = this.$router.resolve({ name: 'memberTrail'});
+
+        window.open(routes.href, '_blank');
+
+        // this.$router.push({
+        //   name:'memberTrail',
+        //   params:item
+        // })
       },
 
       back(){
@@ -393,7 +402,7 @@
           grid: {
             left: '10%',
             top: '10%',
-            bottom: '12%',
+            bottom: '14%',
             right: '5%',
           },
           tooltip: {},
@@ -518,7 +527,7 @@
         geolocation.getCurrentPosition(function (r) {
           if (this.getStatus() == BMAP_STATUS_SUCCESS) {
             var mk = new BMap.Marker(r.point);
-            map.addOverlay(mk);
+            // map.addOverlay(mk);
             map.panTo(r.point);
             // alert('您的位置：' + r.point.lng + ',' + r.point.lat);
           } else {
@@ -535,10 +544,18 @@
         // 标注的点击事件
         markers.addEventListener("click", function (event) {
           console.log(item)
-          that.$router.push({
-            name:'pointInformation',
-            params:item
-          })
+
+          Vue.ls.set(POINT_ITEM, item)
+
+          let routes = that.$router.resolve({ name: 'pointInformation'});
+
+          window.open(routes.href, '_blank');
+
+
+          // that.$router.push({
+          //   name:'pointInformation',
+          //   params:item
+          // })
         });
       },
 
@@ -660,7 +677,7 @@
 
   .es-main{
     width: 100%;
-    height: 100%;
+    min-height: 100%;
     padding: 18px 25px;
     background:rgba(3,20,47,1);
     .header-box{

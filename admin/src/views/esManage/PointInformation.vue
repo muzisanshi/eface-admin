@@ -113,7 +113,7 @@
               </div>
             </div>
             <div class="hot-list">
-              <div class="hot-mess" v-for="(item,index) in temHotList" @click="toTrail(item)">
+              <router-link  :to="{name:'memberTrail',params:item}" target="_blank" class="hot-mess" v-for="(item,index) in temHotList">
                 <div class="user-mess">
                   <div class="top-img"><img :src="item.headImageRemoteUrl" alt=""></div>
                   <p class="hot-name">{{item.userRealName?item.userRealName:'陌生人'}}</p>
@@ -123,7 +123,7 @@
                   <p class="tem-num">{{item.temperature}}℃</p>
                   <img src="@/assets/es/btn_next@2x.png" alt="">
                 </div>
-              </div>
+              </router-link >
             </div>
           </div>
 
@@ -265,9 +265,6 @@
       }
     },
     created(){
-      if(this.$route.params.id){
-        Vue.ls.set(POINT_ITEM, this.$route.params)
-      }
       this.pointItem = Vue.ls.get(POINT_ITEM)
       this.getData();
     },

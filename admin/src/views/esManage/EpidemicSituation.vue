@@ -7,7 +7,7 @@
 <template>
   <div class="es-main">
     <header>
-      <div class="header">
+      <div class="header-box">
 
         <img class="bg-img" src="@/assets/es/img_titlebg@2x.png"/>
 
@@ -274,10 +274,16 @@
       },
 
       nextPage(item){
-        this.$router.push({
-          name: 'bodyTemperature',
-          params: item
-        })
+
+        let routes = this.$router.resolve({ name: 'bodyTemperature'});
+
+        window.open(routes.href, '_blank');
+
+
+        // this.$router.push({
+        //   name: 'bodyTemperature',
+        //   params: item
+        // })
       },
 
       showProvince(id){
@@ -571,7 +577,7 @@
     .tr-list::-webkit-scrollbar-corner{
       background: #179a16;
     }
-    .header{
+    .header-box{
       position: relative;
       .bg-img{
         position: relative;

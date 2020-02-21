@@ -228,8 +228,8 @@
                 <a-col :span="9">
 
                 <a-form-item v-bind="formLayout" label="开始时间" :required="true">
-                <a-date-picker @change="(value, dateString) => beginDateChange(value,dateString, index, index1)" v-if="pane.content.gateBrakeLimits[index1].beginDatetime" :value="moment(pane.content.gateBrakeLimits[index1].beginDatetime,'YYYY-MM-DD HH:mm:ss')" format="YYYY-MM-DD HH:mm:ss" showTime/>
-                <a-date-picker @change="(value, dateString) => beginDateChange(value,dateString, index, index1)" v-if="!pane.content.gateBrakeLimits[index1].beginDatetime" format="YYYY-MM-DD HH:mm:ss" showTime/>
+                <a-date-picker @change="(value, dateString) => beginDateChange(value,dateString, index, index1)" v-if="pane.content.gateBrakeLimits[index1].beginDatetime ? true :false" :value="moment(pane.content.gateBrakeLimits[index1].beginDatetime,'YYYY-MM-DD HH:mm:ss')" format="YYYY-MM-DD HH:mm:ss" showTime/>
+                <a-date-picker class="clearStartDate" @change="(value, dateString) => beginDateChange(value,dateString, index, index1)" v-if="pane.content.gateBrakeLimits[index1].beginDatetime ? false :true" format="YYYY-MM-DD HH:mm:ss" showTime/>
                 </a-form-item>
                 </a-col>
 
@@ -345,6 +345,7 @@
         newTabIndex: 3,
         itemIndex:0,
         curPaneIndex:0,
+        uploadNum:0,
         data:{
           jsonParam:JSON.stringify({
             attOrigin:'ADMIN',
@@ -360,6 +361,7 @@
               gateBrakeLimits:[]
             }, key: '2',remark:'',closable: false,isEditEstate:true },
         ],
+        isStartDate:false
       }
     },
     beforeCreate () {
@@ -417,6 +419,7 @@
         });
         that.userType = userType
         that.activeKey = '1'
+        that.uploadNum = 0
         that.fileList = [];
         that.headImageAttId = null;
         that.topImg = null;
@@ -451,7 +454,6 @@
                 code:userType
               })
                 .then(res => {
-                  console.log('---res---',res)
                   that.formData = res
                   that.formData.faceDeletedIds = []
                   that.topImg = res.resourceFullAddress;
@@ -576,7 +578,6 @@
                 this.formData = Object.assign(this.formData,values)
               }
             }
-            console.log('--------',this.formData)
           }
         })
       },
@@ -639,17 +640,17 @@
       //上传人脸成功回调
       uploadFaceSuccess(imgData){
         if(imgData.faceImageBase64s){
+          this.uploadNum++
           this.formData.faceImageBase64s = this.formData.faceImageBase64s?this.formData.faceImageBase64s:[]
           this.formData.faceImageBase64s.push(imgData.faceImageBase64s)
           this.fileList.push({
-            uid: imgData.uid,
+            uid: this.uploadNum,
             name: imgData.origFilename,
             status: 'done',
             url: imgData.resourceFullAddress,
             thumbUrl:imgData.resourceFullAddress,
             base64:imgData.faceImageBase64s
           })
-          console.log(this.formData)
         }
       },
 
@@ -685,14 +686,12 @@
             this.fileList = this.fileList.filter(pane => pane.uid !== file.uid)
             this.formData.faceImageBase64s = this.formData.faceImageBase64s.filter(pane => pane !== file.base64)
           }
-          console.log(this.formData.faces)
         }
       },
 
       //选择受访区域
       selectRoom(itemIndex){
         this.itemIndex = itemIndex
-        console.log(this.panes[this.curPaneIndex].content.gateBrakeLimits[itemIndex])
         if(this.panes[this.curPaneIndex].content.estateId){
           this.$refs.selectRoom.add(null,this.panes[this.curPaneIndex].content.gateBrakeLimits[itemIndex])
         }else{
@@ -712,7 +711,17 @@
       //选择开始时间
       beginDateChange(date,dateString,index,index1) {
         if(dateString){
-          this.panes[index].content.gateBrakeLimits[index1].beginDatetime = dateString;
+          let endTime = this.panes[index].content.gateBrakeLimits[index1].endDatetime
+          if(endTime && new Date(endTime)< new Date(dateString)){
+            this.$notification.error({
+              message: '提示',
+              description: `开始时间不能大于结束时间`
+            })
+            this.panes[index].content.gateBrakeLimits[index1].beginDatetime = '';
+          }else{
+            this.panes[index].content.gateBrakeLimits[index1].beginDatetime = dateString;
+          }
+
         }else{
           this.panes[index].content.gateBrakeLimits[index1].beginDatetime = '';
         }
@@ -917,7 +926,7 @@
                 if(!this.panes[i].content.gateBrakeLimits[j].beginDatetime){
                   this.$notification.error({
                     message: '提示',
-                    description: `请选择受访区域${i}的开始时间`
+                    description: `受访区域${i>0?i:''}的开始时间不能为空且开始时间不能大于结束时间`
                   })
                   isSubmit =false
                   return false

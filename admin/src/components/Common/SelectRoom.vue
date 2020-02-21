@@ -173,6 +173,7 @@
     },
     methods: {
       add (item,value) {
+        console.log(value)
         let that = this;
         this.visible = true
         this.form.resetFields()
