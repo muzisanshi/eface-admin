@@ -98,7 +98,6 @@
         autoWidth: 400,
         autoHeight: 400,
         fileData:{},
-        uploadNum:0
       }
     },
     components: {
@@ -136,7 +135,6 @@
         this.imgFile = ''
         this.fileName = ''
         this.fileData = {}
-        this.uploadNum = 0
       },
 
       //放大/缩小
@@ -177,8 +175,6 @@
               })
                 .then(resRes => {
                   that.fileData.faceImageBase64s = base64
-                  that.uploadNum++
-                  that.fileData.uid = that.uploadNum
                   that.visible = false
                   that.$emit('uploadFace', that.fileData)
                   that.isCropper = false

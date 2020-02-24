@@ -113,7 +113,7 @@
               </div>
             </div>
             <div class="hot-list">
-              <div class="hot-mess" v-for="(item,index) in temHotList" @click="toTrail(item)">
+              <div @click="toTrail(item)" class="hot-mess" v-for="(item,index) in temHotList" :class="{'red-back':item.temperature >37.2}">
                 <div class="user-mess">
                   <div class="top-img"><img :src="item.headImageRemoteUrl" alt=""></div>
                   <p class="hot-name">{{item.userRealName?item.userRealName:'陌生人'}}</p>
@@ -265,19 +265,19 @@
       }
     },
     created(){
-      if(this.$route.params.id){
-        Vue.ls.set(POINT_ITEM, this.$route.params)
-      }
       this.pointItem = Vue.ls.get(POINT_ITEM)
       this.getData();
+      this.getAreaHeatData()
     },
     methods: {
 
       toTrail(item){
-        this.$router.push({
-          name:'memberTrail',
-          params:item
-        })
+
+        localStorage.setItem('memberData',JSON.stringify(item));
+
+        let routes = this.$router.resolve({ name: 'memberTrail'});
+
+        window.open(routes.href, '_blank');
       },
 
       preUserHeat(){
@@ -322,6 +322,7 @@
 
       getAreaHeatData(){
         let that = this;
+        that.getStatistics();
         that.$api.localtionCheck.statistics(
           {
             estateId:that.pointItem.id

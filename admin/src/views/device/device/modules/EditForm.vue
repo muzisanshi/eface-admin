@@ -541,7 +541,7 @@
 
                 <a-col :span="8">
                   <a-form-item label="热成像模块辐射率" :labelCol="labelCo1" :wrapperCol="wrapperCo1">
-                    <a-input :maxLength="9" :disabled="true"
+                    <a-input :maxLength="9"
                              v-decorator="['thermograph.thermalImagingEmissivity', {initialValue: this.thermograph.thermalImagingEmissivity, rules: [{required: true, message: '请输热成像模块辐射率！'}]}]"/>
                   </a-form-item>
                 </a-col>
@@ -710,7 +710,7 @@
           temperatureMappingMode:"NONE",
           thermalImagingCompRate:1000,
           thermalImagingEmissivity:950,
-          triggerBtLockMode:"OPEN",
+          triggerBtLockMode:"CLOSE",
           id:''
         }
       }
@@ -800,17 +800,17 @@
               }else{
                 that.isTemCheck = false
                 that.thermograph = {
-                    bcstTemperatureNumMode :"OPEN",
-                    closeToVoiceMode : "OPEN",
-                    enable : true,
-                    highTemperatureThreshold:37.30,
-                    lowTemperatureThreshold:35.50,
-                    temperatureCheckMode:"CLOSE",
-                    temperatureMappingMode:"NONE",
-                    thermalImagingCompRate:1000,
-                    thermalImagingEmissivity:950,
-                    triggerBtLockMode:"OPEN",
-                    id:''
+                  bcstTemperatureNumMode:"OPEN",
+                  closeToVoiceMode:"OPEN",
+                  enable:true,
+                  highTemperatureThreshold:37.30,
+                  lowTemperatureThreshold:35.50,
+                  temperatureCheckMode:"CLOSE",
+                  temperatureMappingMode:"NONE",
+                  thermalImagingCompRate:1000,
+                  thermalImagingEmissivity:950,
+                  triggerBtLockMode:"CLOSE",
+                  id:''
                 }
               }
             })
