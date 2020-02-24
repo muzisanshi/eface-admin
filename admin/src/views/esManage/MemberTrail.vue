@@ -374,7 +374,6 @@
             page:{
               pageSize:8,
               pageNumber:(block.recRecordPageData.pageNumber - 1),
-              pageNumber:1,
             },
             recDatetime:this.memberData.recDatetime,
           },id);
@@ -397,7 +396,6 @@
             page:{
               pageSize:8,
               pageNumber:(block.recRecordPageData.pageNumber + 1),
-              pageNumber:1,
             },
             recDatetime:this.memberData.recDatetime,
           },id);
