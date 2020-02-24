@@ -1,8 +1,8 @@
 <!--
  * @name List.vue
  * @author lw
- * @date 2019.11.18
- * @desc 设备型号
+ * @date 2020.2.24
+ * @desc 疫情看板
 -->
 <template>
   <a-card :bordered="false" class="content">
