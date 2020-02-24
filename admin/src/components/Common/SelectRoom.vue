@@ -209,6 +209,7 @@
       },
 
       getBuildList(value){
+
         this.$api.subject.getBuildAll({
           estateId: value
         })
@@ -228,6 +229,11 @@
         if(option){
           this.formData.roomName=option.componentOptions.children[0].text
         }
+
+        this.form.resetFields(['unitId', 'storeyId', 'roomId'])
+
+        this.unitList = [];
+
         this.$api.subject.getUnitAll({
           buildingId: value
         })
@@ -250,6 +256,11 @@
         if(option){
           this.formData.roomName=option.componentOptions.children[0].text
         }
+
+        this.form.resetFields(['storeyId', 'roomId'])
+
+        this.storeyList = [];
+
         this.$api.storey.getAll({
           unitId: value
         })
@@ -272,6 +283,11 @@
         if(option){
           this.formData.roomName=option.componentOptions.children[0].text
         }
+
+        this.form.resetFields(['roomId'])
+
+        this.roomList = [];
+
         this.$api.room.getAll({
           storeyId: value
         })

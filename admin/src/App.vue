@@ -1,7 +1,7 @@
 <template>
   <a-locale-provider :locale="locale">
     <div id="app">
-      <router-view/>
+      <router-view v-if="isRouterAlive"/>
     </div>
   </a-locale-provider>
 </template>
@@ -13,9 +13,15 @@
 
   export default {
     mixins: [AppDeviceEnquire],
+    provide () {
+      return {
+        reload: this.reload
+      }
+    },
     data() {
       return {
-        locale: zhCN
+        locale: zhCN,
+        isRouterAlive: true,
       }
     },
     created(){
@@ -30,6 +36,15 @@
         this.loadConstants(); //获取枚举
         this.loadLogoData()
       },
+
+      reload () {
+        this.isRouterAlive = false
+        this.$nextTick(function () {
+          this.isRouterAlive = true
+        })
+      },
+
+
     }
   }
 </script>

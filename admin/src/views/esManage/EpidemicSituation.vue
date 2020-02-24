@@ -128,8 +128,11 @@
   import {mixin} from '@/mixins/mixin'
   export default {
     mixins:[mixin],
+
+    inject:["reload"],
     data() {
       return {
+
         charts: '',
         charts2: '',
         timerId:'',
@@ -142,20 +145,42 @@
         hasAreaList:false,
         areaVal:'四川省',
         areaList:[],
-        temperatureCheckData:{
-
-        },
+        temperatureCheckData:{},
         AxData:[],
         serData:[],
         statistics:{},
-        isFullScreen:false,
+        isFullScreen:'false',
+        screenWidth:0
       }
     },
+
     created(){
+      let that = this
+
       this.getHeatDistributeStatistics();
+
       this.getStatistics();
+
+      if(!localStorage.getItem('isFullScreen')){
+        localStorage.getItem('isFullScreen',this.isFullScreen);
+      }
+
+      window.addEventListener('keydown',this.checkFull)
+
     },
+
     methods: {
+
+      checkFull(){
+        if(document.exitFullscreen){
+          return true;
+        }else{
+          return false
+        }
+
+
+
+      },
 
       getHeatDistributeStatistics(){
         let that = this;
@@ -252,14 +277,26 @@
         clearInterval(this.getDataFirTime);
       },
 
-
       // 时间定时器
       startTimer(){
+        let that = this
         this.curDate = this.getDateStr();
+
         this.timerId = setInterval(() => {
           this.curDate = this.getDateStr();
+          if(that.screenWidth > document.body.clientHeight){
+
+            that.screenWidth = document.body.clientHeight;
+
+            localStorage.setItem('isFullScreen',"false");
+
+            that.reload();
+          }else if(that.screenWidth < document.body.clientHeight){
+            that.screenWidth = document.body.clientHeight
+          }
         },1000);
       },
+
       closeTimer(){
         clearInterval(this.timerId);
       },
@@ -487,10 +524,11 @@
       },
 
       togglefullScreen(){
-
         let e = document.documentElement;
 
-        if(!this.isFullScreen){
+        this.isFullScreen = localStorage.getItem('isFullScreen');
+
+        if(this.isFullScreen === 'false'){
           if(e.requestFullscreen) {
             e.requestFullscreen();
           } else if (e.mozRequestFullScreen){	// 兼容火狐
@@ -500,7 +538,12 @@
           } else if (e.msRequestFullscreen) {	// 兼容IE
             e.msRequestFullscreen();
           }
-          this.isFullScreen = true;
+          this.isFullScreen = 'true';
+
+          localStorage.setItem('isFullScreen',this.isFullScreen);
+
+          this.reload();
+
         }else{
           //	退出全屏
           if(document.exitFullscreen) {
@@ -512,22 +555,36 @@
           } else if (document.msExitFullscreen) {
             document.msExitFullscreen();
           }
-          this.isFullScreen = false;
+          this.isFullScreen = 'false';
+
+          localStorage.setItem('isFullScreen',this.isFullScreen);
+
+          this.reload();
+
         }
 
       },
 
     },
     mounted(){
+      let that = this;
       // 启动定时器
       this.startTimer();
       this.startGetDataFirTimer();
       this.startGetStatisticsTimer();
+
+      window.onresize = function(){
+        if(!that.checkFull()){
+
+        }
+      }
+
     },
     beforeDestroy(){
       this.closeTimer();
       this.closeGetStatisticsTimer();
       this.closeGetDataFirTimer();
+      window.removeEventListener('keydown',this.checkFull)
     }
 
   }
