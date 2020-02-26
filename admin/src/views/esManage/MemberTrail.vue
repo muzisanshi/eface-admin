@@ -67,7 +67,7 @@
         <div class="map">
           <div id="allmap" class="Map"/>
         </div>
-        
+
         <div class="trail">
           <div class="wrapper">
 
@@ -97,7 +97,7 @@
                         <img class="b" src="../../assets/es/btn_enter@2x.png"/>
                       </div>
                       <div class="list-main" :id="'listmain'+id">
-                        
+
                         <!-- <div class="page" v-for="(t,i) in it.pages" :key="i"> -->
                         <div class="page">
 
@@ -118,7 +118,7 @@
                           </div>
 
                         </div>
-                        
+
                       </div>
                       <div class="next" @click="next(it,id)">
                         <img class="n" src="../../assets/es/btn_enter@2x.png"/>
@@ -187,10 +187,10 @@
           }
         ],
         map:null,
-        
+
         mapData:[],
         trailData:[],
-        
+
         isFullScreen:false,
       }
     },
@@ -198,11 +198,11 @@
 
     },
     methods:{
-      
+
       togglefullScreen(){
-        
+
         let e = document.documentElement;
-        
+
         if(!this.isFullScreen){
           if(e.requestFullscreen) {
             e.requestFullscreen();
@@ -227,9 +227,9 @@
           }
           this.isFullScreen = false;
         }
-        
+
       },
-      
+
       getDateStr(){
         let date = new Date();
         let y = date.getFullYear();
@@ -237,25 +237,25 @@
         m = m < 10 ? ('0'+m) : m;
         let d = date.getDate();
         d = d < 10 ? ('0'+d) : d;
-        
+
         let h = date.getHours();
         h = h < 10 ? ('0'+h) : h;
         let f = date.getMinutes();
         f = f < 10 ? ('0'+f) : f;
         let s = date.getSeconds();
         s = s < 10 ? ('0'+s) : s;
-        
+
         return y + '-' + m + '-' + d + ' ' + h + ':' + f + ':' + s;
       },
-      
+
       refresh(){
         this.timerId2 = setInterval(() => {
-          
+
           this.getEstates({
             recDatetime:this.memberData.recDatetime,
             recRecordId:this.memberData.id,
           });
-          
+
           this.getBehaviorTracks({
             page:{
               pageNumber:1,
@@ -264,10 +264,10 @@
             recDatetime:this.memberData.recDatetime,
             recRecordId:this.memberData.id,
           });
-          
+
         },1000);
       },
-      
+
       // 定时器
       startTimer(){
         this.curDate = this.getDateStr();
@@ -279,11 +279,11 @@
         clearInterval(this.timerId);
         clearInterval(this.timerId2);
       },
-      
+
       back(){
         this.$router.go(-1);
       },
-      
+
       // 加载小区数据
       getEstates(data){
         this.$api.trail.getEstates(data)
@@ -302,54 +302,54 @@
               })
             })
             this.mapData = md;
-            
+
             this.addPoint(this.mapData,this.map);
-            
+
           }
         });
       },
-      
+
       // 加载行为轨迹
       getBehaviorTracks(data){
         this.$api.trail.getBehaviorTracks(data)
         .then(r => {
-          
+
           if(r && r.trackItems.length > 0){
             // 处理数据
             r.trackItems.map((it,id) => {
-              
+
               // it.curPage = 1;
-              
+
               it.recRecordPageData.records.map((tt,ii) => {
                   if(tt.temperature > 37.3){
                     tt.isHot = true;
                   }
               })
-              
+
               // it.totalWidth = 0;
-              
+
               // let d = [Math.ceil(it.recRecords.length / 8.0)];
               // for(let i = 0;i < d.length;i++){
               //   d[i] = [];
               // }
-              
+
               // it.recRecords.map((tt,ii) => {
-                
+
               //   if(tt.temperature > 37.3){
               //     tt.isHot = true;
               //   }
-                
+
               //   let index = ii / 8;
               //   d[index].push(tt);
-                
+
               // })
-              
+
               // it.pages = d;
-              
+
             })
-            
+
             this.trailData = r.trackItems;
-            
+
           }
         })
       },
@@ -364,9 +364,9 @@
       },
       before(block,id){
         // if(block.curPage > 1){
-        
+
         if(block.recRecordPageData.hasPrevious){
-          
+
           // 加载对应小区的分页数据
           this.getRecRecordPage({
             areaId:'510100',
@@ -377,19 +377,19 @@
             },
             recDatetime:this.memberData.recDatetime,
           },id);
-          
+
           // block.curPage --;
           // $('#listmain'+id).animate({
           //   scrollLeft:((block.curPage - 1) * this.pageWidth) + 'px'
           // },300);
-          
+
         }
       },
       next(block,id){
         // if(block.curPage < block.pages.length){
-        
+
         if(block.recRecordPageData.hasNext){
-          
+
           this.getRecRecordPage({
             areaId:'510100',
             estateId:this.memberData.estateId,
@@ -399,12 +399,12 @@
             },
             recDatetime:this.memberData.recDatetime,
           },id);
-        
+
           // $('#listmain'+id).animate({
           //   scrollLeft:(block.curPage * this.pageWidth) + 'px'
           // },300);
           // block.curPage ++;
-          
+
         }
       },
 
@@ -466,7 +466,7 @@
           });
 
           that.markerFun(pointNumber, null, label, icon, map);
-          
+
         })
 
         // 获取当前地理位置
@@ -498,7 +498,7 @@
         var bdary = new BMap.Boundary();
         bdary.get("成都市", function(rs){       //获取行政区域
           map.clearOverlays();        //清除地图覆盖物
-          var count = rs.boundaries.length; //行政区域的点有多少个
+          var count = rs.boundaries.length; //行政区域的点有多少个`
           if (count === 0) {
             alert('未能获取当前输入行政区域');
             return ;
@@ -512,20 +512,20 @@
           if (that.districtLoading == 0) {
             //全加载完成后加载数据渲染
             // that.addPoint(mapData,map)
-            
+
             // 加载数据
             that.getEstates({
               recDatetime:that.memberData.recDatetime,
               recRecordId:that.memberData.id,
             });
-            
+
           }
           that.districtLoading++;
           map.setViewport(pointArray);    //调整视野
-          
+
         });
       },
-      
+
       calcMap(){
         // 计算地图高度
         let conHeight = $('.member-trail').height();
@@ -533,23 +533,23 @@
         let mapHeight = conHeight - headHeight - 30;
         $('.map').height(mapHeight);
       },
-      
+
     },
     mounted(){
-      
+
       // 处理params参数
       let localData = localStorage.getItem('memberData');
       localData = localData ? JSON.parse(localData) : {};
-      
+
       this.memberData = this.$route.params.id ? this.$route.params : localData;
-      
+
       // 备份数据到本地
       localStorage.setItem('memberData',JSON.stringify(this.memberData));
-      
+
       window.onresize = () => {
         this.calcMap();
       }
-      
+
       if($){
         let pw = $('.list-main').width();
         if(pw){
@@ -560,10 +560,10 @@
           this.calcMap();
         },500)
       }
-      
+
       // 启动定时器
       this.startTimer();
-      
+
       // 加载轨迹数据
       this.getBehaviorTracks({
         page:{
@@ -573,10 +573,10 @@
         recDatetime:this.memberData.recDatetime,
         recRecordId:this.memberData.id,
       });
-      
+
       // 定时刷新数据
       this.refresh();
-      
+
     },
     beforeDestroy(){
       this.closeTimer();
@@ -593,7 +593,7 @@
 
     .member-info{
       padding: 15px 40px;
-      
+
       .header{
         position: relative;
         .bg-img{
@@ -649,7 +649,7 @@
       .body{
         margin-top: 10px;
         position: relative;
-        
+
         .excep-member{
           position: relative;
           width: 300px;
@@ -721,13 +721,13 @@
           position: absolute;
           z-index: 0;
           top:0px;
-          
+
           .Map{
             width: 100%;
             height: 100%;
           }
         }
-        
+
         .trail{
           width: 460px;
           position: absolute;
@@ -755,7 +755,7 @@
             padding-bottom: 5px;
             border-bottom: 1px solid #454F63;
           }
-          
+
           .blocks::-webkit-scrollbar { width: 0px !important;}
           .blocks{
 
@@ -828,13 +828,13 @@
 
                   .list-main::-webkit-scrollbar { height: 0px !important;}
                   .list-main{
-                    
+
                     scrollbar-color: transparent transparent;
                     scrollbar-track-color: transparent;
-                    
+
                     -ms-overflow-style:none;
                     -ms-scrollbar-track-color: transparent;
-                    
+
                     position: relative;
                     border-radius: 4px;
                     z-index: 0;

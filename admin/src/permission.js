@@ -76,7 +76,7 @@ router.beforeEach((to, from, next) => {
                 message: '错误',
                 description: '请求用户菜单失败，请重试'
               })
-              next({ path: '/404' })
+              next({ path: '/user/login' })
             })
         } else {
           next(vm => {
