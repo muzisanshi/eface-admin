@@ -84,19 +84,21 @@
         </a-form-item>
 
         <a-form-item
-          label="拼英名称"
+          label="经度"
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
         >
-          <a-input :maxLength="128" v-decorator="['pinyinName',{initialValue: this.formData.pinyinName}]"/>
+          <a-input :maxLength="15" v-decorator="['lng',{initialValue: this.formData.lng}]">
+            <div slot="addonAfter" @click="selectLng">选择</div>
+          </a-input>
         </a-form-item>
 
         <a-form-item
-          label="拼英简写"
+          label="纬度"
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
         >
-          <a-input :maxLength="64" v-decorator="['pinyinShortName',{initialValue: this.formData.pinyinShortName}]"/>
+          <a-input :maxLength="15" v-decorator="['lat',{initialValue: this.formData.lat}]"/>
         </a-form-item>
 
         <a-form-item
@@ -108,15 +110,19 @@
         </a-form-item>
 
       </a-form>
+      <select-lng ref="selectLngAndLat" @ok="selectSuccess"/>
     </a-spin>
   </a-modal>
 </template>
 
 <script>
   import {mixin} from '@/mixins/mixin'
-
+  import selectLng from './selectLngAndLat'
   export default {
     mixins: [mixin],
+    components: {
+      selectLng
+    },
     data() {
       return {
         labelCol: {
@@ -141,7 +147,8 @@
         ],
         arr:[],
         num:0,
-        hasAdd:'SAVE'
+        hasAdd:'SAVE',
+        shortName:''
       }
     },
     watch:{
@@ -163,6 +170,7 @@
         that.arr = [];
         that.num = 0;
         that.formData = {};
+        that.shortName = '';
         that.$api.area.getAllParent({})
           .then(res => {
             const l = []
@@ -177,7 +185,7 @@
             }
             that.options = l
             if (item) {
-              console.log(item)
+              that.shortName = item.shortName;
               that.$api.area.getById({id: item.id})
                 .then(res => {
                   if (addChild != 'addChild') {
@@ -216,6 +224,14 @@
               that.title = '新增'
             }
           })
+      },
+
+      selectLng(){
+        this.$refs.selectLngAndLat.add(this.shortName);
+      },
+
+      selectSuccess(item){
+        this.form.setFieldsValue({ lng: item.lng,lat:item.lat});
       },
 
       handleAreaId(res){

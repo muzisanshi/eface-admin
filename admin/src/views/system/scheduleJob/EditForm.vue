@@ -21,7 +21,7 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
         >
-          <a-input :maxLength="64" v-decorator="['jobName', {initialValue: this.formData.jobName, rules: [{required: true, message: '请输入任务名称！'}]}]" />
+          <a-input :maxLength="64" :disabled="title === '修改'" v-decorator="['jobName', {initialValue: this.formData.jobName, rules: [{required: true, message: '请输入任务名称！'}]}]" />
         </a-form-item>
 
         <a-form-item
@@ -29,7 +29,7 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
         >
-          <a-input :maxLength="64" v-decorator="['jobGroup', {initialValue: this.formData.jobGroup,rules: [{required: true, message: '请输入任务分组！'}]}]" />
+          <a-input :maxLength="64" :disabled="title === '修改'"  v-decorator="['jobGroup', {initialValue: this.formData.jobGroup,rules: [{required: true, message: '请输入任务分组！'}]}]" />
         </a-form-item>
 
         <a-form-item

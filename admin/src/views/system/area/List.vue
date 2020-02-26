@@ -122,14 +122,13 @@
             title: '简写名称',
             dataIndex: 'shortName'
           },
-
           {
-            title: '拼英名称',
-            dataIndex: 'pinyinName'
+            title: '经度',
+            dataIndex: 'lng'
           },
           {
-            title: '拼英简写',
-            dataIndex: 'pinyinShortName'
+            title: '纬度',
+            dataIndex: 'lat'
           },
           {
             title: '是否启用',

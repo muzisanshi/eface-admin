@@ -233,7 +233,8 @@
         this.form.resetFields(['unitId', 'storeyId', 'roomId'])
 
         this.unitList = [];
-
+        this.storeyList = [];
+        this.roomList = [];
         this.$api.subject.getUnitAll({
           buildingId: value
         })
@@ -260,6 +261,7 @@
         this.form.resetFields(['storeyId', 'roomId'])
 
         this.storeyList = [];
+        this.roomList = [];
 
         this.$api.storey.getAll({
           unitId: value
