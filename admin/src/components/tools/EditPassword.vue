@@ -111,7 +111,7 @@ export default {
               this.visible = false
               this.confirmLoading = false
               this.form.resetFields();
-              const token = Vue.ls.get(ACCESS_TOKEN)
+              const token = sessionStorage.getItem('ACCESS_TOKEN')
               Logout(token)
                 .then((res) => {
                   setTimeout(() => {

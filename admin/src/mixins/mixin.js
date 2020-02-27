@@ -23,7 +23,7 @@ export const mixin = {
       deleted: false,
       visible: false,
       tokenHeader: {
-        'JWT-MANAGER-ACCOUNT-AUTHORIZATION': Vue.ls.get(ACCESS_TOKEN),
+        'JWT-MANAGER-ACCOUNT-AUTHORIZATION': sessionStorage.getItem('ACCESS_TOKEN'),
         'X-clientId': SIGN.clientId
       },
       clientHeader: {

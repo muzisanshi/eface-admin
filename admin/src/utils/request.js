@@ -39,7 +39,7 @@ const err = (error) => {
           message: '401',
           description: '没有访问权限！'
         })
-        const token = Vue.ls.get(ACCESS_TOKEN)
+        const token = sessionStorage.getItem('ACCESS_TOKEN')
         if (token) {
           store.dispatch('Logout').then(() => {
             setTimeout(() => {
@@ -58,7 +58,7 @@ service.interceptors.request.use(config => {
   const clientId = 'admin'
   const timestamp = new Date().getTime() + ''
   const signature = clientId + timestamp + 'da74588912504563e464ffe8956de784'
-  const token = Vue.ls.get(ACCESS_TOKEN)
+  const token = sessionStorage.getItem('ACCESS_TOKEN')
   if (token) {
     config.headers['JWT-MANAGER-ACCOUNT-AUTHORIZATION'] = token
   }
@@ -95,7 +95,7 @@ service.interceptors.response.use((response) => {
       response.config['onFail'].call(data)
     } else {
       if (data.errCode === 'ACCOUNT_NEED_LOGIN' || data.errCode === 'ACCOUNT_LOGIN_EXCEPTION') {
-        const token = Vue.ls.get(ACCESS_TOKEN)
+        const token = sessionStorage.getItem('ACCESS_TOKEN')
         if (token) {
           store.dispatch('Logout').then(() => {
             setTimeout(() => {

@@ -19,10 +19,10 @@ router.beforeEach((to, from, next) => {
   if (to.path === '/404') {
     next()
   } else {
-    if (Vue.ls.get(ACCESS_TOKEN)) {
+    if (sessionStorage.getItem('ACCESS_TOKEN')) {
       /* has token */
       if (to.path === '/user/login') {
-        next({ path: '/dashboard/workplace' })
+        next()
         NProgress.done()
       } else {
         if (store.getters.permissionList.length === 0) {
