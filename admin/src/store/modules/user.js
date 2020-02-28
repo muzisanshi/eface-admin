@@ -98,7 +98,7 @@ const user = {
     Logout ({ commit, state }) {
       return new Promise((resolve) => {
         commit('SET_TOKEN', '')
-        Vue.ls.remove(ACCESS_TOKEN)
+        sessionStorage.removeItem('ACCESS_TOKEN')
         api.manager.logout(state.token).then(() => {
           resolve()
         }).catch(() => {
