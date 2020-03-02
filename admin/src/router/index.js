@@ -6,7 +6,8 @@ Vue.use(Router)
 
 const originalPush = Router.prototype.push
 Router.prototype.push = function push (location) {
-  return originalPush.call(this, location).catch(err => err)
+  // return originalPush.call(this, location).catch(err => err)
+  return originalPush.call(this, location)
 }
 
 export default new Router({
