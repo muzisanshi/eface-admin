@@ -100,6 +100,7 @@
       ref="table"
       size="default"
       rowKey="id"
+      :pagination="false"
       :columns="columns"
       :scroll="{ x: 1800 }"
       :dataSource="data"

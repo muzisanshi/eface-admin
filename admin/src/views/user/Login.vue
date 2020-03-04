@@ -56,7 +56,7 @@
         </a-col>
         <a-col :span="8" :offset="2">
           <div class="gc-canvas" style="height: 38px" @click="getCodeImg">
-            <img :src="codeImgUrl" style="height: 100%;width: auto" alt="">
+            <img :src="codeImgUrl" style="height: 100%;width: auto" alt="验证码">
           </div>
         </a-col>
       </a-row>

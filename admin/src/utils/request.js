@@ -48,6 +48,24 @@ const err = (error) => {
           })
         }
         break
+      case 500:
+        notification.error({
+          message: '500',
+          description: '服务器发生错误，请检查服务器！'
+        })
+        setTimeout(() => {
+          window.location.reload()
+        }, 5000)
+        break
+      default:
+        notification.error({
+          message: error.response.status,
+          description: '发生错误'
+        })
+        setTimeout(() => {
+          window.location.reload()
+        }, 5000)
+        break
     }
   }
   return Promise.reject(error)
