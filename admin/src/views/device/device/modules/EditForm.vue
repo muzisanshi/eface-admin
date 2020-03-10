@@ -603,6 +603,15 @@
 
               <a-row :gutter="24">
                 <a-col :span="8">
+                  <a-form-item
+                    label="语音提示阈值"
+                    :labelCol="labelCo1"
+                    :wrapperCol="wrapperCo1"
+                  >
+                    <a-input :maxLength="255" :disabled="true" v-decorator="['thermograph.voicePromptThreshold',{initialValue: this.thermograph.voicePromptThreshold}]" />
+                  </a-form-item>
+                </a-col>
+                <a-col :span="8">
                   <a-form-item label="是否启用" :labelCol="labelCo1" :wrapperCol="wrapperCo1">
                     <a-select
                       size="default"
@@ -711,7 +720,8 @@
           thermalImagingCompRate:1000,
           thermalImagingEmissivity:950,
           triggerBtLockMode:"CLOSE",
-          id:''
+          id:'',
+          voicePromptThreshold: 150
         }
       }
     },
@@ -810,7 +820,8 @@
                   thermalImagingCompRate:1000,
                   thermalImagingEmissivity:950,
                   triggerBtLockMode:"CLOSE",
-                  id:''
+                  id:'',
+                  voicePromptThreshold: 150
                 }
               }
             })

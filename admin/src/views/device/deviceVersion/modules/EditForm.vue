@@ -33,6 +33,18 @@
           </a-select>
         </a-form-item>
 
+        <a-form-item label="平台类型" :labelCol="labelCol" :wrapperCol="wrapperCol">
+          <a-select
+            size="default"
+            placeholder="请选择平台类型"
+            optionFilterProp="children"
+            v-decorator="['platformType', {initialValue: this.formData.platformType, rules: [{required: true, message: '请输入平台类型！'}]}]"
+          >
+            <a-select-option :value="item.value" v-for="(item, index) in constants.data.devicePlatformType" :key="index">{{ item.value }}</a-select-option>
+            <!-- <a-select-option value="CLOSE">关闭</a-select-option> -->
+          </a-select>
+        </a-form-item>
+
         <a-form-item label="版本" :labelCol="labelCol" :wrapperCol="wrapperCol">
           <a-input :maxLength="64"
             v-decorator="['softVer', {initialValue: this.formData.softVer, rules: [{required: true, message: '请输入版本！'}]}]"/>

@@ -302,7 +302,7 @@
         <template v-if="!selectDeviceStatus">
           <a @click="handleEditInit(record)">修改</a>
           <a-divider type="vertical"/>
-          <a @click="lowerHairUser(record)">同步底库用户</a>
+          <a @click="lowerHairUser(record.id)">同步底库用户</a>
         </template>
       </span>
 
@@ -418,6 +418,10 @@ export default {
           dataIndex: 'dbConfigVer'
         },
         {
+          title: '平台类型',
+          dataIndex: 'platformType'
+        },
+        {
           title: '是否启用',
           dataIndex: 'enable',
           scopedSlots: {customRender: 'status'}
@@ -469,6 +473,10 @@ export default {
         {
           title: '数据库配置版本',
           dataIndex: 'dbConfigVer'
+        },
+        {
+          title: '平台类型',
+          dataIndex: 'platformType'
         },
         {
           title: '是否启用',

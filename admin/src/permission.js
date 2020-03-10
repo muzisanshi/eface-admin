@@ -77,6 +77,7 @@ router.beforeEach((to, from, next) => {
                 description: '请求用户菜单失败，请重试'
               })
               next({ path: '/user/login' })
+              NProgress.done()
             })
         } else {
           next(vm => {
