@@ -35,7 +35,7 @@
             v-decorator="['name']" @blur="searchName($event)" placeholder="请输入地产名称搜索"/>
         </a-form-item>
 
-        <a-form-item
+        <!-- <a-form-item
           label="街道办"
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
@@ -48,6 +48,23 @@
             :filterOption="filterCommonOption"
             :options="streetList"
             v-decorator="['streetOfficeId', {initialValue: this.formData.streetOfficeId?this.formData.streetOfficeId:'',rules: [{required: true, message: '请选择街道办！'}]}]"
+          >
+          </a-select>
+        </a-form-item> -->
+
+        <a-form-item
+          label="街道"
+          :labelCol="labelCol"
+          :wrapperCol="wrapperCol"
+        >
+          <a-select
+            showSearch
+            placeholder="选择街道"
+            optionFilterProp="children"
+            @change="streetChange"
+            :filterOption="filterCommonOption"
+            :options="streetList"
+            v-decorator="['streetId', {initialValue: this.formData.streetId?this.formData.streetId:'',rules: [{required: true, message: '请选择街道！'}]}]"
           >
           </a-select>
         </a-form-item>
@@ -135,7 +152,8 @@
         if(!that.areaId && !that.name){
 
         }else{
-          this.$api.streetOffice.getAll({
+          // this.$api.streetOffice.getAll({
+          this.$api.street.getAll({
             name:that.name,
             areaId:that.areaId
           })

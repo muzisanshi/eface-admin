@@ -35,6 +35,7 @@ import adDist from './adDist'
 import scheduleJob from './scheduleJob'
 import recRecord from './recRecord'
 import streetOffice from './streetOffice'
+import street from './street'
 import deviceVersion from './deviceVersion'
 import appVersion from './appVersion'
 import userAction from './userAction'
@@ -82,6 +83,7 @@ export default {
   scheduleJob,
   recRecord,
   streetOffice,
+  street,
   deviceVersion,
   appVersion,
   userAction,

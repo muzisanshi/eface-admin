@@ -73,8 +73,15 @@
         <a-row :gutter="24">
 
           <a-col :span="12">
-            <a-form-item label="街道办" :labelCol="labelCol" :wrapperCol="wrapperCol">
+            <!-- <a-form-item label="街道办" :labelCol="labelCol" :wrapperCol="wrapperCol">
               <a-input @click="selectStreetOffice" :read-only="true" v-decorator="['streetOfficeName', {initialValue: this.formData.streetOfficeName}]">
+                <a-icon slot="suffix" @click="clearStreetOffice" type="close" style="color: rgba(0, 0, 0, 0.25);"/>
+                <a-icon slot="addonAfter" @click="addStreetOffice" type="plus"/>
+              </a-input>
+            </a-form-item> -->
+
+            <a-form-item label="街道" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <a-input @click="selectStreetOffice" :read-only="true" v-decorator="['streetName', {initialValue: this.formData.streetName}]">
                 <a-icon slot="suffix" @click="clearStreetOffice" type="close" style="color: rgba(0, 0, 0, 0.25);"/>
                 <a-icon slot="addonAfter" @click="addStreetOffice" type="plus"/>
               </a-input>
@@ -129,8 +136,9 @@
 <script>
   import {mixin} from '@/mixins/mixin'
   import selectArea from '@/components/Common/SelectArea'
-  import selectStreetOffice from '@/components/Common/SelectStreetOffice'
-  import addStreetOffice from '@/views/system/streetOffice/modules/EditForm.vue'
+  import selectStreetOffice from '@/components/Common/SelectStreetOffice.vue'
+  // import addStreetOffice from '@/views/system/streetOffice/modules/EditForm.vue'
+  import addStreetOffice from '@/views/system/street/modules/EditForm.vue'
 export default {
   mixins:[mixin],
   components: {
@@ -187,9 +195,9 @@ export default {
     },
 
     selectSuccess(value){
-      this.formData.streetOfficeName = value.name
-      this.formData.streetOfficeId = value.id
-      this.form.setFieldsValue({ streetOfficeName: value.name});
+      this.formData.streetName = value.name
+      this.formData.streetId = value.id
+      this.form.setFieldsValue({ streetName: value.name});
     },
 
 
@@ -267,9 +275,9 @@ export default {
     },
 
     clearStreetOffice(){
-      this.formData.streetOfficeName = '';
-      this.formData.streetOfficeId = '';
-      this.form.resetFields(['streetOfficeName']);
+      this.formData.streetName = '';
+      this.formData.streetId = '';
+      this.form.resetFields(['streetName']);
     },
 
     addressChange(val) {
@@ -410,8 +418,8 @@ export default {
             return false
           }
 
-          if(this.formData.streetOfficeId){
-            values.streetOfficeId = this.formData.streetOfficeId
+          if(this.formData.streetId){
+            values.streetId = this.formData.streetId
           }
           this.$api.estate.saveOrUpdate(values)
             .then(res => {
