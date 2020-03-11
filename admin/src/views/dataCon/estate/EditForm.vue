@@ -12,38 +12,35 @@
     :confirmLoading="confirmLoading"
     @ok="handleSubmit"
     :zIndex="zIndex"
-    :maskClosable="false" :keyboard="false"
+    :maskClosable="false"
+    :keyboard="false"
     @cancel="handleCancel"
   >
     <a-spin :spinning="confirmLoading">
       <a-form :form="form">
         <a-row :gutter="24">
-
           <a-col :span="12">
             <a-form-item label="编码" :labelCol="labelCol" :wrapperCol="wrapperCol">
               <a-input
                 :maxLength="32"
-                v-decorator="['code', {initialValue: this.formData.code, rules: [{required: true, message: '请输入编码！'}]}]"/>
+                v-decorator="['code', {initialValue: this.formData.code, rules: [{required: true, message: '请输入编码！'}]}]"
+              />
             </a-form-item>
           </a-col>
 
           <a-col :span="12">
             <a-form-item label="名称" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input  :maxLength="64"
-                v-decorator="['name', {initialValue: this.formData.name, rules: [{required: true, message: '请输入组织名称！'}]}]"/>
+              <a-input
+                :maxLength="64"
+                v-decorator="['name', {initialValue: this.formData.name, rules: [{required: true, message: '请输入组织名称！'}]}]"
+              />
             </a-form-item>
           </a-col>
-
         </a-row>
 
         <a-row :gutter="24">
-
           <a-col :span="12">
-            <a-form-item
-              label="组织"
-              :labelCol="labelCol"
-              :wrapperCol="wrapperCol"
-            >
+            <a-form-item label="组织" :labelCol="labelCol" :wrapperCol="wrapperCol">
               <a-select
                 showSearch
                 placeholder="选择组织"
@@ -51,48 +48,47 @@
                 :filterOption="filterCommonOption"
                 :options="orgList"
                 v-decorator="['orgId', {initialValue: this.formData.orgId?this.formData.orgId:'',rules: [{required: true, message: '请选择组织！'}]}]"
-              >
-              </a-select>
+              ></a-select>
             </a-form-item>
           </a-col>
 
           <a-col :span="12">
-            <a-form-item
-              label="选择地区"
-              :labelCol="labelCol"
-              :wrapperCol="wrapperCol"
-              :required="true"
-            >
-              <select-area ref="selectArea" :initArea="initCascader"
-                           @selectedArea="selectedArea"></select-area>
+            <a-form-item label="选择地区" :labelCol="labelCol" :wrapperCol="wrapperCol" :required="true">
+              <select-area ref="selectArea" :initArea="initCascader" @selectedArea="selectedArea"></select-area>
             </a-form-item>
           </a-col>
-
         </a-row>
 
         <a-row :gutter="24">
-
           <a-col :span="12">
             <!-- <a-form-item label="街道办" :labelCol="labelCol" :wrapperCol="wrapperCol">
               <a-input @click="selectStreetOffice" :read-only="true" v-decorator="['streetOfficeName', {initialValue: this.formData.streetOfficeName}]">
                 <a-icon slot="suffix" @click="clearStreetOffice" type="close" style="color: rgba(0, 0, 0, 0.25);"/>
                 <a-icon slot="addonAfter" @click="addStreetOffice" type="plus"/>
               </a-input>
-            </a-form-item> -->
+            </a-form-item>-->
 
             <a-form-item label="街道" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input @click="selectStreetOffice" :read-only="true" v-decorator="['streetName', {initialValue: this.formData.streetName}]">
-                <a-icon slot="suffix" @click="clearStreetOffice" type="close" style="color: rgba(0, 0, 0, 0.25);"/>
-                <a-icon slot="addonAfter" @click="addStreetOffice" type="plus"/>
+              <a-input
+                @click="selectStreetOffice"
+                :read-only="true"
+                v-decorator="['streetName', {initialValue: this.formData.streetName}]"
+              >
+                <a-icon slot="suffix" @click="clearStreetOffice" type="close" style="color: rgba(0, 0, 0, 0.25);" />
+                <a-icon slot="addonAfter" @click="addStreetOffice" type="plus" />
               </a-input>
             </a-form-item>
           </a-col>
 
           <a-col :span="12">
             <a-form-item label="详细地址" :labelCol="labelCol" :wrapperCol="wrapperCol" :required="true">
-
-              <a-input  :maxLength="255" id="detailAddress" class="ant-input" style="position: relative;" v-model="inputChange"/>
-
+              <a-input
+                :maxLength="255"
+                id="detailAddress"
+                class="ant-input"
+                style="position: relative;"
+                v-model="inputChange"
+              />
             </a-form-item>
           </a-col>
         </a-row>
@@ -105,19 +101,15 @@
           </a-col>
           <a-col :span="12">
             <a-form-item label="纬度" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input :disabled="true"  v-model="latitude"/>
+              <a-input :disabled="true" v-model="latitude" />
             </a-form-item>
           </a-col>
         </a-row>
 
         <a-row :gutter="24">
           <a-col :span="12">
-            <a-form-item
-              label="备注"
-              :labelCol="labelCol"
-              :wrapperCol="wrapperCol"
-            >
-              <a-input  :maxLength="255" v-decorator="['remark',{initialValue: this.formData.remark}]" />
+            <a-form-item label="备注" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <a-input :maxLength="255" v-decorator="['remark',{initialValue: this.formData.remark}]" />
             </a-form-item>
           </a-col>
         </a-row>
@@ -126,25 +118,26 @@
 
         <add-street-office ref="addStreetOffice" :initArea="initCascader" @addSuccess="selectSuccess"></add-street-office>
 
-        <div id='allmap' style="width:100%;height:300px;"></div>
-
+        <div id="allmap" style="width:100%;height:300px;"></div>
       </a-form>
     </a-spin>
   </a-modal>
 </template>
 
 <script>
-  import {mixin} from '@/mixins/mixin'
-  import selectArea from '@/components/Common/SelectArea'
-  import selectStreetOffice from '@/components/Common/SelectStreetOffice.vue'
-  // import addStreetOffice from '@/views/system/streetOffice/modules/EditForm.vue'
-  import addStreetOffice from '@/views/system/street/modules/EditForm.vue'
+import { mixin } from '@/mixins/mixin'
+import selectArea from '@/components/Common/SelectArea'
+import selectStreetOffice from '@/components/Common/SelectStreetOffice.vue'
+// import addStreetOffice from '@/views/system/streetOffice/modules/EditForm.vue'
+import addStreetOffice from '@/views/system/street/modules/EditForm.vue'
 export default {
-  mixins:[mixin],
+  mixins: [mixin],
   components: {
-    selectArea,selectStreetOffice,addStreetOffice
+    selectArea,
+    selectStreetOffice,
+    addStreetOffice
   },
-  data () {
+  data() {
     return {
       labelCol: {
         xs: { span: 24 },
@@ -158,12 +151,12 @@ export default {
 
       uploadFileId: '',
       formData: {
-        areaId:[]
+        areaId: []
       },
-      title:'',
-      enable:true,
+      title: '',
+      enable: true,
       form: this.$form.createForm(this),
-      countries:[],
+      countries: [],
       initCascader: [],
       options: [],
       data: {},
@@ -174,183 +167,180 @@ export default {
       longitude: '',
       latitude: '',
       isChangeClone: true,
-      orgList:[],
-      visible:true,
-      zIndex:1,
-      isClickMap:false
+      orgList: [],
+      visible: true,
+      zIndex: 1,
+      isClickMap: false
     }
   },
   watch: {
     inputChange(newVal) {
-      if(!this.isClickMap){
+      if (!this.isClickMap) {
         this.addressChange(newVal)
-      }else{
+      } else {
         this.isClickMap = false
       }
-    },
+    }
   },
   methods: {
-    onUploadSuccess (id){
+    onUploadSuccess(id) {
       this.uploadFileId = id
     },
 
-    selectSuccess(value){
+    selectSuccess(value) {
       this.formData.streetName = value.name
       this.formData.streetId = value.id
-      this.form.setFieldsValue({ streetName: value.name});
+      this.form.setFieldsValue({ streetName: value.name })
     },
-
 
     selectStreetOffice() {
       this.$refs.selectStreetOffice.selectStreetOffice()
     },
 
-    addStreetOffice(){
+    addStreetOffice() {
       this.$refs.addStreetOffice.add()
     },
 
-    add (item) {
+    add(item) {
       this.zIndex = 10
-      let that = this;
-      this.visible = true;
+      let that = this
+      this.visible = true
 
       this.form.resetFields()
       this.formData = {
-        areaId:[]
-      };
+        areaId: []
+      }
       this.initCascader = []
-      this.options = [];
-      this.latitude = '';
-      this.longitude = '';
-      this.inputChange = '';
-      this.$api.org.getAll({})
-        .then(res => {
-          const l = []
-          for (let i = 0, j = res.length; i < j; i++) {
-            l.push({
-              value: res[i].id,
-              label: res[i].name
-            })
-          }
-          this.orgList = l
-        })
-
-      if(item){
-          this.title = '修改'
-        this.$api.estate.getById({id: item.id})
-          .then(res => {
-            this.formData = res
-            that.isChangeClone =false
-            that.inputChange = res.fullAddress;
-            that.latitude = res.lat;
-            that.longitude = res.lng;
-
-            that.longitude = res.lng;
-            if (res.areas.length) {
-              for (let i = res.areas.length - 1; i >= 0; i--) {
-                that.initCascader.push(res.areas[i].id)
-              }
-              that.$refs.selectArea.initAllArea()
-            }
+      this.options = []
+      this.latitude = ''
+      this.longitude = ''
+      this.inputChange = ''
+      this.$api.org.getAll({}).then(res => {
+        const l = []
+        for (let i = 0, j = res.length; i < j; i++) {
+          l.push({
+            value: res[i].id,
+            label: res[i].name
           })
-
-        }else{
-          this.enable = true
-          this.title = '新增'
-          that.$refs.selectArea.initAllArea()
         }
-    },
+        this.orgList = l
+      })
 
-    selectedArea(area) {
+      if (item) {
+        this.title = '修改'
+        this.$api.estate.getById({ id: item.id }).then(res => {
+          this.formData = res
+          that.isChangeClone = false
+          that.inputChange = res.fullAddress
+          that.latitude = res.lat
+          that.longitude = res.lng
 
-      if(area.value.length){
-        this.initCascader = area.value;
-        this.inputChange = area.name.join('')
-      }else{
-        this.initCascader = [];
-        this.inputChange = '';
-        this.latitude = '';
-        this.longitude = '';
+          that.longitude = res.lng
+          if (res.areas.length) {
+            for (let i = res.areas.length - 1; i >= 0; i--) {
+              that.initCascader.push(res.areas[i].id)
+            }
+            that.$refs.selectArea.initAllArea()
+          }
+        })
+      } else {
+        this.enable = true
+        this.title = '新增'
+        that.$refs.selectArea.initAllArea()
       }
     },
 
-    clearStreetOffice(){
-      this.formData.streetName = '';
-      this.formData.streetId = '';
-      this.form.resetFields(['streetName']);
+    selectedArea(area) {
+      if (area.value.length) {
+        this.initCascader = area.value
+        this.inputChange = area.name.join('')
+      } else {
+        this.initCascader = []
+        this.inputChange = ''
+        this.latitude = ''
+        this.longitude = ''
+      }
+    },
+
+    clearStreetOffice() {
+      this.formData.streetName = ''
+      this.formData.streetId = ''
+      this.form.resetFields(['streetName'])
     },
 
     addressChange(val) {
-      let that = this;
+      let that = this
       that.isClickMap = false
       if (val) {
         // if(that.isChangeClone){
         //   that.latitude = '';
         //   that.longitude = '';
         // }
-        that.isChangeClone =true
-        var myGeo = new BMap.Geocoder();
+        that.isChangeClone = true
+        var myGeo = new BMap.Geocoder()
         var map = this.map
-        myGeo.getPoint(val, function (point) {
+        myGeo.getPoint(val, function(point) {
           if (point) {
             map.clearOverlays()
-            map.centerAndZoom(point, 12);
-            map.addOverlay(new BMap.Marker(point));
-
+            map.centerAndZoom(point, 12)
+            map.addOverlay(new BMap.Marker(point))
           }
         })
-        var ac = new BMap.Autocomplete(    //建立一个自动完成的对象
-          {
-            "input": "detailAddress"
-            , "location": map
-          });
-        var myValue;
-        ac.addEventListener("onconfirm", function (e) {    //鼠标点击下拉列表后的事件
-          var _value = e.item.value;
-          myValue = _value.province + _value.city + _value.district + _value.street + _value.business;
+        var ac = new BMap.Autocomplete({ //建立一个自动完成的对象
+          input: 'detailAddress',
+          location: map
+        })
+        var myValue
+        ac.addEventListener('onconfirm', function(e) {
+          //鼠标点击下拉列表后的事件
+          var _value = e.item.value
+          myValue = _value.province + _value.city + _value.district + _value.street + _value.business
 
-          that.setPlace(myValue);
-        });
+          that.setPlace(myValue)
+        })
       }
     },
     setPlace(myValue) {
       let that = this
       var map = this.map
-      map.clearOverlays();    //清除地图上所有覆盖物
+      map.clearOverlays() //清除地图上所有覆盖物
       function myFun(e) {
-        var pp = local.getResults().getPoi(0).point;    //获取第一个智能搜索的结果
+        var pp = local.getResults().getPoi(0).point //获取第一个智能搜索的结果
 
         that.longitude = pp.lng
         that.latitude = pp.lat
-        console.log(that.longitude,that.latitude)
-        map.centerAndZoom(pp, 18);
-        map.addOverlay(new BMap.Marker(pp));    //添加标注
+        console.log(that.longitude, that.latitude)
+        map.centerAndZoom(pp, 18)
+        map.addOverlay(new BMap.Marker(pp)) //添加标注
       }
 
-      var local = new BMap.LocalSearch(map, { //智能搜索
+      var local = new BMap.LocalSearch(map, {
+        //智能搜索
         onSearchComplete: myFun
-      });
-      local.search(myValue);
-      that.inputChange = '';
-      that.inputChange = myValue;
+      })
+      local.search(myValue)
+      that.inputChange = ''
+      that.inputChange = myValue
     },
 
     createMap() {
-      let that = this;
+      let that = this
 
-      this.map = new BMap.Map("allmap");  // 创建Map实例
-      this.map.centerAndZoom("成都", 12);      // 初始化地图,用城市名设置地图中心点
-      this.map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+      this.map = new BMap.Map('allmap') // 创建Map实例
+      this.map.centerAndZoom('成都', 12) // 初始化地图,用城市名设置地图中心点
+      this.map.enableScrollWheelZoom(true) //开启鼠标滚轮缩放
       //mp.enableScrollWheelZoom();
-      this.map.enableInertialDragging();
-      this.map.enableContinuousZoom();
+      this.map.enableInertialDragging()
+      this.map.enableContinuousZoom()
 
       //添加城市切换
-      var size = new BMap.Size(10, 20);
-      this.map.addControl(new BMap.CityListControl({
-        anchor: BMAP_ANCHOR_TOP_LEFT,
-        offset: size,
-      }));
+      var size = new BMap.Size(10, 20)
+      this.map.addControl(
+        new BMap.CityListControl({
+          anchor: BMAP_ANCHOR_TOP_LEFT,
+          offset: size
+        })
+      )
 
       // 添加带有定位的导航控件
       var navigationControl = new BMap.NavigationControl({
@@ -360,46 +350,49 @@ export default {
         type: BMAP_NAVIGATION_CONTROL_LARGE,
         // 启用显示定位
         enableGeolocation: true
-      });
-      this.map.addControl(navigationControl);
+      })
+      this.map.addControl(navigationControl)
 
       // 添加定位控件
-      var geolocationControl = new BMap.GeolocationControl();
-      this.map.addControl(geolocationControl);
+      var geolocationControl = new BMap.GeolocationControl()
+      this.map.addControl(geolocationControl)
 
-      var geoc = new BMap.Geocoder();
+      var geoc = new BMap.Geocoder()
       //填加鼠标点击事件
-      this.map.addEventListener("click", e => {
+      this.map.addEventListener('click', e => {
         that.longitude = e.point.lng
         that.latitude = e.point.lat
 
-        this.map.clearOverlays();
-        var marker = new BMap.Marker(new BMap.Point(e.point.lng, e.point.lat)); // 创建点
-        this.map.addOverlay(marker);            //增加点
+        this.map.clearOverlays()
+        var marker = new BMap.Marker(new BMap.Point(e.point.lng, e.point.lat)) // 创建点
+        this.map.addOverlay(marker) //增加点
 
-        geoc.getLocation(e.point, function (rs) {
-          let addComp = rs.addressComponents;
-          that.inputChange = '';
-          that.inputChange = addComp.province + addComp.city+ addComp.district + addComp.street + addComp.streetNumber+'';
+        geoc.getLocation(e.point, function(rs) {
+          let addComp = rs.addressComponents
+          that.inputChange = ''
+          that.inputChange =
+            addComp.province + addComp.city + addComp.district + addComp.street + addComp.streetNumber + ''
           that.isClickMap = true
-        });
-      });
+        })
+      })
     },
 
-    handleSubmit () {
-      const { form: { validateFields } } = this
+    handleSubmit() {
+      const {
+        form: { validateFields }
+      } = this
       this.confirmLoading = true
       validateFields((errors, values) => {
         if (!errors) {
-          if(this.formData.id){
-            values.id = this.formData.id;
+          if (this.formData.id) {
+            values.id = this.formData.id
           }
-          values.lat = this.latitude;
-          values.lng = this.longitude;
+          values.lat = this.latitude
+          values.lng = this.longitude
 
           if (this.initCascader.length > 0) {
             values.areaId = this.initCascader[this.initCascader.length - 1]
-          }else{
+          } else {
             this.$notification.error({
               message: '提示',
               description: '请选择地区！'
@@ -408,8 +401,8 @@ export default {
             return false
           }
 
-          values.fullAddress = this.inputChange;
-          if(!values.fullAddress){
+          values.fullAddress = this.inputChange
+          if (!values.fullAddress) {
             this.$notification.error({
               message: '提示',
               description: '请填写详细地址！'
@@ -418,42 +411,44 @@ export default {
             return false
           }
 
-          if(this.formData.streetId){
+          if (this.formData.streetId) {
             values.streetId = this.formData.streetId
           }
-          this.$api.estate.saveOrUpdate(values)
+          this.$api.estate
+            .saveOrUpdate(values)
             .then(res => {
               this.$notification.success({
                 message: '成功',
-                description:this.title +'成功'
+                description: this.title + '成功'
               })
               this.visible = false
               this.confirmLoading = false
               this.form.resetFields()
               this.$emit('ok', values)
-            }).finally(() => {
+            })
+            .finally(() => {
               this.confirmLoading = false
             })
         } else {
           this.confirmLoading = false
         }
       })
-    },
+    }
   },
   mounted() {
     this.zIndex = -10
-    this.createMap();
-    this.visible = false;
+    this.createMap()
+    this.visible = false
   }
 }
 </script>
 <style>
-  .tangram-suggestion-main {
-    z-index: 1000 !important;
-  }
+.tangram-suggestion-main {
+  z-index: 1000 !important;
+}
 
-  #detailAddress {
-    touch-action: manipulation;
-    -webkit-appearance: none;
-  }
+#detailAddress {
+  touch-action: manipulation;
+  -webkit-appearance: none;
+}
 </style>

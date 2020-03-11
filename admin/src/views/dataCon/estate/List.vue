@@ -95,6 +95,10 @@ export default {
           dataIndex: 'areaName'
         },
         {
+          title: '街道',
+          dataIndex: 'streetName'
+        },
+        {
           title: '详细地址',
           dataIndex: 'fullAddress'
         },
@@ -102,11 +106,6 @@ export default {
         //   title: '街道办',
         //   dataIndex: 'streetOfficeName'
         // },
-        {
-          title: '街道',
-          dataIndex: 'streetName'
-        },
-
         {
           title: '纬度',
           dataIndex: 'lat'
