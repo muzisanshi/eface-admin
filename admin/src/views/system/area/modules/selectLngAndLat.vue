@@ -14,6 +14,7 @@
     :maskClosable="false" :keyboard="false"
     @cancel="handleCancel"
   >
+    <a-input-search :placeholder="mapName" v-model="current" style="margin-bottom: 15px" @search="onSearch" />
     <a-spin :spinning="confirmLoading">
       <div id='allmap' style="width:100%;height:350px;margin-bottom: 15px"></div>
     </a-spin>
@@ -25,12 +26,19 @@
 
   export default {
     mixins: [mixin],
+    props:{
+      mapName: {
+        type: String,
+        default: ''
+      }
+    },
     data() {
       return {
         confirmLoading: false,
         longitude:'',
         latitude:'',
-        visible:false
+        visible:false,
+        current: ''
       }
     },
     watch:{
@@ -38,10 +46,19 @@
         if(newVal == this.initCascader.length){
             this.handleAreaArr()
         }
+      },
+      visible(newVal) {
+        if (!newVal) {
+          this.current = ''
+        }
       }
     },
     methods: {
+      onSearch(value) {
+        this.add(value)
+      },
       add(item) {
+        console.log(item)
         // this.createMap();
         let that = this;
         that.visible = true
@@ -59,9 +76,8 @@
 
       createMap(item) {
         let that = this;
-
         this.map = new BMap.Map("allmap"); // 创建Map实例
-        this.map.centerAndZoom(item?item:'成都', 12); // 初始化地图,用城市名设置地图中心点
+        this.map.centerAndZoom(item?item:this.mapName, 12); // 初始化地图,用城市名设置地图中心点
         this.map.enableScrollWheelZoom(true); //开启鼠标滚轮缩放
         this.map.enableInertialDragging();
         this.map.enableContinuousZoom();

@@ -69,14 +69,15 @@
             </a-form-item>-->
 
             <a-form-item label="街道" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input
-                @click="selectStreetOffice"
-                :read-only="true"
-                v-decorator="['streetName', {initialValue: this.formData.streetName}]"
-              >
-                <a-icon slot="suffix" @click="clearStreetOffice" type="close" style="color: rgba(0, 0, 0, 0.25);" />
-                <a-icon slot="addonAfter" @click="addStreetOffice" type="plus" />
-              </a-input>
+              <a-select
+                showSearch
+                placeholder="选择街道"
+                optionFilterProp="children"
+                :filterOption="filterCommonOption"
+                :options="streetList"
+                @change="streetChange"
+                v-decorator="['streetName', {initialValue: this.formData.streetName, rules: [{required: true, message: '请选择街道！'}]}]"
+              ></a-select>
             </a-form-item>
           </a-col>
 
@@ -126,7 +127,7 @@
 
 <script>
 import { mixin } from '@/mixins/mixin'
-import selectArea from '@/components/Common/SelectArea'
+import selectArea from '@/components/Common/SelectArea.vue'
 import selectStreetOffice from '@/components/Common/SelectStreetOffice.vue'
 // import addStreetOffice from '@/views/system/streetOffice/modules/EditForm.vue'
 import addStreetOffice from '@/views/system/street/modules/EditForm.vue'
@@ -170,7 +171,10 @@ export default {
       orgList: [],
       visible: true,
       zIndex: 1,
-      isClickMap: false
+      isClickMap: false,
+      streetList: [],
+      areaId: '',
+      name: ''
     }
   },
   watch: {
@@ -188,6 +192,7 @@ export default {
     },
 
     selectSuccess(value) {
+      console.log(value)
       this.formData.streetName = value.name
       this.formData.streetId = value.id
       this.form.setFieldsValue({ streetName: value.name })
@@ -205,7 +210,9 @@ export default {
       this.zIndex = 10
       let that = this
       this.visible = true
-
+      this.streetList = []
+      this.areaId = ''
+      this.name = ''
       this.form.resetFields()
       this.formData = {
         areaId: []
@@ -254,6 +261,8 @@ export default {
       if (area.value.length) {
         this.initCascader = area.value
         this.inputChange = area.name.join('')
+        this.areaId = this.initCascader[this.initCascader.length - 1]
+        this.getStreetList()
       } else {
         this.initCascader = []
         this.inputChange = ''
@@ -414,6 +423,10 @@ export default {
           if (this.formData.streetId) {
             values.streetId = this.formData.streetId
           }
+
+          if (this.formData.streetName) {
+            values.streetName = this.formData.streetName
+          }
           this.$api.estate
             .saveOrUpdate(values)
             .then(res => {
@@ -433,7 +446,37 @@ export default {
           this.confirmLoading = false
         }
       })
-    }
+    },
+
+    getStreetList() {
+      const that = this
+      if (!that.areaId && !that.name) {
+      } else {
+        this.$api.street
+          .getAll({
+            name: that.name,
+            areaId: that.areaId
+          })
+          .then(res => {
+            console.log(res)
+            const l = []
+            for (let i = 0, j = res.length; i < j; i++) {
+              l.push({
+                value: res[i].id,
+                label: res[i].name
+              })
+            }
+            this.streetList = l
+          })
+      }
+    },
+
+    streetChange(value, option) {
+      console.log(value)
+      console.log(option)
+      this.formData.streetId = value
+      this.formData.streetName = option.componentOptions.children[0].text
+    },
   },
   mounted() {
     this.zIndex = -10

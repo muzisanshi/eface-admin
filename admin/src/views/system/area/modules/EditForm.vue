@@ -110,7 +110,7 @@
         </a-form-item>
 
       </a-form>
-      <select-lng ref="selectLngAndLat" @ok="selectSuccess"/>
+      <select-lng ref="selectLngAndLat" :mapName="mapName" @ok="selectSuccess"/>
     </a-spin>
   </a-modal>
 </template>
@@ -148,7 +148,8 @@
         arr:[],
         num:0,
         hasAdd:'SAVE',
-        shortName:''
+        shortName:'',
+        mapName: null
       }
     },
     watch:{
@@ -188,6 +189,7 @@
               that.shortName = item.shortName;
               that.$api.area.getById({id: item.id})
                 .then(res => {
+                  this.mapName = (res.parentAreaName ? res.parentAreaName : '') + res.name
                   if (addChild != 'addChild') {
                     that.title = '修改'
                     that.formData = res
@@ -222,11 +224,13 @@
               that.enable = true
               that.hasAdd = 'SAVE'
               that.title = '新增'
+              this.mapName = '成都'
             }
           })
       },
 
       selectLng(){
+        this.mapName = this.form.getFieldValue('name')
         this.$refs.selectLngAndLat.add(this.shortName);
       },
 

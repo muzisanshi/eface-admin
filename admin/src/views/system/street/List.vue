@@ -96,9 +96,30 @@ export default {
           dataIndex: 'name'
         },
         {
-          title: '备注',
-          dataIndex: 'remark'
+          title: '简写名称',
+          dataIndex: 'shortName'
         },
+        {
+          title: '行政区划代码',
+          dataIndex: 'id'
+        },
+        {
+          title: '经度',
+          dataIndex: 'lng'
+        },
+        {
+          title: '纬度',
+          dataIndex: 'lat'
+        },
+        {
+          title: '是否启用',
+          dataIndex: 'enable',
+          scopedSlots: {customRender: 'status'}
+        },
+        // {
+        //   title: '备注',
+        //   dataIndex: 'remark'
+        // },
         {
           title: '操作',
           dataIndex: 'action',
