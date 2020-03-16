@@ -608,7 +608,7 @@
                     :labelCol="labelCo1"
                     :wrapperCol="wrapperCo1"
                   >
-                    <a-input :maxLength="255" :disabled="true" v-decorator="['thermograph.voicePromptThreshold',{initialValue: this.thermograph.voicePromptThreshold}]" />
+                    <a-input :maxLength="255" v-decorator="['thermograph.voicePromptThreshold',{initialValue: this.thermograph.voicePromptThreshold}]" />
                   </a-form-item>
                 </a-col>
                 <a-col :span="8">

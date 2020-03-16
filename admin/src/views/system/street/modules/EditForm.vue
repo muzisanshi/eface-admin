@@ -153,7 +153,7 @@ export default {
     selectedArea(area) {
       this.initCascader = area.value
       console.log(area.name.join(''))
-      this.mapName = area.name.join('') + this.form.getFieldValue('name')
+      this.mapName = area.name.join('') + (this.form.getFieldValue('name') || '')
       // console.log(this.form.getFieldValue('name'))
       // this.inputChange = area.name.join('')
     },

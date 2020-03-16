@@ -249,6 +249,8 @@ export default {
             }
             that.$refs.selectArea.initAllArea()
           }
+          this.areaId = res.areas[0].id
+          that.getStreetList()
         })
       } else {
         this.enable = true

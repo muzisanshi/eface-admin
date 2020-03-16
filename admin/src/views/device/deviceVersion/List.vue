@@ -101,6 +101,10 @@ export default {
           dataIndex: 'softVer'
         },
         {
+          title: '平台类型',
+          dataIndex: 'platformType'
+        },
+        {
           title: '附件地址',
           width: '300px',
           scopedSlots: { customRender: 'resourceFullAddress' }
