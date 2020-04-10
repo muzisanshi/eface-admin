@@ -40,6 +40,20 @@
 
         <a-row :gutter="24">
           <a-col :span="12">
+            <a-form-item label="地产类型" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <a-select
+                showSearch
+                allowClear
+                placeholder="选择地产类型"
+                optionFilterProp="children"
+                :filterOption="filterCommonOption"
+                :options="constants.list.estateType"
+                v-decorator="['type', {initialValue: this.formData.type,rules: [{required: true, message: '请选择地产类型！'}]}]"
+              ></a-select>
+            </a-form-item>
+          </a-col>
+
+          <a-col :span="12">
             <a-form-item label="组织" :labelCol="labelCol" :wrapperCol="wrapperCol">
               <a-select
                 showSearch
@@ -51,15 +65,20 @@
               ></a-select>
             </a-form-item>
           </a-col>
-
-          <a-col :span="12">
-            <a-form-item label="选择地区" :labelCol="labelCol" :wrapperCol="wrapperCol" :required="true">
-              <select-area ref="selectArea" :initArea="initCascader" @selectedArea="selectedArea"></select-area>
-            </a-form-item>
-          </a-col>
         </a-row>
 
         <a-row :gutter="24">
+          <a-col :span="12">
+            <a-form-item
+              label="选择地区"
+              :labelCol="labelCol"
+              :wrapperCol="wrapperCol"
+              :required="true"
+            >
+              <select-area ref="selectArea" :initArea="initCascader" @selectedArea="selectedArea"></select-area>
+            </a-form-item>
+          </a-col>
+
           <a-col :span="12">
             <!-- <a-form-item label="街道办" :labelCol="labelCol" :wrapperCol="wrapperCol">
               <a-input @click="selectStreetOffice" :read-only="true" v-decorator="['streetOfficeName', {initialValue: this.formData.streetOfficeName}]">
@@ -80,18 +99,6 @@
               ></a-select>
             </a-form-item>
           </a-col>
-
-          <a-col :span="12">
-            <a-form-item label="详细地址" :labelCol="labelCol" :wrapperCol="wrapperCol" :required="true">
-              <a-input
-                :maxLength="255"
-                id="detailAddress"
-                class="ant-input"
-                style="position: relative;"
-                v-model="inputChange"
-              />
-            </a-form-item>
-          </a-col>
         </a-row>
 
         <a-row :gutter="24">
@@ -100,6 +107,7 @@
               <a-input :disabled="true" v-model="longitude" />
             </a-form-item>
           </a-col>
+
           <a-col :span="12">
             <a-form-item label="纬度" :labelCol="labelCol" :wrapperCol="wrapperCol">
               <a-input :disabled="true" v-model="latitude" />
@@ -109,15 +117,43 @@
 
         <a-row :gutter="24">
           <a-col :span="12">
+            <a-form-item
+              label="详细地址"
+              :labelCol="labelCol"
+              :wrapperCol="wrapperCol"
+              :required="true"
+            >
+              <a-input
+                :maxLength="255"
+                id="detailAddress"
+                class="ant-input"
+                style="position: relative;"
+                v-model="inputChange"
+              />
+            </a-form-item>
+          </a-col>
+
+          <a-col :span="12">
             <a-form-item label="备注" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input :maxLength="255" v-decorator="['remark',{initialValue: this.formData.remark}]" />
+              <a-input
+                :maxLength="255"
+                v-decorator="['remark',{initialValue: this.formData.remark}]"
+              />
             </a-form-item>
           </a-col>
         </a-row>
 
-        <select-street-office ref="selectStreetOffice" :initArea="initCascader" @selectSuccess="selectSuccess"></select-street-office>
+        <select-street-office
+          ref="selectStreetOffice"
+          :initArea="initCascader"
+          @selectSuccess="selectSuccess"
+        ></select-street-office>
 
-        <add-street-office ref="addStreetOffice" :initArea="initCascader" @addSuccess="selectSuccess"></add-street-office>
+        <add-street-office
+          ref="addStreetOffice"
+          :initArea="initCascader"
+          @addSuccess="selectSuccess"
+        ></add-street-office>
 
         <div id="allmap" style="width:100%;height:300px;"></div>
       </a-form>
@@ -131,12 +167,17 @@ import selectArea from '@/components/Common/SelectArea.vue'
 import selectStreetOffice from '@/components/Common/SelectStreetOffice.vue'
 // import addStreetOffice from '@/views/system/streetOffice/modules/EditForm.vue'
 import addStreetOffice from '@/views/system/street/modules/EditForm.vue'
+import { mapState } from 'vuex'
+
 export default {
   mixins: [mixin],
   components: {
     selectArea,
     selectStreetOffice,
     addStreetOffice
+  },
+  computed: {
+    ...mapState(['constants'])
   },
   data() {
     return {
@@ -297,7 +338,8 @@ export default {
             map.addOverlay(new BMap.Marker(point))
           }
         })
-        var ac = new BMap.Autocomplete({ //建立一个自动完成的对象
+        var ac = new BMap.Autocomplete({
+          //建立一个自动完成的对象
           input: 'detailAddress',
           location: map
         })
@@ -478,7 +520,7 @@ export default {
       console.log(option)
       this.formData.streetId = value
       this.formData.streetName = option.componentOptions.children[0].text
-    },
+    }
   },
   mounted() {
     this.zIndex = -10

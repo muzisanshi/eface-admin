@@ -4,7 +4,8 @@
     width="256px"
     :collapsible="collapsible"
     v-model="collapsed"
-    :trigger="null">
+    :trigger="null"
+  >
     <logo />
     <s-menu
       :collapsed="collapsed"
@@ -12,13 +13,16 @@
       :theme="theme"
       :mode="mode"
       @select="onSelect"
-      style="padding: 16px 0 90px 0;"></s-menu>
-    <div style="width: 100%;height: 80px;position: absolute;bottom: 0;left: 0;background-color: #001529;text-align: left;padding: 10px 20px;color: #fff;font-size: 12px;">
-          <p>前端版本 -v2.1.1</p>
-          <p>后端版本 -v2.1.1</p>
-    </div>
+      style="padding: 16px 0 90px 0;"
+    ></s-menu>
+    <!-- <div
+      v-if="false"
+      style="width: 100%;height: 80px;position: absolute;bottom: 0;left: 0;background-color: #001529;text-align: left;padding: 10px 20px;color: #fff;font-size: 12px;"
+    >
+      <p>前端版本 -v2.1.4</p>
+      <p>后端版本 -v2.1.4</p>
+    </div> -->
   </a-layout-sider>
-
 </template>
 
 <script>
@@ -57,7 +61,7 @@ export default {
     }
   },
   methods: {
-    onSelect (obj) {
+    onSelect(obj) {
       this.$emit('menuSelect', obj)
     }
   }

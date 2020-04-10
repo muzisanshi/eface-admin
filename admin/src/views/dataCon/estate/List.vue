@@ -11,7 +11,7 @@
         <a-row :gutter="48">
           <a-col :md="4" :sm="24">
             <a-form-item label="名称">
-              <a-input :maxLength="64" v-model="queryParam.name"/>
+              <a-input :maxLength="64" v-model="queryParam.name" />
             </a-form-item>
           </a-col>
           <a-col :md="3" :sm="24">
@@ -26,7 +26,12 @@
 
     <div class="table-operator">
       <a-button type="primary" icon="plus" @click="handleEdit(null)">新增</a-button>
-      <a-button type="danger" icon="delete" @click="handleDelete" :disabled="selectedRowKeys.length < 1">删除</a-button>
+      <a-button
+        type="danger"
+        icon="delete"
+        @click="handleDelete"
+        :disabled="selectedRowKeys.length < 1"
+      >删除</a-button>
     </div>
 
     <s-table
@@ -37,11 +42,15 @@
       :data="loadData"
       :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
     >
-      <span slot="serial" slot-scope="text, record, index">
-        {{ index + 1 }}
-      </span>
+      <span slot="serial" slot-scope="text, record, index">{{ index + 1 }}</span>
 
-      <a-avatar size="large" shape="square" :src="record | resourceFullAddressFilter" slot="resourceFullAddress" slot-scope="record"/>
+      <a-avatar
+        size="large"
+        shape="square"
+        :src="record | resourceFullAddressFilter"
+        slot="resourceFullAddress"
+        slot-scope="record"
+      />
 
       <span slot="status" slot-scope="text">
         <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />
@@ -53,25 +62,29 @@
         </template>
       </span>
     </s-table>
-    <edit-form ref="editModal" @ok="handleOk"/>
+    <edit-form ref="editModal" @ok="handleOk" />
   </a-card>
 </template>
 
 <script>
 import { STable } from '@/components'
 import EditForm from './EditForm'
-import {mixin} from '@/mixins/mixin'
+import { mixin } from '@/mixins/mixin'
+import { mapState } from 'vuex'
 
 export default {
-  mixins:[mixin],
+  mixins: [mixin],
   components: {
     STable,
     EditForm
   },
-  data () {
+  computed: {
+    ...mapState(['constants'])
+  },
+  data() {
     return {
       queryParam: {
-        enable:''
+        enable: ''
       },
       columns: [
         {
@@ -81,6 +94,10 @@ export default {
         {
           title: '编码',
           dataIndex: 'code'
+        },
+        {
+          title: '地产类型',
+          dataIndex: 'type'
         },
         {
           title: '名称',
@@ -126,33 +143,34 @@ export default {
           scopedSlots: { customRender: 'action' }
         }
       ],
-      enableChecked:false,
+      enableChecked: false,
       loadData: parameter => {
-        return this.$api.estate.getPage(Object.assign(parameter, this.queryParam))
-          .then(res => {
-            return res
+        return this.$api.estate.getPage(Object.assign(parameter, this.queryParam)).then(res => {
+          res.records.forEach(item => {
+            const index = this.constants.list.estateType.findIndex(i => i.value === item.type)
+            item.type = this.constants.list.estateType ? this.constants.list.estateType[index]['label'] : ''
           })
-      },
+          return res
+        })
+      }
     }
   },
   methods: {
-    handleDelete () {
+    handleDelete() {
       const that = this
       that.$confirm({
         title: '删除',
         content: '确定删除勾选的记录？',
-        onOk () {
-          that.$api.estate.del({ ids: that.selectedRowKeys })
-            .then(res => {
-              that.$notification.success({
-                message: '成功',
-                description: `删除成功！`
-              })
-              that.handleOk()
+        onOk() {
+          that.$api.estate.del({ ids: that.selectedRowKeys }).then(res => {
+            that.$notification.success({
+              message: '成功',
+              description: `删除成功！`
             })
+            that.handleOk()
+          })
         },
-        onCancel () {
-        }
+        onCancel() {}
       })
     }
   }

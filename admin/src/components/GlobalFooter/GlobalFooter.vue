@@ -2,7 +2,7 @@
   <div class="footer">
     <div class="copyright">
       Copyright
-      <a-icon type="copyright" /> 2019 <span>成都翼飞视有限公司</span>
+      <a-icon type="copyright" /> 2019 <span>成都翼飞视有限公司 [v2.1.4]</span>
     </div>
   </div>
 </template>

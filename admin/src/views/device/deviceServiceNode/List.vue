@@ -116,6 +116,10 @@ export default {
     return {
       columns: [
         {
+          title: '设备厂商',
+          dataIndex: 'deviceFactory.name'
+        },
+        {
           title: '节点ID',
           dataIndex: 'workId'
         },
