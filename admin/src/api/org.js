@@ -8,7 +8,9 @@ const URI = {
   getAll: '/org/getAll',
   getAllByManager: '/org/getAllByManager',
   getEstates: '/org/getEstates',
-  del: '/org/delete'
+  del: '/org/delete',
+  MaxCode: '/org/getMaxCode',
+  editEnable: '/org/editEnable'
 }
 
 function getPage (parameter) {
@@ -67,6 +69,20 @@ function getEstates (parameter) {
   })
 }
 
+function getMaxCode (parameter) {
+  return axios({
+    url: URI.MaxCode,
+    params: parameter
+  })
+}
+
+function editEnable (parameter) {
+  return axios({
+    url: URI.editEnable,
+    params: parameter
+  })
+}
+
 export default {
   getPage,
   getById,
@@ -75,5 +91,7 @@ export default {
   getAll,
   getAllByManager,
   getEstates,
-  saveOrUpdateOps
+  saveOrUpdateOps,
+  getMaxCode,
+  editEnable
 }

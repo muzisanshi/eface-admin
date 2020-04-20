@@ -40,15 +40,15 @@
 
         <a-row :gutter="24">
           <a-col :span="12">
-            <a-form-item label="地产类型" :labelCol="labelCol" :wrapperCol="wrapperCol">
+            <a-form-item label="类型" :labelCol="labelCol" :wrapperCol="wrapperCol">
               <a-select
                 showSearch
                 allowClear
-                placeholder="选择地产类型"
+                placeholder="选择类型"
                 optionFilterProp="children"
                 :filterOption="filterCommonOption"
                 :options="constants.list.estateType"
-                v-decorator="['type', {initialValue: this.formData.type,rules: [{required: true, message: '请选择地产类型！'}]}]"
+                v-decorator="['type', {initialValue: this.formData.type,rules: [{required: true, message: '请选择类型！'}]}]"
               ></a-select>
             </a-form-item>
           </a-col>
@@ -80,13 +80,18 @@
           </a-col>
 
           <a-col :span="12">
-            <!-- <a-form-item label="街道办" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input @click="selectStreetOffice" :read-only="true" v-decorator="['streetOfficeName', {initialValue: this.formData.streetOfficeName}]">
-                <a-icon slot="suffix" @click="clearStreetOffice" type="close" style="color: rgba(0, 0, 0, 0.25);"/>
-                <a-icon slot="addonAfter" @click="addStreetOffice" type="plus"/>
-              </a-input>
-            </a-form-item>-->
+            <a-form-item label="地址" :labelCol="labelCol" :wrapperCol="wrapperCol" :required="true">
+              <a-input
+                :maxLength="255"
+                id="detailAddress"
+                class="ant-input"
+                style="position: relative;"
+                v-model="inputChange"
+              />
+            </a-form-item>
+          </a-col>
 
+          <!-- <a-col :span="12">
             <a-form-item label="街道" :labelCol="labelCol" :wrapperCol="wrapperCol">
               <a-select
                 showSearch
@@ -98,7 +103,7 @@
                 v-decorator="['streetName', {initialValue: this.formData.streetName, rules: [{required: true, message: '请选择街道！'}]}]"
               ></a-select>
             </a-form-item>
-          </a-col>
+          </a-col>-->
         </a-row>
 
         <a-row :gutter="24">
@@ -116,23 +121,6 @@
         </a-row>
 
         <a-row :gutter="24">
-          <a-col :span="12">
-            <a-form-item
-              label="详细地址"
-              :labelCol="labelCol"
-              :wrapperCol="wrapperCol"
-              :required="true"
-            >
-              <a-input
-                :maxLength="255"
-                id="detailAddress"
-                class="ant-input"
-                style="position: relative;"
-                v-model="inputChange"
-              />
-            </a-form-item>
-          </a-col>
-
           <a-col :span="12">
             <a-form-item label="备注" :labelCol="labelCol" :wrapperCol="wrapperCol">
               <a-input
@@ -291,7 +279,7 @@ export default {
             that.$refs.selectArea.initAllArea()
           }
           this.areaId = res.areas[0].id
-          that.getStreetList()
+          // that.getStreetList()
         })
       } else {
         this.enable = true
@@ -305,7 +293,7 @@ export default {
         this.initCascader = area.value
         this.inputChange = area.name.join('')
         this.areaId = this.initCascader[this.initCascader.length - 1]
-        this.getStreetList()
+        // this.getStreetList()
       } else {
         this.initCascader = []
         this.inputChange = ''
@@ -348,7 +336,6 @@ export default {
           //鼠标点击下拉列表后的事件
           var _value = e.item.value
           myValue = _value.province + _value.city + _value.district + _value.street + _value.business
-
           that.setPlace(myValue)
         })
       }

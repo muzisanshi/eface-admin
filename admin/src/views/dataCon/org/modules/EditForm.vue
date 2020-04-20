@@ -47,25 +47,26 @@
             </a-form-item>
           </a-col>
         </a-row>-->
-
         <a-row :gutter="24">
           <a-col :span="12">
-            <a-form-item label="编码" :labelCol="labelCol" :wrapperCol="wrapperCol">
+            <a-form-item label="单位简称" :labelCol="labelCol" :wrapperCol="wrapperCol">
               <a-input
-                :maxLength="32"
-                v-decorator="['code', {initialValue: this.formData.code, rules: [{required: true, message: '请输入编码！'}]}]"
+                :maxLength="255"
+                v-decorator="['shortName',{initialValue: this.formData.shortName, rules: [{required: true, message: '请选择单位简称！'}]}]"
               />
             </a-form-item>
           </a-col>
+
           <a-col :span="12">
-            <a-form-item label="名称" :labelCol="labelCol" :wrapperCol="wrapperCol">
+            <a-form-item label="单位全称" :labelCol="labelCol" :wrapperCol="wrapperCol">
               <a-input
-                :maxLength="64"
-                v-decorator="['name', {initialValue: this.formData.name, rules: [{required: true, message: '请输入组织名称！'}]}]"
+                :maxLength="255"
+                v-decorator="['name',{initialValue: this.formData.name, rules: [{required: true, message: '请选择单位全称！'}]}]"
               />
             </a-form-item>
           </a-col>
         </a-row>
+
         <a-row :gutter="24">
           <a-col :span="12">
             <a-form-item
@@ -77,9 +78,22 @@
               <select-area ref="selectArea" :initArea="initCascader" @selectedArea="selectedArea"></select-area>
             </a-form-item>
           </a-col>
+          <!-- <a-col :span="12">
+            <a-form-item label="街道" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <a-select
+                showSearch
+                placeholder="选择街道"
+                optionFilterProp="children"
+                :filterOption="filterCommonOption"
+                :options="streetList"
+                @change="streetChange"
+                v-decorator="['streetName', {initialValue: this.formData.streetName, rules: [{required: true, message: '请选择街道！'}]}]"
+              ></a-select>
+            </a-form-item>
+          </a-col>-->
           <a-col :span="12">
             <a-form-item
-              label="详细地址"
+              label="单位地址"
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               :required="true"
@@ -104,16 +118,27 @@
 
         <a-row :gutter="24">
           <a-col :span="12">
-            <a-form-item label="备注" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input
-                :maxLength="255"
-                v-decorator="['remark',{initialValue: this.formData.remark}]"
-              />
+            <a-form-item label="行政等级" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <a-select
+                showSearch
+                allowClear
+                placeholder="选择行政等级"
+                optionFilterProp="children"
+                :filterOption="filterCommonOption"
+                :options="constants.list.orgLevel"
+                v-decorator="['level', {initialValue: this.formData.level,rules: [{required: true, message: '请选择行政等级！'}]}]"
+              ></a-select>
+            </a-form-item>
+          </a-col>
+
+          <a-col :span="12">
+            <a-form-item label="状态" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <a-switch :checked="enable" @change="changeEnable" v-decorator="['enable']" />
             </a-form-item>
           </a-col>
         </a-row>
 
-        <!-- <div id='allmap' style="width:100%;height:350px;margin-bottom: 15px"></div> -->
+        <div id="allmap" style="width:100%;height:350px;margin-bottom: 15px"></div>
       </a-form>
     </a-spin>
   </a-modal>
@@ -166,7 +191,14 @@ export default {
           attType: 'HEAD_IMAGE'
         })
       },
-      isClickMap: false
+      isClickMap: false,
+
+      code: '', // 编码
+      enable: true,
+      areaId: '',
+      streetList: [],
+      streetName: '',
+      streetId: ''
     }
   },
   computed: {
@@ -191,10 +223,11 @@ export default {
     },
 
     selectedArea(area) {
-      console.log(area)
       if (area.value.length) {
         this.initCascader = area.value
         this.inputChange = area.name.join('')
+        this.areaId = this.initCascader[this.initCascader.length - 1]
+        // this.getStreetList()
       } else {
         this.initCascader = []
         this.inputChange = ''
@@ -245,9 +278,11 @@ export default {
       this.headImageAttId = null
       this.topImg = null
 
+      this.streetList = []
+
       if (item) {
         let that = this
-        this.title = '修改'
+        this.title = '编辑'
         this.$api.org.getById({ id: item.id }).then(res => {
           this.formData = res
           that.isChangeClone = false
@@ -256,6 +291,11 @@ export default {
           that.longitude = res.lng
           that.topImg = res.resourceFullAddress
           that.headImageAttId = res.attId
+
+          this.code = res.code
+          this.enable = this.formData.enable
+          this.streetId = this.formData.streetId
+          this.streetName = this.formData.streetName
           if (res.areas.length) {
             for (let i = res.areas.length - 1; i >= 0; i--) {
               that.initCascader.push(res.areas[i].id)
@@ -266,6 +306,8 @@ export default {
       } else {
         this.title = '新增'
         this.$refs.selectArea.initAllArea()
+
+        this.enable = true
       }
     },
     handleSubmit() {
@@ -277,6 +319,10 @@ export default {
         if (!errors) {
           if (this.formData.id) {
             values.id = this.formData.id
+          }
+
+          if (!values.enable) {
+            values.enable = this.enable
           }
           values.lat = this.latitude
           values.lng = this.longitude
@@ -295,12 +341,15 @@ export default {
           if (!values.address) {
             this.$notification.error({
               message: '提示',
-              description: '请填写详细地址！'
+              description: '请填写单位地址！'
             })
             this.confirmLoading = false
             return false
           }
-          values.headImageAttId = this.headImageAttId
+          // values.headImageAttId = this.headImageAttId
+
+          // values.streetId = this.streetId
+          // values.streetName = this.streetName
 
           this.$api.org
             .saveOrUpdate(values)
@@ -443,11 +492,48 @@ export default {
           that.isClickMap = true
         })
       })
+    },
+
+    // 获取编码
+    getCode() {
+      this.$api.org.getMaxCode().then(res => {
+        this.code = res
+      })
+    },
+
+    getStreetList() {
+      const that = this
+      if (!that.areaId && !that.name) {
+      } else {
+        this.$api.street
+          .getAll({
+            name: that.name,
+            areaId: that.areaId
+          })
+          .then(res => {
+            console.log(res)
+            const l = []
+            for (let i = 0, j = res.length; i < j; i++) {
+              l.push({
+                value: res[i].id,
+                label: res[i].name
+              })
+            }
+            this.streetList = l
+          })
+      }
+    },
+
+    streetChange(value, option) {
+      // this.formData.streetId = value
+      // this.formData.streetName = option.componentOptions.children[0].text
+      this.streetId = value
+      this.streetName = option.componentOptions.children[0].text
     }
   },
   mounted() {
     this.zIndex = -10
-    // this.createMap();
+    this.createMap()
     this.visible = false
   }
 }

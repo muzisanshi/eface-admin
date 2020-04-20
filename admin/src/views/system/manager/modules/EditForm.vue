@@ -89,7 +89,7 @@
         </a-row>
         <a-row :gutter="24">
 
-          <a-col :span="12" v-if="isOrgInput">
+          <!-- <a-col :span="12" v-if="isOrgInput">
 
             <a-form-item
               label="组织"
@@ -108,7 +108,7 @@
               </a-select>
             </a-form-item>
 
-          </a-col>
+          </a-col> -->
 
           <a-col :span="12">
             <a-form-item label="角色" :labelCol="labelCol" :wrapperCol="wrapperCol">
@@ -280,20 +280,20 @@
       },
 
       manageTypeChange(value){
-        if(value === 'ORG'){
-          this.isOrgInput = true
-          this.roleList = []
-          this.formData.orgId = ''
-          this.form.setFieldsValue({
-            rolesIds:[],
-          });
-        }else{
+        // if(value === 'ORG'){
+        //   this.isOrgInput = true
+        //   this.roleList = []
+        //   this.formData.orgId = ''
+        //   this.form.setFieldsValue({
+        //     rolesIds:[],
+        //   });
+        // }else{
           this.isOrgInput = false
           this.getRoleList('')
           this.form.setFieldsValue({
             rolesIds:[],
           });
-        }
+        // }
       },
 
       orgChange(value,option){
@@ -302,7 +302,7 @@
 
       getRoleList(value){
         this.$api.role.getAll({
-          orgId:value
+          // orgId:value
         })
           .then(res => {
             const l = []

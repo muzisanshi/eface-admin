@@ -96,7 +96,7 @@ export default {
           dataIndex: 'code'
         },
         {
-          title: '地产类型',
+          title: '类型',
           dataIndex: 'type'
         },
         {
@@ -111,10 +111,10 @@ export default {
           title: '地区名称',
           dataIndex: 'areaName'
         },
-        {
-          title: '街道',
-          dataIndex: 'streetName'
-        },
+        // {
+        //   title: '街道',
+        //   dataIndex: 'streetName'
+        // },
         {
           title: '详细地址',
           dataIndex: 'fullAddress'

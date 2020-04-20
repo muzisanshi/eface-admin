@@ -10,7 +10,7 @@
       <a-form layout="inline">
         <a-row :gutter="48">
           <a-col :md="6" :sm="24">
-            <a-form-item label="组织名称">
+            <a-form-item label="单位全称">
               <a-input :maxLength="64" v-model="queryParam.name" />
             </a-form-item>
           </a-col>
@@ -31,12 +31,12 @@
 
     <div class="table-operator">
       <a-button type="primary" icon="plus" @click="handleEdit(null)">新增</a-button>
-      <a-button
+      <!-- <a-button
         type="danger"
         icon="delete"
         @click="handleDelete"
         :disabled="selectedRowKeys.length < 1"
-      >删除</a-button>
+      >删除</a-button> -->
     </div>
 
     <s-table
@@ -62,7 +62,11 @@
       </span>
 
       <span slot="action" slot-scope="text, record">
-        <a @click="handleEdit(record)">修改</a>
+        <a @click="handleEdit(record)">编辑</a>
+
+        <a-divider type="vertical" />
+
+        <a @click="handleEnable(record)">{{ record.enable === true ? '关闭' : '开启' }}</a>
       </span>
     </s-table>
     <edit-form ref="editModal" @ok="handleOk" />
@@ -102,7 +106,7 @@ export default {
         },
         {
           title: 'POI信息',
-          dataIndex: 'poiInfo'
+          dataIndex: 'address'
         },
         {
           title: '管理员',
@@ -127,6 +131,10 @@ export default {
       enableChecked: false,
       loadData: parameter => {
         return this.$api.org.getPage(Object.assign(parameter, this.queryParam)).then(res => {
+          res.records.forEach(item => {
+            const index = this.constants.list.orgLevel.findIndex(i => i.value === item.level)
+            item.level = this.constants.list.orgLevel ? this.constants.list.orgLevel[index]['label'] : ''
+          })
           return res
         })
       }
@@ -152,6 +160,21 @@ export default {
         },
         onCancel() {}
       })
+    },
+
+    handleEnable(record) {
+      this.$refs.editModal.confirmLoading = true
+      this.$api.org
+        .editEnable({
+          id: record.id
+        })
+        .then(res => {
+          this.$refs.editModal.confirmLoading = false
+          this.$refs.editModal.form.resetFields()
+          this.$refs.table.refresh()
+          this.selectedRowKeys = []
+          this.selectedRows = []
+        })
     }
   }
 }
