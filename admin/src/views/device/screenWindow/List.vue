@@ -33,7 +33,7 @@
     </div>
 
     <div class="table-operator">
-      <a-button type="primary" icon="plus"  @click="handleEdit(null)">新增</a-button>
+      <a-button type="primary" icon="plus" @click="handleEdit(null)">新增</a-button>
 
       <a-button type="danger" icon="delete" @click="handleDelete" :disabled="selectedRowKeys.length < 1">删除</a-button>
 
@@ -71,17 +71,17 @@
 <script>
 import { STable } from '@/components'
 import EditForm from './modules/EditForm'
-import {mapState} from 'vuex';
-import {mixin} from '@/mixins/mixin'
+import { mapState } from 'vuex'
+import { mixin } from '@/mixins/mixin'
 
 export default {
-  mixins:[mixin],
+  mixins: [mixin],
   components: {
     STable,
-    EditForm,
+    EditForm
   },
   computed: {
-    ...mapState(['constants']),
+    ...mapState(['constants'])
   },
   data () {
     return {
@@ -101,7 +101,7 @@ export default {
         {
           title: '是否下发广告',
           dataIndex: 'canDistAd',
-          scopedSlots: {customRender: 'status'}
+          scopedSlots: { customRender: 'status' }
         },
         {
           title: '备注',
@@ -119,7 +119,7 @@ export default {
           .then(res => {
             return res
           })
-      },
+      }
     }
   },
   methods: {
@@ -142,7 +142,7 @@ export default {
         onCancel () {
         }
       })
-    },
+    }
   }
 }
 </script>

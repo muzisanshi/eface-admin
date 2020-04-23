@@ -42,7 +42,7 @@
     </div>
 
     <div class="table-operator">
-      <a-button type="primary" icon="plus"  @click="handleEdit(null)">新增</a-button>
+      <a-button type="primary" icon="plus" @click="handleEdit(null)">新增</a-button>
 
       <a-button type="danger" icon="delete" @click="handleDelete" :disabled="selectedRowKeys.length < 1">删除</a-button>
 
@@ -80,10 +80,10 @@
 <script>
 import { STable } from '@/components'
 import EditForm from './modules/EditForm'
-import {mixin} from '@/mixins/mixin'
+import { mixin } from '@/mixins/mixin'
 
 export default {
-  mixins:[mixin],
+  mixins: [mixin],
   components: {
     STable,
     EditForm
@@ -100,7 +100,7 @@ export default {
         {
           title: '是否时间限制',
           dataIndex: 'timeLimit',
-          scopedSlots: {customRender: 'status'}
+          scopedSlots: { customRender: 'status' }
         },
         {
           title: '有效时间',
@@ -124,9 +124,9 @@ export default {
       loadData: parameter => {
         return this.$api.gateBrakeRule.getPage(Object.assign(parameter, this.queryParam))
           .then(res => {
-            res.records.forEach(item=>{
+            res.records.forEach(item => {
               item.validTime = this.timeStamp(item.validMinutes)
-            });
+            })
             return res
           })
       }
@@ -135,23 +135,20 @@ export default {
   methods: {
 
     timeStamp (StatusMinute) {
-      var day=parseInt(StatusMinute/60/24);
-      var hour=parseInt(StatusMinute/60%24);
-      var min= parseInt(StatusMinute % 60);
-      StatusMinute="";
-      if (day > 0)
-      {
-        StatusMinute= day + "天";
+      var day = parseInt(StatusMinute / 60 / 24)
+      var hour = parseInt(StatusMinute / 60 % 24)
+      var min = parseInt(StatusMinute % 60)
+      StatusMinute = ''
+      if (day > 0) {
+        StatusMinute = day + '天'
       }
-      if (hour>0)
-      {
-        StatusMinute += hour + "小时";
+      if (hour > 0) {
+        StatusMinute += hour + '小时'
       }
-      if (min>0)
-      {
-        StatusMinute += parseFloat(min) + "分钟";
+      if (min > 0) {
+        StatusMinute += parseFloat(min) + '分钟'
       }
-      return StatusMinute;
+      return StatusMinute
     },
     handleDelete () {
       const that = this
@@ -171,7 +168,7 @@ export default {
         onCancel () {
         }
       })
-    },
+    }
   }
 }
 </script>

@@ -12,8 +12,10 @@
 
           <a-col :md="6" :sm="24">
             <a-form-item label="地区">
-              <select-area ref="selectAreaAll" :initArea="initCascader"
-                           @selectedArea="selectedArea($event)"></select-area>
+              <select-area
+                ref="selectAreaAll"
+                :initArea="initCascader"
+                @selectedArea="selectedArea($event)"></select-area>
             </a-form-item>
           </a-col>
 
@@ -102,11 +104,11 @@
 import { STable } from '@/components'
 import createForm from './modules/CreateForm'
 import EditForm from './modules/EditForm'
-import {mapState} from 'vuex';
-import {mixin} from '@/mixins/mixin'
+import { mapState } from 'vuex'
+import { mixin } from '@/mixins/mixin'
 import selectArea from '@/components/Common/SelectArea'
 export default {
-  mixins:[mixin],
+  mixins: [mixin],
   components: {
     STable,
     createForm,
@@ -115,7 +117,7 @@ export default {
 
   },
   computed: {
-    ...mapState(['constants','system']),
+    ...mapState(['constants', 'system'])
   },
   data () {
     return {
@@ -154,8 +156,8 @@ export default {
       goodsGroups: [],
       allBrand: [],
       uploadFileId: '',
-      initCascader:[],
-      importUrl:process.env.VUE_APP_ADMIN_SERVICE_BASE_URL+'/unit/importExcel'
+      initCascader: [],
+      importUrl: process.env.VUE_APP_ADMIN_SERVICE_BASE_URL + '/unit/importExcel'
     }
   },
   methods: {
@@ -181,21 +183,21 @@ export default {
     },
 
     selectedArea(area) {
-      this.queryParam.areaId = area.value[area.value.length-1];
-      this.queryParam.level = area.level[area.level.length-1];
+      this.queryParam.areaId = area.value[area.value.length - 1]
+      this.queryParam.level = area.level[area.level.length - 1]
     },
 
-    handleGoodsRecord(record){
+    handleGoodsRecord(record) {
       this.$refs.editRecordModal.add(this.selectedRows[0])
     },
-    handleModify(item){
+    handleModify(item) {
       this.handleEdit(item)
     },
     handleGoodsOk () {
       this.$refs.table.refresh()
-      this.selectedRowKeys = [];
+      this.selectedRowKeys = []
       this.selectedRows = []
-    },
+    }
   }
 }
 </script>

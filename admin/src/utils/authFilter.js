@@ -1,93 +1,92 @@
-import {USER_AUTH, SYS_BUTTON_AUTH} from "@/store/mutation-types"
+import { USER_AUTH, SYS_BUTTON_AUTH } from '@/store/mutation-types'
 
 export function disabledAuthFilter(code, formData) {
   if (nodeDisabledAuth(code, formData)) {
-    return true;
+    return true
   } else {
-    return globalDisabledAuth(code);
+    return globalDisabledAuth(code)
   }
 }
 
 function nodeDisabledAuth(code, formData) {
-  var permissionList = [];
+  var permissionList = []
   try {
-    var obj = formData;
+    var obj = formData
     if (obj) {
-      let bpmList = obj.permissionList;
+      const bpmList = obj.permissionList
       for (var bpm of bpmList) {
-        permissionList.push(bpm);
+        permissionList.push(bpm)
       }
     }
   } catch (e) {
   }
-  if (permissionList === null || permissionList === "" || permissionList === undefined || permissionList.length <= 0) {
-    return false;
+  if (permissionList === null || permissionList === '' || permissionList === undefined || permissionList.length <= 0) {
+    return false
   }
-  let permissions = [];
+  const permissions = []
   for (var item of permissionList) {
-    permissions.push(item.action);
+    permissions.push(item.action)
   }
   if (!permissions.includes(code)) {
-    return false;
+    return false
   } else {
     for (var item2 of permissionList) {
       if (code === item2.action) {
-        return true;
+        return true
       }
     }
   }
-  return false;
+  return false
 }
 
 function globalDisabledAuth(code) {
+  var permissionList = []
+  var allPermissionList = []
 
-  var permissionList = [];
-  var allPermissionList = [];
-
-  let authList = JSON.parse(sessionStorage.getItem(USER_AUTH) || "[]");
+  const authList = JSON.parse(sessionStorage.getItem(USER_AUTH) || '[]')
 
   for (var auth of authList) {
-    permissionList.push(auth);
+    permissionList.push(auth)
   }
 
-  let allAuthList = JSON.parse(sessionStorage.getItem(SYS_BUTTON_AUTH) || "[]");
+  const allAuthList = JSON.parse(sessionStorage.getItem(SYS_BUTTON_AUTH) || '[]')
   for (var gauth of allAuthList) {
-    allPermissionList.push(gauth);
+    allPermissionList.push(gauth)
   }
-  //设置全局配置是否有命中
-  var gFlag = false;//禁用命中
-  var invalidFlag = false;//无效命中
-  if (allPermissionList != null && allPermissionList != "" && allPermissionList != undefined && allPermissionList.length > 0) {
+  // 设置全局配置是否有命中
+  var gFlag = false// 禁用命中
+  var invalidFlag = false// 无效命中
+  if (allPermissionList != null && allPermissionList != '' && allPermissionList != undefined && allPermissionList.length > 0) {
     for (var itemG of allPermissionList) {
       if (code === itemG.action) {
         if (itemG.status == '0') {
-          invalidFlag = true;
-          break;
+          invalidFlag = true
+          break
         } else {
-          gFlag = true;
-          break;
+          gFlag = true
+          break
         }
       }
     }
   }
   if (invalidFlag) {
-    return false;
+    return false
   }
-  if (permissionList === null || permissionList === "" || permissionList === undefined || permissionList.length <= 0) {
-    return gFlag;
+  if (permissionList === null || permissionList === '' || permissionList === undefined || permissionList.length <= 0) {
+    return gFlag
   }
-  let permissions = [];
+  const permissions = []
   for (var item of permissionList) {
-    permissions.push(item.action);
+    permissions.push(item.action)
   }
   if (!permissions.includes(code)) {
-    return gFlag;
+    return gFlag
   } else {
     for (var item2 of permissionList) {
       if (code === item2.action) {
-        gFlag = false;
+        gFlag = false
       }
     }
-    return gFlag;
+    return gFlag
   }
 }

@@ -11,7 +11,8 @@
     :visible="visible"
     :confirmLoading="confirmLoading"
     @ok="handleSubmit"
-    :maskClosable="false" :keyboard="false"
+    :maskClosable="false"
+    :keyboard="false"
     @cancel="handleCancel"
   >
     <a-spin :spinning="confirmLoading">
@@ -42,7 +43,6 @@
           >
           </a-select>
         </a-form-item>
-
 
         <a-form-item
           label="楼栋单元"
@@ -102,238 +102,234 @@
 </template>
 
 <script>
-  import {mixin} from '@/mixins/mixin'
-  import selectDataCon from '@/components/Common/SelectDataCon'
+import { mixin } from '@/mixins/mixin'
+import selectDataCon from '@/components/Common/SelectDataCon'
 
-  export default {
-    mixins:[mixin],
-    components: {
-      selectDataCon
-    },
-    props:{
-      estateId:{
-        type:String,
-        default:''
-      }
-    },
-    data () {
-      return {
-        goodsGroups:[],
+export default {
+  mixins: [mixin],
+  components: {
+    selectDataCon
+  },
+  props: {
+    estateId: {
+      type: String,
+      default: ''
+    }
+  },
+  data () {
+    return {
+      goodsGroups: [],
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 5 }
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 16 }
+      },
+      formLayout: {
         labelCol: {
           xs: { span: 24 },
-          sm: { span: 5 },
+          sm: { span: 7 }
         },
         wrapperCol: {
           xs: { span: 24 },
-          sm: { span: 16 },
+          sm: { span: 17 }
+        }
+      },
+      formItemLayout: {
+        labelCol: {
+          xs: { span: 24 },
+          sm: { span: 0 }
         },
-        formLayout:{
-          labelCol: {
-            xs: { span: 24 },
-            sm: { span: 7 },
-          },
-          wrapperCol: {
-            xs: { span: 24 },
-            sm: { span: 17 },
-          },
-        },
-        formItemLayout: {
-          labelCol: {
-            xs: { span: 24 },
-            sm: { span: 0 },
-          },
-          wrapperCol: {
-            xs: { span: 24 },
-            sm: { span: 24 },
-          },
-        },
-        formItemLayoutWithOutLabel: {
-          wrapperCol: {
-            xs: { span: 24, offset: 0 },
-            sm: { span: 20, offset: 4 },
-          },
-        },
-        visible: false,
-        confirmLoading: false,
-        formData: {},
-        parentGoodsGroupId: '',
-        goodsAttrAndOptParams:[],
-        goodsId:'',
-        attrOpt:[[]],
-        cloneAttrOpt:[[{name:''}]],
-        buildList:[],
-        unitList:[],
-        storeyList:[],
-        roomList:[],
-        title: '',
+        wrapperCol: {
+          xs: { span: 24 },
+          sm: { span: 24 }
+        }
+      },
+      formItemLayoutWithOutLabel: {
+        wrapperCol: {
+          xs: { span: 24, offset: 0 },
+          sm: { span: 20, offset: 4 }
+        }
+      },
+      visible: false,
+      confirmLoading: false,
+      formData: {},
+      parentGoodsGroupId: '',
+      goodsAttrAndOptParams: [],
+      goodsId: '',
+      attrOpt: [[]],
+      cloneAttrOpt: [[{ name: '' }]],
+      buildList: [],
+      unitList: [],
+      storeyList: [],
+      roomList: [],
+      title: ''
+    }
+  },
+  beforeCreate () {
+    this.form = this.$form.createForm(this)
+  },
+  methods: {
+    add (item, value) {
+      console.log(value)
+      const that = this
+      this.visible = true
+      this.form.resetFields()
+      this.formData = {}
+      this.unitList = []
+      this.storeyList = []
+      this.roomList = []
+      if (this.estateId) {
+        this.formData.estateId = this.estateId
+        this.getBuildList(this.estateId)
+      }
+      if (value) {
+        this.formData.roomName = value.roomName
+        if (value.buildingId) {
+          this.getUnitList(value.buildingId, null, true)
+        }
+        if (value.unitId) {
+          this.getStoreyList(value.unitId, null, true)
+        }
+        if (value.storeyId) {
+          this.getRoomList(value.storeyId, null, true, value.roomId)
+        }
       }
     },
-    beforeCreate () {
-      this.form = this.$form.createForm(this);
+
+    selectSuccess(value) {
+      this.formData.estateName = value.name
+      this.formData.estateId = value.value
+      this.getBuildList(value.value)
+      this.form.setFieldsValue({ storeyName: value.name })
     },
-    methods: {
-      add (item,value) {
-        console.log(value)
-        let that = this;
-        this.visible = true
-        this.form.resetFields()
-        this.formData ={}
-        this.unitList = [];
-        this.storeyList = [];
-        this.roomList = [];
-        if(this.estateId){
-          this.formData.estateId = this.estateId
-          this.getBuildList(this.estateId)
-        }
-        if(value){
-          this.formData.roomName = value.roomName
-          if(value.buildingId){
-            this.getUnitList(value.buildingId,null,true)
+
+    getBuildList(value) {
+      this.$api.subject.getBuildAll({
+        estateId: value
+      })
+        .then(res => {
+          const l = []
+          for (let i = 0, j = res.length; i < j; i++) {
+            l.push({
+              value: res[i].id,
+              label: res[i].name
+            })
           }
-          if(value.unitId){
-            this.getStoreyList(value.unitId,null,true)
+          this.buildList = l
+        })
+    },
+
+    getUnitList(value, option, status) {
+      if (option) {
+        this.formData.roomName = option.componentOptions.children[0].text
+      }
+
+      this.form.resetFields(['unitId', 'storeyId', 'roomId'])
+
+      this.unitList = []
+      this.storeyList = []
+      this.roomList = []
+      this.$api.subject.getUnitAll({
+        buildingId: value
+      })
+        .then(res => {
+          const l = []
+          for (let i = 0, j = res.length; i < j; i++) {
+            l.push({
+              value: res[i].id,
+              label: res[i].name
+            })
           }
-          if(value.storeyId){
-            this.getRoomList(value.storeyId,null,true,value.roomId)
-          }
-
-
-        }
-      },
-
-      selectSuccess(value){
-        this.formData.estateName = value.name
-        this.formData.estateId = value.value
-        this.getBuildList(value.value)
-        this.form.setFieldsValue({ storeyName: value.name});
-      },
-
-      getBuildList(value){
-
-        this.$api.subject.getBuildAll({
-          estateId: value
-        })
-          .then(res => {
-            const l = []
-            for (let i = 0, j = res.length; i < j; i++) {
-              l.push({
-                value: res[i].id,
-                label: res[i].name
-              })
-            }
-            this.buildList = l
-          })
-      },
-
-      getUnitList(value,option,status){
-        if(option){
-          this.formData.roomName=option.componentOptions.children[0].text
-        }
-
-        this.form.resetFields(['unitId', 'storeyId', 'roomId'])
-
-        this.unitList = [];
-        this.storeyList = [];
-        this.roomList = [];
-        this.$api.subject.getUnitAll({
-          buildingId: value
-        })
-          .then(res => {
-            const l = []
-            for (let i = 0, j = res.length; i < j; i++) {
-              l.push({
-                value: res[i].id,
-                label: res[i].name
-              })
-            }
-            this.unitList = l
-            if(status){
-              this.form.setFieldsValue({ buildingId: value});
-            }
-          })
-      },
-
-      getStoreyList(value,option,status){
-        if(option){
-          this.formData.roomName=option.componentOptions.children[0].text
-        }
-
-        this.form.resetFields(['storeyId', 'roomId'])
-
-        this.storeyList = [];
-        this.roomList = [];
-
-        this.$api.storey.getAll({
-          unitId: value
-        })
-          .then(res => {
-            const l = []
-            for (let i = 0, j = res.length; i < j; i++) {
-              l.push({
-                value: res[i].id,
-                label: res[i].name
-              })
-            }
-            this.storeyList = l
-            if(status){
-              this.form.setFieldsValue({ unitId: value});
-            }
-          })
-      },
-
-      getRoomList(value,option,status,roomId){
-        if(option){
-          this.formData.roomName=option.componentOptions.children[0].text
-        }
-
-        this.form.resetFields(['roomId'])
-
-        this.roomList = [];
-
-        this.$api.room.getAll({
-          storeyId: value
-        })
-          .then(res => {
-            const l = []
-            for (let i = 0, j = res.length; i < j; i++) {
-              l.push({
-                value: res[i].id,
-                label: res[i].name
-              })
-            }
-            this.roomList = l
-            if(status){
-              this.form.setFieldsValue({ storeyId: value});
-            }
-            if(roomId){
-              this.form.setFieldsValue({ roomId: roomId});
-            }
-          })
-      },
-
-      changeRoom(value,option){
-        this.formData.roomName=option.componentOptions.children[0].text
-      },
-
-      handleSubmit () {
-        const { form: { validateFields } } = this
-        validateFields((errors, values) => {
-
-          if (!errors) {
-            if(this.formData.roomName){
-              values.roomName = this.formData.roomName
-            }
-            if(!values.buildingId){
-              values.roomName = this.formData.estateName
-            }
-
-            values.estateId = this.formData.estateId
-            this.$emit('selectRoom',values)
-            this.visible = false
-            this.form.resetFields()
+          this.unitList = l
+          if (status) {
+            this.form.setFieldsValue({ buildingId: value })
           }
         })
-      },
+    },
+
+    getStoreyList(value, option, status) {
+      if (option) {
+        this.formData.roomName = option.componentOptions.children[0].text
+      }
+
+      this.form.resetFields(['storeyId', 'roomId'])
+
+      this.storeyList = []
+      this.roomList = []
+
+      this.$api.storey.getAll({
+        unitId: value
+      })
+        .then(res => {
+          const l = []
+          for (let i = 0, j = res.length; i < j; i++) {
+            l.push({
+              value: res[i].id,
+              label: res[i].name
+            })
+          }
+          this.storeyList = l
+          if (status) {
+            this.form.setFieldsValue({ unitId: value })
+          }
+        })
+    },
+
+    getRoomList(value, option, status, roomId) {
+      if (option) {
+        this.formData.roomName = option.componentOptions.children[0].text
+      }
+
+      this.form.resetFields(['roomId'])
+
+      this.roomList = []
+
+      this.$api.room.getAll({
+        storeyId: value
+      })
+        .then(res => {
+          const l = []
+          for (let i = 0, j = res.length; i < j; i++) {
+            l.push({
+              value: res[i].id,
+              label: res[i].name
+            })
+          }
+          this.roomList = l
+          if (status) {
+            this.form.setFieldsValue({ storeyId: value })
+          }
+          if (roomId) {
+            this.form.setFieldsValue({ roomId: roomId })
+          }
+        })
+    },
+
+    changeRoom(value, option) {
+      this.formData.roomName = option.componentOptions.children[0].text
+    },
+
+    handleSubmit () {
+      const { form: { validateFields } } = this
+      validateFields((errors, values) => {
+        if (!errors) {
+          if (this.formData.roomName) {
+            values.roomName = this.formData.roomName
+          }
+          if (!values.buildingId) {
+            values.roomName = this.formData.estateName
+          }
+
+          values.estateId = this.formData.estateId
+          this.$emit('selectRoom', values)
+          this.visible = false
+          this.form.resetFields()
+        }
+      })
     }
   }
+}
 </script>

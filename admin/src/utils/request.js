@@ -99,7 +99,7 @@ service.interceptors.request.use(config => {
     }
     delete data.pageNo
   }
-  //console.log('request', { baseURL: config.baseURL, url: config.url, method: config.method, data: data })
+  // console.log('request', { baseURL: config.baseURL, url: config.url, method: config.method, data: data })
   config.data = data
   config.params = null
   return config
@@ -134,7 +134,6 @@ service.interceptors.response.use((response) => {
     }
     return Promise.reject(data)
   } else {
-
     const ret = data.data
     if (ret) {
       if (ret.pageNumber) {

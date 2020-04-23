@@ -5,7 +5,7 @@
       <a-dropdown>
         <span class="action ant-dropdown-link user-dropdown-menu">
           <a-avatar class="avatar" size="small" :src="avatar()"/>
-          <span>{{ user?user.username:''}}</span>
+          <span>{{ user?user.username:'' }}</span>
         </span>
         <a-menu slot="overlay" class="user-dropdown-menu-wrapper">
           <a-menu-item key="0" @click="editUserInfo">
@@ -31,8 +31,8 @@
 </template>
 
 <script>
-  import Vue from 'vue'
-  import {MANAGER} from '@/store/mutation-types'
+import Vue from 'vue'
+import { MANAGER } from '@/store/mutation-types'
 import NoticeIcon from '@/components/NoticeIcon'
 import { mapActions, mapGetters } from 'vuex'
 import EditForm from './EditForm'
@@ -50,9 +50,9 @@ export default {
     }
   },
   created () {
-    if(this.$store.getters.userInfo.username){
+    if (this.$store.getters.userInfo.username) {
       this.user = this.$store.getters.userInfo
-    }else{
+    } else {
       this.user = Vue.ls.get(MANAGER)
     }
   },
@@ -79,18 +79,18 @@ export default {
         }
       })
     },
-    handleOk(){
-      if(this.$store.getters.userInfo.username){
+    handleOk() {
+      if (this.$store.getters.userInfo.username) {
         this.user = this.$store.getters.userInfo
-      }else{
+      } else {
         this.user = Vue.ls.get(MANAGER)
       }
     },
-    editUserInfo(){
+    editUserInfo() {
       this.$refs.editModal.add()
     },
 
-    editPassward(){
+    editPassward() {
       this.$refs.editPasswordModal.add()
     }
   }

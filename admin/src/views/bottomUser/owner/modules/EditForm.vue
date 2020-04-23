@@ -224,11 +224,11 @@
                             @click="selectRoom(index1)"
                             :read-only="true"
                             v-decorator="[
-                `roomNameVal[${k.roomName}]`,
-                {
-                initialValue: pane.content.gateBrakeLimits[index1].roomName
-                }
-                ]"
+                              `roomNameVal[${k.roomName}]`,
+                              {
+                                initialValue: pane.content.gateBrakeLimits[index1].roomName
+                              }
+                            ]"
                             placeholder="请选择受访区域"
                             style="margin-right: 8px"
                           ></a-input>
@@ -245,11 +245,11 @@
                           <a-input
                             :maxLength="255"
                             v-decorator="[
-              `remarkVal[${k.remark}]`,
-              {
-                initialValue: pane.content.gateBrakeLimits[index1].remark
-              }
-              ]"
+                              `remarkVal[${k.remark}]`,
+                              {
+                                initialValue: pane.content.gateBrakeLimits[index1].remark
+                              }
+                            ]"
                             placeholder="请输入备注"
                             style="margin-right: 8px"
                           ></a-input>
@@ -370,8 +370,8 @@ import selectUser from './SelectUser'
 import uploadFace from './UploadImg'
 import moment from 'moment'
 import api from '@/api/index'
-let remarkNum = 0,
-  roomNameNum = 0
+let remarkNum = 0
+let roomNameNum = 0
 
 const userTypeCode = [
   { label: '业主', value: 'OWNER' },
@@ -489,7 +489,7 @@ export default {
     moment,
 
     addEdit(item, userType) {
-      let that = this
+      const that = this
       that.visible = true
       that.form.resetFields()
       that.userType = userType
@@ -575,7 +575,7 @@ export default {
               }
 
               res.userEstates.map((item, index) => {
-                let obj = {
+                const obj = {
                   title: '受访区域' + (index > 0 ? index : ''),
                   form: this.$form.createForm(this),
                   content: item,
@@ -584,7 +584,7 @@ export default {
                   isEditEstate: true
                 }
 
-                let initialVal = []
+                const initialVal = []
                 item.gateBrakeLimits.map((val, inx) => {
                   initialVal.push({
                     remark: inx,
@@ -632,9 +632,9 @@ export default {
       }
     },
 
-    //tab切換
+    // tab切換
     callback(key) {
-      let that = this
+      const that = this
       if (key === '1') {
         this.activeKey = '1'
       } else {
@@ -642,9 +642,9 @@ export default {
       }
     },
 
-    //下一步
+    // 下一步
     next(key) {
-      let that = this
+      const that = this
       const {
         form: { validateFields }
       } = this
@@ -686,9 +686,9 @@ export default {
       })
     },
 
-    //头像上传回调
+    // 头像上传回调
     handleChange(info) {
-      let that = this
+      const that = this
       switch (info.file.status) {
         case 'uploading':
           this.loading = true
@@ -710,9 +710,9 @@ export default {
       }
     },
 
-    //保存基本信息
+    // 保存基本信息
     saveBasicMess() {
-      let that = this
+      const that = this
       const {
         form: { validateFields }
       } = this
@@ -738,12 +738,12 @@ export default {
       })
     },
 
-    //上传人脸
+    // 上传人脸
     uploadFace() {
       this.$refs.uploadFace.add()
     },
 
-    //上传人脸成功回调
+    // 上传人脸成功回调
     uploadFaceSuccess(imgData) {
       if (imgData.faceImageBase64s) {
         this.uploadNum++
@@ -764,9 +764,9 @@ export default {
       this.uploadFileId = id
     },
 
-    //删除人脸照片
+    // 删除人脸照片
     delUploadImg(file) {
-      let that = this
+      const that = this
       if (this.fileList.length < 2) {
         that.$notification.error({
           message: '提示',
@@ -794,7 +794,7 @@ export default {
       }
     },
 
-    //选择受访区域
+    // 选择受访区域
     selectRoom(itemIndex) {
       this.itemIndex = itemIndex
       if (this.panes[this.curPaneIndex].content.estateId) {
@@ -807,7 +807,7 @@ export default {
       }
     },
 
-    //选择受访区域回调
+    // 选择受访区域回调
     selectRoomSuccess(value) {
       this.panes[this.curPaneIndex].content.gateBrakeLimits[this.itemIndex] = Object.assign(
         this.panes[this.curPaneIndex].content.gateBrakeLimits[this.itemIndex],
@@ -816,10 +816,10 @@ export default {
       this.panes[this.curPaneIndex].form.setFieldsValue({ roomNameVal: value.roomName })
     },
 
-    //选择开始时间
+    // 选择开始时间
     beginDateChange(date, dateString, index, index1) {
       if (dateString) {
-        let endTime = this.panes[index].content.gateBrakeLimits[index1].endDatetime
+        const endTime = this.panes[index].content.gateBrakeLimits[index1].endDatetime
         if (endTime && new Date(endTime) < new Date(dateString)) {
           this.$notification.error({
             message: '提示',
@@ -834,7 +834,7 @@ export default {
       }
     },
 
-    //选择结束时间
+    // 选择结束时间
     endDateChange(date, dateString, index, index1) {
       if (dateString) {
         this.panes[index].content.gateBrakeLimits[index1].endDatetime = dateString
@@ -843,7 +843,7 @@ export default {
       }
     },
 
-    //选择地产回调
+    // 选择地产回调
     selectSuccess(value) {
       this.panes[this.curPaneIndex].content.estateId = value.value
       this.panes[this.curPaneIndex].content.estateName = value.name
@@ -869,7 +869,7 @@ export default {
       })
     },
 
-    //解绑change
+    // 解绑change
     changeRelieve(value, index) {
       this.panes[index].content.relieve = value
       if (value) {
@@ -879,19 +879,19 @@ export default {
       }
     },
 
-    //是否启用change
+    // 是否启用change
     changeGkEnable(value, index, index1) {
       this.panes[index].content.gateBrakeLimits[index1].enable = value
     },
 
-    //tab添加
+    // tab添加
     onEdit(targetKey, action) {
       this[action](targetKey)
     },
 
-    //tab添加
+    // tab添加
     add() {
-      let that = this
+      const that = this
       const {
         form: { validateFields }
       } = this
@@ -929,7 +929,7 @@ export default {
       })
     },
 
-    //tab删除
+    // tab删除
     remove(targetKey) {
       const that = this
       let activeKey = that.activeKey
@@ -959,7 +959,7 @@ export default {
       }
     },
 
-    //受访区域item删除
+    // 受访区域item删除
     removeAttr(k, index, index1) {
       const keys = this.panes[index].form.getFieldValue('keys')
       if (keys.length === 0) {
@@ -973,7 +973,7 @@ export default {
       })
     },
 
-    //受访区域添加
+    // 受访区域添加
     addAttr(index) {
       const keys = this.panes[index].form.getFieldValue('keys')
       this.panes[index].content.gateBrakeLimits.push({
@@ -989,7 +989,7 @@ export default {
         roomName: '',
         enable: true
       })
-      let arr = [
+      const arr = [
         {
           remark: 0,
           roomName: 0
@@ -1005,7 +1005,7 @@ export default {
 
     trimSpace(array) {
       for (var i = 0; i < array.length; i++) {
-        if (array[i] == ' ' || array[i] == null || typeof array[i] == 'undefined') {
+        if (array[i] == ' ' || array[i] == null || typeof array[i] === 'undefined') {
           array.splice(i, 1)
           i = i - 1
         }
@@ -1019,19 +1019,19 @@ export default {
       this.formData.headImageAttId = null
     },
 
-    //提交
+    // 提交
     handleSubmit() {
       const {
         form: { validateFields }
       } = this
-      let camerasData = [],
-        isSubmit = true
+      const camerasData = []
+      let isSubmit = true
       for (let i = 0; i < this.panes.length; i++) {
         this.panes[i].content.code = this.userType
         camerasData.push(this.panes[i].content)
         this.panes[i].form.validateFields((errors, valuesItem) => {
           if (!errors) {
-            let remarkData = []
+            const remarkData = []
             if (valuesItem.remarkVal && valuesItem.remarkVal.length) {
               valuesItem.remarkVal.forEach((item, index) => {
                 remarkData.push(item)

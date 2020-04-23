@@ -33,7 +33,7 @@
     </div>
 
     <div class="table-operator">
-      <a-button type="primary" icon="plus"  @click="handleEdit(null)">新增</a-button>
+      <a-button type="primary" icon="plus" @click="handleEdit(null)">新增</a-button>
 
       <a-button type="danger" icon="delete" @click="handleDelete" :disabled="selectedRowKeys.length < 1">删除</a-button>
 
@@ -55,7 +55,7 @@
       <span slot="resourceFullAddress" slot-scope="text, record">
         <template>
           <div style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis;width: 300px;">
-            <a :href="record.resourceFullAddress">{{record.resourceFullAddress}}</a>
+            <a :href="record.resourceFullAddress">{{ record.resourceFullAddress }}</a>
           </div>
         </template>
       </span>
@@ -78,16 +78,16 @@
 <script>
 import { STable } from '@/components'
 import EditForm from './modules/EditForm'
-import {mapState} from 'vuex';
-import {mixin} from '@/mixins/mixin'
+import { mapState } from 'vuex'
+import { mixin } from '@/mixins/mixin'
 export default {
-  mixins:[mixin],
+  mixins: [mixin],
   components: {
     STable,
-    EditForm,
+    EditForm
   },
   computed: {
-    ...mapState(['constants']),
+    ...mapState(['constants'])
   },
   data () {
     return {
@@ -128,19 +128,19 @@ export default {
           scopedSlots: { customRender: 'action' }
         }
       ],
-      initCascader:[],
+      initCascader: [],
       loadData: parameter => {
         return this.$api.deviceVersion.getPage(Object.assign(parameter, this.queryParam))
           .then(res => {
             return res
           })
-      },
+      }
     }
   },
   methods: {
 
     selectedArea(area) {
-      this.queryParam.areaId = area.value[area.value.length-1];
+      this.queryParam.areaId = area.value[area.value.length - 1]
     },
 
     handleDelete () {
@@ -161,7 +161,7 @@ export default {
         onCancel () {
         }
       })
-    },
+    }
   }
 }
 </script>

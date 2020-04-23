@@ -19,10 +19,10 @@
 </template>
 
 <script>
-import {mixin} from '@/mixins/mixin'
+import { mixin } from '@/mixins/mixin'
 import EpidemicSituation from './EpidemicSituation'
 export default {
-  mixins:[mixin],
+  mixins: [mixin],
   data () {
     return {
 
@@ -33,11 +33,11 @@ export default {
   },
   methods: {
 
-    allScreen(){
+    allScreen() {
       this.$router.push({
-        name:'epidemicSituation'
+        name: 'epidemicSituation'
       })
-    },
+    }
 
   }
 }

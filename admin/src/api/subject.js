@@ -1,4 +1,4 @@
-  import { axios } from '@/utils/request'
+import { axios } from '@/utils/request'
 
 const URI = {
   getUnitAll: '/unit/getAll',
@@ -64,7 +64,7 @@ function exportExcel (parameter) {
 function importExcel (parameter) {
   return axios({
     url: URI.importExcel,
-    params: parameter,
+    params: parameter
   })
 }
 

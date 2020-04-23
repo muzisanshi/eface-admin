@@ -2,7 +2,7 @@
   <a-drawer
     :title="title"
     :maskClosable="true"
-    width=650
+    width="650"
     placement="right"
     :closable="true"
     @close="close"
@@ -10,7 +10,7 @@
     style="height: calc(100% - 55px);overflow: auto;padding-bottom: 53px;">
 
     <a-form>
-      <a-form-item label='所拥有的权限'>
+      <a-form-item label="所拥有的权限">
         <a-tree
           checkable
           @check="onCheck"
@@ -55,149 +55,148 @@
 
 </template>
 <script>
-  import RoleDataruleModal from './RoleDataruleModal.vue'
+import RoleDataruleModal from './RoleDataruleModal.vue'
 
-  export default {
-    name: "RoleModal",
-    components: {
-      RoleDataruleModal
+export default {
+  name: 'RoleModal',
+  components: {
+    RoleDataruleModal
+  },
+  props: {
+    initChecked: {
+      type: Array,
+      default: []
     },
-    props: {
-      initChecked: {
-        type: Array,
-        default: []
-      },
-      selectType: {
-        type: String,
-        default: ''
+    selectType: {
+      type: String,
+      default: ''
+    }
+  },
+  data() {
+    return {
+      roleId: '',
+      treeData: [],
+      defaultCheckedKeys: [],
+      checkedKeys: [],
+      expandedKeysss: [],
+      allTreeKeys: [],
+      autoExpandParent: true,
+      checkStrictly: true,
+      title: '角色权限配置',
+      visible: false,
+      loading: false,
+      selectedKeys: []
+    }
+  },
+  methods: {
+    onTreeNodeSelect(id) {
+      if (id && id.length > 0) {
+        this.selectedKeys = id
+      }
+      this.$refs.datarule.show(this.selectedKeys[0], this.roleId)
+    },
+    onCheck(o) {
+      if (this.checkStrictly) {
+        this.checkedKeys = o.checked
+      } else {
+        this.checkedKeys = o
       }
     },
-    data() {
-      return {
-        roleId: "",
-        treeData: [],
-        defaultCheckedKeys: [],
-        checkedKeys: [],
-        expandedKeysss: [],
-        allTreeKeys: [],
-        autoExpandParent: true,
-        checkStrictly: true,
-        title: "角色权限配置",
-        visible: false,
-        loading: false,
-        selectedKeys: []
+    show(roleId) {
+      if (roleId) {
+        this.roleId = roleId
+      }
+      this.visible = true
+    },
+    close() {
+      this.reset()
+      this.$emit('close')
+      this.visible = false
+    },
+    onExpand(expandedKeys) {
+      this.expandedKeysss = expandedKeys
+      this.autoExpandParent = false
+    },
+    reset() {
+      this.expandedKeysss = []
+      this.checkedKeys = []
+      this.defaultCheckedKeys = []
+      this.loading = false
+    },
+    expandAll() {
+      this.expandedKeysss = this.allTreeKeys
+    },
+    closeAll() {
+      this.expandedKeysss = []
+    },
+    checkALL() {
+      this.checkedKeys = this.allTreeKeys
+    },
+    cancelCheckALL() {
+      // this.checkedKeys = this.defaultCheckedKeys
+      this.checkedKeys = []
+    },
+    switchCheckStrictly(v) {
+      if (v == 1) {
+        this.checkStrictly = false
+      } else if (v == 2) {
+        this.checkStrictly = true
       }
     },
-    methods: {
-      onTreeNodeSelect(id) {
-        if (id && id.length > 0) {
-          this.selectedKeys = id
+    handleCancel() {
+      this.close()
+    },
+    handleSubmit() {
+      const that = this
+      that.$emit('checkedMenu', this.checkedKeys)
+      this.visible = false
+    },
+    generateList(data) {
+      for (let i = 0; i < data.length; i++) {
+        const node = data[i]
+        node.title = node.name
+        this.allTreeKeys.push(node.id)
+        if (node.children.length > 0) {
+          this.generateList(node.children)
         }
-        this.$refs.datarule.show(this.selectedKeys[0], this.roleId)
-      },
-      onCheck(o) {
-        if (this.checkStrictly) {
-          this.checkedKeys = o.checked;
-        } else {
-          this.checkedKeys = o
-        }
-      },
-      show(roleId) {
-        if (roleId) {
-          this.roleId = roleId
-        }
-        this.visible = true;
-      },
-      close() {
-        this.reset()
-        this.$emit('close');
-        this.visible = false;
-      },
-      onExpand(expandedKeys) {
-        this.expandedKeysss = expandedKeys;
-        this.autoExpandParent = false
-      },
-      reset() {
-        this.expandedKeysss = []
-        this.checkedKeys = []
-        this.defaultCheckedKeys = []
-        this.loading = false
-      },
-      expandAll() {
-        this.expandedKeysss = this.allTreeKeys
-      },
-      closeAll() {
-        this.expandedKeysss = []
-      },
-      checkALL() {
-        this.checkedKeys = this.allTreeKeys
-      },
-      cancelCheckALL() {
-        //this.checkedKeys = this.defaultCheckedKeys
-        this.checkedKeys = []
-      },
-      switchCheckStrictly(v) {
-        if (v == 1) {
-          this.checkStrictly = false
-        } else if (v == 2) {
-          this.checkStrictly = true
-        }
-      },
-      handleCancel() {
-        this.close()
-      },
-      handleSubmit() {
-        let that = this;
-        that.$emit('checkedMenu', this.checkedKeys)
-        this.visible = false;
-      },
-      generateList(data) {
-        for (let i = 0; i < data.length; i++) {
-          const node = data[i];
-          node.title = node.name;
-          this.allTreeKeys.push(node.id)
-          if (node.children.length > 0) {
-            this.generateList(node.children);
-          }
-        }
-        return data
-      },
+      }
+      return data
+    },
 
-      getAllIds(data) {
-        for (let i = 0; i < data.length; i++) {
-          const node = data[i];
-          this.allTreeKeys.push(node.id)
-          if (node.children.length > 0) {
-            this.getAllIds(node.children);
-          }
+    getAllIds(data) {
+      for (let i = 0; i < data.length; i++) {
+        const node = data[i]
+        this.allTreeKeys.push(node.id)
+        if (node.children.length > 0) {
+          this.getAllIds(node.children)
         }
       }
-    },
-    watch: {
-      visible() {
-        if (this.visible) {
-          this.allTreeKeys = [];
-          if (this.selectType == 'MENU_BUTTON') {
-            this.$api.permission.getPermissionTree()
-              .then(res => {
-                this.treeData = this.generateList(res)
-                this.checkedKeys = this.initChecked
-              })
-          } else if (this.selectType == 'MENU') {
-            this.$api.menu.getMenuTree()
-              .then(res => {
-                this.treeData = res
-                this.getAllIds(res)
-                this.checkedKeys = this.initChecked
-              })
-          }
+    }
+  },
+  watch: {
+    visible() {
+      if (this.visible) {
+        this.allTreeKeys = []
+        if (this.selectType == 'MENU_BUTTON') {
+          this.$api.permission.getPermissionTree()
+            .then(res => {
+              this.treeData = this.generateList(res)
+              this.checkedKeys = this.initChecked
+            })
+        } else if (this.selectType == 'MENU') {
+          this.$api.menu.getMenuTree()
+            .then(res => {
+              this.treeData = res
+              this.getAllIds(res)
+              this.checkedKeys = this.initChecked
+            })
         }
       }
     }
   }
+}
 
 </script>
 <style>
-
 
 </style>

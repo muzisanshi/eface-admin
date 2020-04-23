@@ -1,5 +1,5 @@
 import Mock from 'mockjs2'
-import {getBody, responseSuccess} from '../util'
+import { getBody, responseSuccess } from '../util'
 
 const info = (options) => {
   const userInfo = {
@@ -370,7 +370,6 @@ const info = (options) => {
 }
 
 const queryPermissionsByUser = (options) => {
-
   const allAuth = [
     {
       'action': 'online:goGenerateCode',
@@ -391,7 +390,6 @@ const queryPermissionsByUser = (options) => {
       'status': '1'
     }
   ]
-
 
   const managerAuth = [
     {

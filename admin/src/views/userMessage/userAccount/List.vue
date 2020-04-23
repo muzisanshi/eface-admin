@@ -18,11 +18,17 @@
 
           <a-col :md="5" :sm="24">
             <a-form-item label="账户状态">
-              <a-select showSearch allowClear placeholder="选择账户状态"  v-model="queryParam.accountState" optionFilterProp="children" :filterOption="filterCommonOption" :options="constants.list.accountState">
+              <a-select
+                showSearch
+                allowClear
+                placeholder="选择账户状态"
+                v-model="queryParam.accountState"
+                optionFilterProp="children"
+                :filterOption="filterCommonOption"
+                :options="constants.list.accountState">
               </a-select>
             </a-form-item>
           </a-col>
-
 
           <a-col :md="4" :sm="24">
             <span class="table-page-search-submitButtons">
@@ -64,15 +70,15 @@
 
 <script>
 import { STable } from '@/components'
-import {mixin} from '@/mixins/mixin'
-import {mapState} from 'vuex';
+import { mixin } from '@/mixins/mixin'
+import { mapState } from 'vuex'
 export default {
-  mixins:[mixin],
+  mixins: [mixin],
   components: {
-    STable,
+    STable
   },
   computed: {
-    ...mapState(['constants']),
+    ...mapState(['constants'])
   },
   data () {
     return {
@@ -102,14 +108,14 @@ export default {
       loadData: parameter => {
         return this.$api.userAccount.getPage(Object.assign(parameter, this.queryParam))
           .then(res => {
-            res.records.forEach(item=>{
-              item.accountStateName = this.constants.data.accountState?this.constants.data.accountState[item.accountState]['name']:''
-            });
+            res.records.forEach(item => {
+              item.accountStateName = this.constants.data.accountState ? this.constants.data.accountState[item.accountState]['name'] : ''
+            })
             return res
           })
       }
     }
-  },
+  }
 }
 </script>
 <style scoped>

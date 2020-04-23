@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import api from '@/api/index'
-import { ACCESS_TOKEN,MANAGER,USER_AUTH,SYS_BUTTON_AUTH } from '@/store/mutation-types'
+import { ACCESS_TOKEN, MANAGER, USER_AUTH, SYS_BUTTON_AUTH } from '@/store/mutation-types'
 import { setStore } from '@/utils/storage'
 const user = {
   state: {
@@ -17,7 +17,7 @@ const user = {
     SET_TOKEN: (state, token) => {
       state.token = token
     },
-    SET_NAME: (state, {name, welcome}) => {
+    SET_NAME: (state, { name, welcome }) => {
       state.name = name
       state.welcome = welcome
     },
@@ -32,12 +32,12 @@ const user = {
     },
     SET_PERMISSIONLIST: (state, permissionList) => {
       state.permissionList = permissionList
-    },
+    }
   },
 
   actions: {
     // 登录
-    Login({commit}, userInfo) {
+    Login({ commit }, userInfo) {
       return new Promise((resolve, reject) => {
         api.user.login(userInfo).then(response => {
           const result = response
@@ -77,11 +77,11 @@ const user = {
               ]
             }
           ]
-          const menuData = [...initMenu,...response.menus]
-          const authData = response.managerAuth;
-          const allAuthData = response.allAuth;
-          sessionStorage.setItem(USER_AUTH,JSON.stringify(authData));
-          sessionStorage.setItem(SYS_BUTTON_AUTH,JSON.stringify(allAuthData));
+          const menuData = [...initMenu, ...response.menus]
+          const authData = response.managerAuth
+          const allAuthData = response.allAuth
+          sessionStorage.setItem(USER_AUTH, JSON.stringify(authData))
+          sessionStorage.setItem(SYS_BUTTON_AUTH, JSON.stringify(allAuthData))
           if (menuData && menuData.length > 0) {
             commit('SET_PERMISSIONLIST', menuData)
           } else {

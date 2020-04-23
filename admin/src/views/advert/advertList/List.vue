@@ -22,7 +22,6 @@
             </a-form-item>
           </a-col>
 
-
           <a-col :md="4" :sm="24">
             <a-form-item label="是否启用">
               <a-select
@@ -49,7 +48,7 @@
     </div>
 
     <div class="table-operator" v-if="!selectAdStatus">
-      <a-button type="primary" icon="plus"  @click="handleEdit(null)">新增</a-button>
+      <a-button type="primary" icon="plus" @click="handleEdit(null)">新增</a-button>
 
       <a-button type="danger" icon="delete" @click="handleDelete" :disabled="selectedRowKeys.length < 1">删除</a-button>
 
@@ -87,36 +86,36 @@
 <script>
 import { STable } from '@/components'
 import EditForm from './modules/EditForm'
-import {mixin} from '@/mixins/mixin'
+import { mixin } from '@/mixins/mixin'
 
 export default {
-  mixins:[mixin],
+  mixins: [mixin],
   components: {
     STable,
     EditForm
 
   },
-  props:{
-    selectAdStatus:{
-      type:Boolean,
-      default:false
+  props: {
+    selectAdStatus: {
+      type: Boolean,
+      default: false
     },
-    playType:{
+    playType: {
       type: String,
       default: 'ALL'
     }
   },
-  watch:{
-    selectAdStatus(newVal){
-      if(newVal){
-        this.selectedRowKeys = [];
+  watch: {
+    selectAdStatus(newVal) {
+      if (newVal) {
+        this.selectedRowKeys = []
         this.$refs.table.refresh(true)
       }
     }
   },
   data () {
     return {
-      queryParam:{
+      queryParam: {
         enable: 'true'
       },
       columns: [
@@ -139,7 +138,7 @@ export default {
         {
           title: '是否启用',
           dataIndex: 'enable',
-          scopedSlots: {customRender: 'status'}
+          scopedSlots: { customRender: 'status' }
         },
         {
           title: '操作',
@@ -149,7 +148,7 @@ export default {
         }
       ],
       loadData: parameter => {
-        if(this.selectAdStatus){
+        if (this.selectAdStatus) {
           this.columns = [
             {
               title: '广告编号',
@@ -170,10 +169,10 @@ export default {
             {
               title: '是否启用',
               dataIndex: 'enable',
-              scopedSlots: {customRender: 'status'}
+              scopedSlots: { customRender: 'status' }
             }
           ]
-        }else{
+        } else {
           this.columns = [
             {
               title: '广告编号',
@@ -194,7 +193,7 @@ export default {
             {
               title: '是否启用',
               dataIndex: 'enable',
-              scopedSlots: {customRender: 'status'}
+              scopedSlots: { customRender: 'status' }
             },
             {
               title: '操作',
@@ -204,8 +203,8 @@ export default {
             }
           ]
         }
-        return this.$api.ad.getPage(Object.assign(parameter, this.queryParam,{
-          playType:this.playType
+        return this.$api.ad.getPage(Object.assign(parameter, this.queryParam, {
+          playType: this.playType
         }))
           .then(res => {
             return res
@@ -218,31 +217,30 @@ export default {
     onSelectAdChange (selectedRowKeys, selectedRows) {
       this.selectedRowKeys = selectedRowKeys
 
-      let that = this;
-      let hash = {},rowsIds = [],defferentId = '';
-      that.selectedRows = [...this.selectedRows,...selectedRows]
+      const that = this
+      const hash = {}; let rowsIds = []; let defferentId = ''
+      that.selectedRows = [...this.selectedRows, ...selectedRows]
       that.selectedRows = that.selectedRows.reduce(function(item, next) {
-        hash[next.id] ? '' : hash[next.id] = true && item.push(next);
+        hash[next.id] ? '' : hash[next.id] = true && item.push(next)
         return item
       }, [])
 
-      if(selectedRowKeys.length < that.selectedRows.length){
-        let newRows = [];
+      if (selectedRowKeys.length < that.selectedRows.length) {
+        let newRows = []
         rowsIds = []
-        that.selectedRows.map((item)=>{
+        that.selectedRows.map((item) => {
           rowsIds.push(item.id)
         })
         defferentId = this.selectedRowKeys.concat(rowsIds).filter(function(v, i, arr) {
-            return arr.indexOf(v) === arr.lastIndexOf(v);
-         });
+          return arr.indexOf(v) === arr.lastIndexOf(v)
+        })
         newRows = that.selectedRows.filter(pane => pane.id !== defferentId[0])
         that.selectedRows = [...newRows]
       }
 
-      if(this.selectAdStatus){
-        this.$emit('selectedAd',that.selectedRows)
+      if (this.selectAdStatus) {
+        this.$emit('selectedAd', that.selectedRows)
       }
-
     },
 
     handleDelete () {
@@ -263,7 +261,7 @@ export default {
         onCancel () {
         }
       })
-    },
+    }
   }
 }
 </script>

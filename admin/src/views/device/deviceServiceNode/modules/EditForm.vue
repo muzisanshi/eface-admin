@@ -122,7 +122,7 @@ export default {
   },
   methods: {
     add(item) {
-      let that = this
+      const that = this
       this.visible = true
       this.form.resetFields()
       this.formData = {}

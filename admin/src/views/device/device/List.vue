@@ -11,7 +11,7 @@
         <a-row :gutter="48">
           <a-col :md="5" :sm="24">
             <a-form-item label="地产位置">
-              <a-input @click="selectRoom()"  v-model="roomName" :read-only="true" />
+              <a-input @click="selectRoom()" v-model="roomName" :read-only="true" />
             </a-form-item>
           </a-col>
 
@@ -65,22 +65,22 @@
     </div>
 
     <div class="table-operator" v-if="!selectDeviceStatus">
-      <a-button type="primary" icon="plus"  @click="handleEditInit(null)">新增</a-button>
+      <a-button type="primary" icon="plus" @click="handleEditInit(null)">新增</a-button>
 
       <!--<a-upload-->
-        <!--name="file"-->
-        <!--:showUploadList="false"-->
-        <!--:multiple="false"-->
-        <!--:action="importUrl"-->
-        <!--@change="handleImportExcel"-->
-        <!--:headers="tokenHeader"-->
+      <!--name="file"-->
+      <!--:showUploadList="false"-->
+      <!--:multiple="false"-->
+      <!--:action="importUrl"-->
+      <!--@change="handleImportExcel"-->
+      <!--:headers="tokenHeader"-->
       <!--&gt;-->
-        <!--<a-button type="primary" icon="import">导入</a-button>-->
+      <!--<a-button type="primary" icon="import">导入</a-button>-->
       <!--</a-upload>-->
 
       <!--<a-button type="primary" icon="export" @click="handleExportXls('/device/exportExcel','设备信息')">导出</a-button>-->
 
-<!--      <a-button type="primary" @click="recoverDevice" v-if="selectedRows.length === 1 && selectedRows[0].deviceStatus === '离线'">上线</a-button>-->
+      <!--      <a-button type="primary" @click="recoverDevice" v-if="selectedRows.length === 1 && selectedRows[0].deviceStatus === '离线'">上线</a-button>-->
 
       <a-button type="primary" @click="resetDevice" v-if="selectedRows.length === 1 && selectedRows[0].deviceStatus === '在线'">重置</a-button>
 
@@ -89,8 +89,6 @@
       <a-button type="primary" @click="lowerHairUser(selectedRows[0].id)" v-if="selectedRows.length === 1 && selectedRows[0].deviceStatus === '在线'">同步底库用户</a-button>
 
       <a-button type="primary" @click="rejectDevice" v-if="selectedRows.length === 1 && selectedRows[0].deviceStatus === '在线'">下线</a-button>
-
-
 
       <a-button type="danger" icon="delete" @click="handleDelete" :disabled="selectedRowKeys.length < 1">删除</a-button>
 
@@ -117,11 +115,10 @@
           <div>
             <span v-if="record.deviceStatus === '在线'" style="width: 6px;height: 6px;background-color: #52c41a;display: inline-block;border-radius: 50%;margin-right: 8px;margin-bottom: 2px;"></span>
             <span v-if="record.deviceStatus !== '在线'" style="width: 6px;height: 6px;background-color: #FA6274;display: inline-block;border-radius: 50%;margin-right: 8px;margin-bottom: 2px;"></span>
-            <span>{{record.deviceStatus}}</span>
+            <span>{{ record.deviceStatus }}</span>
           </div>
         </template>
       </span>
-
 
       <div slot="expandedRowRender" slot-scope="record, index, indent, expanded" style="margin: 0">
         <p style="margin: 0; border-bottom: 1px dashed #DDD; padding: 10px 0;">主机信息:</p>
@@ -129,56 +126,56 @@
           <a-row :gutter="24">
             <a-col :span="6">
               <a-form-item label="人脸显示数量" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                <span>{{itemData.mainEngine.faceShowNum?itemData.mainEngine.faceShowNum+'':''}}</span>
+                <span>{{ itemData.mainEngine.faceShowNum?itemData.mainEngine.faceShowNum+'':'' }}</span>
               </a-form-item>
             </a-col>
             <a-col :span="6">
               <a-form-item label="人脸显示时间" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                <span>{{itemData.mainEngine.faceShowSeconds}}</span>
+                <span>{{ itemData.mainEngine.faceShowSeconds }}</span>
               </a-form-item>
             </a-col>
             <a-col :span="6">
               <a-form-item label="人证对比" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                <span>{{itemData.mainEngine.witnessComparison?'是':'否'}}</span>
+                <span>{{ itemData.mainEngine.witnessComparison?'是':'否' }}</span>
               </a-form-item>
             </a-col>
             <a-col :span="6">
               <a-form-item label="访客注册" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                <span>{{itemData.mainEngine.visitorRegister?'是':'否'}}</span>
+                <span>{{ itemData.mainEngine.visitorRegister?'是':'否' }}</span>
               </a-form-item>
             </a-col>
           </a-row>
           <a-row :gutter="24">
             <a-col :span="6">
               <a-form-item label="有效分钟" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                <span>{{itemData.mainEngine.validMinutes}}</span>
+                <span>{{ itemData.mainEngine.validMinutes }}</span>
               </a-form-item>
             </a-col>
             <a-col :span="6">
               <a-form-item label="主机备注" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                <span>{{itemData.mainEngine.remark}}</span>
+                <span>{{ itemData.mainEngine.remark }}</span>
               </a-form-item>
             </a-col>
             <a-col :span="6">
               <a-form-item label="Ip地址" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                <span>{{itemData.mainEngine.network.ip}}</span>
+                <span>{{ itemData.mainEngine.network.ip }}</span>
               </a-form-item>
             </a-col>
             <a-col :span="6">
               <a-form-item label="子网掩码" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                <span>{{itemData.mainEngine.network.subnetMask}}</span>
+                <span>{{ itemData.mainEngine.network.subnetMask }}</span>
               </a-form-item>
             </a-col>
           </a-row>
           <a-row :gutter="24">
             <a-col :span="6">
               <a-form-item label="默认网关" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                <span>{{itemData.mainEngine.network.defaultGateway}}</span>
+                <span>{{ itemData.mainEngine.network.defaultGateway }}</span>
               </a-form-item>
             </a-col>
             <a-col :span="6">
               <a-form-item label="MAC地址" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                <span>{{itemData.mainEngine.network.macAddress}}</span>
+                <span>{{ itemData.mainEngine.network.macAddress }}</span>
               </a-form-item>
             </a-col>
           </a-row>
@@ -190,43 +187,42 @@
             <a-row :gutter="24">
               <a-col :span="6">
                 <a-form-item label="相机类型" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                  <span>{{item.cameraType?constants.data.cameraType[item.cameraType]['name'] : ''}}</span>
+                  <span>{{ item.cameraType?constants.data.cameraType[item.cameraType]['name'] : '' }}</span>
                 </a-form-item>
               </a-col>
 
               <a-col :span="6">
                 <a-form-item label="流媒体地址" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                  <span>{{item.streamAddress}}</span>
+                  <span>{{ item.streamAddress }}</span>
                 </a-form-item>
               </a-col>
               <a-col :span="6">
                 <a-form-item label="解码类型" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                  <span>{{item.streamDecodeType?constants.data.streamDecodeType[item.streamDecodeType]['name'] : ''}}</span>
+                  <span>{{ item.streamDecodeType?constants.data.streamDecodeType[item.streamDecodeType]['name'] : '' }}</span>
                 </a-form-item>
               </a-col>
               <a-col :span="6">
                 <a-form-item label="备注" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                  <span>{{item.remark}}</span>
+                  <span>{{ item.remark }}</span>
                 </a-form-item>
               </a-col>
             </a-row>
 
-
             <a-row :gutter="24">
               <a-col :span="6">
                 <a-form-item label="设备位置" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                  <span>{{item.locationName}}</span>
+                  <span>{{ item.locationName }}</span>
                 </a-form-item>
               </a-col>
 
               <a-col :span="6">
                 <a-form-item label="网络开关类型" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                  <span>{{item.gateBrake.networkSwitchType?constants.data.networkSwitchType[item.gateBrake.networkSwitchType]['name'] : ''}}</span>
+                  <span>{{ item.gateBrake.networkSwitchType?constants.data.networkSwitchType[item.gateBrake.networkSwitchType]['name'] : '' }}</span>
                 </a-form-item>
               </a-col>
               <a-col :span="6">
                 <a-form-item label="方向" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                  <span>{{item.gateBrake.direction?constants.data.direction[item.gateBrake.direction]['name'] : ''}}</span>
+                  <span>{{ item.gateBrake.direction?constants.data.direction[item.gateBrake.direction]['name'] : '' }}</span>
                 </a-form-item>
               </a-col>
               <a-col :span="6">
@@ -240,44 +236,44 @@
 
               <a-col :span="6">
                 <a-form-item label="Ip地址(门禁闸机)" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                  <span>{{item.gateBrake.network.ip}}</span>
+                  <span>{{ item.gateBrake.network.ip }}</span>
                 </a-form-item>
               </a-col>
               <a-col :span="6">
                 <a-form-item label="子网掩码(门禁闸机)" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                  <span>{{item.gateBrake.network.subnetMask}}</span>
+                  <span>{{ item.gateBrake.network.subnetMask }}</span>
                 </a-form-item>
               </a-col>
               <a-col :span="6">
                 <a-form-item label="默认网关(门禁闸机)" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                  <span>{{item.gateBrake.network.defaultGateway}}</span>
+                  <span>{{ item.gateBrake.network.defaultGateway }}</span>
                 </a-form-item>
               </a-col>
               <a-col :span="6">
                 <a-form-item label="MAC地址(门禁闸机)" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                  <span>{{item.gateBrake.network.macAddress}}</span>
+                  <span>{{ item.gateBrake.network.macAddress }}</span>
                 </a-form-item>
               </a-col>
             </a-row>
             <a-row :gutter="24">
               <a-col :span="6">
                 <a-form-item label="Ip地址(相机配置)" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                  <span>{{item.network.ip}}</span>
+                  <span>{{ item.network.ip }}</span>
                 </a-form-item>
               </a-col>
               <a-col :span="6">
                 <a-form-item label="子网掩码(相机配置)" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                  <span>{{item.network.subnetMask}}</span>
+                  <span>{{ item.network.subnetMask }}</span>
                 </a-form-item>
               </a-col>
               <a-col :span="6">
                 <a-form-item label="默认网关(相机配置)" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                  <span>{{item.network.defaultGateway}}</span>
+                  <span>{{ item.network.defaultGateway }}</span>
                 </a-form-item>
               </a-col>
               <a-col :span="6">
                 <a-form-item label="MAC地址(相机配置)" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                  <span>{{item.network.macAddress}}</span>
+                  <span>{{ item.network.macAddress }}</span>
                 </a-form-item>
               </a-col>
             </a-row>
@@ -285,7 +281,7 @@
             <a-row :gutter="24">
               <a-col :span="6">
                 <a-form-item label="是否启用" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                  <span>{{item.enable?'是':'否'}}</span>
+                  <span>{{ item.enable?'是':'否' }}</span>
                 </a-form-item>
               </a-col>
             </a-row>
@@ -307,10 +303,15 @@
       </span>
 
     </a-table>
-    <a-pagination class="ant-table-pagination ant-pagination" :showTotal="total => `总共 ${total} 条`" showSizeChanger
-                  :pageSize.sync="queryParam.page.pageSize"
-                  @change="onChange" @showSizeChange="onShowSizeChange" :total="pageElements"
-                  v-model="queryParam.page.pageNumber"/>
+    <a-pagination
+      class="ant-table-pagination ant-pagination"
+      :showTotal="total => `总共 ${total} 条`"
+      showSizeChanger
+      :pageSize.sync="queryParam.page.pageSize"
+      @change="onChange"
+      @showSizeChange="onShowSizeChange"
+      :total="pageElements"
+      v-model="queryParam.page.pageNumber"/>
     <edit-form v-if="!selectDeviceStatus" ref="editModal" @ok="handleLoadOk"/>
     <select-room ref="selectRoom" @selectRoom="selectRoomSuccess"></select-room>
   </a-card>
@@ -319,31 +320,31 @@
 <script>
 import { STable } from '@/components'
 import EditForm from './modules/EditForm'
-import {mapState} from 'vuex';
-import {mixin} from '@/mixins/mixin'
+import { mapState } from 'vuex'
+import { mixin } from '@/mixins/mixin'
 import selectRoom from '@/components/Common/SelectRoom'
 export default {
-  mixins:[mixin],
+  mixins: [mixin],
   components: {
     STable,
     EditForm,
     selectRoom
   },
-  props:{
-    selectDeviceStatus:{
-      type:Boolean,
-      default:false
+  props: {
+    selectDeviceStatus: {
+      type: Boolean,
+      default: false
     }
   },
-  watch:{
-    selectDeviceStatus(newVal){
-      if(newVal){
-        this.selectedRowKeys = [];
+  watch: {
+    selectDeviceStatus(newVal) {
+      if (newVal) {
+        this.selectedRowKeys = []
       }
     }
   },
   computed: {
-    ...mapState(['constants']),
+    ...mapState(['constants'])
   },
   data () {
     return {
@@ -355,27 +356,27 @@ export default {
       },
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 10 },
+        sm: { span: 10 }
       },
       wrapperCol: {
         xs: { span: 24 },
-        sm: { span: 14 },
+        sm: { span: 14 }
       },
       columns: [],
-      importUrl:process.env.VUE_APP_ADMIN_SERVICE_BASE_URL+'/device/importExcel',
+      importUrl: process.env.VUE_APP_ADMIN_SERVICE_BASE_URL + '/device/importExcel',
       data: [],
       pageElements: 0,
-      itemData:{
-        mainEngine:{
-          network:{}
+      itemData: {
+        mainEngine: {
+          network: {}
         },
-        cameras:[]
+        cameras: []
       },
-      roomName:''
+      roomName: ''
     }
   },
   created() {
-    if(this.selectDeviceStatus){
+    if (this.selectDeviceStatus) {
       this.columns = [
         {
           title: 'SN',
@@ -424,14 +425,14 @@ export default {
         {
           title: '是否启用',
           dataIndex: 'enable',
-          scopedSlots: {customRender: 'status'}
+          scopedSlots: { customRender: 'status' }
         },
         {
           title: '备注',
           dataIndex: 'remark'
         }
       ]
-    }else{
+    } else {
       this.columns = [
         {
           title: 'SN',
@@ -481,7 +482,7 @@ export default {
         {
           title: '是否启用',
           dataIndex: 'enable',
-          scopedSlots: {customRender: 'status'}
+          scopedSlots: { customRender: 'status' }
         },
         {
           title: '备注',
@@ -503,15 +504,15 @@ export default {
       this.queryParam = {
         page: { pageNumber: 1, pageSize: 10 }
       }
-      this.initCascader = [];
+      this.initCascader = []
       this.roomName = ''
     },
 
-    selectRoom(){
+    selectRoom() {
       this.$refs.selectRoom.add(null)
     },
 
-    recoverDevice(){
+    recoverDevice() {
       this.$api.device.recoverConnect({ deviceSn: this.selectedRows[0].sn })
         .then(res => {
           this.$notification.success({
@@ -522,7 +523,7 @@ export default {
         })
     },
 
-    resetDevice(){
+    resetDevice() {
       this.$api.device.resetDevice({ deviceSn: this.selectedRows[0].sn })
         .then(res => {
           this.$notification.success({
@@ -533,7 +534,7 @@ export default {
         })
     },
 
-    openGateBrake(){
+    openGateBrake() {
       this.$api.device.openGateBrake({ deviceSn: this.selectedRows[0].sn })
         .then(res => {
           this.$notification.success({
@@ -544,7 +545,7 @@ export default {
         })
     },
 
-    rejectDevice(){
+    rejectDevice() {
       this.$api.device.rejectConnect({ deviceSn: this.selectedRows[0].sn })
         .then(res => {
           this.$notification.success({
@@ -555,9 +556,9 @@ export default {
         })
     },
 
-    selectRoomSuccess(value){
+    selectRoomSuccess(value) {
       this.roomName = value.roomName
-      this.queryParam = Object.assign(this.queryParam,value)
+      this.queryParam = Object.assign(this.queryParam, value)
       // this.form.setFieldsValue({ roomName: value.roomName});
     },
 
@@ -567,9 +568,9 @@ export default {
       this.selectedRows = []
       this.$api.device.getPage(Object.assign({}, this.queryParam))
         .then(res => {
-          res.records.forEach(item=>{
-            item.deviceStatus = item.deviceStatus === 'OFFLINE'?'离线':'在线'
-          });
+          res.records.forEach(item => {
+            item.deviceStatus = item.deviceStatus === 'OFFLINE' ? '离线' : '在线'
+          })
           this.data = res.records
           this.pageElements = res.totalElements
         })
@@ -594,17 +595,17 @@ export default {
       })
     },
     handleExpand(expanded, record) {
-      if(expanded){
-        this.$api.device.getById({id: record.id})
+      if (expanded) {
+        this.$api.device.getById({ id: record.id })
           .then(res => {
             this.itemData = res
           })
-      }else{
-        this.itemData ={
-          mainEngine:{
-            network:{}
+      } else {
+        this.itemData = {
+          mainEngine: {
+            network: {}
           },
-          cameras:[]
+          cameras: []
         }
       }
     },
@@ -612,15 +613,15 @@ export default {
     onSelectDeviceChange (selectedRowKeys, selectedRows) {
       this.selectedRowKeys = selectedRowKeys
       this.selectedRows = selectedRows
-      if(this.selectDeviceStatus){
-        this.$emit('selectedDevice',selectedRows)
+      if (this.selectDeviceStatus) {
+        this.$emit('selectedDevice', selectedRows)
         this.selectAdStatus = false
       }
     },
 
-    lowerHairUser(id){
+    lowerHairUser(id) {
       console.log(id)
-      let that = this;
+      const that = this
       that.$confirm({
         title: '提示',
         content: '确定下发底库用户？',
@@ -638,7 +639,7 @@ export default {
       })
     },
 
-    handleEditInit(record){
+    handleEditInit(record) {
       this.$refs.editModal.addEdit(record)
     }
   }

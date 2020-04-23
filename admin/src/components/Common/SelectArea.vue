@@ -64,7 +64,7 @@ export default {
   methods: {
     initAllArea() {
       this.cascaderFlag = false
-      let that = this
+      const that = this
       that.initCascader = []
       this.num = 0
       this.arr = []
@@ -93,7 +93,7 @@ export default {
     },
 
     handleAreaArr() {
-      let cacheData = [this.options, ...this.arr]
+      const cacheData = [this.options, ...this.arr]
       if (this.initCascader.length) {
         for (let i = this.initCascader.length - 1; i >= 0; i--) {
           for (let j = cacheData[i].length - 1; j >= 0; j--) {
@@ -117,7 +117,7 @@ export default {
     },
 
     getChildAreaList(id, index) {
-      let that = this
+      const that = this
       this.$api.area
         .getAll({
           parentId: id
@@ -154,7 +154,7 @@ export default {
     },
 
     loadData(selectedOptions) {
-      let that = this
+      const that = this
       this.popupVisible = true
       const targetOption = selectedOptions[selectedOptions.length - 1]
       targetOption.loading = true
@@ -192,8 +192,8 @@ export default {
         })
     },
     onChangeAddress(value, selectedOptions) {
-      let areaNameArr = [],
-        levelItem = []
+      const areaNameArr = []
+      const levelItem = []
       this.initCascader = value
       if (value.length) {
         selectedOptions.map(item => {

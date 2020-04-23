@@ -26,17 +26,17 @@
                 </a-col>
 
                 <a-col :md="4" :sm="24">
-            <span class="table-page-search-submitButtons">
-              <a-button type="primary" @click="tableRefresh">查询</a-button>
-              <a-button style="margin-left: 8px" @click="resetSearchForm">重置</a-button>
-            </span>
+                  <span class="table-page-search-submitButtons">
+                    <a-button type="primary" @click="tableRefresh">查询</a-button>
+                    <a-button style="margin-left: 8px" @click="resetSearchForm">重置</a-button>
+                  </span>
                 </a-col>
               </a-row>
             </a-form>
           </div>
 
           <div class="table-operator">
-            <a-button type="primary" icon="plus"  @click="handleEdit(null)">新增</a-button>
+            <a-button type="primary" icon="plus" @click="handleEdit(null)">新增</a-button>
 
             <a-button type="danger" icon="delete" @click="handleDelete" :disabled="selectedRowKeys.length < 1">删除</a-button>
 
@@ -50,21 +50,21 @@
             :data="loadData"
             :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange,type:'radio'}"
           >
-      <span slot="serial" slot-scope="text, record, index">
+            <span slot="serial" slot-scope="text, record, index">
 
-        {{ index + 1 }}
-      </span>
+              {{ index + 1 }}
+            </span>
 
             <a-avatar size="large" shape="square" :src="record | resourceFullAddressFilter" slot="resourceFullAddress" slot-scope="record"/>
             <span slot="status" slot-scope="text">
-        <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />
-      </span>
+              <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />
+            </span>
 
             <span slot="action" slot-scope="text, record">
-        <template>
-          <a @click="handleEdit(record)">修改</a>
-        </template>
-      </span>
+              <template>
+                <a @click="handleEdit(record)">修改</a>
+              </template>
+            </span>
 
           </s-table>
           <edit-form ref="editModal" @ok="handleOk"/>
@@ -82,10 +82,10 @@
 import { STable } from '@/components'
 import EditForm from './modules/EditForm'
 import dictValue from '../dictValue/List'
-import {mixin} from '@/mixins/mixin'
-import {mapState} from 'vuex';
+import { mixin } from '@/mixins/mixin'
+import { mapState } from 'vuex'
 export default {
-  mixins:[mixin],
+  mixins: [mixin],
   components: {
     STable,
     EditForm,
@@ -106,12 +106,12 @@ export default {
         {
           title: '是否更新',
           dataIndex: 'canUpdate',
-          scopedSlots: {customRender: 'status'}
+          scopedSlots: { customRender: 'status' }
         },
         {
           title: '是否显示',
           dataIndex: 'canView',
-          scopedSlots: {customRender: 'status'}
+          scopedSlots: { customRender: 'status' }
         },
         {
           title: '备注',
@@ -133,7 +133,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['constants']),
+    ...mapState(['constants'])
   },
   methods: {
 
@@ -155,7 +155,7 @@ export default {
         onCancel () {
         }
       })
-    },
+    }
   }
 }
 </script>

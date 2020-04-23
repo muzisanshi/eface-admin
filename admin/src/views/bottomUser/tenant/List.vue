@@ -12,20 +12,20 @@
 
 <script>
 import userList from '../owner/List'
-import {mixin} from '@/mixins/mixin'
-import {mapState} from 'vuex';
+import { mixin } from '@/mixins/mixin'
+import { mapState } from 'vuex'
 export default {
-  mixins:[mixin],
+  mixins: [mixin],
   components: {
     userList
 
   },
   computed: {
-    ...mapState(['constants']),
+    ...mapState(['constants'])
   },
   data () {
     return {
-      userType:'RENTER'
+      userType: 'RENTER'
     }
   },
   methods: {

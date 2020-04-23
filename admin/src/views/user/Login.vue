@@ -48,8 +48,11 @@
               type="text"
               @change="inputCodeChange"
               placeholder="请输入验证码">
-              <a-icon slot="prefix" v-if="inputCodeContent==verifiedCode " type="smile"
-                      :style="{ color: 'rgba(0,0,0,.25)' }"/>
+              <a-icon
+                slot="prefix"
+                v-if="inputCodeContent==verifiedCode "
+                type="smile"
+                :style="{ color: 'rgba(0,0,0,.25)' }"/>
               <a-icon slot="prefix" v-else type="frown" :style="{ color: 'rgba(0,0,0,.25)' }"/>
             </a-input>
           </a-form-item>
@@ -87,114 +90,112 @@
 </template>
 
 <script>
-  import Vue from 'vue'
-  import md5 from 'md5'
-  import {mapActions} from 'vuex'
-  import { SAVE_PASSWORD } from '@/store/mutation-types'
-  export default {
-    data() {
-      return {
-        form: this.$form.createForm(this),
-        state: {
-          loginBtn: false
-        },
-        inputCodeContent: "",
-        verifiedCode: "",
-        inputCodeNull: true,
-        codeImgUrl: '',
-        passWordChecked:false,
-        formData:{},
-      }
-    },
-    created() {
-      this.getCodeImg();
-      if(Vue.ls.get(SAVE_PASSWORD)){
-        if(Vue.ls.get(SAVE_PASSWORD).checked){
-          this.passWordChecked = Vue.ls.get(SAVE_PASSWORD).checked
-          this.formData = {
-            username: Vue.ls.get(SAVE_PASSWORD).name,
-            password: Vue.ls.get(SAVE_PASSWORD).password
-          }
-        }else{
-          this.passWordChecked =false
-          this.formData = {
-            username: '',
-            password: ''
-          }
+import Vue from 'vue'
+import md5 from 'md5'
+import { mapActions } from 'vuex'
+import { SAVE_PASSWORD } from '@/store/mutation-types'
+export default {
+  data() {
+    return {
+      form: this.$form.createForm(this),
+      state: {
+        loginBtn: false
+      },
+      inputCodeContent: '',
+      verifiedCode: '',
+      inputCodeNull: true,
+      codeImgUrl: '',
+      passWordChecked: false,
+      formData: {}
+    }
+  },
+  created() {
+    this.getCodeImg()
+    if (Vue.ls.get(SAVE_PASSWORD)) {
+      if (Vue.ls.get(SAVE_PASSWORD).checked) {
+        this.passWordChecked = Vue.ls.get(SAVE_PASSWORD).checked
+        this.formData = {
+          username: Vue.ls.get(SAVE_PASSWORD).name,
+          password: Vue.ls.get(SAVE_PASSWORD).password
+        }
+      } else {
+        this.passWordChecked = false
+        this.formData = {
+          username: '',
+          password: ''
         }
       }
-    },
-    methods: {
-      ...mapActions(['Login']),
-      getCodeImg() {
-        this.$api.user.genVerifyCode()
-          .then(res => {
-            this.codeImgUrl = res.bufferedImage
-          this.form.uniqueId = res.uniqueId;
-          }).finally(() => {
+    }
+  },
+  methods: {
+    ...mapActions(['Login']),
+    getCodeImg() {
+      this.$api.user.genVerifyCode()
+        .then(res => {
+          this.codeImgUrl = res.bufferedImage
+          this.form.uniqueId = res.uniqueId
+        }).finally(() => {
         })
-      },
+    },
 
-      onChange(e) {
-        this.passWordChecked = e.target.checked
-      },
+    onChange(e) {
+      this.passWordChecked = e.target.checked
+    },
 
-      inputCodeChange(e) {
-        this.inputCodeContent = e.target.value
-        if (!e.target.value || 0 == e.target.value) {
-          this.inputCodeNull = true
-        } else {
-          this.inputCodeContent = this.inputCodeContent.toLowerCase()
-          this.inputCodeNull = false
-        }
-      },
-      handleSubmit(e) {
-        e.preventDefault()
-        const {
-          form: {validateFields},
-          state,
-          Login,
-        } = this
+    inputCodeChange(e) {
+      this.inputCodeContent = e.target.value
+      if (!e.target.value || e.target.value == 0) {
+        this.inputCodeNull = true
+      } else {
+        this.inputCodeContent = this.inputCodeContent.toLowerCase()
+        this.inputCodeNull = false
+      }
+    },
+    handleSubmit(e) {
+      e.preventDefault()
+      const {
+        form: { validateFields },
+        state,
+        Login
+      } = this
 
-        state.loginBtn = true
+      state.loginBtn = true
 
-        const validateFieldsKey = ['username', 'password', 'verifyCode']
+      const validateFieldsKey = ['username', 'password', 'verifyCode']
 
-        validateFields(validateFieldsKey, {force: true}, (err, values) => {
-          if (!err) {
-            const loginParams = {...values}
-            loginParams.password = values.password
-            loginParams.uniqueId = this.form.uniqueId;
-            Login(loginParams)
-              .then((res) => this.loginSuccess(res,values))
-              .catch(err => this.loginFailed(err))
-              .finally(() => {
-                state.loginBtn = false
-              })
-          } else {
-            setTimeout(() => {
+      validateFields(validateFieldsKey, { force: true }, (err, values) => {
+        if (!err) {
+          const loginParams = { ...values }
+          loginParams.password = values.password
+          loginParams.uniqueId = this.form.uniqueId
+          Login(loginParams)
+            .then((res) => this.loginSuccess(res, values))
+            .catch(err => this.loginFailed(err))
+            .finally(() => {
               state.loginBtn = false
-            }, 600)
-          }
-        })
-      },
-      loginSuccess(res,values) {
-        let that = this;
-        this.$router.push({name: 'dashboard'})
-        if(this.passWordChecked){
-          Vue.ls.set(SAVE_PASSWORD, {
-            checked:that.passWordChecked,
-            name:values.username,
-            password:values.password
-          })
-
-
+            })
+        } else {
+          setTimeout(() => {
+            state.loginBtn = false
+          }, 600)
         }
-      },
-      loginFailed(err) {
+      })
+    },
+    loginSuccess(res, values) {
+      const that = this
+      this.$router.push({ name: 'dashboard' })
+      if (this.passWordChecked) {
+        Vue.ls.set(SAVE_PASSWORD, {
+          checked: that.passWordChecked,
+          name: values.username,
+          password: values.password
+        })
       }
     },
+    loginFailed(err) {
+    }
   }
+}
 </script>
 
 <style lang="less" scoped>

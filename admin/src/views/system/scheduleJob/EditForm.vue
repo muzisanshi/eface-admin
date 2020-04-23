@@ -11,7 +11,8 @@
     :visible="visible"
     :confirmLoading="confirmLoading"
     @ok="handleSubmit"
-    :maskClosable="false" :keyboard="false"
+    :maskClosable="false"
+    :keyboard="false"
     @cancel="handleCancel"
   >
     <a-spin :spinning="confirmLoading">
@@ -29,7 +30,7 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
         >
-          <a-input :maxLength="64" :disabled="title === '修改'"  v-decorator="['jobGroup', {initialValue: this.formData.jobGroup,rules: [{required: true, message: '请输入任务分组！'}]}]" />
+          <a-input :maxLength="64" :disabled="title === '修改'" v-decorator="['jobGroup', {initialValue: this.formData.jobGroup,rules: [{required: true, message: '请输入任务分组！'}]}]" />
         </a-form-item>
 
         <a-form-item
@@ -94,10 +95,10 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
-import {mixin} from '@/mixins/mixin'
+import { mapState } from 'vuex'
+import { mixin } from '@/mixins/mixin'
 export default {
-  mixins:[mixin],
+  mixins: [mixin],
   data () {
     return {
       labelCol: {
@@ -112,7 +113,7 @@ export default {
 
       uploadFileId: '',
       formData: {},
-      loadBalanced:true,
+      loadBalanced: true,
       title: '',
       form: this.$form.createForm(this)
     }
@@ -126,20 +127,20 @@ export default {
       this.form.resetFields()
       this.formData = {}
 
-      if(item){
-          this.title = '修改'
-          this.$api.scheduleJob.getById({ id: item.id })
+      if (item) {
+        this.title = '修改'
+        this.$api.scheduleJob.getById({ id: item.id })
           .then(res => {
             this.formData = res
-            this.loadBalanced = this.formData.loadBalanced;
+            this.loadBalanced = this.formData.loadBalanced
           })
-        }else{
-          this.title = '新增'
-          this.loadBalanced = true
+      } else {
+        this.title = '新增'
+        this.loadBalanced = true
       }
     },
     filterCountryOption(input, option) {
-        return option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0
+      return option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0
     },
 
     changeLoadBalanced(checked) {
@@ -151,8 +152,8 @@ export default {
       this.confirmLoading = true
       validateFields((errors, values) => {
         if (!errors) {
-          if(this.formData.id){
-            values.id = this.formData.id;
+          if (this.formData.id) {
+            values.id = this.formData.id
           }
           if (!values.loadBalanced) {
             values.loadBalanced = this.loadBalanced
@@ -161,7 +162,7 @@ export default {
             .then(res => {
               this.$notification.success({
                 message: '成功',
-                description: this.title +'成功'
+                description: this.title + '成功'
               })
               this.visible = false
               this.confirmLoading = false

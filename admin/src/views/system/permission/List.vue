@@ -51,10 +51,15 @@
           </a-dropdown>
         </span>
       </a-table>
-      <a-pagination class="ant-table-pagination ant-pagination" showSizeChanger :showTotal="total => `总共 ${total} 条`"
-                    :pageSize.sync="queryParam.page.pageSize"
-                    @change="onChange" @showSizeChange="onShowSizeChange" :total="pageElements"
-                    v-model="queryParam.page.pageNumber"/>
+      <a-pagination
+        class="ant-table-pagination ant-pagination"
+        showSizeChanger
+        :showTotal="total => `总共 ${total} 条`"
+        :pageSize.sync="queryParam.page.pageSize"
+        @change="onChange"
+        @showSizeChange="onShowSizeChange"
+        :total="pageElements"
+        v-model="queryParam.page.pageNumber"/>
     </div>
     <!-- table区域-end -->
 
@@ -64,171 +69,171 @@
 </template>
 
 <script>
-  import {mapState} from 'vuex';
-  import {STable} from '@/components'
-  import PermissionModal from './modules/EditForm'
-  import {mixin} from '@/mixins/mixin'
+import { mapState } from 'vuex'
+import { STable } from '@/components'
+import PermissionModal from './modules/EditForm'
+import { mixin } from '@/mixins/mixin'
 
-  export default {
-    name: 'menuList',
-    mixins: [mixin],
-    components: {
-      STable,
-      PermissionModal,
-    },
-    computed: {
-      ...mapState(['constants'])
-    },
-    data() {
-      return {
-        queryParam: {
-          page: {
-            pageNumber: 1,
-            pageSize: 10
-          }
-        },
-        description: '',
-        // 表头
-        columns: [
-          {
-            title: '编码',
-            dataIndex: 'code',
-            key: 'code'
-          },
-          {
-            title: '权限名称',
-            dataIndex: 'name',
-            key: 'name'
-          },
-          {
-            title: '权限类型',
-            dataIndex: 'permissionTypeName',
-            key: 'permissionTypeName'
-          },
-          {
-            title: '父级权限名称',
-            dataIndex: 'parentPermissionName',
-            key: 'parentPermissionName'
-          },
-          {
-            title: '授权标识',
-            dataIndex: 'sn',
-            key: 'sn'
-          },
-          {
-            title: '资源地址',
-            dataIndex: 'url',
-            key: 'url'
-          },
-          {
-            title: '备注',
-            dataIndex: 'remark',
-            key: 'remark'
-          },
-          {
-            title: '操作',
-            dataIndex: 'action',
-            scopedSlots: {customRender: 'action'},
-            align: 'center',
-            width: 150
-          }
-        ],
-        loading: false,
-        url: {
-          list: '/sys/permission/list',
-          delete: '/sys/permission/delete',
-          deleteBatch: '/sys/permission/deleteBatch'
-        },
-        data: [],
-        pageElements: 0,
-        expandedRowKeys: []
-      }
-    },
-    created() {
-      this.loadData()
-    },
-    methods: {
-      loadData() {
-        this.expandedRowKeys = []
-        this.$api.permission.getPage(Object.assign({}, this.queryParam))
-          .then(res => {
-            for (let i = 0, j = res.records.length; i < j; i++) {
-              res.records[i].children = []
-              res.records[i].permissionTypeName = this.constants.data.permissionType ? this.constants.data.permissionType[res.records[i].permissionType]['name'] : ''
-            }
-            this.data = res.records
-            this.pageElements = res.totalElements
-          })
-      },
-
-      handleDetail: function (record) {
-        this.$refs.editModal.edit(record);
-        this.$refs.editModal.title = "详情";
-        this.$refs.editModal.disableSubmit = true;
-      },
-      handleAddSub(record) {
-        this.$refs.editModal.title = "添加子菜单";
-        this.$refs.editModal.localMenuType = 1;
-        this.$refs.editModal.disableSubmit = false;
-        this.$refs.editModal.edit(null, record.id);
-      },
-
-      buildSubData(data, children, parentId) {
-        for (let i = 0, j = data.length; i < j; i++) {
-          let d = data[i]
-          if (d.id === parentId) {
-            d.children = children
-            break
-          }
-          d.children = this.buildSubData(d.children, children, parentId)
+export default {
+  name: 'MenuList',
+  mixins: [mixin],
+  components: {
+    STable,
+    PermissionModal
+  },
+  computed: {
+    ...mapState(['constants'])
+  },
+  data() {
+    return {
+      queryParam: {
+        page: {
+          pageNumber: 1,
+          pageSize: 10
         }
-        return data
       },
-      expand(id) {
-        this.$api.permission.getPage({parentId: id, page: {pageNumber: 1, pageSize: 100}})
-          .then(res => {
-            for (let i = 0, j = res.records.length; i < j; i++) {
-              res.records[i].children = []
-              res.records[i].permissionTypeName = this.constants.data.permissionType ? this.constants.data.permissionType[res.records[i].permissionType]['name'] : ''
-            }
-            this.data = this.buildSubData(this.data, res.records, id)
-          })
-      },
-      handleExpand(expanded, record) {
-        const l = this.expandedRowKeys
-        if (this.expandedRowKeys.includes(record.id)) {
-          l.splice(l.findIndex(element => element === record.id), 1)
-        } else {
-          l.push(record.id)
-          this.expand(record.id)
+      description: '',
+      // 表头
+      columns: [
+        {
+          title: '编码',
+          dataIndex: 'code',
+          key: 'code'
+        },
+        {
+          title: '权限名称',
+          dataIndex: 'name',
+          key: 'name'
+        },
+        {
+          title: '权限类型',
+          dataIndex: 'permissionTypeName',
+          key: 'permissionTypeName'
+        },
+        {
+          title: '父级权限名称',
+          dataIndex: 'parentPermissionName',
+          key: 'parentPermissionName'
+        },
+        {
+          title: '授权标识',
+          dataIndex: 'sn',
+          key: 'sn'
+        },
+        {
+          title: '资源地址',
+          dataIndex: 'url',
+          key: 'url'
+        },
+        {
+          title: '备注',
+          dataIndex: 'remark',
+          key: 'remark'
+        },
+        {
+          title: '操作',
+          dataIndex: 'action',
+          scopedSlots: { customRender: 'action' },
+          align: 'center',
+          width: 150
         }
-        this.expandedRowKeys = l
+      ],
+      loading: false,
+      url: {
+        list: '/sys/permission/list',
+        delete: '/sys/permission/delete',
+        deleteBatch: '/sys/permission/deleteBatch'
       },
-
-      handleDelete() {
-        const that = this
-        that.$confirm({
-          title: '删除',
-          content: '确定删除勾选的记录？',
-          onOk() {
-            that.$api.permission.del({ids: that.selectedRowKeys})
-              .then(res => {
-                that.$notification.success({
-                  message: '成功',
-                  description: `删除成功！`
-                })
-                that.handleOk()
-              })
-          },
-          onCancel() {
+      data: [],
+      pageElements: 0,
+      expandedRowKeys: []
+    }
+  },
+  created() {
+    this.loadData()
+  },
+  methods: {
+    loadData() {
+      this.expandedRowKeys = []
+      this.$api.permission.getPage(Object.assign({}, this.queryParam))
+        .then(res => {
+          for (let i = 0, j = res.records.length; i < j; i++) {
+            res.records[i].children = []
+            res.records[i].permissionTypeName = this.constants.data.permissionType ? this.constants.data.permissionType[res.records[i].permissionType]['name'] : ''
           }
+          this.data = res.records
+          this.pageElements = res.totalElements
         })
-      },
-      handleOk() {
-        this.loadData()
-      },
+    },
+
+    handleDetail: function (record) {
+      this.$refs.editModal.edit(record)
+      this.$refs.editModal.title = '详情'
+      this.$refs.editModal.disableSubmit = true
+    },
+    handleAddSub(record) {
+      this.$refs.editModal.title = '添加子菜单'
+      this.$refs.editModal.localMenuType = 1
+      this.$refs.editModal.disableSubmit = false
+      this.$refs.editModal.edit(null, record.id)
+    },
+
+    buildSubData(data, children, parentId) {
+      for (let i = 0, j = data.length; i < j; i++) {
+        const d = data[i]
+        if (d.id === parentId) {
+          d.children = children
+          break
+        }
+        d.children = this.buildSubData(d.children, children, parentId)
+      }
+      return data
+    },
+    expand(id) {
+      this.$api.permission.getPage({ parentId: id, page: { pageNumber: 1, pageSize: 100 } })
+        .then(res => {
+          for (let i = 0, j = res.records.length; i < j; i++) {
+            res.records[i].children = []
+            res.records[i].permissionTypeName = this.constants.data.permissionType ? this.constants.data.permissionType[res.records[i].permissionType]['name'] : ''
+          }
+          this.data = this.buildSubData(this.data, res.records, id)
+        })
+    },
+    handleExpand(expanded, record) {
+      const l = this.expandedRowKeys
+      if (this.expandedRowKeys.includes(record.id)) {
+        l.splice(l.findIndex(element => element === record.id), 1)
+      } else {
+        l.push(record.id)
+        this.expand(record.id)
+      }
+      this.expandedRowKeys = l
+    },
+
+    handleDelete() {
+      const that = this
+      that.$confirm({
+        title: '删除',
+        content: '确定删除勾选的记录？',
+        onOk() {
+          that.$api.permission.del({ ids: that.selectedRowKeys })
+            .then(res => {
+              that.$notification.success({
+                message: '成功',
+                description: `删除成功！`
+              })
+              that.handleOk()
+            })
+        },
+        onCancel() {
+        }
+      })
+    },
+    handleOk() {
+      this.loadData()
     }
   }
+}
 </script>
 <style scoped>
 

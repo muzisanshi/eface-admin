@@ -1,4 +1,4 @@
-  import { axios } from '@/utils/request'
+import { axios } from '@/utils/request'
 
 const URI = {
   getById: '/estate/getById',
@@ -43,7 +43,6 @@ function del (parameter) {
     params: parameter
   })
 }
-
 
 function getLimitPage (parameter) {
   return axios({

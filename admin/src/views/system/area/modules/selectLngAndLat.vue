@@ -66,7 +66,7 @@ export default {
     add(item) {
       console.log(item)
       // this.createMap();
-      let that = this
+      const that = this
       that.visible = true
 
       this.$nextTick(() => {
@@ -79,14 +79,14 @@ export default {
     },
 
     createMap(item) {
-      let that = this
+      const that = this
       this.map = new BMap.Map('allmap') // 创建Map实例
-      this.map.centerAndZoom(item ? item : this.mapName, 12) // 初始化地图,用城市名设置地图中心点
-      this.map.enableScrollWheelZoom(true) //开启鼠标滚轮缩放
+      this.map.centerAndZoom(item || this.mapName, 12) // 初始化地图,用城市名设置地图中心点
+      this.map.enableScrollWheelZoom(true) // 开启鼠标滚轮缩放
       this.map.enableInertialDragging()
       this.map.enableContinuousZoom()
 
-      //添加城市切换
+      // 添加城市切换
       var size = new BMap.Size(10, 20)
 
       this.map.addControl(
@@ -114,9 +114,9 @@ export default {
 
       var geoc = new BMap.Geocoder()
 
-      //填加鼠标点击事件
+      // 填加鼠标点击事件
       this.map.addEventListener('click', e => {
-        //alert(e.point.lng + "," + e.point.lat);
+        // alert(e.point.lng + "," + e.point.lat);
         that.longitude = e.point.lng
         that.latitude = e.point.lat
 
@@ -124,10 +124,10 @@ export default {
 
         var marker = new BMap.Marker(new BMap.Point(e.point.lng, e.point.lat)) // 创建点
 
-        this.map.addOverlay(marker) //增加点
+        this.map.addOverlay(marker) // 增加点
 
         geoc.getLocation(e.point, function(rs) {
-          let addComp = rs.addressComponents
+          const addComp = rs.addressComponents
         })
       })
     },

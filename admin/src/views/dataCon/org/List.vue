@@ -20,6 +20,19 @@
             </a-form-item>
           </a-col>
           <a-col :md="6" :sm="24">
+            <a-form-item label="行政等级">
+              <a-select
+                showSearch
+                allowClear
+                placeholder="选择行政等级"
+                optionFilterProp="children"
+                :filterOption="filterCommonOption"
+                :options="constants.list.orgLevel"
+                v-model="queryParam.level"
+              ></a-select>
+            </a-form-item>
+          </a-col>
+          <a-col :md="6" :sm="24">
             <span class="table-page-search-submitButtons">
               <a-button type="primary" @click="getOrgPage()">查询</a-button>
               <a-button style="margin-left: 8px" @click="resetSearchFormData">重置</a-button>
@@ -528,13 +541,13 @@ export default {
       }
       this.$api.area.getPage({ page: { pageNumber: 1, pageSize: 50 }, parentId: this.currentParentId }).then(res => {
         // console.log(level)
-        // console.log(
-        //   this.provinceParentId,
-        //   this.cityParentId,
-        //   this.countyParentId,
-        //   this.strreetParentId,
-        //   this.currentParentId
-        // )
+        console.log(
+          this.provinceParentId,
+          this.cityParentId,
+          this.countyParentId,
+          this.strreetParentId,
+          this.currentParentId
+        )
         const areaData = res.records
         areaData.unshift({
           id: '请选择',
@@ -579,9 +592,8 @@ export default {
               provinceId: this.provinceParentId,
               cityId: this.cityParentId,
               areaId: this.countyParentId,
-              districtId: this.strreetParentId,
-              level: this.constants.list.orgLevel[id === '请选择' && this.level !== 0 ? this.level - 1 : this.level]
-                .value
+              districtId: this.strreetParentId
+              // level: this.constants.list.orgLevel[id === '请选择' && this.level !== 0 ? this.level - 1 : this.level].value
             },
             this.queryParam
           )

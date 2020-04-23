@@ -33,7 +33,7 @@
     </div>
 
     <div class="table-operator">
-      <a-button type="primary" icon="plus"  :disabled="selectedRow.length < 1" @click="handleEditItem(null)">新增</a-button>
+      <a-button type="primary" icon="plus" :disabled="selectedRow.length < 1" @click="handleEditItem(null)">新增</a-button>
 
       <a-button type="danger" icon="delete" @click="handleDelete" :disabled="selectedRowKeys.length < 1">删除</a-button>
 
@@ -64,10 +64,15 @@
       </span>
 
     </a-table>
-    <a-pagination class="ant-table-pagination ant-pagination" :showTotal="total => `总共 ${total} 条`" showSizeChanger
-                  :pageSize.sync="queryParam.page.pageSize"
-                  @change="onChange" @showSizeChange="onShowSizeChange" :total="pageElements"
-                  v-model="queryParam.page.pageNumber"/>
+    <a-pagination
+      class="ant-table-pagination ant-pagination"
+      :showTotal="total => `总共 ${total} 条`"
+      showSizeChanger
+      :pageSize.sync="queryParam.page.pageSize"
+      @change="onChange"
+      @showSizeChange="onShowSizeChange"
+      :total="pageElements"
+      v-model="queryParam.page.pageNumber"/>
     <edit-form ref="editModal" @ok="handleOk"/>
   </a-card>
 </template>
@@ -75,32 +80,32 @@
 <script>
 import { STable } from '@/components'
 import EditForm from './modules/EditForm'
-import {mixin} from '@/mixins/mixin'
-import {mapState} from 'vuex';
+import { mixin } from '@/mixins/mixin'
+import { mapState } from 'vuex'
 export default {
-  mixins:[mixin],
+  mixins: [mixin],
   components: {
     STable,
     EditForm
 
   },
-  props:{
-    selectedRow:{
-      type:Array,
-      default:[]
+  props: {
+    selectedRow: {
+      type: Array,
+      default: []
     }
   },
-  watch:{
-    selectedRow(newVal){
-      if(newVal.length>0){
-        this.getDictValue();
+  watch: {
+    selectedRow(newVal) {
+      if (newVal.length > 0) {
+        this.getDictValue()
       }
     }
   },
   data () {
     return {
-      queryParam:{
-        page: {pageNumber: 1, pageSize: 10}
+      queryParam: {
+        page: { pageNumber: 1, pageSize: 10 }
       },
       columns: [
         {
@@ -122,7 +127,7 @@ export default {
         {
           title: '是否可修改',
           dataIndex: 'canUpdate',
-          scopedSlots: {customRender: 'status'}
+          scopedSlots: { customRender: 'status' }
         },
         {
           title: '备注',
@@ -135,28 +140,28 @@ export default {
           scopedSlots: { customRender: 'action' }
         }
       ],
-      data:[],
-      pageElements: 0,
+      data: [],
+      pageElements: 0
     }
   },
   computed: {
-    ...mapState(['constants']),
+    ...mapState(['constants'])
   },
   methods: {
     handleEditItem (record) {
-      this.$refs.editModal.add(record,this.selectedRow[0])
+      this.$refs.editModal.add(record, this.selectedRow[0])
     },
-    getDictValue(){
-      let that = this;
-      this.$api.dictValue.getPage(Object.assign(this.queryParam,{
-        dictTypeId:this.selectedRow[0]
+    getDictValue() {
+      const that = this
+      this.$api.dictValue.getPage(Object.assign(this.queryParam, {
+        dictTypeId: this.selectedRow[0]
       }))
         .then(res => {
           that.data = res.records
           that.pageElements = res.totalElements
         })
     },
-    handleOk(){
+    handleOk() {
       this.getDictValue()
     },
     handleDelete () {
@@ -177,7 +182,7 @@ export default {
         onCancel () {
         }
       })
-    },
+    }
   }
 }
 </script>

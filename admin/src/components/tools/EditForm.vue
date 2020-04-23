@@ -41,7 +41,13 @@
         </a-form-item>
 
         <a-form-item label="性别" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <a-select showSearch placeholder="选择性别" optionFilterProp="children" :filterOption="filterCountryOption" :options="constants.list.sexual" v-decorator="['sexual', {initialValue: this.formData.sexual?this.formData.sexual:'',rules: [{required: true, message: '请选择性别！'}]}]">
+          <a-select
+            showSearch
+            placeholder="选择性别"
+            optionFilterProp="children"
+            :filterOption="filterCountryOption"
+            :options="constants.list.sexual"
+            v-decorator="['sexual', {initialValue: this.formData.sexual?this.formData.sexual:'',rules: [{required: true, message: '请选择性别！'}]}]">
           </a-select>
         </a-form-item>
 
@@ -59,9 +65,9 @@
 </template>
 
 <script>
-  import Vue from 'vue'
-  import {MANAGER} from '@/store/mutation-types'
-import { mapState,mapMutations } from 'vuex';
+import Vue from 'vue'
+import { MANAGER } from '@/store/mutation-types'
+import { mapState, mapMutations } from 'vuex'
 export default {
   data () {
     return {
@@ -78,10 +84,10 @@ export default {
 
       uploadFileId: '',
       formData: {},
-      title:'',
+      title: '',
       form: this.$form.createForm(this),
-      allPriceLevel:[],
-      consumerGroups:[],
+      allPriceLevel: [],
+      consumerGroups: [],
       options: [{
         value: 'zhejiang',
         label: 'Zhejiang',
@@ -90,9 +96,9 @@ export default {
           label: 'Hangzhou',
           children: [{
             value: 'xihu',
-            label: 'West Lake',
-          }],
-        }],
+            label: 'West Lake'
+          }]
+        }]
       }, {
         value: 'jiangsu',
         label: 'Jiangsu',
@@ -101,12 +107,12 @@ export default {
           label: 'Nanjing',
           children: [{
             value: 'zhonghuamen',
-            label: 'Zhong Hua Men',
-          }],
-        }],
+            label: 'Zhong Hua Men'
+          }]
+        }]
       }],
-      initCascader:[],
-      formGoodsData: {},
+      initCascader: [],
+      formGoodsData: {}
     }
   },
   computed: {
@@ -115,14 +121,14 @@ export default {
   methods: {
     ...mapMutations(['SET_INFO']),
     add (item) {
-      let thiz = this
+      const thiz = this
       this.visible = true
       this.form.resetFields()
       this.formData = {}
       thiz.$api.user.getUserInfo()
-      .then(res => {
-        thiz.formData = res
-      })
+        .then(res => {
+          thiz.formData = res
+        })
     },
     filterCountryOption(input, option) {
       return option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0
@@ -135,15 +141,15 @@ export default {
       this.confirmLoading = true
       validateFields((errors, values) => {
         if (!errors) {
-          //修改
+          // 修改
           this.$api.user.updateInfo(values)
             .then(res => {
               this.$notification.success({
                 message: '成功',
                 description: '修改成功'
               })
-              let managerMess = Vue.ls.get(MANAGER)
-              managerMess.username = values.username;
+              const managerMess = Vue.ls.get(MANAGER)
+              managerMess.username = values.username
               managerMess.realName = values.realName
               managerMess.phoneNo = values.phoneNo
               managerMess.sexual = values.sexual

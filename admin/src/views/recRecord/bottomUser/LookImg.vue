@@ -10,7 +10,8 @@
     :width="340"
     :visible="visible"
     :confirmLoading="confirmLoading"
-    :maskClosable="false" :keyboard="false"
+    :maskClosable="false"
+    :keyboard="false"
     @cancel="handleCancel"
   >
     <a-spin :spinning="confirmLoading">
@@ -28,41 +29,41 @@
 </template>
 
 <script>
-  import {mixin} from '@/mixins/mixin'
-  export default {
-    mixins:[mixin],
-    data() {
-      return {
-        visible: false,
-        confirmLoading: false,
-        imgUrl:''
-      }
-    },
-    methods: {
-      add(item) {
-        let that = this
-        that.imgUrl = ''
-        that.$api.recRecord.getRecImage({
-          id: item.id,
-          recDatetime:item.recDatetime,
-        })
-          .then(res => {
-            if(!res.recImageResourceFullAddress && !res.recImageBase64){
-              that.$notification.error({
-                message: '提示',
-                description:'暂无截图'
-              })
-            }else{
-              that.visible = true
-              if(res.recImageResourceFullAddress){
-                that.imgUrl = res.recImageResourceFullAddress
-              }
-              if(res.recImageBase64){
-                that.imgUrl = res.recImageBase64
-              }
+import { mixin } from '@/mixins/mixin'
+export default {
+  mixins: [mixin],
+  data() {
+    return {
+      visible: false,
+      confirmLoading: false,
+      imgUrl: ''
+    }
+  },
+  methods: {
+    add(item) {
+      const that = this
+      that.imgUrl = ''
+      that.$api.recRecord.getRecImage({
+        id: item.id,
+        recDatetime: item.recDatetime
+      })
+        .then(res => {
+          if (!res.recImageResourceFullAddress && !res.recImageBase64) {
+            that.$notification.error({
+              message: '提示',
+              description: '暂无截图'
+            })
+          } else {
+            that.visible = true
+            if (res.recImageResourceFullAddress) {
+              that.imgUrl = res.recImageResourceFullAddress
             }
-          })
-      },
+            if (res.recImageBase64) {
+              that.imgUrl = res.recImageBase64
+            }
+          }
+        })
     }
   }
+}
 </script>

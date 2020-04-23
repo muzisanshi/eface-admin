@@ -27,7 +27,7 @@
     </div>
 
     <div class="table-operator">
-      <a-button type="primary" icon="plus"  @click="handleEdit(null)">新增</a-button>
+      <a-button type="primary" icon="plus" @click="handleEdit(null)">新增</a-button>
 
       <a-upload
         name="file"
@@ -80,17 +80,17 @@
 <script>
 import { STable } from '@/components'
 import EditForm from './modules/EditForm'
-import {mapState} from 'vuex';
-import {mixin} from '@/mixins/mixin'
+import { mapState } from 'vuex'
+import { mixin } from '@/mixins/mixin'
 
 export default {
-  mixins:[mixin],
+  mixins: [mixin],
   components: {
     STable,
-    EditForm,
+    EditForm
   },
   computed: {
-    ...mapState(['constants']),
+    ...mapState(['constants'])
   },
   data () {
     return {
@@ -125,13 +125,13 @@ export default {
       loadData: parameter => {
         return this.$api.deviceModel.getPage(Object.assign(parameter, this.queryParam))
           .then(res => {
-            res.records.forEach(item=>{
-              item.deviceModelTypeName = this.constants.data.deviceModelType?this.constants.data.deviceModelType[item.deviceModelType]['name']:''
-            });
+            res.records.forEach(item => {
+              item.deviceModelTypeName = this.constants.data.deviceModelType ? this.constants.data.deviceModelType[item.deviceModelType]['name'] : ''
+            })
             return res
           })
       },
-      importUrl:process.env.VUE_APP_ADMIN_SERVICE_BASE_URL+'/deviceModel/importExcel'
+      importUrl: process.env.VUE_APP_ADMIN_SERVICE_BASE_URL + '/deviceModel/importExcel'
     }
   },
   methods: {
@@ -154,7 +154,7 @@ export default {
         onCancel () {
         }
       })
-    },
+    }
   }
 }
 </script>

@@ -7,8 +7,8 @@
             <img :src="constants.logoData.logoImage?constants.logoData.logoImage.resourceFullAddress:require('../../public/logo.png')" alt="logo" style="width: 200px;height: 50px;display: inline-block;margin-bottom: 15px;">
           </div>
           <a href="/">
-            <span class="title" style="display: block">{{constants.logoData.logoText?constants.logoData.logoText:'e-face'}}</span>
-            <p class="title_second">{{constants.logoData.logoSubTitle?constants.logoData.logoSubTitle:'智慧社区AI管控系统'}}</p>
+            <span class="title" style="display: block">{{ constants.logoData.logoText?constants.logoData.logoText:'e-face' }}</span>
+            <p class="title_second">{{ constants.logoData.logoSubTitle?constants.logoData.logoSubTitle:'智慧社区AI管控系统' }}</p>
           </a>
         </div>
         <div class="desc">
@@ -29,7 +29,7 @@
 <script>
 import RouteView from './RouteView'
 import { mixinDevice } from '@/utils/mixin'
-import {mapState} from 'vuex';
+import { mapState } from 'vuex'
 export default {
   name: 'UserLayout',
   components: { RouteView },

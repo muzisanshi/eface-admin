@@ -33,85 +33,85 @@
 </template>
 
 <script>
-  import ARow from 'ant-design-vue/es/grid/Row'
-  import ACol from 'ant-design-vue/es/grid/Col'
+import ARow from 'ant-design-vue/es/grid/Row'
+import ACol from 'ant-design-vue/es/grid/Col'
 
-  export default {
-    name: 'RoleDataruleModal',
-    components: {ACol, ARow},
-    data() {
-      return {
-        functionId: '',
-        roleId: '',
-        visible: false,
-        tabList: [{
-          key: '1',
-          tab: '数据规则',
-        }, {
-          key: '2',
-          tab: '按钮权限',
-        }],
-        activeTabKey: '1',
-        url: {
-          datarule: "/sys/role/datarule",
-        },
-        dataruleList: [],
-        dataruleChecked: []
-      }
+export default {
+  name: 'RoleDataruleModal',
+  components: { ACol, ARow },
+  data() {
+    return {
+      functionId: '',
+      roleId: '',
+      visible: false,
+      tabList: [{
+        key: '1',
+        tab: '数据规则'
+      }, {
+        key: '2',
+        tab: '按钮权限'
+      }],
+      activeTabKey: '1',
+      url: {
+        datarule: '/sys/role/datarule'
+      },
+      dataruleList: [],
+      dataruleChecked: []
+    }
+  },
+  methods: {
+    loadData() {
+      getAction(`${this.url.datarule}/${this.functionId}/${this.roleId}`).then(res => {
+        console.log(res)
+        if (res.success) {
+          this.dataruleList = res.result.datarule
+          const drChecked = res.result.drChecked
+          if (drChecked) {
+            this.dataruleChecked = drChecked.split(',')
+          }
+        }
+      })
     },
-    methods: {
-      loadData() {
-        getAction(`${this.url.datarule}/${this.functionId}/${this.roleId}`).then(res => {
-          console.log(res)
-          if (res.success) {
-            this.dataruleList = res.result.datarule
-            let drChecked = res.result.drChecked
-            if (drChecked) {
-              this.dataruleChecked = drChecked.split(",")
-            }
-          }
-        })
-      },
-      saveDataruleForRole() {
-        if (!this.dataruleChecked || this.dataruleChecked.length == 0) {
-          this.$message.warning("请注意，现未勾选任何数据权限!")
-        }
-        let params = {
-          permissionId: this.functionId,
-          roleId: this.roleId,
-          dataRuleIds: this.dataruleChecked.join(",")
-        }
-        console.log("保存数据权限", params)
-        postAction(this.url.datarule, params).then(res => {
-          if (res.success) {
-            this.$message.success(res.message)
-          } else {
-            this.$message.error(res.message)
-          }
-        })
-      },
-      show(functionId, roleId) {
-        this.onReset()
-        this.functionId = functionId
-        this.roleId = roleId
-        this.visible = true
-        this.loadData()
-      },
-      onClose() {
-        this.visible = false
-        this.onReset()
-      },
-      onTabChange(key) {
-        this.activeTabKey = key
-      },
-      onReset() {
-        this.functionId = ''
-        this.roleId = ''
-        this.dataruleList = []
-        this.dataruleChecked = []
+    saveDataruleForRole() {
+      if (!this.dataruleChecked || this.dataruleChecked.length == 0) {
+        this.$message.warning('请注意，现未勾选任何数据权限!')
       }
+      const params = {
+        permissionId: this.functionId,
+        roleId: this.roleId,
+        dataRuleIds: this.dataruleChecked.join(',')
+      }
+      console.log('保存数据权限', params)
+      postAction(this.url.datarule, params).then(res => {
+        if (res.success) {
+          this.$message.success(res.message)
+        } else {
+          this.$message.error(res.message)
+        }
+      })
+    },
+    show(functionId, roleId) {
+      this.onReset()
+      this.functionId = functionId
+      this.roleId = roleId
+      this.visible = true
+      this.loadData()
+    },
+    onClose() {
+      this.visible = false
+      this.onReset()
+    },
+    onTabChange(key) {
+      this.activeTabKey = key
+    },
+    onReset() {
+      this.functionId = ''
+      this.roleId = ''
+      this.dataruleList = []
+      this.dataruleChecked = []
     }
   }
+}
 </script>
 
 <style scoped>

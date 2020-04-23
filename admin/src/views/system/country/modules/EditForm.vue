@@ -5,7 +5,8 @@
     :visible="visible"
     :confirmLoading="confirmLoading"
     @ok="handleSubmit"
-    :maskClosable="false" :keyboard="false"
+    :maskClosable="false"
+    :keyboard="false"
     @cancel="handleCancel"
   >
     <a-spin :spinning="confirmLoading">
@@ -85,99 +86,99 @@
 </template>
 
 <script>
-  import { ImageUpload } from '@/components'
-  import {mixin} from '@/mixins/mixin'
-  export default {
-    mixins:[mixin],
-    components: {
-      ImageUpload
+import { ImageUpload } from '@/components'
+import { mixin } from '@/mixins/mixin'
+export default {
+  mixins: [mixin],
+  components: {
+    ImageUpload
+  },
+  data () {
+    return {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 7 }
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 13 }
+      },
+      confirmLoading: false,
+      formData: {
+        nationalAreaCode: {}
+      },
+      form: this.$form.createForm(this),
+      title: '新增',
+      enableLoginRegister: true
+    }
+  },
+  methods: {
+    onUploadSuccess (item) {
+      this.formData.imageAttachment = item
     },
-    data () {
-      return {
-        labelCol: {
-          xs: { span: 24 },
-          sm: { span: 7 }
-        },
-        wrapperCol: {
-          xs: { span: 24 },
-          sm: { span: 13 }
-        },
-        confirmLoading: false,
-        formData: {
-          nationalAreaCode:{}
-        },
-        form: this.$form.createForm(this),
-        title:'新增',
-        enableLoginRegister:true
+    add (item) {
+      this.visible = true
+      this.form.resetFields()
+      this.formData = {
+        nationalAreaCode: {}
+      }
+      this.confirmLoading = false
+      if (item) {
+        this.title = '修改'
+        this.$api.country.getById({ id: item.id })
+          .then(res => {
+            this.formData = res
+            this.enableLoginRegister = this.formData.nationalAreaCode.enableLoginRegister
+            this.formData.imageAttachment = {
+              resourceFullAddress: res.resourceFullAddress
+            }
+          })
+      } else {
+        this.title = '新增'
+        this.enableLoginRegister = true
       }
     },
-    methods: {
-      onUploadSuccess (item) {
-        this.formData.imageAttachment = item
-      },
-      add (item) {
-        this.visible = true
-        this.form.resetFields()
-        this.formData = {
-          nationalAreaCode:{}
-        }
-        this.confirmLoading = false
-        if(item){
-          this.title = '修改'
-          this.$api.country.getById({id: item.id})
+    changeLoginRegister(checked) {
+      this.enableLoginRegister = checked
+    },
+    handleSubmit () {
+      const { form: { validateFields } } = this
+      this.confirmLoading = true
+      validateFields((errors, values) => {
+        if (!errors) {
+          if (this.formData.imageAttachment) {
+            values.imageAttId = this.formData.imageAttachment.id
+          }
+          if (this.formData.id) {
+            values.id = this.formData.id
+          }
+          if (this.formData.imageAttId) {
+            values.imageAttId = this.formData.imageAttId
+          }
+          if (this.formData.nationalAreaCode.id) {
+            values.nationalAreaCode.id = this.formData.nationalAreaCode.id
+          }
+          if (!values.nationalAreaCode.enableLoginRegister) {
+            values.nationalAreaCode.enableLoginRegister = this.enableLoginRegister
+          }
+          this.$api.country.saveOrUpdate(values)
             .then(res => {
-              this.formData = res
-              this.enableLoginRegister = this.formData.nationalAreaCode.enableLoginRegister;
-              this.formData.imageAttachment= {
-                resourceFullAddress:res.resourceFullAddress
-              }
-            })
-        }else{
-          this.title = '新增'
-          this.enableLoginRegister = true
-        }
-      },
-      changeLoginRegister(checked) {
-        this.enableLoginRegister = checked
-      },
-      handleSubmit () {
-        const { form: { validateFields } } = this
-        this.confirmLoading = true
-        validateFields((errors, values) => {
-          if (!errors) {
-            if(this.formData.imageAttachment) {
-              values.imageAttId = this.formData.imageAttachment.id
-            }
-            if(this.formData.id){
-              values.id = this.formData.id
-            }
-            if(this.formData.imageAttId){
-              values.imageAttId = this.formData.imageAttId
-            }
-            if(this.formData.nationalAreaCode.id){
-              values.nationalAreaCode.id = this.formData.nationalAreaCode.id
-            }
-            if (!values.nationalAreaCode.enableLoginRegister) {
-              values.nationalAreaCode.enableLoginRegister = this.enableLoginRegister
-            }
-            this.$api.country.saveOrUpdate(values)
-              .then(res => {
-                this.$notification.success({
-                  message: '成功',
-                  description: this.title+`成功！`
-                })
-                this.visible = false
-                this.confirmLoading = false
-                this.$emit('ok', values)
-              }).finally(() => {
+              this.$notification.success({
+                message: '成功',
+                description: this.title + `成功！`
+              })
+              this.visible = false
+              this.confirmLoading = false
+              this.$emit('ok', values)
+            }).finally(() => {
               this.form.resetFields()
               this.confirmLoading = false
             })
-          } else {
-            this.confirmLoading = false
-          }
-        })
-      }
+        } else {
+          this.confirmLoading = false
+        }
+      })
     }
   }
+}
 </script>

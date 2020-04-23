@@ -53,92 +53,92 @@
 </template>
 
 <script>
-  import { STable } from '@/components'
-  import EditForm from './modules/EditForm'
-  import {mixin} from '@/mixins/mixin'
-  export default {
-    mixins:[mixin],
-    components: {
-      STable,
-      EditForm
-    },
-    data () {
-      return {
-        columns: [
-          {
-            title: '#',
-            scopedSlots: { customRender: 'serial' }
-          },
-          {
-            title: '图片',
-            scopedSlots: { customRender: 'resourceFullAddress' }
-          },
-          {
-            title: '编码',
-            dataIndex: 'code'
-          },
-          {
-            title: '名称',
-            dataIndex: 'name'
-          },
-          {
-            title: '简写标志',
-            dataIndex: 'shortMark'
-          },
-          {
-            title: '全写标志',
-            dataIndex: 'fullMark'
-          },
-          {
-            title: '国际电话区号',
-            dataIndex: 'nationalAreaCode.areaCode'
-          },
-          {
-            title: '是否启用注册登录',
-            dataIndex: 'nationalAreaCode.enableLoginRegister'
-          },
-          {
-            title: '排序序号',
-            dataIndex: 'nationalAreaCode.orderNum'
-          },
-          {
-            title: '操作',
-            dataIndex: 'action',
-            width: '150px',
-            scopedSlots: { customRender: 'action' }
-          }
-        ],
-        loadData: parameter => {
-          return this.$api.country.getPage(Object.assign(parameter, this.queryParam))
-            .then(res => {
-              res.records.forEach(item=>{
-                item.nationalAreaCode.enableLoginRegister = item.nationalAreaCode.enableLoginRegister?'是':'否'
-              });
-              return res
-            })
+import { STable } from '@/components'
+import EditForm from './modules/EditForm'
+import { mixin } from '@/mixins/mixin'
+export default {
+  mixins: [mixin],
+  components: {
+    STable,
+    EditForm
+  },
+  data () {
+    return {
+      columns: [
+        {
+          title: '#',
+          scopedSlots: { customRender: 'serial' }
+        },
+        {
+          title: '图片',
+          scopedSlots: { customRender: 'resourceFullAddress' }
+        },
+        {
+          title: '编码',
+          dataIndex: 'code'
+        },
+        {
+          title: '名称',
+          dataIndex: 'name'
+        },
+        {
+          title: '简写标志',
+          dataIndex: 'shortMark'
+        },
+        {
+          title: '全写标志',
+          dataIndex: 'fullMark'
+        },
+        {
+          title: '国际电话区号',
+          dataIndex: 'nationalAreaCode.areaCode'
+        },
+        {
+          title: '是否启用注册登录',
+          dataIndex: 'nationalAreaCode.enableLoginRegister'
+        },
+        {
+          title: '排序序号',
+          dataIndex: 'nationalAreaCode.orderNum'
+        },
+        {
+          title: '操作',
+          dataIndex: 'action',
+          width: '150px',
+          scopedSlots: { customRender: 'action' }
         }
-      }
-    },
-    methods: {
-      handleDelete () {
-        const that = this
-        that.$confirm({
-          title: '删除',
-          content: '确定删除勾选的记录？',
-          onOk () {
-            that.$api.country.del({ ids: that.selectedRowKeys })
-              .then(res => {
-                that.$notification.success({
-                  message: '成功',
-                  description: `删除成功！`
-                })
-                that.handleOk()
-              })
-          },
-          onCancel () {
-          }
-        })
+      ],
+      loadData: parameter => {
+        return this.$api.country.getPage(Object.assign(parameter, this.queryParam))
+          .then(res => {
+            res.records.forEach(item => {
+              item.nationalAreaCode.enableLoginRegister = item.nationalAreaCode.enableLoginRegister ? '是' : '否'
+            })
+            return res
+          })
       }
     }
+  },
+  methods: {
+    handleDelete () {
+      const that = this
+      that.$confirm({
+        title: '删除',
+        content: '确定删除勾选的记录？',
+        onOk () {
+          that.$api.country.del({ ids: that.selectedRowKeys })
+            .then(res => {
+              that.$notification.success({
+                message: '成功',
+                description: `删除成功！`
+              })
+              that.handleOk()
+            })
+        },
+        onCancel () {
+        }
+      })
+    }
   }
+}
 </script>

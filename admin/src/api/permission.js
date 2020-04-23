@@ -1,4 +1,4 @@
-import {axios} from '@/utils/request'
+import { axios } from '@/utils/request'
 
 const URI = {
   page: '/permission/getPage',
@@ -58,7 +58,6 @@ function getPermissionTree(parameter) {
     params: parameter
   })
 }
-
 
 export default {
   getPage,

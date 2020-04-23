@@ -27,7 +27,7 @@
     </div>
 
     <div class="table-operator">
-      <a-button type="primary" icon="plus"  @click="handleEdit(null)">新增</a-button>
+      <a-button type="primary" icon="plus" @click="handleEdit(null)">新增</a-button>
 
       <a-upload
         name="file"
@@ -80,10 +80,10 @@
 <script>
 import { STable } from '@/components'
 import EditForm from './modules/EditForm'
-import {mixin} from '@/mixins/mixin'
+import { mixin } from '@/mixins/mixin'
 
 export default {
-  mixins:[mixin],
+  mixins: [mixin],
   components: {
     STable,
     EditForm
@@ -118,7 +118,7 @@ export default {
             return res
           })
       },
-      importUrl:process.env.VUE_APP_ADMIN_SERVICE_BASE_URL+'/deviceFactory/importExcel'
+      importUrl: process.env.VUE_APP_ADMIN_SERVICE_BASE_URL + '/deviceFactory/importExcel'
     }
   },
   methods: {
@@ -141,7 +141,7 @@ export default {
         onCancel () {
         }
       })
-    },
+    }
   }
 }
 </script>

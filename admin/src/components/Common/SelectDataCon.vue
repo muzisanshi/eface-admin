@@ -11,7 +11,8 @@
     :visible="visible"
     :confirmLoading="confirmLoading"
     @ok="handleSubmit"
-    :maskClosable="false" :keyboard="false"
+    :maskClosable="false"
+    :keyboard="false"
     @cancel="handleCancel"
   >
     <a-spin :spinning="confirmLoading">
@@ -22,8 +23,10 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
         >
-          <select-area ref="selectAreaAll" :initArea="initCascader"
-                       @selectedArea="selectedArea"></select-area>
+          <select-area
+            ref="selectAreaAll"
+            :initArea="initCascader"
+            @selectedArea="selectedArea"></select-area>
         </a-form-item>
 
         <a-form-item
@@ -32,7 +35,9 @@
           :wrapperCol="wrapperCol"
         >
           <a-input
-            v-decorator="['name']" @blur="searchName($event)" placeholder="请输入地产名称搜索"/>
+            v-decorator="['name']"
+            @blur="searchName($event)"
+            placeholder="请输入地产名称搜索"/>
         </a-form-item>
 
         <a-form-item
@@ -71,7 +76,6 @@
           </a-select>
         </a-form-item>
 
-
         <a-form-item
           label="楼栋单元"
           :labelCol="labelCol"
@@ -108,222 +112,218 @@
           </a-select>
         </a-form-item>
 
-  </a-form>
+      </a-form>
     </a-spin>
   </a-modal>
 </template>
 
 <script>
-  import selectArea from './SelectArea'
-  import {mixin} from '@/mixins/mixin'
-  export default {
-    props:{
+import selectArea from './SelectArea'
+import { mixin } from '@/mixins/mixin'
+export default {
+  props: {
+  },
+  components: {
+    selectArea
+  },
+  mixins: [mixin],
+  data() {
+    return {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 4 }
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 17 }
+      },
+      form: this.$form.createForm(this),
+      formData: {},
+      initCascader: [],
+      estateList: [],
+      buildList: [],
+      unitList: [],
+      storeyList: [],
+      confirmLoading: false,
+      visible: false,
+      curItem: '',
+      currentData: '',
+      currentDataName: '',
+      areaId: '',
+      name: '',
+      currentItem: {},
+      roomNum: 0
+    }
+  },
+  created() {
+
+  },
+  methods: {
+
+    selectData(item) {
+      this.visible = true
+      this.curItem = item
+      this.form.resetFields()
+      this.formData = {}
+      this.init()
     },
-    components: {
-      selectArea
+
+    init() {
+      this.initCascader = []
+      this.currentData = ''
+      this.currentDataName = ''
+      this.estateList = []
+      this.buildList = []
+      this.unitList = []
+      this.storeyList = []
+      this.areaId = ''
+      this.name = ''
+      this.roomNum = 0
     },
-    mixins:[mixin],
-    data() {
-      return {
-        labelCol: {
-          xs: { span: 24 },
-          sm: { span: 4 },
-        },
-        wrapperCol: {
-          xs: { span: 24 },
-          sm: { span: 17 },
-        },
-        form: this.$form.createForm(this),
-        formData: {},
-        initCascader:[],
-        estateList:[],
-        buildList:[],
-        unitList:[],
-        storeyList:[],
-        confirmLoading:false,
-        visible:false,
-        curItem:'',
-        currentData:'',
-        currentDataName:'',
-        areaId:'',
-        name:'',
-        currentItem:{},
-        roomNum:0
-      }
+    selectedArea(area) {
+      this.initCascader = area.value
+      this.areaId = area.value[area.value.length - 1]
+      this.getEstateList()
     },
-    created(){
 
+    searchName(name) {
+      this.name = name ? name.srcElement.value : ''
+      this.getEstateList()
     },
-    methods: {
+    getEstateList() {
+      const that = this
+      if (!that.areaId && !that.name) {
 
-      selectData(item){
-        this.visible = true;
-        this.curItem = item;
-        this.form.resetFields()
-        this.formData = {}
-        this.init();
-      },
-
-      init(){
-        this.initCascader = [];
-        this.currentData = '';
-        this.currentDataName = '';
-        this.estateList = [];
-        this.buildList = [];
-        this.unitList = [];
-        this.storeyList = [];
-        this.areaId = ''
-        this.name = ''
+      } else {
+        this.estateList = []
+        this.buildList = []
+        this.unitList = []
+        this.storeyList = []
         this.roomNum = 0
-      },
-      selectedArea(area) {
-        this.initCascader = area.value;
-        this.areaId = area.value[area.value.length-1]
-        this.getEstateList()
-      },
-
-      searchName(name){
-        this.name = name?name.srcElement.value:'';
-        this.getEstateList()
-
-      },
-      getEstateList(){
-        let that = this;
-        if(!that.areaId && !that.name){
-
-        }else{
-          this.estateList = [];
-          this.buildList = [];
-          this.unitList = [];
-          this.storeyList = [];
-          this.roomNum = 0
-          this.form.resetFields(['estateId','buildId','unitId','storeyList']);
-          this.$api.estate.getLimitPage({
-            name:that.name,
-            areaId:that.areaId
-          })
-            .then(res => {
-              const l = []
-              for (let i = 0, j = res.length; i < j; i++) {
-                l.push({
-                  value: res[i].id,
-                  label: res[i].name
-                })
-              }
-              this.estateList = l
-            })
-        }
-
-      },
-
-      estateChange(value,option){
-        this.currentData = value
-        this.currentDataName = option.componentOptions.children[0].text
-        this.buildList = [];
-        this.unitList = [];
-        this.storeyList = [];
-        this.roomNum = 0
-        this.form.resetFields(['buildId','unitId','storeyList']);
-        if(this.curItem>1){
-          this.$api.subject.getBuildAll({
-            estateId: value
-          })
-            .then(res => {
-              const l = []
-              for (let i = 0, j = res.length; i < j; i++) {
-                l.push({
-                  value: res[i].id,
-                  label: res[i].name
-                })
-              }
-              this.buildList = l
-            })
-        }
-
-      },
-
-      buildChange(value){
-        this.unitList = [];
-        this.storeyList = [];
-        this.roomNum = 0
-        this.form.resetFields(['unitId','storeyList']);
-        if(this.curItem>1){
-          this.$api.subject.getUnitAll({
-            buildingId: value
-          })
-            .then(res => {
-              const l = []
-              for (let i = 0, j = res.length; i < j; i++) {
-                l.push({
-                  value: res[i].id,
-                  label: res[i].name
-                })
-              }
-              this.unitList = l
-            })
-        }
-      },
-
-      unitChange(value,option){
-        this.currentData = value
-        this.currentDataName = option.componentOptions.children[0].text
-        this.storeyList = [];
-        this.roomNum = 0
-        this.form.resetFields(['storeyList']);
-        if(this.curItem>2){
-          this.$api.storey.getAll({
-            unitId: value
-          })
-            .then(res => {
-              const l = []
-              for (let i = 0, j = res.length; i < j; i++) {
-                l.push({
-                  value: res[i].id,
-                  label: res[i].name,
-                  roomNum:res[i].roomNum,
-                })
-              }
-              this.storeyList = l
-            })
-        }
-
-      },
-
-      storeyChange(value,option){
-        this.currentData = value
-        this.roomNum = 0
-        this.getUnAddRoomList(value)
-        this.currentDataName = option.componentOptions.children[0].text
-      },
-
-      getUnAddRoomList(id){
-        this.$api.storey.getMaxRoomNum({
-          storyId: id
+        this.form.resetFields(['estateId', 'buildId', 'unitId', 'storeyList'])
+        this.$api.estate.getLimitPage({
+          name: that.name,
+          areaId: that.areaId
         })
           .then(res => {
-            this.roomNum = res.maxRoomNum
+            const l = []
+            for (let i = 0, j = res.length; i < j; i++) {
+              l.push({
+                value: res[i].id,
+                label: res[i].name
+              })
+            }
+            this.estateList = l
           })
-      },
+      }
+    },
 
-      handleSubmit(){
-        const { form: { validateFields } } = this
-        validateFields((errors, values) => {
-          if (!errors) {
-            this.$emit('selectSuccess', {
-              value:this.currentData,
-              name:this.currentDataName,
-              roomNum:this.roomNum
-            })
-            this.visible = false
-            this.form.resetFields();
-            this.initCascader = [];
-          }
+    estateChange(value, option) {
+      this.currentData = value
+      this.currentDataName = option.componentOptions.children[0].text
+      this.buildList = []
+      this.unitList = []
+      this.storeyList = []
+      this.roomNum = 0
+      this.form.resetFields(['buildId', 'unitId', 'storeyList'])
+      if (this.curItem > 1) {
+        this.$api.subject.getBuildAll({
+          estateId: value
         })
-      },
-      onChangeAddress(value){
-        this.initCascader = value;
-        this.$emit('selectedArea',this.initCascader)
-      },
+          .then(res => {
+            const l = []
+            for (let i = 0, j = res.length; i < j; i++) {
+              l.push({
+                value: res[i].id,
+                label: res[i].name
+              })
+            }
+            this.buildList = l
+          })
+      }
+    },
+
+    buildChange(value) {
+      this.unitList = []
+      this.storeyList = []
+      this.roomNum = 0
+      this.form.resetFields(['unitId', 'storeyList'])
+      if (this.curItem > 1) {
+        this.$api.subject.getUnitAll({
+          buildingId: value
+        })
+          .then(res => {
+            const l = []
+            for (let i = 0, j = res.length; i < j; i++) {
+              l.push({
+                value: res[i].id,
+                label: res[i].name
+              })
+            }
+            this.unitList = l
+          })
+      }
+    },
+
+    unitChange(value, option) {
+      this.currentData = value
+      this.currentDataName = option.componentOptions.children[0].text
+      this.storeyList = []
+      this.roomNum = 0
+      this.form.resetFields(['storeyList'])
+      if (this.curItem > 2) {
+        this.$api.storey.getAll({
+          unitId: value
+        })
+          .then(res => {
+            const l = []
+            for (let i = 0, j = res.length; i < j; i++) {
+              l.push({
+                value: res[i].id,
+                label: res[i].name,
+                roomNum: res[i].roomNum
+              })
+            }
+            this.storeyList = l
+          })
+      }
+    },
+
+    storeyChange(value, option) {
+      this.currentData = value
+      this.roomNum = 0
+      this.getUnAddRoomList(value)
+      this.currentDataName = option.componentOptions.children[0].text
+    },
+
+    getUnAddRoomList(id) {
+      this.$api.storey.getMaxRoomNum({
+        storyId: id
+      })
+        .then(res => {
+          this.roomNum = res.maxRoomNum
+        })
+    },
+
+    handleSubmit() {
+      const { form: { validateFields } } = this
+      validateFields((errors, values) => {
+        if (!errors) {
+          this.$emit('selectSuccess', {
+            value: this.currentData,
+            name: this.currentDataName,
+            roomNum: this.roomNum
+          })
+          this.visible = false
+          this.form.resetFields()
+          this.initCascader = []
+        }
+      })
+    },
+    onChangeAddress(value) {
+      this.initCascader = value
+      this.$emit('selectedArea', this.initCascader)
     }
   }
+}
 </script>

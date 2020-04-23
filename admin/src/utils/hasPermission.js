@@ -21,7 +21,7 @@ export function filterNodePermission (el, binding, vnode) {
   try {
     var obj = vnode.context.$props.formData
     if (obj) {
-      let bpmList = obj.permissionList
+      const bpmList = obj.permissionList
       for (var bpm of bpmList) {
         permissionList.push(bpm)
       }
@@ -31,7 +31,7 @@ export function filterNodePermission (el, binding, vnode) {
   if (permissionList === null || permissionList === '' || permissionList === undefined || permissionList.length <= 0) {
     return false
   }
-  let permissions = []
+  const permissions = []
   for (var item of permissionList) {
     permissions.push(item.action)
   }
@@ -51,23 +51,22 @@ export function filterNodePermission (el, binding, vnode) {
  * 全局权限控制
  */
 export function filterGlobalPermission (el, binding, vnode) {
-
-  var permissionList = [];
-  var allPermissionList = [];
+  var permissionList = []
+  var allPermissionList = []
 
   // let authList = Vue.ls.get(USER_AUTH);
-  let authList = JSON.parse(sessionStorage.getItem(USER_AUTH) || '[]')
+  const authList = JSON.parse(sessionStorage.getItem(USER_AUTH) || '[]')
   for (var auth of authList) {
     permissionList.push(auth)
   }
 
   // console.log("页面权限--Global--",sessionStorage.getItem(SYS_BUTTON_AUTH));
-  let allAuthList = JSON.parse(sessionStorage.getItem(SYS_BUTTON_AUTH) || '[]')
+  const allAuthList = JSON.parse(sessionStorage.getItem(SYS_BUTTON_AUTH) || '[]')
   for (var gauth of allAuthList) {
     allPermissionList.push(gauth)
   }
   // 设置全局配置是否有命中
-  var invalidFlag = false //无效命中
+  var invalidFlag = false // 无效命中
   if (allPermissionList != null && allPermissionList != '' && allPermissionList != undefined && allPermissionList.length > 0) {
     for (var itemG of allPermissionList) {
       if (binding.value === itemG.action) {
@@ -85,7 +84,7 @@ export function filterGlobalPermission (el, binding, vnode) {
     el.parentNode.removeChild(el)
     return
   }
-  let permissions = []
+  const permissions = []
   for (var item of permissionList) {
     permissions.push(item.action)
   }

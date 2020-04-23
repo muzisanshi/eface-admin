@@ -128,7 +128,7 @@ export default {
       this.getStreetList()
     },
     getStreetList() {
-      let that = this
+      const that = this
       if (!that.areaId && !that.name) {
       } else {
         // this.$api.streetOffice.getAll({

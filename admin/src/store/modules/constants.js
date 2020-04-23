@@ -23,10 +23,10 @@ export default {
       commit
     }) {
       api.constants.getEnumData().then(res => {
-        let list = {}
-        for(let i in res){
-          let l = []
-          for(let j in res[i]){
+        const list = {}
+        for (const i in res) {
+          const l = []
+          for (const j in res[i]) {
             res[i][j].label = res[i][j].name
             l.push({
               label: res[i][j].name,
@@ -35,17 +35,17 @@ export default {
           }
           list[i] = l
         }
-        commit("UPDATE_CONSTANTS", res)
-        commit("UPDATE_CONSTANTS_LIST", list)
+        commit('UPDATE_CONSTANTS', res)
+        commit('UPDATE_CONSTANTS_LIST', list)
       }).catch(err => {})
     },
 
     loadLogoData ({
-       commit
+      commit
     }) {
-    api.webPageSetting.getInfo().then(res => {
-      commit("UPDATE_LOGO_DATA", res)
-    }).catch(err => {})
+      api.webPageSetting.getInfo().then(res => {
+        commit('UPDATE_LOGO_DATA', res)
+      }).catch(err => {})
     }
   }
 }
