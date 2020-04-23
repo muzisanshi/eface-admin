@@ -360,7 +360,7 @@ export default {
               })
               this.visible = false
               this.confirmLoading = false
-              this.form.resetFields()
+              // this.form.resetFields()
               this.$emit('ok', values)
             })
             .finally(() => {

@@ -6,6 +6,7 @@
 -->
 <template>
   <a-cascader
+    v-if="cascaderFlag"
     :options="options"
     @change="onChangeAddress"
     :loadData="loadData"
@@ -37,7 +38,8 @@ export default {
       initCascaderName: [],
       options: [],
       num: 0,
-      arr: []
+      arr: [],
+      cascaderFlag: false
     }
   },
   watch: {
@@ -61,12 +63,14 @@ export default {
   },
   methods: {
     initAllArea() {
+      this.cascaderFlag = false
       let that = this
       that.initCascader = []
       this.num = 0
       this.arr = []
       that.initCascaderName = []
       that.$api.area.getAllParent({}).then(res => {
+        this.cascaderFlag = true
         const l = []
         for (let i = 0, j = res.length; i < j; i++) {
           l.push({
@@ -104,9 +108,9 @@ export default {
       this.arr = []
     },
 
-    getChildArea(length) {
+    async getChildArea(length) {
       for (let i = 0; i < length - 1; i++) {
-        this.getChildAreaList(this.initCascader[i], i)
+        await this.getChildAreaList(this.initCascader[i], i)
       }
       // this.getChildAreaList(this.initCascader[0], 0)
       // this.getChildAreaList(this.initCascader[1], 1)
@@ -209,3 +213,9 @@ export default {
   }
 }
 </script>
+
+<style>
+.ant-cascader-menu:empty {
+  display: none;
+}
+</style>

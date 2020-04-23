@@ -956,6 +956,7 @@
       },
 
       add() {
+        this.next('2')
         var that = this;
         const { form: { validateFields } } = this
         validateFields((errors, values) => {

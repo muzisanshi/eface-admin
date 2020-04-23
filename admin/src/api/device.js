@@ -12,7 +12,9 @@ const URI = {
   rejectConnect: '/device/rejectConnect',
   resetDevice: '/device/resetDevice',
   syncUser: '/device/syncUser',
-  exportExcel: '/device/exportExcel'
+  exportExcel: '/device/exportExcel',
+  bindOrg: '/device/bindOrg',
+  unBindOrg: '/device/unBindOrg'
 }
 
 function getPage (parameter) {
@@ -99,6 +101,20 @@ function resetDevice (parameter) {
   })
 }
 
+function bindOrg (parameter) {
+  return axios({
+    url: URI.bindOrg,
+    params: parameter
+  })
+}
+
+function unBindOrg (parameter) {
+  return axios({
+    url: URI.unBindOrg,
+    params: parameter
+  })
+}
+
 export default {
   getById,
   getPage,
@@ -111,5 +127,7 @@ export default {
   recoverConnect,
   rejectConnect,
   resetDevice,
-  syncUser
+  syncUser,
+  bindOrg,
+  unBindOrg
 }
