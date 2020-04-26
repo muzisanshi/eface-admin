@@ -8,7 +8,8 @@ const URI = {
   del: '/manager/delete',
   getInfo: '/manager/getInfo',
   update: '/manager/update',
-  updatePassword: '/manager/updatePassword'
+  updatePassword: '/manager/updatePassword',
+  bindOrg: '/manager/bindOrg'
 }
 
 // 用户管理---wg-2019/6/24
@@ -76,6 +77,13 @@ function downFile (url, parameter) {
   })
 }
 
+function bindOrg (parameter) {
+  return axios({
+    url: URI.bindOrg,
+    params: parameter
+  })
+}
+
 export default {
   getById,
   getPage,
@@ -85,5 +93,6 @@ export default {
   update,
   updatePassword,
   logout,
-  downFile
+  downFile,
+  bindOrg
 }

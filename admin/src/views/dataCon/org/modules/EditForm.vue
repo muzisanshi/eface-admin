@@ -2,7 +2,7 @@
  * @name CreateForm.vue
  * @author lw
  * @date 2019.11.6
- * @desc 新增（组织管理）
+ * @desc 新增（主控单位）
 -->
 <template>
   <a-modal
@@ -265,7 +265,7 @@ export default {
     },
 
     add(item) {
-      this.zIndex = 10
+      this.zIndex = 2000
       const that = this
       this.visible = true
       this.form.resetFields()
@@ -532,7 +532,7 @@ export default {
     }
   },
   mounted() {
-    this.zIndex = -10
+    this.zIndex = -2000
     this.createMap()
     this.visible = false
   }

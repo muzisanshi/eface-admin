@@ -112,18 +112,18 @@
           <!-- <a-col :span="12" v-if="isOrgInput">
 
             <a-form-item
-              label="组织"
+              label="单位"
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
             >
               <a-select
                 showSearch
-                placeholder="选择组织"
+                placeholder="选择单位"
                 optionFilterProp="children"
                 @change="orgChange"
                 :filterOption="filterCommonOption"
                 :options="orgList"
-                v-decorator="['manager.orgId', {initialValue: this.formData.orgId?this.formData.orgId:'',rules: [{required: true, message: '请选择组织！'}]}]"
+                v-decorator="['manager.orgId', {initialValue: this.formData.orgId?this.formData.orgId:'',rules: [{required: true, message: '请选择单位！'}]}]"
               >
               </a-select>
             </a-form-item>

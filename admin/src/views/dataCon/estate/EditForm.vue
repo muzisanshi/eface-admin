@@ -32,7 +32,7 @@
             <a-form-item label="名称" :labelCol="labelCol" :wrapperCol="wrapperCol">
               <a-input
                 :maxLength="64"
-                v-decorator="['name', {initialValue: this.formData.name, rules: [{required: true, message: '请输入组织名称！'}]}]"
+                v-decorator="['name', {initialValue: this.formData.name, rules: [{required: true, message: '请输入单位名称！'}]}]"
               />
             </a-form-item>
           </a-col>
@@ -54,14 +54,14 @@
           </a-col>
 
           <a-col :span="12">
-            <a-form-item label="组织" :labelCol="labelCol" :wrapperCol="wrapperCol">
+            <a-form-item label="单位" :labelCol="labelCol" :wrapperCol="wrapperCol">
               <a-select
                 showSearch
-                placeholder="选择组织"
+                placeholder="选择单位"
                 optionFilterProp="children"
                 :filterOption="filterCommonOption"
                 :options="orgList"
-                v-decorator="['orgId', {initialValue: this.formData.orgId?this.formData.orgId:'',rules: [{required: true, message: '请选择组织！'}]}]"
+                v-decorator="['orgId', {initialValue: this.formData.orgId?this.formData.orgId:'',rules: [{required: true, message: '请选择单位！'}]}]"
               ></a-select>
             </a-form-item>
           </a-col>

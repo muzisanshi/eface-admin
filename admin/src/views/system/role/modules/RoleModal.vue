@@ -32,13 +32,13 @@
         </a-form-item>
 
         <a-form-item
-          label="组织"
+          label="单位"
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
         >
           <a-select
             showSearch
-            placeholder="选择组织"
+            placeholder="选择单位"
             optionFilterProp="children"
             :filterOption="filterCommonOption"
             :options="orgList"

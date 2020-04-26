@@ -17,25 +17,25 @@
 
           <a-col :md="5" :sm="24">
             <a-form-item label="SN">
-              <a-input :maxLength="64" v-model="queryParam.sn" placeholder=""/>
+              <a-input :maxLength="64" v-model="queryParam.sn" placeholder />
             </a-form-item>
           </a-col>
           <a-col :md="5" :sm="24">
             <a-form-item label="型号名称">
-              <a-input :maxLength="64" v-model="queryParam.deviceModelName" placeholder=""/>
+              <a-input :maxLength="64" v-model="queryParam.deviceModelName" placeholder />
             </a-form-item>
           </a-col>
 
           <a-col :md="5" :sm="24">
             <a-form-item label="设备名称">
-              <a-input :maxLength="32" v-model="queryParam.name" placeholder=""/>
+              <a-input :maxLength="32" v-model="queryParam.name" placeholder />
             </a-form-item>
           </a-col>
         </a-row>
         <a-row :gutter="48">
           <a-col :md="5" :sm="24">
             <a-form-item label="位置名称">
-              <a-input :maxLength="64" v-model="queryParam.locationName" placeholder=""/>
+              <a-input :maxLength="64" v-model="queryParam.locationName" placeholder />
             </a-form-item>
           </a-col>
 
@@ -47,7 +47,7 @@
                 optionFilterProp="children"
                 v-model="queryParam.enable"
               >
-                <a-select-option value="">请选择</a-select-option>
+                <a-select-option value>请选择</a-select-option>
                 <a-select-option value="true">是</a-select-option>
                 <a-select-option value="false">否</a-select-option>
               </a-select>
@@ -82,16 +82,36 @@
 
       <!--      <a-button type="primary" @click="recoverDevice" v-if="selectedRows.length === 1 && selectedRows[0].deviceStatus === '离线'">上线</a-button>-->
 
-      <a-button type="primary" @click="resetDevice" v-if="selectedRows.length === 1 && selectedRows[0].deviceStatus === '在线'">重置</a-button>
+      <a-button
+        type="primary"
+        @click="resetDevice"
+        v-if="selectedRows.length === 1 && selectedRows[0].deviceStatus === '在线'"
+      >重置</a-button>
 
-      <a-button type="primary" @click="openGateBrake" v-if="selectedRows.length === 1 && selectedRows[0].deviceStatus === '在线'">开启闸机</a-button>
+      <a-button
+        type="primary"
+        @click="openGateBrake"
+        v-if="selectedRows.length === 1 && selectedRows[0].deviceStatus === '在线'"
+      >开启闸机</a-button>
 
-      <a-button type="primary" @click="lowerHairUser(selectedRows[0].id)" v-if="selectedRows.length === 1 && selectedRows[0].deviceStatus === '在线'">同步底库用户</a-button>
+      <a-button
+        type="primary"
+        @click="lowerHairUser(selectedRows[0].id)"
+        v-if="selectedRows.length === 1 && selectedRows[0].deviceStatus === '在线'"
+      >同步底库用户</a-button>
 
-      <a-button type="primary" @click="rejectDevice" v-if="selectedRows.length === 1 && selectedRows[0].deviceStatus === '在线'">下线</a-button>
+      <a-button
+        type="primary"
+        @click="rejectDevice"
+        v-if="selectedRows.length === 1 && selectedRows[0].deviceStatus === '在线'"
+      >下线</a-button>
 
-      <a-button type="danger" icon="delete" @click="handleDelete" :disabled="selectedRowKeys.length < 1">删除</a-button>
-
+      <a-button
+        type="danger"
+        icon="delete"
+        @click="handleDelete"
+        :disabled="selectedRowKeys.length < 1"
+      >删除</a-button>
     </div>
 
     <a-table
@@ -105,22 +125,29 @@
       :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectDeviceChange}"
       @expand="handleExpand"
     >
-      <span slot="serial" slot-scope="text, record, index">
-
-        {{ index + 1 }}
-      </span>
+      <span slot="serial" slot-scope="text, record, index">{{ index + 1 }}</span>
 
       <span slot="deviceStatus" slot-scope="text, record">
         <template>
           <div>
-            <span v-if="record.deviceStatus === '在线'" style="width: 6px;height: 6px;background-color: #52c41a;display: inline-block;border-radius: 50%;margin-right: 8px;margin-bottom: 2px;"></span>
-            <span v-if="record.deviceStatus !== '在线'" style="width: 6px;height: 6px;background-color: #FA6274;display: inline-block;border-radius: 50%;margin-right: 8px;margin-bottom: 2px;"></span>
+            <span
+              v-if="record.deviceStatus === '在线'"
+              style="width: 6px;height: 6px;background-color: #52c41a;display: inline-block;border-radius: 50%;margin-right: 8px;margin-bottom: 2px;"
+            ></span>
+            <span
+              v-if="record.deviceStatus !== '在线'"
+              style="width: 6px;height: 6px;background-color: #FA6274;display: inline-block;border-radius: 50%;margin-right: 8px;margin-bottom: 2px;"
+            ></span>
             <span>{{ record.deviceStatus }}</span>
           </div>
         </template>
       </span>
 
-      <div slot="expandedRowRender" slot-scope="record, index, indent, expanded" style="margin: 0">
+      <div
+        :slot="selectDeviceStatus ? '' : 'expandedRowRender'"
+        slot-scope="record, index, indent, expanded"
+        style="margin: 0"
+      >
         <p style="margin: 0; border-bottom: 1px dashed #DDD; padding: 10px 0;">主机信息:</p>
         <div class="mainEngine-mess">
           <a-row :gutter="24">
@@ -180,7 +207,10 @@
             </a-col>
           </a-row>
         </div>
-        <p style="margin: 0; border-bottom: 1px dashed #DDD; padding: 10px 0;" v-if="itemData.cameras">相机信息:</p>
+        <p
+          style="margin: 0; border-bottom: 1px dashed #DDD; padding: 10px 0;"
+          v-if="itemData.cameras"
+        >相机信息:</p>
 
         <div class="mainEngine-mess">
           <div v-for="item in itemData.cameras" style="margin: 0; border-bottom: 1px dashed #DDD;">
@@ -233,7 +263,6 @@
             </a-row>
 
             <a-row :gutter="24">
-
               <a-col :span="6">
                 <a-form-item label="Ip地址(门禁闸机)" :labelCol="labelCol" :wrapperCol="wrapperCol">
                   <span>{{ item.gateBrake.network.ip }}</span>
@@ -287,7 +316,6 @@
             </a-row>
           </div>
         </div>
-
       </div>
 
       <span slot="status" slot-scope="text">
@@ -297,11 +325,10 @@
       <span slot="action" slot-scope="text, record">
         <template v-if="!selectDeviceStatus">
           <a @click="handleEditInit(record)">修改</a>
-          <a-divider type="vertical"/>
+          <a-divider type="vertical" />
           <a @click="lowerHairUser(record.id)">同步底库用户</a>
         </template>
       </span>
-
     </a-table>
     <a-pagination
       class="ant-table-pagination ant-pagination"
@@ -311,8 +338,9 @@
       @change="onChange"
       @showSizeChange="onShowSizeChange"
       :total="pageElements"
-      v-model="queryParam.page.pageNumber"/>
-    <edit-form v-if="!selectDeviceStatus" ref="editModal" @ok="handleLoadOk"/>
+      v-model="queryParam.page.pageNumber"
+    />
+    <edit-form v-if="!selectDeviceStatus" ref="editModal" @ok="handleLoadOk" />
     <select-room ref="selectRoom" @selectRoom="selectRoomSuccess"></select-room>
   </a-card>
 </template>
@@ -340,13 +368,14 @@ export default {
     selectDeviceStatus(newVal) {
       if (newVal) {
         this.selectedRowKeys = []
+        this.selectedRows = []
       }
     }
   },
   computed: {
     ...mapState(['constants'])
   },
-  data () {
+  data() {
     return {
       queryParam: {
         page: {
@@ -499,8 +528,7 @@ export default {
     this.loadData()
   },
   methods: {
-
-    resetSearchFormDevice () {
+    resetSearchFormDevice() {
       this.queryParam = {
         page: { pageNumber: 1, pageSize: 10 }
       }
@@ -513,47 +541,43 @@ export default {
     },
 
     recoverDevice() {
-      this.$api.device.recoverConnect({ deviceSn: this.selectedRows[0].sn })
-        .then(res => {
-          this.$notification.success({
-            message: '成功',
-            description: `上线成功！`
-          })
-          this.handleLoadOk()
+      this.$api.device.recoverConnect({ deviceSn: this.selectedRows[0].sn }).then(res => {
+        this.$notification.success({
+          message: '成功',
+          description: `上线成功！`
         })
+        this.handleLoadOk()
+      })
     },
 
     resetDevice() {
-      this.$api.device.resetDevice({ deviceSn: this.selectedRows[0].sn })
-        .then(res => {
-          this.$notification.success({
-            message: '成功',
-            description: `重置成功！`
-          })
-          this.handleLoadOk()
+      this.$api.device.resetDevice({ deviceSn: this.selectedRows[0].sn }).then(res => {
+        this.$notification.success({
+          message: '成功',
+          description: `重置成功！`
         })
+        this.handleLoadOk()
+      })
     },
 
     openGateBrake() {
-      this.$api.device.openGateBrake({ deviceSn: this.selectedRows[0].sn })
-        .then(res => {
-          this.$notification.success({
-            message: '成功',
-            description: `开启闸机成功！`
-          })
-          this.handleLoadOk()
+      this.$api.device.openGateBrake({ deviceSn: this.selectedRows[0].sn }).then(res => {
+        this.$notification.success({
+          message: '成功',
+          description: `开启闸机成功！`
         })
+        this.handleLoadOk()
+      })
     },
 
     rejectDevice() {
-      this.$api.device.rejectConnect({ deviceSn: this.selectedRows[0].sn })
-        .then(res => {
-          this.$notification.success({
-            message: '成功',
-            description: `下线成功！`
-          })
-          this.handleLoadOk()
+      this.$api.device.rejectConnect({ deviceSn: this.selectedRows[0].sn }).then(res => {
+        this.$notification.success({
+          message: '成功',
+          description: `下线成功！`
         })
+        this.handleLoadOk()
+      })
     },
 
     selectRoomSuccess(value) {
@@ -566,40 +590,36 @@ export default {
       this.data = []
       // this.selectedRowKeys = []
       // this.selectedRows = []
-      this.$api.device.getPage(Object.assign({}, this.queryParam))
-        .then(res => {
-          res.records.forEach(item => {
-            item.deviceStatus = item.deviceStatus === 'OFFLINE' ? '离线' : '在线'
-          })
-          this.data = res.records
-          this.pageElements = res.totalElements
+      this.$api.device.getPage(Object.assign({}, this.queryParam)).then(res => {
+        res.records.forEach(item => {
+          item.deviceStatus = item.deviceStatus === 'OFFLINE' ? '离线' : '在线'
         })
+        this.data = res.records
+        this.pageElements = res.totalElements
+      })
     },
-    handleDelete () {
+    handleDelete() {
       const that = this
       that.$confirm({
         title: '删除',
         content: '确定删除勾选的记录？',
-        onOk () {
-          that.$api.device.del({ ids: that.selectedRowKeys })
-            .then(res => {
-              that.$notification.success({
-                message: '成功',
-                description: `删除成功！`
-              })
-              that.handleLoadOk()
+        onOk() {
+          that.$api.device.del({ ids: that.selectedRowKeys }).then(res => {
+            that.$notification.success({
+              message: '成功',
+              description: `删除成功！`
             })
+            that.handleLoadOk()
+          })
         },
-        onCancel () {
-        }
+        onCancel() {}
       })
     },
     handleExpand(expanded, record) {
       if (expanded) {
-        this.$api.device.getById({ id: record.id })
-          .then(res => {
-            this.itemData = res
-          })
+        this.$api.device.getById({ id: record.id }).then(res => {
+          this.itemData = res
+        })
       } else {
         this.itemData = {
           mainEngine: {
@@ -610,21 +630,23 @@ export default {
       }
     },
 
-    onSelectDeviceChange (selectedRowKeys, selectedRows) {
+    onSelectDeviceChange(selectedRowKeys, selectedRows) {
       this.selectedRowKeys = selectedRowKeys
 
       const that = this
-      const hash = {}; let rowsIds = []; let defferentId = ''
+      const hash = {}
+      let rowsIds = []
+      let defferentId = ''
       that.selectedRows = [...this.selectedRows, ...selectedRows]
       that.selectedRows = that.selectedRows.reduce(function(item, next) {
-        hash[next.id] ? '' : hash[next.id] = true && item.push(next)
+        hash[next.id] ? '' : (hash[next.id] = true && item.push(next))
         return item
       }, [])
 
       if (selectedRowKeys.length < that.selectedRows.length) {
         let newRows = []
         rowsIds = []
-        that.selectedRows.map((item) => {
+        that.selectedRows.map(item => {
           rowsIds.push(item.id)
         })
         defferentId = this.selectedRowKeys.concat(rowsIds).filter(function(v, i, arr) {
@@ -646,17 +668,15 @@ export default {
       that.$confirm({
         title: '提示',
         content: '确定下发底库用户？',
-        onOk () {
-          that.$api.device.syncUser({ id: id })
-            .then(res => {
-              that.$notification.success({
-                message: '成功',
-                description: `下发底库用户成功！`
-              })
+        onOk() {
+          that.$api.device.syncUser({ id: id }).then(res => {
+            that.$notification.success({
+              message: '成功',
+              description: `下发底库用户成功！`
             })
+          })
         },
-        onCancel () {
-        }
+        onCancel() {}
       })
     },
 
@@ -667,16 +687,16 @@ export default {
 }
 </script>
 <style scoped>
-.hasBack{
-  background-color:#b75757;
+.hasBack {
+  background-color: #b75757;
 }
 .hasBack td {
-  color:#fff;
+  color: #fff;
 }
-  .table-page-search-wrapper .ant-col-sm-24{
-    padding: 0 10px!important;
-  }
-.mainEngine-mess .ant-form-item{
+.table-page-search-wrapper .ant-col-sm-24 {
+  padding: 0 10px !important;
+}
+.mainEngine-mess .ant-form-item {
   margin-bottom: 0;
 }
 </style>

@@ -104,7 +104,7 @@ export default {
           dataIndex: 'name'
         },
         {
-          title: '组织名称',
+          title: '单位名称',
           dataIndex: 'orgName'
         },
         {
