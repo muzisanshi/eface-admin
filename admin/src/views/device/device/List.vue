@@ -564,8 +564,8 @@ export default {
 
     loadData() {
       this.data = []
-      this.selectedRowKeys = []
-      this.selectedRows = []
+      // this.selectedRowKeys = []
+      // this.selectedRows = []
       this.$api.device.getPage(Object.assign({}, this.queryParam))
         .then(res => {
           res.records.forEach(item => {
@@ -612,9 +612,30 @@ export default {
 
     onSelectDeviceChange (selectedRowKeys, selectedRows) {
       this.selectedRowKeys = selectedRowKeys
-      this.selectedRows = selectedRows
+
+      const that = this
+      const hash = {}; let rowsIds = []; let defferentId = ''
+      that.selectedRows = [...this.selectedRows, ...selectedRows]
+      that.selectedRows = that.selectedRows.reduce(function(item, next) {
+        hash[next.id] ? '' : hash[next.id] = true && item.push(next)
+        return item
+      }, [])
+
+      if (selectedRowKeys.length < that.selectedRows.length) {
+        let newRows = []
+        rowsIds = []
+        that.selectedRows.map((item) => {
+          rowsIds.push(item.id)
+        })
+        defferentId = this.selectedRowKeys.concat(rowsIds).filter(function(v, i, arr) {
+          return arr.indexOf(v) === arr.lastIndexOf(v)
+        })
+        newRows = that.selectedRows.filter(pane => pane.id !== defferentId[0])
+        that.selectedRows = [...newRows]
+      }
+
       if (this.selectDeviceStatus) {
-        this.$emit('selectedDevice', selectedRows)
+        this.$emit('selectedDevice', that.selectedRows)
         this.selectAdStatus = false
       }
     },

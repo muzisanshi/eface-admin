@@ -13,7 +13,7 @@
     @ok="handleSubmitSelect"
     @cancel="handleCancelSelect">
     <a-spin :spinning="confirmLoadingSelect">
-      <ad-list @selectedAd="selectedAd" :playType="playType" :selectAdStatus="selectAdStatus"></ad-list>
+      <ad-list @selectedAd="selectedAd" :playType="playType" :selectAdStatus="selectAdStatus"></ad-list>
     </a-spin>
   </a-modal>
 </template>

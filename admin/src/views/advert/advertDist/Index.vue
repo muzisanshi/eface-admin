@@ -58,8 +58,9 @@
 
                   <a-form-item label="设备绑定" :labelCol="labelCol" :wrapperCol="wrapperCol">
                     <a-input
+                      @click="selectDevice(item.playType, index)"
                       :read-only="true"
-                      v-decorator="['deviceNames', {initialValue: '默认选择全部设备'}]"
+                      v-decorator="['deviceNames', {initialValue: item.deviceNames,rules: [{required: false, message: '请选择设备列表！'}]}]"
                     />
                   </a-form-item>
 
@@ -177,8 +178,9 @@
 
                       <a-form-item label="设备绑定" :labelCol="labelCol" :wrapperCol="wrapperCol">
                         <a-input
+                          @click="selectDevice(item.playType, index)"
                           :read-only="true"
-                          v-decorator="['deviceNames', {initialValue: '默认选择全部设备'}]"
+                          v-decorator="['deviceNames', {initialValue: item.deviceNames,rules: [{required: false, message: '请选择设备列表！'}]}]"
                         />
                       </a-form-item>
 
@@ -312,6 +314,11 @@
       </a-tab-pane>
     </a-tabs>
     <select-ad ref="selectAd" @selectAdSuccess="selectAdSuccess"></select-ad>
+    <select-device
+      ref="selectDevice"
+      @selectDeviceSuccess="selectDeviceSuccess"
+      :deviceAreaId="deviceAreaId"
+    ></select-device>
   </a-card>
 </template>
 
@@ -320,6 +327,8 @@ import { mixin } from '@/mixins/mixin'
 import { mapState } from 'vuex'
 import selectArea from '@/components/Common/SelectArea.vue'
 import selectAd from '@/components/Common/SelectAd.vue'
+import selectDevice from '@/components/Common/SelectDevice'
+
 export default {
   mixins: [mixin],
   data() {
@@ -398,7 +407,9 @@ export default {
       autoplaySpeed: 5000,
       speed: 1000,
       checkLook: true,
-      checkSecLook: true
+      checkSecLook: true,
+
+      deviceAreaId: ''
     }
   },
   beforeCreate() {
@@ -406,7 +417,8 @@ export default {
   },
   components: {
     selectArea,
-    selectAd
+    selectAd,
+    selectDevice
   },
   computed: {
     ...mapState(['constants'])
@@ -431,6 +443,7 @@ export default {
             screenWindowIndex: 1,
             imageShowSeconds: that.playTime[4].value,
             adNames: '',
+            deviceNames: '',
             maxScreenSize: 11,
             minScreenSize: 0,
             playType: that.constants.list.adPlayType[0].value,
@@ -447,6 +460,7 @@ export default {
             screenWindowIndex: 0,
             imageShowSeconds: that.playTime[4].value,
             adNames: '',
+            deviceNames: '',
             maxScreenSize: 300,
             minScreenSize: 11,
             playType: that.constants.list.adPlayType[0].value,
@@ -462,6 +476,7 @@ export default {
             minScreenSize: 11,
             imageShowSeconds: that.playTime[4].value,
             adNames: '',
+            deviceNames: '',
             playType: that.constants.list.adPlayType[0].value,
             playMode: that.constants.list.adPlayMode[0].value,
             adList: [],
@@ -475,6 +490,7 @@ export default {
             minScreenSize: 11,
             imageShowSeconds: that.playTime[4].value,
             adNames: '',
+            deviceNames: '',
             playType: that.constants.list.adPlayType[0].value,
             playMode: that.constants.list.adPlayMode[0].value,
             adList: [],
@@ -528,6 +544,7 @@ export default {
     },
 
     selectedArea(area, index) {
+      this.deviceAreaId = area.value[area.value.length - 1]
       this.initCascader = area.value
       this.windows[index].areaId = area.value[area.value.length - 1]
     },
@@ -545,6 +562,11 @@ export default {
       this.windows[index].adIds = []
       this.windows[index].adList = []
       this.windows[index].form.resetFields(['adNames'])
+
+      this.windows[index].deviceNames = ''
+      this.windows[index].deviceIds = []
+      // this.windows[index].deviceList = []
+      this.windows[index].form.resetFields(['deviceNames'])
     },
 
     selectAdSuccess(value) {
@@ -642,6 +664,43 @@ export default {
             })
         }
       })
+    },
+
+    selectDevice(playType, index) {
+      if (!playType) {
+        playType = this.constants.list.adPlayType[0].value
+      }
+      this.$refs.selectDevice.add(playType, index)
+    },
+
+    selectDeviceSuccess(value) {
+      // console.log(value)
+      let deviceNames = ''
+      const deviceIds = []
+      if (value.deviceItem.length > 0) {
+        for (let i = 0; i < value.deviceItem.length; i++) {
+          deviceIds.push(value.deviceItem[i].id)
+          if (i === value.deviceItem.length - 1) {
+            deviceNames += value.deviceItem[i].name
+          } else {
+            deviceNames += value.deviceItem[i].name + ','
+          }
+        }
+        this.windows[value.key].deviceNames = deviceNames
+        this.windows[value.key].deviceIds = deviceIds
+        this.windows[value.key].form.setFieldsValue({ deviceNames: deviceNames })
+        // if (this.activeKey === '1') {
+        //   if (that.checkLook) {
+        //     that.getAdDataList(deviceIds, value.key)
+        //   }
+        // } else {
+        //   if (that.checkSecLook) {
+        //     that.getAdDataList(deviceIds, value.key)
+        //   }
+        // }
+      }
+      // console.log(deviceNames)
+      // console.log(deviceIds)
     }
   }
 }

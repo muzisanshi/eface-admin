@@ -13,9 +13,15 @@
     @ok="handleSubmitSelect"
     :maskClosable="false"
     :keyboard="false"
-    @cancel="handleCancelSelect">
+    @cancel="handleCancelSelect"
+  >
     <a-spin :spinning="confirmLoadingSelect">
-      <device-list @selectedDevice="selectedDevice" :selectDeviceStatus="selectDeviceStatus"></device-list>
+      <device-list
+        v-if="deviceListFlag"
+        @selectedDevice="selectedDevice"
+        :selectDeviceStatus="selectDeviceStatus"
+        :deviceAreaId="deviceAreaId"
+      ></device-list>
     </a-spin>
   </a-modal>
 </template>
@@ -23,6 +29,12 @@
 <script>
 import deviceList from '@/views/device/device/List.vue'
 export default {
+  props: {
+    deviceAreaId: {
+      type: String,
+      default: ''
+    }
+  },
   data() {
     return {
       visibleSelect: false,
@@ -30,19 +42,22 @@ export default {
       deviceList: [],
       selectDeviceStatus: true,
       name: '',
-      _index: ''
+      _index: '',
+
+      deviceListFlag: false
     }
   },
   components: {
     deviceList
   },
   methods: {
-    add(index) {
+    add(playType, index) {
+      this.deviceListFlag = true
+
       this.visibleSelect = true
       this.selectDeviceStatus = true
       this.deviceList = []
       this._index = index
-      console.log(this._index)
     },
 
     selectedDevice(deviceList) {
@@ -67,6 +82,8 @@ export default {
     },
 
     handleCancelSelect() {
+      this.deviceListFlag = false
+
       this.visibleSelect = false
       this.selectAdStatus = false
     }
