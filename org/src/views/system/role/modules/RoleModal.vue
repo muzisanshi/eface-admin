@@ -28,7 +28,7 @@
                    v-decorator="[ 'name', {initialValue: this.formData.name,rules: [{required: true, message: '请输入角色名称！'}]}]"/>
         </a-form-item>
 
-        <a-form-item
+       <!-- <a-form-item
           label="组织"
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
@@ -42,7 +42,7 @@
             v-decorator="['orgId', {initialValue: this.formData.orgId?this.formData.orgId:''}]"
           >
           </a-select>
-        </a-form-item>
+        </a-form-item> -->
 
         <a-form-item
           :labelCol="labelCol"
@@ -79,7 +79,7 @@
         confirmLoading: false,
         form: this.$form.createForm(this),
         formData: {},
-        orgList: []
+        // orgList: []
       }
     },
     created() {
@@ -89,19 +89,19 @@
         this.form.resetFields();
         this.formData = {};
         this.visible = true;
-        this.orgList = [];
+        // this.orgList = [];
         let that = this;
-        this.$api.org.getAll()
-          .then(res => {
-            const l = []
-            for (let i = 0, j = res.length; i < j; i++) {
-              l.push({
-                value: res[i].id,
-                label: res[i].name
-              })
-            }
-            that.orgList = l
-          })
+        // this.$api.org.getAll()
+        //   .then(res => {
+        //     const l = []
+        //     for (let i = 0, j = res.length; i < j; i++) {
+        //       l.push({
+        //         value: res[i].id,
+        //         label: res[i].name
+        //       })
+        //     }
+        //     that.orgList = l
+        //   })
         if (record) {
           this.title = '修改'
           this.$api.role.getById({

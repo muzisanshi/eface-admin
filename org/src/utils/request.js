@@ -73,14 +73,14 @@ const err = (error) => {
 
 // request interceptor
 service.interceptors.request.use(config => {
-  const clientId = 'admin'
+  const clientId = 'org-admin'
   const timestamp = new Date().getTime() + ''
-  const signature = clientId + timestamp + 'da74588912504563e464ffe8956de784'
+  const signature = clientId + timestamp + 'da74588912504563e464ffe8956de786'
   const token = sessionStorage.getItem('ACCESS_TOKEN')
   if (token) {
-    config.headers['JWT-MANAGER-ACCOUNT-AUTHORIZATION'] = token
+    config.headers['JWT-MANAGER-ORG-ACCOUNT-AUTHORIZATION'] = token
   }
-  config.baseURL = process.env.VUE_APP_ADMIN_SERVICE_BASE_URL
+  config.baseURL = process.env.VUE_APP_ORG_SERVICE_BASE_URL
   config.method = 'post'
   config.timeout = 100000
   if (config.enctype) {

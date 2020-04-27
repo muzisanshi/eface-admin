@@ -1,7 +1,7 @@
 import {axios} from '@/utils/request'
 
 const URI = {
-  getConstantsEnumData: '/../adminService/getConstantsEnumData'
+  getConstantsEnumData: '/../orgService/getConstantsEnumData'
 }
 
 function getEnumData(parameter) {

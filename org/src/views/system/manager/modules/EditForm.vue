@@ -60,7 +60,7 @@
                         optionFilterProp="children"
                         :filterOption="filterCommonOption"
                         @change="manageTypeChange"
-                        :options="constants.list.managerType"
+                        :options="newTypes"
                         v-decorator="['manager.managerType', {initialValue: this.formData.managerType?this.formData.managerType:constants.list.managerType[0].value,rules: [{required: true, message: '请选择类型！'}]}]">
               </a-select>
 
@@ -216,7 +216,10 @@
         orgList: [],
         estateList:[],
         nationalAreaCodeList:[],
-        isOrgInput:false
+        isOrgInput:false,
+        
+        newTypes:[],
+        
       }
     },
     computed: {
@@ -231,17 +234,17 @@
         this.form.resetFields()
         this.formData = {};
 
-        this.$api.org.getAll()
-          .then(res => {
-            const l = []
-            for (let i = 0, j = res.length; i < j; i++) {
-              l.push({
-                value: res[i].id,
-                label: res[i].name
-              })
-            }
-            this.orgList = l
-          })
+        // this.$api.org.getAll()
+        //   .then(res => {
+        //     const l = []
+        //     for (let i = 0, j = res.length; i < j; i++) {
+        //       l.push({
+        //         value: res[i].id,
+        //         label: res[i].name
+        //       })
+        //     }
+        //     this.orgList = l
+        //   })
 
         this.$api.nationalAreaCode.getAll()
           .then(res => {
@@ -351,6 +354,12 @@
           callback();
         }
       }
+    },
+    mounted(){
+      (this.constants.list.managerType || [])
+      .map(it => {
+        if( it.label.indexOf('运维管理员') === -1 ) this.newTypes.push(it)
+      })
     }
   }
 </script>

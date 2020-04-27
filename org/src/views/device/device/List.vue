@@ -65,7 +65,7 @@
     </div>
 
     <div class="table-operator" v-if="!selectDeviceStatus">
-      <a-button type="primary" icon="plus"  @click="handleEditInit(null)">新增</a-button>
+      <!-- <a-button type="primary" icon="plus"  @click="handleEditInit(null)">新增</a-button> -->
 
       <!--<a-upload-->
         <!--name="file"-->
@@ -92,7 +92,7 @@
 
 
 
-      <a-button type="danger" icon="delete" @click="handleDelete" :disabled="selectedRowKeys.length < 1">删除</a-button>
+      <!-- <a-button type="danger" icon="delete" @click="handleDelete" :disabled="selectedRowKeys.length < 1">删除</a-button> -->
 
     </div>
 
@@ -362,7 +362,7 @@ export default {
         sm: { span: 14 },
       },
       columns: [],
-      importUrl:process.env.VUE_APP_ADMIN_SERVICE_BASE_URL+'/device/importExcel',
+      importUrl:process.env.VUE_APP_ORG_SERVICE_BASE_URL + '/device/importExcel',
       data: [],
       pageElements: 0,
       itemData:{

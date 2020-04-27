@@ -118,7 +118,7 @@ export default {
             return res
           })
       },
-      importUrl:process.env.VUE_APP_ADMIN_SERVICE_BASE_URL+'/deviceFactory/importExcel'
+      importUrl:process.env.VUE_APP_ORG_SERVICE_BASE_URL + '/deviceFactory/importExcel'
     }
   },
   methods: {
