@@ -10,12 +10,14 @@
       <a-form :form="form">
 
         <a-form-item label="系统LOGO文字" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <a-input :maxLength="64"
+          <a-input
+            :maxLength="64"
             v-decorator="['logoText', {initialValue: this.formData.logoText, rules: [{required: true, message: '请输入系统LOGO文字！'}]}]"/>
         </a-form-item>
 
         <a-form-item label="系统LOGO文字-子标题" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <a-input :maxLength="64"
+          <a-input
+            :maxLength="64"
             v-decorator="['logoSubTitle', {initialValue: this.formData.logoSubTitle, rules: [{required: true, message: '请输入名称！'}]}]"/>
         </a-form-item>
 
@@ -109,202 +111,200 @@
 </template>
 
 <script>
-  import {mixin} from '@/mixins/mixin'
-  import {mapState, mapActions} from 'vuex';
-  import moment from 'moment';
-  export default {
-    mixins:[mixin],
-    data () {
-      return {
-        goodsGroups:[],
-        labelCol: {
-          xs: { span: 24 },
-          sm: { span: 5 },
-        },
-        wrapperCol: {
-          xs: { span: 24 },
-          sm: { span: 16 },
-        },
-        visible: false,
-        confirmLoading: false,
-        formData: {
-          adItem:{}
-        },
-        title: '',
-        logoImage:'',
-        loginBgImage:'',
-        loginBgImageId:'',
-        logoImageId:'',
-        showLogoImageToLoginPage:false,
-        showLogoImageToIndexPage:true,
-        loginBgImageToLoginPage:true,
-        fileType:'image/*',
-        imgData:{
-          jsonParam:JSON.stringify({
-            attOrigin:'ADMIN',
-            attType:'NORMAL'
-          })
-        },
+import { mixin } from '@/mixins/mixin'
+import { mapState, mapActions } from 'vuex'
+import moment from 'moment'
+export default {
+  mixins: [mixin],
+  data () {
+    return {
+      goodsGroups: [],
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 5 }
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 16 }
+      },
+      visible: false,
+      confirmLoading: false,
+      formData: {
+        adItem: {}
+      },
+      title: '',
+      logoImage: '',
+      loginBgImage: '',
+      loginBgImageId: '',
+      logoImageId: '',
+      showLogoImageToLoginPage: false,
+      showLogoImageToIndexPage: true,
+      loginBgImageToLoginPage: true,
+      fileType: 'image/*',
+      imgData: {
+        jsonParam: JSON.stringify({
+          attOrigin: 'ADMIN',
+          attType: 'NORMAL'
+        })
+      }
+    }
+  },
+  beforeCreate () {
+    this.form = this.$form.createForm(this)
+  },
+  computed: {
+    ...mapState(['constants', 'system'])
+  },
+  created() {
+    this.add()
+  },
+  methods: {
+    ...mapActions(['loadLogoData']),
+    moment,
+    add () {
+      this.visible = true
+      this.form.resetFields()
+      this.formData = {
+        no: (new Date()).getTime(),
+        adItem: {}
+      }
+      this.headImageAttId = ''
+      this.$api.webPageSetting.getInfo()
+        .then(res => {
+          this.formData = res
+          this.logoImage = this.formData.logoImage ? this.formData.logoImage.resourceFullAddress : ''
+          this.loginBgImage = this.formData.loginBgImage ? this.formData.loginBgImage.resourceFullAddress : ''
+          this.logoImageId = this.formData.logoImageId
+          this.loginBgImageId = this.formData.loginBgImageId
+          this.showLogoImageToLoginPage = this.formData.showLogoImageToLoginPage
+          this.showLogoImageToIndexPage = this.formData.showLogoImageToIndexPage
+          this.loginBgImageToLoginPage = this.formData.loginBgImageToLoginPage
+        })
+        // if(){
+      this.title = '修改'
+      //
+      // }else{
+      //   this.title = '新增'
+      //   this.showLogoImageToLoginPage = false
+      //   this.showLogoImageToIndexPage = true
+      //   this.loginBgImageToLoginPage = true
+      // }
+    },
+
+    handleChange(info) {
+      const that = this
+      switch (info.file.status) {
+        case 'uploading':
+          this.loading = true
+          break
+        case 'done':
+          if (info.file.response.success) {
+            that.logoImage = info.file.response.data.resourceFullAddress
+            that.logoImageId = info.file.response.data.id
+            that.confirmLoading = false
+          } else {
+            this.$message.error(info.file.response.errCode + ':' + info.file.response.errDesc)
+          }
+          this.loading = false
+          break
+        case 'error':
+          this.$message.error(info.file.response.status + ':' + info.file.response.error)
+          this.loading = false
+          break
       }
     },
-    beforeCreate () {
-      this.form = this.$form.createForm(this);
+
+    handleBgChange(info) {
+      const that = this
+      switch (info.file.status) {
+        case 'uploading':
+          this.loading = true
+          break
+        case 'done':
+          if (info.file.response.success) {
+            that.loginBgImage = info.file.response.data.resourceFullAddress
+            that.loginBgImageId = info.file.response.data.id
+            that.confirmLoading = false
+          } else {
+            this.$message.error(info.file.response.errCode + ':' + info.file.response.errDesc)
+          }
+          this.loading = false
+          break
+        case 'error':
+          this.$message.error(info.file.response.status + ':' + info.file.response.error)
+          this.loading = false
+          break
+      }
     },
-    computed: {
-      ...mapState(['constants', 'system'])
+
+    changeToLogin(checked) {
+      this.showLogoImageToLoginPage = checked
     },
-    created(){
-      this.add()
+
+    changeToIndex(checked) {
+      this.showLogoImageToIndexPage = checked
     },
-    methods: {
-      ...mapActions(['loadLogoData']),
-      moment,
-      add () {
-        this.visible = true
-        this.form.resetFields()
-        this.formData ={
-          no:(new Date()).getTime(),
-          adItem:{}
-        }
-        this.headImageAttId = '';
-        this.$api.webPageSetting.getInfo()
-          .then(res => {
-            this.formData = res
-            this.logoImage = this.formData.logoImage?this.formData.logoImage.resourceFullAddress:'';
-            this.loginBgImage = this.formData.loginBgImage? this.formData.loginBgImage.resourceFullAddress:'';
-            this.logoImageId = this.formData.logoImageId;
-            this.loginBgImageId = this.formData.loginBgImageId;
-            this.showLogoImageToLoginPage = this.formData.showLogoImageToLoginPage;
-            this.showLogoImageToIndexPage = this.formData.showLogoImageToIndexPage;
-            this.loginBgImageToLoginPage = this.formData.loginBgImageToLoginPage;
-          })
-        // if(){
-          this.title = '修改'
-        //
-        // }else{
-        //   this.title = '新增'
-        //   this.showLogoImageToLoginPage = false
-        //   this.showLogoImageToIndexPage = true
-        //   this.loginBgImageToLoginPage = true
-        // }
-      },
 
-      handleChange(info) {
-        let that = this;
-        switch (info.file.status) {
-          case 'uploading':
-            this.loading = true
-            break
-          case 'done':
-            if (info.file.response.success) {
-              that.logoImage = info.file.response.data.resourceFullAddress
-              that.logoImageId = info.file.response.data.id
-              that.confirmLoading = false
-            } else {
-              this.$message.error(info.file.response.errCode + ':' + info.file.response.errDesc)
-            }
-            this.loading = false
-            break
-          case 'error':
-            this.$message.error(info.file.response.status + ':' + info.file.response.error)
-            this.loading = false
-            break
-        }
-      },
+    changeBgToLogin(checked) {
+      this.loginBgImageToLoginPage = checked
+    },
 
-      handleBgChange(info) {
-        let that = this;
-        switch (info.file.status) {
-          case 'uploading':
-            this.loading = true
-            break
-          case 'done':
-            if (info.file.response.success) {
-              that.loginBgImage = info.file.response.data.resourceFullAddress
-              that.loginBgImageId = info.file.response.data.id
-              that.confirmLoading = false
-            } else {
-              this.$message.error(info.file.response.errCode + ':' + info.file.response.errDesc)
-            }
-            this.loading = false
-            break
-          case 'error':
-            this.$message.error(info.file.response.status + ':' + info.file.response.error)
-            this.loading = false
-            break
-        }
-      },
+    delLogoImage() {
+      // this.showLogoImageToLoginPage = false
+      this.logoImage = ''
+      this.logoImageId = ''
+    },
 
-      changeToLogin(checked) {
-        this.showLogoImageToLoginPage = checked
-      },
+    delLogoBgImage() {
+      // this.loginBgImageToLoginPage = false
+      this.loginBgImage = ''
+      this.loginBgImageId = ''
+    },
 
-      changeToIndex(checked) {
-        this.showLogoImageToIndexPage = checked
-      },
+    handleSubmit () {
+      const { form: { validateFields } } = this
+      this.confirmLoading = true
+      validateFields((errors, values) => {
+        if (!errors) {
+          if (this.formData.id) {
+            values.id = this.formData.id
+          }
 
-      changeBgToLogin(checked) {
-        this.loginBgImageToLoginPage = checked
-      },
+          if (!values.showLogoImageToLoginPage) {
+            values.showLogoImageToLoginPage = this.showLogoImageToLoginPage
+          }
 
+          if (!values.showLogoImageToIndexPage) {
+            values.showLogoImageToIndexPage = this.showLogoImageToIndexPage
+          }
 
-      delLogoImage(){
-        // this.showLogoImageToLoginPage = false
-        this.logoImage = ''
-        this.logoImageId = ''
-      },
+          if (!values.loginBgImageToLoginPage) {
+            values.loginBgImageToLoginPage = this.loginBgImageToLoginPage
+          }
 
-      delLogoBgImage(){
-        // this.loginBgImageToLoginPage = false
-        this.loginBgImage = ''
-        this.loginBgImageId = ''
-      },
+          values.logoImageAttId = this.logoImageId
 
-      handleSubmit () {
-        const { form: { validateFields } } = this
-        this.confirmLoading = true
-        validateFields((errors, values) => {
-          if (!errors) {
-            if(this.formData.id){
-              values.id = this.formData.id
-            }
+          values.loginBgImageAttId = this.loginBgImageId
 
-            if (!values.showLogoImageToLoginPage) {
-              values.showLogoImageToLoginPage = this.showLogoImageToLoginPage
-            }
-
-            if (!values.showLogoImageToIndexPage) {
-              values.showLogoImageToIndexPage = this.showLogoImageToIndexPage
-            }
-
-            if (!values.loginBgImageToLoginPage) {
-              values.loginBgImageToLoginPage = this.loginBgImageToLoginPage
-            }
-
-            values.logoImageAttId = this.logoImageId
-
-            values.loginBgImageAttId = this.loginBgImageId
-
-            this.$api.webPageSetting.saveOrUpdate(values)
-              .then(res => {
-                this.$notification.success({
-                  message: '成功',
-                  description: this.title + '成功！'
-                })
-                this.confirmLoading = false
-                this.loadLogoData();
-                this.form.resetFields()
-
-              }).finally(() => {
+          this.$api.webPageSetting.saveOrUpdate(values)
+            .then(res => {
+              this.$notification.success({
+                message: '成功',
+                description: this.title + '成功！'
+              })
+              this.confirmLoading = false
+              this.loadLogoData()
+              this.form.resetFields()
+            }).finally(() => {
               this.confirmLoading = false
             })
-          } else {
-            this.confirmLoading = false
-          }
-        })
-      },
+        } else {
+          this.confirmLoading = false
+        }
+      })
     }
   }
+}
 </script>
 <style>
 .upload-img .ant-col-sm-16 .ant-form-item-children{

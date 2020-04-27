@@ -132,7 +132,6 @@ export default {
      * @param {Object} sorter 排序条件
      */
     loadData (pagination, filters, sorter) {
-
       this.localLoading = true
       const parameter = Object.assign({
         pageNo: (pagination && pagination.current) ||
@@ -157,7 +156,7 @@ export default {
           this.localPagination = Object.assign({}, this.localPagination, {
             current: r.pageNumber, // 返回结果中的当前分页数
             total: r.totalElements, // 返回结果中的总记录数
-            showTotal:total => `总共 ${total} 条`,
+            showTotal: total => `总共 ${total} 条`,
             showSizeChanger: this.showSizeChanger,
             pageSize: (pagination && pagination.pageSize) ||
               this.localPagination.pageSize

@@ -1,5 +1,5 @@
 import Mock from 'mockjs2'
-import {getBody, responseFail, responseSuccess} from '../util'
+import { getBody, responseFail, responseSuccess } from '../util'
 
 const username = ['admin', 'user', 'super']
 const password = ['21232f297a57a5a743894a0e4a801fc3', '8914de686ab28dc22f30d3d8e107ff6c'] // admin, ant.design
@@ -27,7 +27,7 @@ const login = (options) => {
     'roleId': 'admin',
     'lang': 'zh-CN',
     'token': '4291d7da9005377ec9aec4a71ea837f'
-  }, {'Custom-Header': Mock.mock('@guid')})
+  }, { 'Custom-Header': Mock.mock('@guid') })
 }
 
 const logout = () => {

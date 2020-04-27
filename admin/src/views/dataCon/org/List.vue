@@ -20,6 +20,19 @@
             </a-form-item>
           </a-col>
           <a-col :md="6" :sm="24">
+            <a-form-item label="行政等级">
+              <a-select
+                showSearch
+                allowClear
+                placeholder="选择行政等级"
+                optionFilterProp="children"
+                :filterOption="filterCommonOption"
+                :options="constants.list.orgLevel"
+                v-model="queryParam.level"
+              ></a-select>
+            </a-form-item>
+          </a-col>
+          <a-col :md="6" :sm="24">
             <span class="table-page-search-submitButtons">
               <a-button type="primary" @click="getOrgPage()">查询</a-button>
               <a-button style="margin-left: 8px" @click="resetSearchFormData">重置</a-button>
@@ -87,7 +100,7 @@
       </a-form>
     </div>
 
-    <div class="table-operator">
+    <div class="table-operator" v-show="!orgVisible">
       <a-button type="primary" icon="plus" @click="handleEdit(null)">新增</a-button>
       <a-button
         type="danger"
@@ -95,6 +108,11 @@
         @click="handleDelete"
         :disabled="selectedRowKeys.length < 1"
       >删除</a-button>
+      <a-button
+        v-show="selectedRowKeys.length === 1"
+        type="primary"
+        @click="managerVisible = true"
+      >查看管理员</a-button>
     </div>
 
     <a-table
@@ -104,7 +122,7 @@
       :columns="columns"
       :dataSource="data"
       :loading="orgLoading"
-      :rowSelection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
+      :rowSelection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange, type: 'radio' }"
     >
       <span slot="serial" slot-scope="text, record, index">{{ index + 1 }}</span>
 
@@ -243,6 +261,10 @@
         </a-form-item>
       </a-form>
     </a-modal>
+
+    <a-modal title="管理员" v-model="managerVisible" :footer="null" :width="1080">
+      <manager-list :managerId="selectedRowKeys.join('')"></manager-list>
+    </a-modal>
   </a-card>
 </template>
 
@@ -251,13 +273,26 @@ import { STable } from '@/components'
 import EditForm from './modules/EditForm'
 import { mapState } from 'vuex'
 import { mixin } from '@/mixins/mixin'
+import ManagerList from './modules/ManagerList'
 
 export default {
+  name: 'OrgList',
   components: {
     STable,
-    EditForm
+    EditForm,
+    ManagerList
   },
   mixins: [mixin],
+  props: {
+    orgVisible: {
+      type: Boolean,
+      default: false
+    },
+    selectedId: {
+      type: Array,
+      default: () => []
+    }
+  },
   data() {
     return {
       labelCol: {
@@ -295,14 +330,14 @@ export default {
           title: 'POI信息',
           dataIndex: 'address'
         },
-        {
-          title: '管理员',
-          dataIndex: 'managerName'
-        },
-        {
-          title: '手机号码',
-          dataIndex: 'managerPhone'
-        },
+        // {
+        //   title: '管理员',
+        //   dataIndex: 'managerName'
+        // },
+        // {
+        //   title: '手机号码',
+        //   dataIndex: 'managerPhone'
+        // },
         {
           title: '状态',
           dataIndex: 'enable',
@@ -383,7 +418,9 @@ export default {
       provinceName: undefined,
       cityName: undefined,
       countyName: undefined,
-      streetName: undefined
+      streetName: undefined,
+
+      managerVisible: false
     }
   },
   computed: {
@@ -526,15 +563,18 @@ export default {
           this.currentParentId = this.countyParentId
         }
       }
+      if (this.orgVisible) {
+        this.columns.pop()
+      }
       this.$api.area.getPage({ page: { pageNumber: 1, pageSize: 50 }, parentId: this.currentParentId }).then(res => {
         // console.log(level)
-        // console.log(
-        //   this.provinceParentId,
-        //   this.cityParentId,
-        //   this.countyParentId,
-        //   this.strreetParentId,
-        //   this.currentParentId
-        // )
+        console.log(
+          this.provinceParentId,
+          this.cityParentId,
+          this.countyParentId,
+          this.strreetParentId,
+          this.currentParentId
+        )
         const areaData = res.records
         areaData.unshift({
           id: '请选择',
@@ -579,9 +619,8 @@ export default {
               provinceId: this.provinceParentId,
               cityId: this.cityParentId,
               areaId: this.countyParentId,
-              districtId: this.strreetParentId,
-              level: this.constants.list.orgLevel[id === '请选择' && this.level !== 0 ? this.level - 1 : this.level]
-                .value
+              districtId: this.strreetParentId
+              // level: this.constants.list.orgLevel[id === '请选择' && this.level !== 0 ? this.level - 1 : this.level].value
             },
             this.queryParam
           )
@@ -596,7 +635,11 @@ export default {
           this.orgLoading = false
           this.data = res.records
 
-          this.selectedRowKeys = []
+          if (this.orgVisible) {
+            this.selectedRowKeys = this.selectedId
+          } else {
+            this.selectedRowKeys = []
+          }
           this.selectedRows = []
         })
     },
@@ -612,6 +655,22 @@ export default {
 
       this.getAreaPage(this.provinceParentId, this.level)
       this.getOrgPage()
+    },
+
+    onSelectChange(selectedRowKeys, selectedRows) {
+      // if (selectedRowKeys.length > 1) {
+      //   selectedRowKeys.shift()
+      // }
+      // if (selectedRows.length > 1) {
+      //   selectedRows.shift()
+      // }
+      this.selectedRowKeys = selectedRowKeys
+      this.selectedRows = selectedRows
+
+      // console.log(this.selectedRowKeys)
+      // console.log(this.selectedRows)
+
+      this.$emit('selectedOrg', this.selectedRows)
     }
   }
 }

@@ -48,7 +48,7 @@ export function handleScrollHeader (callback) {
 // 生成首页路由
 
 export function generateIndexRouter (data) {
-  let indexRouter = [{
+  const indexRouter = [{
     path: '/',
     name: 'index',
     component: resolve => require(['@/layouts/BasicLayout'], resolve),
@@ -73,7 +73,7 @@ function generateChildRouters (data) {
       componentItem = 'views/' + item.component
     }
 
-    let menu = {
+    const menu = {
       path: item.path,
       name: item.name,
       redirect: item.redirect,

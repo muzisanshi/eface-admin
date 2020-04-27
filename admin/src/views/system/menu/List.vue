@@ -55,10 +55,15 @@
           </a-dropdown>
         </span>
       </a-table>
-      <a-pagination class="ant-table-pagination ant-pagination" showSizeChanger :showTotal="total => `总共 ${total} 条`"
-                    :pageSize.sync="queryParam.page.pageSize"
-                    @change="onChange" @showSizeChange="onShowSizeChange" :total="pageElements"
-                    v-model="queryParam.page.pageNumber"/>
+      <a-pagination
+        class="ant-table-pagination ant-pagination"
+        showSizeChanger
+        :showTotal="total => `总共 ${total} 条`"
+        :pageSize.sync="queryParam.page.pageSize"
+        @change="onChange"
+        @showSizeChange="onShowSizeChange"
+        :total="pageElements"
+        v-model="queryParam.page.pageNumber"/>
     </div>
     <!-- table区域-end -->
 
@@ -68,180 +73,180 @@
 </template>
 
 <script>
-  import {STable} from '@/components'
-  import PermissionModal from './modules/EditForm'
-  import {mixin} from '@/mixins/mixin'
+import { STable } from '@/components'
+import PermissionModal from './modules/EditForm'
+import { mixin } from '@/mixins/mixin'
 
-  export default {
-    name: 'menuList',
-    mixins: [mixin],
-    components: {
-      STable,
-      PermissionModal,
-    },
+export default {
+  name: 'MenuList',
+  mixins: [mixin],
+  components: {
+    STable,
+    PermissionModal
+  },
 
-    data() {
-      return {
-        queryParam: {
-          page: {
-            pageNumber: 1,
-            pageSize: 10
-          }
-        },
-        description: '',
-        // 表头
-        columns: [
-          {
-            title: '菜单标题',
-            dataIndex: 'title',
-            key: 'title'
-          },
-          {
-            title: '菜单名称',
-            dataIndex: 'name',
-            key: 'name'
-          },
-          {
-            title: 'icon',
-            dataIndex: 'iconName',
-            key: 'iconName'
-          },
-          {
-            title: '组件',
-            dataIndex: 'component',
-            key: 'component',
-            scopedSlots: {customRender: 'component'}
-          },
-          {
-            title: '菜单地址',
-            dataIndex: 'path',
-            key: 'path',
-            scopedSlots: {customRender: 'path'}
-          },
-          {
-            title: '是否缓存',
-            dataIndex: 'keepAliveName',
-            scopedSlots: {customRender: 'status'}
-          },
-          {
-            title: '排序',
-            dataIndex: 'orderNum',
-            key: 'orderNum'
-          },
-          {
-            title: '是否启用',
-            dataIndex: 'enable',
-            scopedSlots: {customRender: 'status'}
-          },
-          {
-            title: '操作',
-            dataIndex: 'action',
-            scopedSlots: {customRender: 'action'},
-            align: 'center',
-            width: 150
-          }
-        ],
-        loading: false,
-        url: {
-          list: '/sys/permission/list',
-          delete: '/sys/permission/delete',
-          deleteBatch: '/sys/permission/deleteBatch'
-        },
-        data: [],
-        pageElements: 0,
-        expandedRowKeys: []
-      }
-    },
-    created() {
-      this.loadData()
-    },
-    methods: {
-
-      loadData() {
-        this.expandedRowKeys = []
-        this.$api.menu.getPage(Object.assign({}, this.queryParam))
-          .then(res => {
-            for (let i = 0, j = res.records.length; i < j; i++) {
-              res.records[i].children = []
-              res.records[i].iconName = res.records[i].meta.icon
-              res.records[i].keepAliveName = res.records[i].meta.keepAlive
-              res.records[i].title = res.records[i].meta.title
-            }
-            this.data = res.records
-            this.pageElements = res.totalElements
-          })
-      },
-
-      handleDetail: function (record) {
-        this.$refs.editModal.edit(record);
-        this.$refs.editModal.title = "详情";
-        this.$refs.editModal.disableSubmit = true;
-      },
-      handleAddSub(record) {
-        this.$refs.editModal.title = "添加子菜单";
-        this.$refs.editModal.localMenuType = 1;
-        this.$refs.editModal.disableSubmit = false;
-        this.$refs.editModal.edit(null, record.id);
-      },
-
-      buildSubData(data, children, parentId) {
-        for (let i = 0, j = data.length; i < j; i++) {
-          let d = data[i]
-          if (d.id === parentId) {
-            d.children = children
-            break
-          }
-          d.children = this.buildSubData(d.children, children, parentId)
+  data() {
+    return {
+      queryParam: {
+        page: {
+          pageNumber: 1,
+          pageSize: 10
         }
-        return data
       },
-      expand(id) {
-        this.$api.menu.getPage({parentId: id, page: {pageNumber: 1, pageSize: 100}})
-          .then(res => {
-            for (let i = 0, j = res.records.length; i < j; i++) {
-              res.records[i].children = []
-              res.records[i].iconName = res.records[i].meta.icon
-              res.records[i].keepAliveName = res.records[i].meta.keepAlive
-              res.records[i].title = res.records[i].meta.title
-            }
-            this.data = this.buildSubData(this.data, res.records, id)
-          })
-      },
-      handleExpand(expanded, record) {
-        const l = this.expandedRowKeys
-        if (this.expandedRowKeys.includes(record.id)) {
-          l.splice(l.findIndex(element => element === record.id), 1)
-        } else {
-          l.push(record.id)
-          this.expand(record.id)
+      description: '',
+      // 表头
+      columns: [
+        {
+          title: '菜单标题',
+          dataIndex: 'title',
+          key: 'title'
+        },
+        {
+          title: '菜单名称',
+          dataIndex: 'name',
+          key: 'name'
+        },
+        {
+          title: 'icon',
+          dataIndex: 'iconName',
+          key: 'iconName'
+        },
+        {
+          title: '组件',
+          dataIndex: 'component',
+          key: 'component',
+          scopedSlots: { customRender: 'component' }
+        },
+        {
+          title: '菜单地址',
+          dataIndex: 'path',
+          key: 'path',
+          scopedSlots: { customRender: 'path' }
+        },
+        {
+          title: '是否缓存',
+          dataIndex: 'keepAliveName',
+          scopedSlots: { customRender: 'status' }
+        },
+        {
+          title: '排序',
+          dataIndex: 'orderNum',
+          key: 'orderNum'
+        },
+        {
+          title: '是否启用',
+          dataIndex: 'enable',
+          scopedSlots: { customRender: 'status' }
+        },
+        {
+          title: '操作',
+          dataIndex: 'action',
+          scopedSlots: { customRender: 'action' },
+          align: 'center',
+          width: 150
         }
-        this.expandedRowKeys = l
+      ],
+      loading: false,
+      url: {
+        list: '/sys/permission/list',
+        delete: '/sys/permission/delete',
+        deleteBatch: '/sys/permission/deleteBatch'
       },
+      data: [],
+      pageElements: 0,
+      expandedRowKeys: []
+    }
+  },
+  created() {
+    this.loadData()
+  },
+  methods: {
 
-      handleDelete() {
-        const that = this
-        that.$confirm({
-          title: '删除',
-          content: '确定删除勾选的记录？',
-          onOk() {
-            that.$api.menu.del({ids: that.selectedRowKeys})
-              .then(res => {
-                that.$notification.success({
-                  message: '成功',
-                  description: `删除成功！`
-                })
-                that.handleOk()
-              })
-          },
-          onCancel() {
+    loadData() {
+      this.expandedRowKeys = []
+      this.$api.menu.getPage(Object.assign({}, this.queryParam))
+        .then(res => {
+          for (let i = 0, j = res.records.length; i < j; i++) {
+            res.records[i].children = []
+            res.records[i].iconName = res.records[i].meta.icon
+            res.records[i].keepAliveName = res.records[i].meta.keepAlive
+            res.records[i].title = res.records[i].meta.title
           }
+          this.data = res.records
+          this.pageElements = res.totalElements
         })
-      },
-      handleOk() {
-        this.loadData()
-      },
+    },
+
+    handleDetail: function (record) {
+      this.$refs.editModal.edit(record)
+      this.$refs.editModal.title = '详情'
+      this.$refs.editModal.disableSubmit = true
+    },
+    handleAddSub(record) {
+      this.$refs.editModal.title = '添加子菜单'
+      this.$refs.editModal.localMenuType = 1
+      this.$refs.editModal.disableSubmit = false
+      this.$refs.editModal.edit(null, record.id)
+    },
+
+    buildSubData(data, children, parentId) {
+      for (let i = 0, j = data.length; i < j; i++) {
+        const d = data[i]
+        if (d.id === parentId) {
+          d.children = children
+          break
+        }
+        d.children = this.buildSubData(d.children, children, parentId)
+      }
+      return data
+    },
+    expand(id) {
+      this.$api.menu.getPage({ parentId: id, page: { pageNumber: 1, pageSize: 100 } })
+        .then(res => {
+          for (let i = 0, j = res.records.length; i < j; i++) {
+            res.records[i].children = []
+            res.records[i].iconName = res.records[i].meta.icon
+            res.records[i].keepAliveName = res.records[i].meta.keepAlive
+            res.records[i].title = res.records[i].meta.title
+          }
+          this.data = this.buildSubData(this.data, res.records, id)
+        })
+    },
+    handleExpand(expanded, record) {
+      const l = this.expandedRowKeys
+      if (this.expandedRowKeys.includes(record.id)) {
+        l.splice(l.findIndex(element => element === record.id), 1)
+      } else {
+        l.push(record.id)
+        this.expand(record.id)
+      }
+      this.expandedRowKeys = l
+    },
+
+    handleDelete() {
+      const that = this
+      that.$confirm({
+        title: '删除',
+        content: '确定删除勾选的记录？',
+        onOk() {
+          that.$api.menu.del({ ids: that.selectedRowKeys })
+            .then(res => {
+              that.$notification.success({
+                message: '成功',
+                description: `删除成功！`
+              })
+              that.handleOk()
+            })
+        },
+        onCancel() {
+        }
+      })
+    },
+    handleOk() {
+      this.loadData()
     }
   }
+}
 </script>
 <style scoped>
 

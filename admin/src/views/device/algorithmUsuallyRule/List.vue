@@ -27,7 +27,7 @@
     </div>
 
     <div class="table-operator">
-      <a-button type="primary" icon="plus"  @click="handleEdit(null)">新增</a-button>
+      <a-button type="primary" icon="plus" @click="handleEdit(null)">新增</a-button>
 
       <a-button type="danger" icon="delete" @click="handleDelete" :disabled="selectedRowKeys.length < 1">删除</a-button>
 
@@ -65,13 +65,13 @@
 <script>
 import { STable } from '@/components'
 import EditForm from './modules/EditForm'
-import {mixin} from '@/mixins/mixin'
+import { mixin } from '@/mixins/mixin'
 
 export default {
-  mixins:[mixin],
+  mixins: [mixin],
   components: {
     STable,
-    EditForm,
+    EditForm
   },
   data () {
     return {
@@ -96,7 +96,7 @@ export default {
           .then(res => {
             return res
           })
-      },
+      }
     }
   },
   methods: {
@@ -119,7 +119,7 @@ export default {
         onCancel () {
         }
       })
-    },
+    }
   }
 }
 </script>

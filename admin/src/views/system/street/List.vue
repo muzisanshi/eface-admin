@@ -114,7 +114,7 @@ export default {
         {
           title: '是否启用',
           dataIndex: 'enable',
-          scopedSlots: {customRender: 'status'}
+          scopedSlots: { customRender: 'status' }
         },
         // {
         //   title: '备注',

@@ -24,14 +24,28 @@
 
           <a-col :md="5" :sm="24">
             <a-form-item label="执行状态">
-              <a-select showSearch allowClear placeholder="选择执行状态"  v-model="queryParam.executeStatus" optionFilterProp="children" :filterOption="filterCommonOption" :options="constants.list.actionExecuteStatus">
+              <a-select
+                showSearch
+                allowClear
+                placeholder="选择执行状态"
+                v-model="queryParam.executeStatus"
+                optionFilterProp="children"
+                :filterOption="filterCommonOption"
+                :options="constants.list.actionExecuteStatus">
               </a-select>
             </a-form-item>
           </a-col>
 
           <a-col :md="5" :sm="24">
             <a-form-item label="报文最后发送状态">
-              <a-select showSearch allowClear placeholder="报文最后发送状态"  v-model="queryParam.lastMsgSendStatus" optionFilterProp="children" :filterOption="filterCommonOption" :options="constants.list.msgSendStatus">
+              <a-select
+                showSearch
+                allowClear
+                placeholder="报文最后发送状态"
+                v-model="queryParam.lastMsgSendStatus"
+                optionFilterProp="children"
+                :filterOption="filterCommonOption"
+                :options="constants.list.msgSendStatus">
               </a-select>
             </a-form-item>
           </a-col>
@@ -48,7 +62,6 @@
 
     <div class="table-operator">
       <a-button type="primary" @click="rePush" :disabled="selectedRowKeys.length < 1">重新推送</a-button>
-
 
       <a-button type="danger" icon="delete" @click="handleDelete" :disabled="selectedRowKeys.length < 1">删除</a-button>
 
@@ -84,16 +97,16 @@
 
 <script>
 import { STable } from '@/components'
-import {mapState} from 'vuex';
-import {mixin} from '@/mixins/mixin'
+import { mapState } from 'vuex'
+import { mixin } from '@/mixins/mixin'
 
 export default {
-  mixins:[mixin],
+  mixins: [mixin],
   components: {
-    STable,
+    STable
   },
   computed: {
-    ...mapState(['constants']),
+    ...mapState(['constants'])
   },
   data () {
     return {
@@ -116,17 +129,17 @@ export default {
         },
         {
           title: '执行状态',
-          align:'center',
+          align: 'center',
           dataIndex: 'executeStatusName'
         },
         {
           title: '执行次数',
-          align:'center',
+          align: 'center',
           dataIndex: 'executeNum'
         },
         {
           title: '报文发送成功次数',
-          align:'center',
+          align: 'center',
           dataIndex: 'msgSendSuccessNum'
         },
         {
@@ -135,7 +148,7 @@ export default {
         },
         {
           title: '报文最后发送状态',
-          align:'center',
+          align: 'center',
           dataIndex: 'lastMsgSendStatusName'
         },
         {
@@ -150,13 +163,13 @@ export default {
       loadData: parameter => {
         return this.$api.userAction.getPage(Object.assign(parameter, this.queryParam))
           .then(res => {
-            res.records.forEach(item=>{
-              item.executeStatusName = this.constants.data.actionExecuteStatus?this.constants.data.actionExecuteStatus[item.executeStatus]['name']:''
-              item.lastMsgSendStatusName = this.constants.data.msgSendStatus?this.constants.data.msgSendStatus[item.lastMsgSendStatus]['name']:''
-            });
+            res.records.forEach(item => {
+              item.executeStatusName = this.constants.data.actionExecuteStatus ? this.constants.data.actionExecuteStatus[item.executeStatus]['name'] : ''
+              item.lastMsgSendStatusName = this.constants.data.msgSendStatus ? this.constants.data.msgSendStatus[item.lastMsgSendStatus]['name'] : ''
+            })
             return res
           })
-      },
+      }
     }
   },
   methods: {
@@ -199,7 +212,7 @@ export default {
         onCancel () {
         }
       })
-    },
+    }
   }
 }
 </script>

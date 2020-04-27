@@ -11,8 +11,10 @@
         <a-row :gutter="48">
           <a-col :md="6" :sm="24">
             <a-form-item label="地区">
-              <select-area ref="selectAreaAll" :initArea="initCascader"
-                           @selectedArea="selectedArea($event)"></select-area>
+              <select-area
+                ref="selectAreaAll"
+                :initArea="initCascader"
+                @selectedArea="selectedArea($event)"></select-area>
             </a-form-item>
           </a-col>
 
@@ -58,7 +60,7 @@
     </div>
 
     <div class="table-operator" v-if="!selectLocationStatus">
-      <a-button type="primary" icon="plus"  @click="handleEdit(null)">新增</a-button>
+      <a-button type="primary" icon="plus" @click="handleEdit(null)">新增</a-button>
 
       <a-button type="danger" icon="delete" @click="handleDelete" :disabled="selectedRowKeys.length < 1">删除</a-button>
 
@@ -89,19 +91,19 @@
       </span>
 
     </s-table>
-    <edit-form  v-if="!selectLocationStatus" ref="editModal" @ok="handleOk"/>
+    <edit-form v-if="!selectLocationStatus" ref="editModal" @ok="handleOk"/>
   </a-card>
 </template>
 
 <script>
 import { STable } from '@/components'
 import EditForm from './modules/EditForm'
-import {mapState} from 'vuex';
-import {mixin} from '@/mixins/mixin'
+import { mapState } from 'vuex'
+import { mixin } from '@/mixins/mixin'
 import selectArea from '@/components/Common/SelectArea'
 
 export default {
-  mixins:[mixin],
+  mixins: [mixin],
   components: {
     STable,
     EditForm,
@@ -109,18 +111,18 @@ export default {
 
   },
   computed: {
-    ...mapState(['constants']),
+    ...mapState(['constants'])
   },
-  props:{
-    selectLocationStatus:{
-      type:Boolean,
-      default:false
+  props: {
+    selectLocationStatus: {
+      type: Boolean,
+      default: false
     }
   },
-  watch:{
-    selectLocationStatus(newVal){
-      if(newVal){
-        this.selectedRowKeys = [];
+  watch: {
+    selectLocationStatus(newVal) {
+      if (newVal) {
+        this.selectedRowKeys = []
       }
     }
   },
@@ -167,7 +169,7 @@ export default {
         }
       ],
       loadData: parameter => {
-        if(this.selectLocationStatus){
+        if (this.selectLocationStatus) {
           this.columns = [
             {
               title: '编码',
@@ -202,7 +204,7 @@ export default {
               dataIndex: 'remark'
             }
           ]
-          }else{
+        } else {
           this.columns = [
             {
               title: '编码',
@@ -243,7 +245,7 @@ export default {
               scopedSlots: { customRender: 'action' }
             }
           ]
-          }
+        }
         return this.$api.location.getPage(Object.assign(parameter, this.queryParam))
           .then(res => {
             return res
@@ -253,7 +255,7 @@ export default {
       goodsGroups: [],
       allBrand: [],
       uploadFileId: '',
-      initCascader:[],
+      initCascader: []
     }
   },
   methods: {
@@ -281,13 +283,13 @@ export default {
     onSelectLocationChange (selectedRowKeys, selectedRows) {
       this.selectedRowKeys = selectedRowKeys
       this.selectedRows = selectedRows
-      this.$emit('selectedLocation',selectedRows)
+      this.$emit('selectedLocation', selectedRows)
     },
 
     selectedArea(area) {
-      this.queryParam.areaId = area.value[area.value.length-1];
-      this.queryParam.level = area.level[area.level.length-1];
-    },
+      this.queryParam.areaId = area.value[area.value.length - 1]
+      this.queryParam.level = area.level[area.level.length - 1]
+    }
   }
 }
 </script>

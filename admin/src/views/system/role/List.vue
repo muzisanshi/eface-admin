@@ -71,134 +71,136 @@
 
     <!-- 表单区域 -->
     <role-modal ref="editModal" @ok="handleOk"></role-modal>
-    <user-role-modal ref="modalUserRole" @checkedMenu='checkedMenu' :selectType="selectMenu"
-                     :initChecked="initCheckedKeys"></user-role-modal>
+    <user-role-modal
+      ref="modalUserRole"
+      @checkedMenu="checkedMenu"
+      :selectType="selectMenu"
+      :initChecked="initCheckedKeys"></user-role-modal>
   </a-card>
 </template>
 
 <script>
-  import {STable} from '@/components'
-  import RoleModal from './modules/RoleModal'
-  import UserRoleModal from './modules/UserRoleModal'
-  import {mixin} from '@/mixins/mixin'
-  import JDate from '@/components/Date/selectDate'
+import { STable } from '@/components'
+import RoleModal from './modules/RoleModal'
+import UserRoleModal from './modules/UserRoleModal'
+import { mixin } from '@/mixins/mixin'
+import JDate from '@/components/Date/selectDate'
 
-  export default {
-    name: "RoleList",
-    mixins: [mixin],
-    components: {
-      RoleModal,
-      UserRoleModal,
-      JDate,
-      STable
-    },
-    data() {
-      return {
+export default {
+  name: 'RoleList',
+  mixins: [mixin],
+  components: {
+    RoleModal,
+    UserRoleModal,
+    JDate,
+    STable
+  },
+  data() {
+    return {
 
-        description: '角色管理页面',
-        data: [],
-        // 查询条件
-        queryParam: {name: '',},
-        // 表头
-        columns: [
-          {
-            title: '角色名称',
-            align: "center",
-            dataIndex: 'name'
-          },
-          {
-            title: '备注',
-            align: "center",
-            dataIndex: 'remark'
-          },
-          {
-            title: '创建时间',
-            dataIndex: 'createDatetime',
-            align: "center"
-          },
-          {
-            title: '更新时间',
-            dataIndex: 'updateDatetime',
-            align: "center"
-          },
-          {
-            title: '操作',
-            dataIndex: 'action',
-            align: "center",
-            scopedSlots: {customRender: 'action'},
-          }
-        ],
-        selectMenu: 'MENU_BUTTON',
-        initCheckedKeys: [],
-        loadData: parameter => {
-          return this.$api.role.getPage(Object.assign(parameter, this.queryParam))
-            .then(res => {
-              return res
-            })
+      description: '角色管理页面',
+      data: [],
+      // 查询条件
+      queryParam: { name: '' },
+      // 表头
+      columns: [
+        {
+          title: '角色名称',
+          align: 'center',
+          dataIndex: 'name'
         },
-      }
-    },
-    methods: {
-      handlePerssion(roleId) {
-        let that = this;
-        that.$api.role.getPermissionsById({
-          id: roleId
-        })
-          .then(res => {
-            that.initCheckedKeys = res;
-            that.$refs.modalUserRole.show();
-            that.itemId = roleId;
-          })
-
-      },
-      handleDelete(id) {
-        const that = this
-        let ids = [];
-        if (id) {
-          ids.push(id)
-        } else {
-          ids = that.selectedRowKeys
+        {
+          title: '备注',
+          align: 'center',
+          dataIndex: 'remark'
+        },
+        {
+          title: '创建时间',
+          dataIndex: 'createDatetime',
+          align: 'center'
+        },
+        {
+          title: '更新时间',
+          dataIndex: 'updateDatetime',
+          align: 'center'
+        },
+        {
+          title: '操作',
+          dataIndex: 'action',
+          align: 'center',
+          scopedSlots: { customRender: 'action' }
         }
-
-        that.$confirm({
-          title: '删除',
-          content: '确定删除勾选的记录？',
-          onOk() {
-            that.$api.role.del({ids: ids})
-              .then(res => {
-                that.$notification.success({
-                  message: '成功',
-                  description: `删除成功！`
-                })
-                that.handleOk()
-              })
-          },
-          onCancel() {
-          }
-        })
-      },
-      checkedMenu(selectList) {
-        let that = this;
-        if (selectList.length > 0) {
-          that.$api.role.authorize({
-            id: that.itemId,
-            permissionIds: selectList
+      ],
+      selectMenu: 'MENU_BUTTON',
+      initCheckedKeys: [],
+      loadData: parameter => {
+        return this.$api.role.getPage(Object.assign(parameter, this.queryParam))
+          .then(res => {
+            return res
           })
+      }
+    }
+  },
+  methods: {
+    handlePerssion(roleId) {
+      const that = this
+      that.$api.role.getPermissionsById({
+        id: roleId
+      })
+        .then(res => {
+          that.initCheckedKeys = res
+          that.$refs.modalUserRole.show()
+          that.itemId = roleId
+        })
+    },
+    handleDelete(id) {
+      const that = this
+      let ids = []
+      if (id) {
+        ids.push(id)
+      } else {
+        ids = that.selectedRowKeys
+      }
+
+      that.$confirm({
+        title: '删除',
+        content: '确定删除勾选的记录？',
+        onOk() {
+          that.$api.role.del({ ids: ids })
             .then(res => {
               that.$notification.success({
                 message: '成功',
-                description: `授权成功！`
+                description: `删除成功！`
               })
+              that.handleOk()
             })
-        } else {
-          that.$notification.error({
-            message: '提示',
-            description: `请选择菜单或按钮授权！`
-          })
+        },
+        onCancel() {
         }
+      })
+    },
+    checkedMenu(selectList) {
+      const that = this
+      if (selectList.length > 0) {
+        that.$api.role.authorize({
+          id: that.itemId,
+          permissionIds: selectList
+        })
+          .then(res => {
+            that.$notification.success({
+              message: '成功',
+              description: `授权成功！`
+            })
+          })
+      } else {
+        that.$notification.error({
+          message: '提示',
+          description: `请选择菜单或按钮授权！`
+        })
       }
     }
   }
+}
 </script>
 <style scoped>
 </style>

@@ -38,7 +38,6 @@ function del (parameter) {
   })
 }
 
-
 function getAllParent (parameter) {
   return axios({
     url: URI.getAllParent,

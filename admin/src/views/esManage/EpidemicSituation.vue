@@ -17,8 +17,8 @@
         </div>
 
         <div class="right">
-          <span class="time">{{curDate}}</span>
-          <img @click="togglefullScreen"  class="full-screen" src="@/assets/es/btn_fullscreen@2x.png"/>
+          <span class="time">{{ curDate }}</span>
+          <img @click="togglefullScreen" class="full-screen" src="@/assets/es/btn_fullscreen@2x.png"/>
         </div>
 
       </div>
@@ -29,29 +29,29 @@
           <div id="sichuan"></div>
           <div class="testing-statistics">
             <div class="normal-color">
-              <div class="title">累计检测人次 <span><img style="margin-top: -4px" src="@/assets/es/img_upb.png" alt=""></span><span>{{toThousands(statistics.temperatureCheckTodayTotal)}}</span></div>
-              <div class="people-num">{{toFourth(statistics.temperatureCheckTotal)}}</div>
+              <div class="title">累计检测人次 <span><img style="margin-top: -4px" src="@/assets/es/img_upb.png" alt=""></span><span>{{ toThousands(statistics.temperatureCheckTodayTotal) }}</span></div>
+              <div class="people-num">{{ toFourth(statistics.temperatureCheckTotal) }}</div>
             </div>
 
             <div class="normal-color red-color" style="margin: 60px 0">
-              <div class="title">累计检测人次 <span><img style="margin-top: -4px" src="@/assets/es/img_upb.png" alt=""></span><span>{{toThousands(statistics.temperatureHeatTodayTotal)}}</span></div>
-              <div class="people-num">{{toFourth(statistics.temperatureHeatTotal)}}</div>
+              <div class="title">累计检测人次 <span><img style="margin-top: -4px" src="@/assets/es/img_upb.png" alt=""></span><span>{{ toThousands(statistics.temperatureHeatTodayTotal) }}</span></div>
+              <div class="people-num">{{ toFourth(statistics.temperatureHeatTotal) }}</div>
             </div>
 
             <div class="normal-color green-color">
-              <div class="title">累计检测人次 <span><img style="margin-top: -4px" src="@/assets/es/img_upg.png" alt=""></span><span>{{toThousands(statistics.temperatureNormalTodayTotal)}}</span></div>
-              <div class="people-num ">{{toFourth(statistics.temperatureNormalTotal)}}</div>
+              <div class="title">累计检测人次 <span><img style="margin-top: -4px" src="@/assets/es/img_upg.png" alt=""></span><span>{{ toThousands(statistics.temperatureNormalTodayTotal) }}</span></div>
+              <div class="people-num ">{{ toFourth(statistics.temperatureNormalTotal) }}</div>
             </div>
           </div>
 
           <div class="select-city-box">
             <div class="select-city" @click="selectCity">
               <div class="before-icon"><img style="width: 24px;height: 24px" src="@/assets/es/icon_map.png" alt=""></div>
-              <div class="select-value">{{areaVal}}</div>
+              <div class="select-value">{{ areaVal }}</div>
               <div class="after-icon"><img style="width: 21px;height: 13px" src="@/assets/es/btn_pull_down.png" alt=""></div>
             </div>
             <div class="data-list tr-list" v-if="hasAreaList">
-              <div class="option" v-for="(item,index) in areaList" :class="{'active': index === nowIndex }"  @click="changeCity(item,index)">{{item.name}}</div>
+              <div class="option" v-for="(item,index) in areaList" :class="{'active': index === nowIndex }" @click="changeCity(item,index)">{{ item.name }}</div>
             </div>
           </div>
 
@@ -69,7 +69,7 @@
               <div class="status-img"><img src="@/assets/es/icon_grqst_red@2x.png" alt=""></div>
               <div class="content">
                 <p class="content-title">今日高热人数</p>
-                <p class="content-num">{{temperatureCheckData.temperatureHeatTodayTotal}}</p>
+                <p class="content-num">{{ temperatureCheckData.temperatureHeatTodayTotal }}</p>
               </div>
             </div>
 
@@ -77,7 +77,7 @@
               <div class="status-img"><img src="@/assets/es/icon_grqst_blue@2x.png" alt=""></div>
               <div class="content">
                 <p class="content-title">今日新增检测</p>
-                <p class="content-num">{{temperatureCheckData.temperatureCheckTodayTotal}}</p>
+                <p class="content-num">{{ temperatureCheckData.temperatureCheckTodayTotal }}</p>
               </div>
             </div>
 
@@ -85,7 +85,7 @@
               <div class="status-img"><img src="@/assets/es/icon_grqst_green@2x.png" alt=""></div>
               <div class="content">
                 <p class="content-title">今日体温正常</p>
-                <p class="content-num">{{temperatureCheckData.temperatureNormalTodayTotal}}</p>
+                <p class="content-num">{{ temperatureCheckData.temperatureNormalTodayTotal }}</p>
               </div>
             </div>
 
@@ -109,9 +109,9 @@
                 </div>
                 <div class="tr-list">
                   <div class="table-td" v-for="(item,index) in dataList">
-                    <div class="city">{{item.areaName}}</div>
-                    <div class="total-hot">{{item.temperatureHeatTotal}}</div>
-                    <div class="today-num" :class="{'red-color':item.temperatureHeatTodayAddTotal != 0}">{{item.temperatureHeatTodayAddTotal}}</div>
+                    <div class="city">{{ item.areaName }}</div>
+                    <div class="total-hot">{{ item.temperatureHeatTotal }}</div>
+                    <div class="today-num" :class="{'red-color':item.temperatureHeatTodayAddTotal != 0}">{{ item.temperatureHeatTodayAddTotal }}</div>
                   </div>
                 </div>
               </div>
@@ -125,469 +125,452 @@
 </template>
 
 <script>
-  import {mixin} from '@/mixins/mixin'
-  export default {
-    mixins:[mixin],
-
-    inject:["reload"],
-    data() {
-      return {
-
-        charts: '',
-        charts2: '',
-        timerId:'',
-        getStatisticsTime:'',
-        getDataFirTime:'',
-        curDate:'',
-        data:[],
-        dataList:[],
-        nowIndex:-1,
-        hasAreaList:false,
-        areaVal:'四川省',
-        areaList:[],
-        temperatureCheckData:{},
-        AxData:[],
-        serData:[],
-        statistics:{},
-        isFullScreen:'false',
-        screenWidth:0
-      }
-    },
-
-    created(){
-      let that = this
-
-      this.getHeatDistributeStatistics();
-
-      this.getStatistics();
-
-      if(!localStorage.getItem('isFullScreen')){
-        localStorage.getItem('isFullScreen',this.isFullScreen);
-      }
-
-      window.addEventListener('keydown',this.checkFull)
-
-    },
-
-    methods: {
-
-      checkFull(){
-        if(document.exitFullscreen){
-          return true;
-        }else{
-          return false
-        }
-
-
-
-      },
-
-      getHeatDistributeStatistics(){
-        let that = this;
-
-        that.$api.provinceCheck.mapStatistics({areaId: '510000'})
-          .then(res => {
-            that.dataList = res
-            if(res.length){
-              that.data = []
-              that.areaList = []
-              res.forEach((item)=>{
-                let obj = {
-                  name:item.areaName,
-                  value:item.temperatureHeatTotal,
-                  areaId:item.areaId
-                };
-                that.data.push(obj)
-
-                let objArea = {
-                  name:item.areaName,
-                  value:item.areaId,
-                  areaId:item.areaId
-                };
-
-                that.areaList.push(objArea)
-              })
-
-              that.showProvince('sichuan')
-
-              that.$nextTick(function() {
-
-                that.charts.on('click', function (params) {
-                  if(params.data.areaId === '510100'){
-                    that.nextPage(params)
-                  }
-
-                });
-
-              })
-
-            }
-          })
-
-        that.$api.provinceCheck.heatDistributeStatistics({areaId: '510000'})
-          .then(res => {
-              that.dataList = res
-          })
-
-      },
-
-      getStatistics(){
-        let that = this
-        that.$api.provinceCheck.statistics({areaId: '510000'})
-          .then(res => {
-            that.statistics = res
-          })
-
-        that.$api.provinceCheck.heatTrendStatistics({areaId: '510000'})
-          .then(res => {
-            that.temperatureCheckData = res
-            if(res.dateStatistics.length){
-              that.AxData = [];
-              that.serData = [];
-              res.dateStatistics.forEach((item)=>{
-                let dateStr = item.date.substring(item.date.length-4).replace("-", "/");
-                that.AxData.push(dateStr)
-                that.serData.push(item.temperatureHeatTotal)
-              })
-
-              that.showLine();
-            }
-          })
-      },
-
-      // 3秒定时器
-      startGetStatisticsTimer(){
-        this.getStatisticsTime = setInterval(() => {
-          this.getStatistics();
-        },3000);
-      },
-
-      closeGetStatisticsTimer(){
-        clearInterval(this.getStatisticsTime);
-      },
-
-      // 3秒定时器
-      startGetDataFirTimer(){
-        this.getDataFirTime = setInterval(() => {
-          this.getHeatDistributeStatistics();
-        },5000);
-      },
-
-      closeGetDataFirTimer(){
-        clearInterval(this.getDataFirTime);
-      },
-
-      // 时间定时器
-      startTimer(){
-        let that = this
-        this.curDate = this.getDateStr();
-
-        this.timerId = setInterval(() => {
-          this.curDate = this.getDateStr();
-          if(that.screenWidth > document.body.clientHeight){
-
-            that.screenWidth = document.body.clientHeight;
-
-            localStorage.setItem('isFullScreen',"false");
-
-            that.reload();
-          }else if(that.screenWidth < document.body.clientHeight){
-            that.screenWidth = document.body.clientHeight
-          }
-        },1000);
-      },
-
-      closeTimer(){
-        clearInterval(this.timerId);
-      },
-
-      selectCity(){
-        this.hasAreaList = !this.hasAreaList;
-      },
-
-      changeCity(item,index){
-        // this.nowIndex = index;
-        // this.areaVal = item.name
-      },
-
-      nextPage(item){
-
-        let routes = this.$router.resolve({ name: 'bodyTemperature'});
-
-        window.open(routes.href, '_blank');
-
-
-        // this.$router.push({
-        //   name: 'bodyTemperature',
-        //   params: item
-        // })
-      },
-
-      showProvince(id){
-        let that = this;
-        var name = 'sichuan';
-
-        this.charts = this.$echarts.init(document.getElementById(id))
-
-        let geoJson = require('@/utils/json/sichuan.json');
-
-        this.$echarts.registerMap(name, geoJson);
-
-        this.charts.setOption({
-          backgroundColor: "rgba(3,20,47,1)",
-          title: {
-            show:false,
-            text: '2月15日四川省新型肺炎疫情地图',
-            left: 'center', //标题位置
-            textStyle: {
-              fontSize: 32,
-              fontWeight: 'bolder',
-              color: 'black' // 主标题文字颜色
-            }
-          },
-          color: ['white'],
-
-          legend: {
-            show:false,
-            orient: 'vertical',
-            left: 'left',
-
-            textStyle: {
-              fontSize: 20,
-              color: 'black' // 图例文字颜色
-            },
-            //data: ['地市']
-            // 图例位置
-          },
-          tooltip: {
-
-            trigger: 'item',
-            backgroundColor: 'rgba(0,0,0,0.8)',
-            extraCssText: 'box-shadow: 0 0 3px rgba(255, 255, 255, 0.6);',
-            textStyle:{
-              align:'left'
-            }
-          },
-          visualMap: {
-            min: 0,
-            max: 10000,
-            left: 'left',
-            icon: "diamond",
-            bottom:'2%',
-            // 文本，默认为数值文本
-            //calculable: true,
-            //color: ['blue', 'blue']
-            //图例颜色
-            pieces: [{
-              min: 100,
-              max: 500,
-              label: "100-500人",
-              color: "#A50002"
-            }, {
-              min: 11,
-              max: 99,
-              label: "11-99人",
-              color: "#dc6c5c"
-            }, {
-              min: 1,
-              max: 10,
-              label: "1-10人",
-              color: "#f2ad8b"
-            }, {
-              min: 0,
-              max: 0,
-              label: "0人",
-              color: "#ffffff"
-
-            }],
-            orient: 'vertical',
-            itemWidth: 25,
-            itemHeight: 15,
-            showLabel: true,
-            seriesIndex: [0],
-            textStyle: {
-              color: '#fff'
-            }
-          },
-          toolbox: {
-            show: false,
-            orient: 'vertical',
-            left: 'right',
-            top: 'center',
-            feature: {
-              dataView: {
-                readOnly: false
-              },
-              restore: {},
-              saveAsImage: {}
-            }
-          },
-          series: [{
-            name: '感染人数统计',
-            type: 'map',
-            mapType: name,
-            left:'35%',
-            top: 80,
-            bottom: 120,
-            label: {
-              normal: {
-                show: true,
-              },
-              emphasis: {
-                textStyle: {
-                  color: 'rgba(0, 0, 0, 1)'
-                }
-              }
-            },
-            data: that.data
-          }]
-        });
-      },
-
-      showLine(){
-
-        let hotLineChart = this.$echarts.init(document.getElementById('hotLine'))
-        // 绘制图表
-        hotLineChart.setOption({
-          title: {
-            show:false
-          },
-          grid: {
-            left: '10%',
-            top: '10%',
-            bottom: '12%',
-            right: '5%',
-          },
-          tooltip: {},
-          xAxis: {
-            type: 'category',
-            axisTick: {
-              show: false
-            },
-            axisLine: {
-              show: false,
-              lineStyle: {
-                color: '#fff',
-              }
-            },
-            axisLabel: {
-              inside: false,
-              textStyle: {
-                fontWeight: 'normal',
-                fontSize: '14',
-                lineHeight: 22
-              }
-            },
-            data: this.AxData,
-          },
-          yAxis: {
-            type: 'value',
-            position: 'left',
-            minInterval: 1,
-            lineStyle: {
-              color: '#fff',
-            },
-            nameTextStyle: {
-              color: '#fff'
-            },
-            splitLine: {
-              lineStyle: {
-                type: 'solid',
-                color: '#56565D'
-              }
-            },
-            axisLine: {
-              show: false
-            },
-            axisTick: {
-              show: false
-            },
-            axisLabel: {
-              color: '#fff',
-              formatter: '{value}',
-              fontSize: 14
-            }
-          },
-          series: [{
-            symbolSize: 10,
-            name: '新增确诊',
-            type: "line",
-            yAxisIndex: 0,
-            data: this.serData,
-            itemStyle: {
-              normal: {
-                borderWidth: 10,
-              }
-            }
-          },]
-        });
-      },
-
-      togglefullScreen(){
-        let e = document.documentElement;
-
-        this.isFullScreen = localStorage.getItem('isFullScreen');
-
-        if(this.isFullScreen === 'false'){
-          if(e.requestFullscreen) {
-            e.requestFullscreen();
-          } else if (e.mozRequestFullScreen){	// 兼容火狐
-            e.mozRequestFullScreen();
-          } else if(e.webkitRequestFullscreen) {	// 兼容谷歌
-            e.webkitRequestFullscreen();
-          } else if (e.msRequestFullscreen) {	// 兼容IE
-            e.msRequestFullscreen();
-          }
-          this.isFullScreen = 'true';
-
-          localStorage.setItem('isFullScreen',this.isFullScreen);
-
-          this.reload();
-
-        }else{
-          //	退出全屏
-          if(document.exitFullscreen) {
-            document.exitFullscreen();
-          } else if (document.mozCancelFullScreen) {
-            document.mozCancelFullScreen();
-          } else if (document.webkitCancelFullScreen) {
-            document.webkitCancelFullScreen();
-          } else if (document.msExitFullscreen) {
-            document.msExitFullscreen();
-          }
-          this.isFullScreen = 'false';
-
-          localStorage.setItem('isFullScreen',this.isFullScreen);
-
-          this.reload();
-
-        }
-
-      },
-
-    },
-    mounted(){
-      let that = this;
-      // 启动定时器
-      this.startTimer();
-      this.startGetDataFirTimer();
-      this.startGetStatisticsTimer();
-
-      window.onresize = function(){
-        if(!that.checkFull()){
-
-        }
-      }
-
-    },
-    beforeDestroy(){
-      this.closeTimer();
-      this.closeGetStatisticsTimer();
-      this.closeGetDataFirTimer();
-      window.removeEventListener('keydown',this.checkFull)
+import { mixin } from '@/mixins/mixin'
+export default {
+  mixins: [mixin],
+
+  inject: ['reload'],
+  data() {
+    return {
+
+      charts: '',
+      charts2: '',
+      timerId: '',
+      getStatisticsTime: '',
+      getDataFirTime: '',
+      curDate: '',
+      data: [],
+      dataList: [],
+      nowIndex: -1,
+      hasAreaList: false,
+      areaVal: '四川省',
+      areaList: [],
+      temperatureCheckData: {},
+      AxData: [],
+      serData: [],
+      statistics: {},
+      isFullScreen: 'false',
+      screenWidth: 0
+    }
+  },
+
+  created() {
+    const that = this
+
+    this.getHeatDistributeStatistics()
+
+    this.getStatistics()
+
+    if (!localStorage.getItem('isFullScreen')) {
+      localStorage.getItem('isFullScreen', this.isFullScreen)
     }
 
+    window.addEventListener('keydown', this.checkFull)
+  },
+
+  methods: {
+
+    checkFull() {
+      if (document.exitFullscreen) {
+        return true
+      } else {
+        return false
+      }
+    },
+
+    getHeatDistributeStatistics() {
+      const that = this
+
+      that.$api.provinceCheck.mapStatistics({ areaId: '510000' })
+        .then(res => {
+          that.dataList = res
+          if (res.length) {
+            that.data = []
+            that.areaList = []
+            res.forEach((item) => {
+              const obj = {
+                name: item.areaName,
+                value: item.temperatureHeatTotal,
+                areaId: item.areaId
+              }
+              that.data.push(obj)
+
+              const objArea = {
+                name: item.areaName,
+                value: item.areaId,
+                areaId: item.areaId
+              }
+
+              that.areaList.push(objArea)
+            })
+
+            that.showProvince('sichuan')
+
+            that.$nextTick(function() {
+              that.charts.on('click', function (params) {
+                if (params.data.areaId === '510100') {
+                  that.nextPage(params)
+                }
+              })
+            })
+          }
+        })
+
+      that.$api.provinceCheck.heatDistributeStatistics({ areaId: '510000' })
+        .then(res => {
+          that.dataList = res
+        })
+    },
+
+    getStatistics() {
+      const that = this
+      that.$api.provinceCheck.statistics({ areaId: '510000' })
+        .then(res => {
+          that.statistics = res
+        })
+
+      that.$api.provinceCheck.heatTrendStatistics({ areaId: '510000' })
+        .then(res => {
+          that.temperatureCheckData = res
+          if (res.dateStatistics.length) {
+            that.AxData = []
+            that.serData = []
+            res.dateStatistics.forEach((item) => {
+              const dateStr = item.date.substring(item.date.length - 4).replace('-', '/')
+              that.AxData.push(dateStr)
+              that.serData.push(item.temperatureHeatTotal)
+            })
+
+            that.showLine()
+          }
+        })
+    },
+
+    // 3秒定时器
+    startGetStatisticsTimer() {
+      this.getStatisticsTime = setInterval(() => {
+        this.getStatistics()
+      }, 3000)
+    },
+
+    closeGetStatisticsTimer() {
+      clearInterval(this.getStatisticsTime)
+    },
+
+    // 3秒定时器
+    startGetDataFirTimer() {
+      this.getDataFirTime = setInterval(() => {
+        this.getHeatDistributeStatistics()
+      }, 5000)
+    },
+
+    closeGetDataFirTimer() {
+      clearInterval(this.getDataFirTime)
+    },
+
+    // 时间定时器
+    startTimer() {
+      const that = this
+      this.curDate = this.getDateStr()
+
+      this.timerId = setInterval(() => {
+        this.curDate = this.getDateStr()
+        if (that.screenWidth > document.body.clientHeight) {
+          that.screenWidth = document.body.clientHeight
+
+          localStorage.setItem('isFullScreen', 'false')
+
+          that.reload()
+        } else if (that.screenWidth < document.body.clientHeight) {
+          that.screenWidth = document.body.clientHeight
+        }
+      }, 1000)
+    },
+
+    closeTimer() {
+      clearInterval(this.timerId)
+    },
+
+    selectCity() {
+      this.hasAreaList = !this.hasAreaList
+    },
+
+    changeCity(item, index) {
+      // this.nowIndex = index;
+      // this.areaVal = item.name
+    },
+
+    nextPage(item) {
+      const routes = this.$router.resolve({ name: 'bodyTemperature' })
+
+      window.open(routes.href, '_blank')
+
+      // this.$router.push({
+      //   name: 'bodyTemperature',
+      //   params: item
+      // })
+    },
+
+    showProvince(id) {
+      const that = this
+      var name = 'sichuan'
+
+      this.charts = this.$echarts.init(document.getElementById(id))
+
+      const geoJson = require('@/utils/json/sichuan.json')
+
+      this.$echarts.registerMap(name, geoJson)
+
+      this.charts.setOption({
+        backgroundColor: 'rgba(3,20,47,1)',
+        title: {
+          show: false,
+          text: '2月15日四川省新型肺炎疫情地图',
+          left: 'center', // 标题位置
+          textStyle: {
+            fontSize: 32,
+            fontWeight: 'bolder',
+            color: 'black' // 主标题文字颜色
+          }
+        },
+        color: ['white'],
+
+        legend: {
+          show: false,
+          orient: 'vertical',
+          left: 'left',
+
+          textStyle: {
+            fontSize: 20,
+            color: 'black' // 图例文字颜色
+          }
+          // data: ['地市']
+          // 图例位置
+        },
+        tooltip: {
+
+          trigger: 'item',
+          backgroundColor: 'rgba(0,0,0,0.8)',
+          extraCssText: 'box-shadow: 0 0 3px rgba(255, 255, 255, 0.6);',
+          textStyle: {
+            align: 'left'
+          }
+        },
+        visualMap: {
+          min: 0,
+          max: 10000,
+          left: 'left',
+          icon: 'diamond',
+          bottom: '2%',
+          // 文本，默认为数值文本
+          // calculable: true,
+          // color: ['blue', 'blue']
+          // 图例颜色
+          pieces: [{
+            min: 100,
+            max: 500,
+            label: '100-500人',
+            color: '#A50002'
+          }, {
+            min: 11,
+            max: 99,
+            label: '11-99人',
+            color: '#dc6c5c'
+          }, {
+            min: 1,
+            max: 10,
+            label: '1-10人',
+            color: '#f2ad8b'
+          }, {
+            min: 0,
+            max: 0,
+            label: '0人',
+            color: '#ffffff'
+
+          }],
+          orient: 'vertical',
+          itemWidth: 25,
+          itemHeight: 15,
+          showLabel: true,
+          seriesIndex: [0],
+          textStyle: {
+            color: '#fff'
+          }
+        },
+        toolbox: {
+          show: false,
+          orient: 'vertical',
+          left: 'right',
+          top: 'center',
+          feature: {
+            dataView: {
+              readOnly: false
+            },
+            restore: {},
+            saveAsImage: {}
+          }
+        },
+        series: [{
+          name: '感染人数统计',
+          type: 'map',
+          mapType: name,
+          left: '35%',
+          top: 80,
+          bottom: 120,
+          label: {
+            normal: {
+              show: true
+            },
+            emphasis: {
+              textStyle: {
+                color: 'rgba(0, 0, 0, 1)'
+              }
+            }
+          },
+          data: that.data
+        }]
+      })
+    },
+
+    showLine() {
+      const hotLineChart = this.$echarts.init(document.getElementById('hotLine'))
+      // 绘制图表
+      hotLineChart.setOption({
+        title: {
+          show: false
+        },
+        grid: {
+          left: '10%',
+          top: '10%',
+          bottom: '12%',
+          right: '5%'
+        },
+        tooltip: {},
+        xAxis: {
+          type: 'category',
+          axisTick: {
+            show: false
+          },
+          axisLine: {
+            show: false,
+            lineStyle: {
+              color: '#fff'
+            }
+          },
+          axisLabel: {
+            inside: false,
+            textStyle: {
+              fontWeight: 'normal',
+              fontSize: '14',
+              lineHeight: 22
+            }
+          },
+          data: this.AxData
+        },
+        yAxis: {
+          type: 'value',
+          position: 'left',
+          minInterval: 1,
+          lineStyle: {
+            color: '#fff'
+          },
+          nameTextStyle: {
+            color: '#fff'
+          },
+          splitLine: {
+            lineStyle: {
+              type: 'solid',
+              color: '#56565D'
+            }
+          },
+          axisLine: {
+            show: false
+          },
+          axisTick: {
+            show: false
+          },
+          axisLabel: {
+            color: '#fff',
+            formatter: '{value}',
+            fontSize: 14
+          }
+        },
+        series: [{
+          symbolSize: 10,
+          name: '新增确诊',
+          type: 'line',
+          yAxisIndex: 0,
+          data: this.serData,
+          itemStyle: {
+            normal: {
+              borderWidth: 10
+            }
+          }
+        }]
+      })
+    },
+
+    togglefullScreen() {
+      const e = document.documentElement
+
+      this.isFullScreen = localStorage.getItem('isFullScreen')
+
+      if (this.isFullScreen === 'false') {
+        if (e.requestFullscreen) {
+          e.requestFullscreen()
+        } else if (e.mozRequestFullScreen) {	// 兼容火狐
+          e.mozRequestFullScreen()
+        } else if (e.webkitRequestFullscreen) {	// 兼容谷歌
+          e.webkitRequestFullscreen()
+        } else if (e.msRequestFullscreen) {	// 兼容IE
+          e.msRequestFullscreen()
+        }
+        this.isFullScreen = 'true'
+
+        localStorage.setItem('isFullScreen', this.isFullScreen)
+
+        this.reload()
+      } else {
+        //	退出全屏
+        if (document.exitFullscreen) {
+          document.exitFullscreen()
+        } else if (document.mozCancelFullScreen) {
+          document.mozCancelFullScreen()
+        } else if (document.webkitCancelFullScreen) {
+          document.webkitCancelFullScreen()
+        } else if (document.msExitFullscreen) {
+          document.msExitFullscreen()
+        }
+        this.isFullScreen = 'false'
+
+        localStorage.setItem('isFullScreen', this.isFullScreen)
+
+        this.reload()
+      }
+    }
+
+  },
+  mounted() {
+    const that = this
+    // 启动定时器
+    this.startTimer()
+    this.startGetDataFirTimer()
+    this.startGetStatisticsTimer()
+
+    window.onresize = function() {
+      if (!that.checkFull()) {
+
+      }
+    }
+  },
+  beforeDestroy() {
+    this.closeTimer()
+    this.closeGetStatisticsTimer()
+    this.closeGetDataFirTimer()
+    window.removeEventListener('keydown', this.checkFull)
   }
+
+}
 </script>
 
 <style lang="scss" type="text/scss" scoped>

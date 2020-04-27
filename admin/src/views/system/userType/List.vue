@@ -42,7 +42,7 @@
     </div>
 
     <div class="table-operator">
-      <a-button type="primary" icon="plus"  @click="handleEdit(null)">新增</a-button>
+      <a-button type="primary" icon="plus" @click="handleEdit(null)">新增</a-button>
 
       <a-button type="danger" icon="delete" @click="handleDelete" :disabled="selectedRowKeys.length < 1">删除</a-button>
 
@@ -80,10 +80,10 @@
 <script>
 import { STable } from '@/components'
 import EditForm from './modules/EditForm'
-import {mixin} from '@/mixins/mixin'
-import {mapState} from 'vuex';
+import { mixin } from '@/mixins/mixin'
+import { mapState } from 'vuex'
 export default {
-  mixins:[mixin],
+  mixins: [mixin],
   components: {
     STable,
     EditForm
@@ -100,7 +100,7 @@ export default {
         {
           title: '是否注册',
           dataIndex: 'enableRegister',
-          scopedSlots: {customRender: 'status'}
+          scopedSlots: { customRender: 'status' }
         },
         {
           title: '门禁闸机常用规则名称',
@@ -128,16 +128,16 @@ export default {
       loadData: parameter => {
         return this.$api.userType.getPage(Object.assign(parameter, this.queryParam))
           .then(res => {
-            res.records.forEach(item=>{
-              item.codeName = this.constants.data.userTypeCode?this.constants.data.userTypeCode[item.code]['name']:''
-            });
+            res.records.forEach(item => {
+              item.codeName = this.constants.data.userTypeCode ? this.constants.data.userTypeCode[item.code]['name'] : ''
+            })
             return res
           })
       }
     }
   },
   computed: {
-    ...mapState(['constants']),
+    ...mapState(['constants'])
   },
   methods: {
 
@@ -159,7 +159,7 @@ export default {
         onCancel () {
         }
       })
-    },
+    }
   }
 }
 </script>

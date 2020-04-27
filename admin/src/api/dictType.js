@@ -1,4 +1,4 @@
-  import { axios } from '@/utils/request'
+import { axios } from '@/utils/request'
 
 const URI = {
   getById: '/dictType/getById',
@@ -42,7 +42,6 @@ function getAll (parameter) {
     params: parameter
   })
 }
-
 
 export default {
   getById,

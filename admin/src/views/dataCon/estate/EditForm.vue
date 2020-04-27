@@ -32,7 +32,7 @@
             <a-form-item label="名称" :labelCol="labelCol" :wrapperCol="wrapperCol">
               <a-input
                 :maxLength="64"
-                v-decorator="['name', {initialValue: this.formData.name, rules: [{required: true, message: '请输入组织名称！'}]}]"
+                v-decorator="['name', {initialValue: this.formData.name, rules: [{required: true, message: '请输入单位名称！'}]}]"
               />
             </a-form-item>
           </a-col>
@@ -54,14 +54,14 @@
           </a-col>
 
           <a-col :span="12">
-            <a-form-item label="组织" :labelCol="labelCol" :wrapperCol="wrapperCol">
+            <a-form-item label="单位" :labelCol="labelCol" :wrapperCol="wrapperCol">
               <a-select
                 showSearch
-                placeholder="选择组织"
+                placeholder="选择单位"
                 optionFilterProp="children"
                 :filterOption="filterCommonOption"
                 :options="orgList"
-                v-decorator="['orgId', {initialValue: this.formData.orgId?this.formData.orgId:'',rules: [{required: true, message: '请选择组织！'}]}]"
+                v-decorator="['orgId', {initialValue: this.formData.orgId?this.formData.orgId:'',rules: [{required: true, message: '请选择单位！'}]}]"
               ></a-select>
             </a-form-item>
           </a-col>
@@ -237,7 +237,7 @@ export default {
 
     add(item) {
       this.zIndex = 10
-      let that = this
+      const that = this
       this.visible = true
       this.streetList = []
       this.areaId = ''
@@ -309,7 +309,7 @@ export default {
     },
 
     addressChange(val) {
-      let that = this
+      const that = this
       that.isClickMap = false
       if (val) {
         // if(that.isChangeClone){
@@ -327,13 +327,13 @@ export default {
           }
         })
         var ac = new BMap.Autocomplete({
-          //建立一个自动完成的对象
+          // 建立一个自动完成的对象
           input: 'detailAddress',
           location: map
         })
         var myValue
         ac.addEventListener('onconfirm', function(e) {
-          //鼠标点击下拉列表后的事件
+          // 鼠标点击下拉列表后的事件
           var _value = e.item.value
           myValue = _value.province + _value.city + _value.district + _value.street + _value.business
           that.setPlace(myValue)
@@ -341,21 +341,21 @@ export default {
       }
     },
     setPlace(myValue) {
-      let that = this
+      const that = this
       var map = this.map
-      map.clearOverlays() //清除地图上所有覆盖物
+      map.clearOverlays() // 清除地图上所有覆盖物
       function myFun(e) {
-        var pp = local.getResults().getPoi(0).point //获取第一个智能搜索的结果
+        var pp = local.getResults().getPoi(0).point // 获取第一个智能搜索的结果
 
         that.longitude = pp.lng
         that.latitude = pp.lat
         console.log(that.longitude, that.latitude)
         map.centerAndZoom(pp, 18)
-        map.addOverlay(new BMap.Marker(pp)) //添加标注
+        map.addOverlay(new BMap.Marker(pp)) // 添加标注
       }
 
       var local = new BMap.LocalSearch(map, {
-        //智能搜索
+        // 智能搜索
         onSearchComplete: myFun
       })
       local.search(myValue)
@@ -364,16 +364,16 @@ export default {
     },
 
     createMap() {
-      let that = this
+      const that = this
 
       this.map = new BMap.Map('allmap') // 创建Map实例
       this.map.centerAndZoom('成都', 12) // 初始化地图,用城市名设置地图中心点
-      this.map.enableScrollWheelZoom(true) //开启鼠标滚轮缩放
-      //mp.enableScrollWheelZoom();
+      this.map.enableScrollWheelZoom(true) // 开启鼠标滚轮缩放
+      // mp.enableScrollWheelZoom();
       this.map.enableInertialDragging()
       this.map.enableContinuousZoom()
 
-      //添加城市切换
+      // 添加城市切换
       var size = new BMap.Size(10, 20)
       this.map.addControl(
         new BMap.CityListControl({
@@ -398,17 +398,17 @@ export default {
       this.map.addControl(geolocationControl)
 
       var geoc = new BMap.Geocoder()
-      //填加鼠标点击事件
+      // 填加鼠标点击事件
       this.map.addEventListener('click', e => {
         that.longitude = e.point.lng
         that.latitude = e.point.lat
 
         this.map.clearOverlays()
         var marker = new BMap.Marker(new BMap.Point(e.point.lng, e.point.lat)) // 创建点
-        this.map.addOverlay(marker) //增加点
+        this.map.addOverlay(marker) // 增加点
 
         geoc.getLocation(e.point, function(rs) {
-          let addComp = rs.addressComponents
+          const addComp = rs.addressComponents
           that.inputChange = ''
           that.inputChange =
             addComp.province + addComp.city + addComp.district + addComp.street + addComp.streetNumber + ''

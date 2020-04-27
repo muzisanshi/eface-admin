@@ -2,7 +2,7 @@
  * @name CreateForm.vue
  * @author lw
  * @date 2019.11.6
- * @desc 新增（组织管理）
+ * @desc 新增（主控单位）
 -->
 <template>
   <a-modal
@@ -242,7 +242,7 @@ export default {
     },
 
     handleChange(info) {
-      let that = this
+      const that = this
       switch (info.file.status) {
         case 'uploading':
           this.loading = true
@@ -265,8 +265,8 @@ export default {
     },
 
     add(item) {
-      this.zIndex = 10
-      let that = this
+      this.zIndex = 2000
+      const that = this
       this.visible = true
       this.form.resetFields()
       this.formData = {}
@@ -281,7 +281,7 @@ export default {
       this.streetList = []
 
       if (item) {
-        let that = this
+        const that = this
         this.title = '编辑'
         this.$api.org.getById({ id: item.id }).then(res => {
           this.formData = res
@@ -376,7 +376,7 @@ export default {
     },
 
     addressChange(val) {
-      let that = this
+      const that = this
       that.isClickMap = false
       if (val) {
         // if(that.isChangeClone){
@@ -396,17 +396,17 @@ export default {
           }
         })
 
-        //建立一个自动完成的对象
+        // 建立一个自动完成的对象
         var ac = new BMap.Autocomplete({
           input: 'detailAddress',
           location: map
         })
         ac.addEventListener('onhighlight', function(e) {
-          //鼠标放在下拉列表上的事件
+          // 鼠标放在下拉列表上的事件
         })
 
         ac.addEventListener('onconfirm', function(e) {
-          //鼠标点击下拉列表后的事件
+          // 鼠标点击下拉列表后的事件
           var _value = e.item.value
           that.setPlace(_value.province + _value.city + _value.district + _value.street + _value.business)
         })
@@ -414,21 +414,21 @@ export default {
     },
 
     setPlace(myValue) {
-      let that = this
+      const that = this
       var map = this.map
-      map.clearOverlays() //清除地图上所有覆盖物
+      map.clearOverlays() // 清除地图上所有覆盖物
       function myFun(e) {
-        var pp = local.getResults().getPoi(0).point //获取第一个智能搜索的结果
+        var pp = local.getResults().getPoi(0).point // 获取第一个智能搜索的结果
 
         that.longitude = pp.lng
         that.latitude = pp.lat
 
         map.centerAndZoom(pp, 18)
-        map.addOverlay(new BMap.Marker(pp)) //添加标注
+        map.addOverlay(new BMap.Marker(pp)) // 添加标注
       }
 
       var local = new BMap.LocalSearch(map, {
-        //智能搜索
+        // 智能搜索
         onSearchComplete: myFun
       })
       local.search(myValue)
@@ -436,15 +436,15 @@ export default {
     },
 
     createMap() {
-      let that = this
+      const that = this
 
       this.map = new BMap.Map('allmap') // 创建Map实例
       this.map.centerAndZoom('成都', 12) // 初始化地图,用城市名设置地图中心点
-      this.map.enableScrollWheelZoom(true) //开启鼠标滚轮缩放
+      this.map.enableScrollWheelZoom(true) // 开启鼠标滚轮缩放
       this.map.enableInertialDragging()
       this.map.enableContinuousZoom()
 
-      //添加城市切换
+      // 添加城市切换
       var size = new BMap.Size(10, 20)
 
       this.map.addControl(
@@ -472,9 +472,9 @@ export default {
 
       var geoc = new BMap.Geocoder()
 
-      //填加鼠标点击事件
+      // 填加鼠标点击事件
       this.map.addEventListener('click', e => {
-        //alert(e.point.lng + "," + e.point.lat);
+        // alert(e.point.lng + "," + e.point.lat);
         // debugger
         that.longitude = e.point.lng
         that.latitude = e.point.lat
@@ -483,10 +483,10 @@ export default {
 
         var marker = new BMap.Marker(new BMap.Point(e.point.lng, e.point.lat)) // 创建点
 
-        this.map.addOverlay(marker) //增加点
+        this.map.addOverlay(marker) // 增加点
 
         geoc.getLocation(e.point, function(rs) {
-          let addComp = rs.addressComponents
+          const addComp = rs.addressComponents
           that.inputChange =
             addComp.province + addComp.city + addComp.district + addComp.street + addComp.streetNumber + ''
           that.isClickMap = true
@@ -532,7 +532,7 @@ export default {
     }
   },
   mounted() {
-    this.zIndex = -10
+    this.zIndex = -2000
     this.createMap()
     this.visible = false
   }

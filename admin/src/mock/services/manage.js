@@ -1,5 +1,5 @@
 import Mock from 'mockjs2'
-import {getBody, responseSuccess} from '../util'
+import { getBody, responseSuccess } from '../util'
 
 const countryList = (options) => {
   const parameters = getBody(options)

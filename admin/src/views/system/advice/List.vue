@@ -18,11 +18,17 @@
 
           <a-col :md="5" :sm="24">
             <a-form-item label="反馈状态">
-              <a-select showSearch allowClear placeholder="选择反馈状态"  v-model="queryParam.handleState" optionFilterProp="children" :filterOption="filterCommonOption" :options="constants.list.adviceHandleState">
+              <a-select
+                showSearch
+                allowClear
+                placeholder="选择反馈状态"
+                v-model="queryParam.handleState"
+                optionFilterProp="children"
+                :filterOption="filterCommonOption"
+                :options="constants.list.adviceHandleState">
               </a-select>
             </a-form-item>
           </a-col>
-
 
           <a-col :md="4" :sm="24">
             <span class="table-page-search-submitButtons">
@@ -52,23 +58,22 @@
         <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />
       </span>
 
-
       <span slot="action" slot-scope="text, record">
-          <a-dropdown :trigger="['click']" :disabled="record.handleState !== 'NOT_HANDLE'">
-            <a class="ant-dropdown-link" :class="{'not-edit': record.handleState !== 'NOT_HANDLE'}">
-              操作
-              <a-icon type="down"/>
-            </a>
-            <a-menu slot="overlay">
-              <a-menu-item>
-                <a href="javascript:;" @click="handleState('RESOLVED',record.id)">已解决</a>
-              </a-menu-item>
-              <a-menu-item>
-                <a href="javascript:;" @click="handleState('IGNORE',record.id)">忽略</a>
-              </a-menu-item>
-            </a-menu>
-          </a-dropdown>
-        </span>
+        <a-dropdown :trigger="['click']" :disabled="record.handleState !== 'NOT_HANDLE'">
+          <a class="ant-dropdown-link" :class="{'not-edit': record.handleState !== 'NOT_HANDLE'}">
+            操作
+            <a-icon type="down"/>
+          </a>
+          <a-menu slot="overlay">
+            <a-menu-item>
+              <a href="javascript:;" @click="handleState('RESOLVED',record.id)">已解决</a>
+            </a-menu-item>
+            <a-menu-item>
+              <a href="javascript:;" @click="handleState('IGNORE',record.id)">忽略</a>
+            </a-menu-item>
+          </a-menu>
+        </a-dropdown>
+      </span>
 
     </s-table>
   </a-card>
@@ -76,15 +81,15 @@
 
 <script>
 import { STable } from '@/components'
-import {mixin} from '@/mixins/mixin'
-import {mapState} from 'vuex';
+import { mixin } from '@/mixins/mixin'
+import { mapState } from 'vuex'
 export default {
-  mixins:[mixin],
+  mixins: [mixin],
   components: {
-    STable,
+    STable
   },
   computed: {
-    ...mapState(['constants']),
+    ...mapState(['constants'])
   },
   data () {
     return {
@@ -124,20 +129,20 @@ export default {
       loadData: parameter => {
         return this.$api.advice.getPage(Object.assign(parameter, this.queryParam))
           .then(res => {
-            res.records.forEach(item=>{
-              item.handleStateName = this.constants.data.adviceHandleState?this.constants.data.adviceHandleState[item.handleState]['name']:''
-            });
+            res.records.forEach(item => {
+              item.handleStateName = this.constants.data.adviceHandleState ? this.constants.data.adviceHandleState[item.handleState]['name'] : ''
+            })
             return res
           })
       }
     }
   },
-  methods:{
-    handleState(value,id){
-      let that = this;
+  methods: {
+    handleState(value, id) {
+      const that = this
       that.$api.advice.updateAdviceHandleState({
         ids: [id],
-        handleState:value
+        handleState: value
       })
         .then(res => {
           that.$notification.success({

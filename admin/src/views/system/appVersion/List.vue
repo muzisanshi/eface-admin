@@ -12,14 +12,28 @@
 
           <a-col :md="5" :sm="24">
             <a-form-item label="APP类型">
-              <a-select showSearch allowClear placeholder="选择APP类型"  v-model="queryParam.appType" optionFilterProp="children" :filterOption="filterCommonOption" :options="constants.list.appType">
+              <a-select
+                showSearch
+                allowClear
+                placeholder="选择APP类型"
+                v-model="queryParam.appType"
+                optionFilterProp="children"
+                :filterOption="filterCommonOption"
+                :options="constants.list.appType">
               </a-select>
             </a-form-item>
           </a-col>
 
           <a-col :md="5" :sm="24">
             <a-form-item label="设备类型">
-              <a-select showSearch allowClear placeholder="选择设备类型"  v-model="queryParam.deviceType" optionFilterProp="children" :filterOption="filterCommonOption" :options="constants.list.deviceType">
+              <a-select
+                showSearch
+                allowClear
+                placeholder="选择设备类型"
+                v-model="queryParam.deviceType"
+                optionFilterProp="children"
+                :filterOption="filterCommonOption"
+                :options="constants.list.deviceType">
               </a-select>
             </a-form-item>
           </a-col>
@@ -47,7 +61,7 @@
     </div>
 
     <div class="table-operator">
-      <a-button type="primary" icon="plus"  @click="handleEdit(null)">新增</a-button>
+      <a-button type="primary" icon="plus" @click="handleEdit(null)">新增</a-button>
 
       <a-button type="danger" icon="delete" @click="handleDelete" :disabled="selectedRowKeys.length < 1">删除</a-button>
 
@@ -69,7 +83,7 @@
       <span slot="frameAttResourceAddress" slot-scope="text, record">
         <template>
           <div style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis;width: 150px;">
-            <a :href="record.frameAttResourceAddress">{{record.frameAttResourceAddress}}</a>
+            <a :href="record.frameAttResourceAddress">{{ record.frameAttResourceAddress }}</a>
           </div>
         </template>
       </span>
@@ -77,7 +91,7 @@
       <span slot="rootAttResourceAddress" slot-scope="text, record">
         <template>
           <div style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis;width: 150px;">
-            <a :href="record.rootAttResourceAddress">{{record.rootAttResourceAddress}}</a>
+            <a :href="record.rootAttResourceAddress">{{ record.rootAttResourceAddress }}</a>
           </div>
         </template>
       </span>
@@ -100,16 +114,16 @@
 <script>
 import { STable } from '@/components'
 import EditForm from './modules/EditForm'
-import {mapState} from 'vuex';
-import {mixin} from '@/mixins/mixin'
+import { mapState } from 'vuex'
+import { mixin } from '@/mixins/mixin'
 export default {
-  mixins:[mixin],
+  mixins: [mixin],
   components: {
     STable,
-    EditForm,
+    EditForm
   },
   computed: {
-    ...mapState(['constants']),
+    ...mapState(['constants'])
   },
   data () {
     return {
@@ -153,23 +167,23 @@ export default {
           scopedSlots: { customRender: 'action' }
         }
       ],
-      initCascader:[],
+      initCascader: [],
       loadData: parameter => {
         return this.$api.appVersion.getPage(Object.assign(parameter, this.queryParam))
           .then(res => {
-            res.records.forEach(item=>{
-              item.appTypeName = this.constants.data.appType?this.constants.data.appType[item.appType]['name']:''
-              item.deviceTypeName = this.constants.data.deviceType?this.constants.data.deviceType[item.deviceType]['name']:''
-            });
+            res.records.forEach(item => {
+              item.appTypeName = this.constants.data.appType ? this.constants.data.appType[item.appType]['name'] : ''
+              item.deviceTypeName = this.constants.data.deviceType ? this.constants.data.deviceType[item.deviceType]['name'] : ''
+            })
             return res
           })
-      },
+      }
     }
   },
   methods: {
 
     selectedArea(area) {
-      this.queryParam.areaId = area.value[area.value.length-1];
+      this.queryParam.areaId = area.value[area.value.length - 1]
     },
 
     handleDelete () {
@@ -190,7 +204,7 @@ export default {
         onCancel () {
         }
       })
-    },
+    }
   }
 }
 </script>

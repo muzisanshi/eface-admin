@@ -24,7 +24,14 @@
 
           <a-col :md="5" :sm="24">
             <a-form-item label="用户类型">
-              <a-select showSearch allowClear placeholder="选择用户类型"  v-model="queryParam.code" optionFilterProp="children" :filterOption="filterCommonOption" :options="constants.list.userTypeCode">
+              <a-select
+                showSearch
+                allowClear
+                placeholder="选择用户类型"
+                v-model="queryParam.code"
+                optionFilterProp="children"
+                :filterOption="filterCommonOption"
+                :options="constants.list.userTypeCode">
               </a-select>
             </a-form-item>
           </a-col>
@@ -47,7 +54,14 @@
 
           <a-col :md="5" :sm="24">
             <a-form-item label="识别结果">
-              <a-select showSearch allowClear placeholder="选择识别结果"  v-model="queryParam.recResult" optionFilterProp="children" :filterOption="filterCommonOption" :options="constants.list.recResult">
+              <a-select
+                showSearch
+                allowClear
+                placeholder="选择识别结果"
+                v-model="queryParam.recResult"
+                optionFilterProp="children"
+                :filterOption="filterCommonOption"
+                :options="constants.list.recResult">
               </a-select>
             </a-form-item>
           </a-col>
@@ -101,10 +115,10 @@
       <span slot="temperature" slot-scope="text, record">
         <template>
           <div>
-            <span v-if="parseFloat(record.t) <36" class="tImgColor" style="color: #5286F2">{{record.t+'℃/'+record.fahrenheit+'℉'}}</span>
-            <span v-if="parseFloat(record.t) <37.3 && parseFloat(record.t) >=36" class="tImgColor" style="color: #AEEA68">{{record.t+'℃/'+record.fahrenheit+'℉'}}</span>
-            <span v-if="parseFloat(record.t) >=37.3 && parseFloat(record.t) <37.6" class="tImgColor" style="color: #FFB94E">{{record.t+'℃/'+record.fahrenheit+'℉'}}</span>
-            <span v-if="parseFloat(record.t) >37.6" class="tImgColor" style="color: #EA2E45">{{record.t+'℃/'+record.fahrenheit+'℉'}}</span>
+            <span v-if="parseFloat(record.t) <36" class="tImgColor" style="color: #5286F2">{{ record.t+'℃/'+record.fahrenheit+'℉' }}</span>
+            <span v-if="parseFloat(record.t) <37.3 && parseFloat(record.t) >=36" class="tImgColor" style="color: #AEEA68">{{ record.t+'℃/'+record.fahrenheit+'℉' }}</span>
+            <span v-if="parseFloat(record.t) >=37.3 && parseFloat(record.t) <37.6" class="tImgColor" style="color: #FFB94E">{{ record.t+'℃/'+record.fahrenheit+'℉' }}</span>
+            <span v-if="parseFloat(record.t) >37.6" class="tImgColor" style="color: #EA2E45">{{ record.t+'℃/'+record.fahrenheit+'℉' }}</span>
           </div>
         </template>
       </span>
@@ -124,35 +138,35 @@
 
 <script>
 import { STable } from '@/components'
-import {mixin} from '@/mixins/mixin'
-import {mapState} from 'vuex';
-import moment from 'moment';
+import { mixin } from '@/mixins/mixin'
+import { mapState } from 'vuex'
+import moment from 'moment'
 import selectDataCon from '@/components/Common/SelectDataCon'
 import lookImg from './LookImg'
 export default {
-  mixins:[mixin],
+  mixins: [mixin],
   components: {
-    STable,selectDataCon,lookImg
+    STable, selectDataCon, lookImg
   },
   computed: {
-    ...mapState(['constants']),
+    ...mapState(['constants'])
   },
   beforeCreate () {
-    this.form = this.$form.createForm(this);
+    this.form = this.$form.createForm(this)
   },
   data () {
     return {
-      queryParam:{
-        estateName:'',
+      queryParam: {
+        estateName: ''
       },
-      defaultDate:[moment().startOf('day').subtract(0, 'days'), moment().endOf('day')],
+      defaultDate: [moment().startOf('day').subtract(0, 'days'), moment().endOf('day')],
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 1 },
+        sm: { span: 1 }
       },
       wrapperCol: {
         xs: { span: 24 },
-        sm: { span: 18 },
+        sm: { span: 18 }
       },
       columns: [
         {
@@ -207,101 +221,99 @@ export default {
         {
           title: '操作',
           dataIndex: 'action',
-          fixed:'right',
+          fixed: 'right',
           width: '100px',
           scopedSlots: { customRender: 'action' }
         }
       ],
       dateFormat: 'YYYY-MM-DD HH:mm:ss',
-      startDate:'',
-      endDate:'',
+      startDate: '',
+      endDate: '',
       loadData: parameter => {
-        return this.$api.recRecord.getPage(Object.assign(parameter, this.queryParam,{
-          beginDatetime:this.startDate?this.startDate:this.moment().startOf('day').subtract(0, 'days').format(this.dateFormat),
-          endDatetime:this.endDate?this.endDate:this.moment().endOf('day').format(this.dateFormat)
+        return this.$api.recRecord.getPage(Object.assign(parameter, this.queryParam, {
+          beginDatetime: this.startDate ? this.startDate : this.moment().startOf('day').subtract(0, 'days').format(this.dateFormat),
+          endDatetime: this.endDate ? this.endDate : this.moment().endOf('day').format(this.dateFormat)
         }))
           .then(res => {
-            res.records.forEach(item=>{
-              item.recResultName = this.constants.data.recResult?this.constants.data.recResult[item.recResult]['name']:''
-              item.qualityLevel = item.qualityLevel === 0?'优秀':item.qualityLevel === 1?'良好':item.qualityLevel === 2?'中':'差'
-              item.temperature = '';
-              item.resourceFullAddress = item.tImageResourceAddress?item.tImageResourceAddress:'';
-              item.userTypeCodeName = this.constants.data.userTypeCode?this.constants.data.userTypeCode[item.userTypeCode]['name']:''
-
-            });
+            res.records.forEach(item => {
+              item.recResultName = this.constants.data.recResult ? this.constants.data.recResult[item.recResult]['name'] : ''
+              item.qualityLevel = item.qualityLevel === 0 ? '优秀' : item.qualityLevel === 1 ? '良好' : item.qualityLevel === 2 ? '中' : '差'
+              item.temperature = ''
+              item.resourceFullAddress = item.tImageResourceAddress ? item.tImageResourceAddress : ''
+              item.userTypeCodeName = this.constants.data.userTypeCode ? this.constants.data.userTypeCode[item.userTypeCode]['name'] : ''
+            })
             return res
           })
       }
     }
   },
-  methods:{
+  methods: {
     moment,
 
     handleLookEdit (record) {
       this.$refs.editModal.add(record)
     },
 
-    resetSearchBUForm(){
+    resetSearchBUForm() {
       // this.defaultDate = [moment().startOf('day').subtract(0, 'days'), moment().endOf('day')];
       this.form.setFieldsValue({
-        rangeTimePicker:[moment().startOf('day').subtract(0, 'days'), moment().endOf('day')]
-      });
+        rangeTimePicker: [moment().startOf('day').subtract(0, 'days'), moment().endOf('day')]
+      })
       this.startDate = this.moment().startOf('day').subtract(0, 'days').format(this.dateFormat)
       this.endDate = this.moment().endOf('day').format(this.dateFormat)
       this.queryParam = {
-        beginDatetime:this.startDate?this.startDate:this.moment().startOf('day').subtract(0, 'days').format(this.dateFormat),
-        endDatetime:this.endDate?this.endDate:this.moment().endOf('day').format(this.dateFormat),
+        beginDatetime: this.startDate ? this.startDate : this.moment().startOf('day').subtract(0, 'days').format(this.dateFormat),
+        endDatetime: this.endDate ? this.endDate : this.moment().endOf('day').format(this.dateFormat),
         page: { pageNumber: 1, pageSize: 10 }
       }
       this.initCascader = []
     },
 
     onChange(dates) {
-      this.startDate = dates[0].format(this.dateFormat);
+      this.startDate = dates[0].format(this.dateFormat)
       this.endDate = dates[1].format(this.dateFormat)
     },
 
     disabledDate(current) {
-      return current && current > moment().endOf('day').add(1, 'days');
+      return current && current > moment().endOf('day').add(1, 'days')
     },
 
-    selectSuccess(value){
+    selectSuccess(value) {
       console.log(value)
       this.queryParam.estateName = value.name
       this.queryParam.estateId = value.value
     },
-    clearSelected(){
+    clearSelected() {
       this.queryParam.estateName = ''
     },
 
     onSelectUserChange (selectedRowKeys, selectedRows) {
       this.selectedRowKeys = selectedRowKeys
 
-      let that = this;
-      let hash = {},rowsIds = [],defferentId = '';
-      that.selectedRows = [...this.selectedRows,...selectedRows]
+      const that = this
+      const hash = {}; let rowsIds = []; let defferentId = ''
+      that.selectedRows = [...this.selectedRows, ...selectedRows]
       that.selectedRows = that.selectedRows.reduce(function(item, next) {
-        hash[next.id] ? '' : hash[next.id] = true && item.push(next);
+        hash[next.id] ? '' : hash[next.id] = true && item.push(next)
         return item
       }, [])
 
-      if(selectedRowKeys.length < that.selectedRows.length){
-        let newRows = [];
+      if (selectedRowKeys.length < that.selectedRows.length) {
+        let newRows = []
         rowsIds = []
-        that.selectedRows.map((item)=>{
+        that.selectedRows.map((item) => {
           rowsIds.push(item.id)
         })
         defferentId = this.selectedRowKeys.concat(rowsIds).filter(function(v, i, arr) {
-          return arr.indexOf(v) === arr.lastIndexOf(v);
-        });
+          return arr.indexOf(v) === arr.lastIndexOf(v)
+        })
         newRows = that.selectedRows.filter(pane => pane.id !== defferentId[0])
         that.selectedRows = [...newRows]
       }
 
-      if(this.selectAdStatus){
-        this.$emit('selectedAd',that.selectedRows)
+      if (this.selectAdStatus) {
+        this.$emit('selectedAd', that.selectedRows)
       }
-
     },
 
     handleDelete () {
@@ -310,12 +322,12 @@ export default {
         title: '删除',
         content: '确定删除勾选的记录？',
         onOk () {
-          let params = []
-          if(that.selectedRows.length){
-            that.selectedRows.forEach((item,index)=>{
-              let obj = {
-                id:item.id,
-                recDatetime:item.recDatetime
+          const params = []
+          if (that.selectedRows.length) {
+            that.selectedRows.forEach((item, index) => {
+              const obj = {
+                id: item.id,
+                recDatetime: item.recDatetime
               }
               params.push(obj)
             })
@@ -332,7 +344,7 @@ export default {
         onCancel () {
         }
       })
-    },
+    }
 
   }
 }

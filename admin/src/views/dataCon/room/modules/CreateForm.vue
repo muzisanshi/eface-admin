@@ -11,7 +11,8 @@
     :visible="visible"
     :confirmLoading="confirmLoading"
     @ok="handleSubmit"
-    :maskClosable="false" :keyboard="false"
+    :maskClosable="false"
+    :keyboard="false"
     @cancel="handleCancel"
   >
     <a-spin :spinning="confirmLoading">
@@ -33,16 +34,20 @@
 
               <a-col :span="7">
                 <a-form-item :key="k.no" v-bind="formLayout" label="房间编号">
-                  <a-input :maxLength="16" v-decorator="[
-                        `noVal[${k.no}]`,
-                        {
-                          rules: [{
-                            required: true,
-                            whitespace: true,
-                            message: '房间编号不能为空',
-                          }],
-                        }
-                      ]" placeholder="请输入房间编号" style="margin-right: 8px" >
+                  <a-input
+                    :maxLength="16"
+                    v-decorator="[
+                      `noVal[${k.no}]`,
+                      {
+                        rules: [{
+                          required: true,
+                          whitespace: true,
+                          message: '房间编号不能为空',
+                        }],
+                      }
+                    ]"
+                    placeholder="请输入房间编号"
+                    style="margin-right: 8px" >
 
                   </a-input>
                 </a-form-item>
@@ -51,24 +56,32 @@
 
               <a-col :span="7" >
                 <a-form-item :key="k.name" v-bind="formLayout" label="房间名称">
-                  <a-input :maxLength="64" v-decorator="[
-                          `nameVal[${k.name}]`,
-                          {
-                            rules: [{
-                              required: true,
-                              whitespace: true,
-                              message: '房间名称不能为空',
-                            }],
-                          }
-                        ]" placeholder="请输入房间名称" style="margin-right: 8px" >
+                  <a-input
+                    :maxLength="64"
+                    v-decorator="[
+                      `nameVal[${k.name}]`,
+                      {
+                        rules: [{
+                          required: true,
+                          whitespace: true,
+                          message: '房间名称不能为空',
+                        }],
+                      }
+                    ]"
+                    placeholder="请输入房间名称"
+                    style="margin-right: 8px" >
                   </a-input>
                 </a-form-item>
               </a-col>
 
               <a-col :span="7" >
                 <a-form-item :key="k.remark" v-bind="formLayout" label="备注" :required="false">
-                  <a-input :maxLength="255" v-decorator="[
-                          `remarkVal[${k.remark}]`]" placeholder="请输入备注" style="margin-right: 8px" >
+                  <a-input
+                    :maxLength="255"
+                    v-decorator="[
+                      `remarkVal[${k.remark}]`]"
+                    placeholder="请输入备注"
+                    style="margin-right: 8px" >
                   </a-input>
                 </a-form-item>
               </a-col>
@@ -94,202 +107,197 @@
 </template>
 
 <script>
-  import {mixin} from '@/mixins/mixin'
-  import selectDataCon from '@/components/Common/SelectDataCon'
-  let nameNum = 0,
-    noNum = 0,
-    remarkNum =0;
+import { mixin } from '@/mixins/mixin'
+import selectDataCon from '@/components/Common/SelectDataCon'
+let nameNum = 0
+let noNum = 0
+let remarkNum = 0
 
-  export default {
-    mixins:[mixin],
-    components: {
-      selectDataCon
-    },
-    data () {
-      return {
-        goodsGroups:[],
+export default {
+  mixins: [mixin],
+  components: {
+    selectDataCon
+  },
+  data () {
+    return {
+      goodsGroups: [],
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 5 }
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 16 }
+      },
+      labelCo1: {
+        xs: { span: 24 },
+        sm: { span: 4 }
+      },
+      wrapperCo1: {
+        xs: { span: 24 },
+        sm: { span: 17 }
+      },
+      formLayout: {
         labelCol: {
           xs: { span: 24 },
-          sm: { span: 5 },
+          sm: { span: 7 }
         },
         wrapperCol: {
           xs: { span: 24 },
-          sm: { span: 16 },
-        },
-        labelCo1: {
+          sm: { span: 17 }
+        }
+      },
+      formItemLayout: {
+        labelCol: {
           xs: { span: 24 },
-          sm: { span: 4 },
+          sm: { span: 0 }
         },
-        wrapperCo1: {
+        wrapperCol: {
           xs: { span: 24 },
-          sm: { span: 17 },
-        },
-        formLayout:{
-          labelCol: {
-            xs: { span: 24 },
-            sm: { span: 7 },
-          },
-          wrapperCol: {
-            xs: { span: 24 },
-            sm: { span: 17 },
-          },
-        },
-        formItemLayout: {
-          labelCol: {
-            xs: { span: 24 },
-            sm: { span: 0 },
-          },
-          wrapperCol: {
-            xs: { span: 24 },
-            sm: { span: 24 },
-          },
-        },
-        formItemLayoutWithOutLabel: {
-          wrapperCol: {
-            xs: { span: 24, offset: 0 },
-            sm: { span: 10, offset: 7 },
-          },
-        },
-        visible: false,
-        confirmLoading: false,
-        formData: {},
-        parentGoodsGroupId: '',
-        goodsAttrAndOptParams:[],
-        goodsId:'',
-        attrOpt:[[]],
-        cloneAttrOpt:[[{name:''}]],
+          sm: { span: 24 }
+        }
+      },
+      formItemLayoutWithOutLabel: {
+        wrapperCol: {
+          xs: { span: 24, offset: 0 },
+          sm: { span: 10, offset: 7 }
+        }
+      },
+      visible: false,
+      confirmLoading: false,
+      formData: {},
+      parentGoodsGroupId: '',
+      goodsAttrAndOptParams: [],
+      goodsId: '',
+      attrOpt: [[]],
+      cloneAttrOpt: [[{ name: '' }]]
+    }
+  },
+  beforeCreate () {
+    this.form = this.$form.createForm(this)
+    this.form.getFieldDecorator('keys', {
+      initialValue: [],
+      preserve: true
+    })
+  },
+  methods: {
+    add (item) {
+      this.visible = true
+      this.form.resetFields()
+      this.formData = {}
+    },
+
+    selectSuccess(value) {
+      this.formData.storeyName = value.name
+      this.formData.storeyId = value.value
+      this.formData.roomNum = value.roomNum
+      this.form.setFieldsValue({ storeyName: value.name })
+    },
+
+    handleSubmit () {
+      if (this.formData.roomNum < 1) {
+        this.$notification.error({
+          message: '提示',
+          description: '该楼层房间数量已添加完，请选择其他楼层！'
+        })
+        return false
+      }
+      const { form: { validateFields } } = this
+      // this.confirmLoading = true
+      validateFields((errors, values) => {
+        if (!errors) {
+          if (values.keys.length > 0) {
+            this.handleAddData(values)
+          }
+          const parmas = {}
+          parmas.rooms = this.goodsAttrAndOptParams
+          parmas.storeyId = this.formData.storeyId
+          console.log(parmas)
+
+          this.$api.room.saveOrUpdate(parmas)
+            .then(res => {
+              this.$notification.success({
+                message: '成功',
+                description: '增加成功！'
+              })
+              this.visible = false
+              this.confirmLoading = false
+              this.form.resetFields()
+              this.$emit('ok', values)
+            }).finally(() => {
+              this.confirmLoading = false
+            })
+        } else {
+          this.confirmLoading = false
+        }
+      })
+    },
+    trimSpace(array) {
+      for (var i = 0; i < array.length; i++) {
+        if (array[i] == ' ' || array[i] == null || typeof (array[i]) === 'undefined') {
+          array.splice(i, 1)
+          i = i - 1
+        }
+      }
+      return array
+    },
+    handleAddData(data) {
+      // data.nameVal = this.trimSpace(data.nameVal);
+      // data.noVal = this.trimSpace(data.noVal);
+      // data.remarkVal = this.trimSpace(data.remarkVal);
+      this.goodsAttrAndOptParams = []
+      for (let i = 0; i < data.nameVal.length; i++) {
+        const obj = {}
+        if (data.nameVal[i]) {
+          obj.name = data.nameVal[i]
+          obj.no = data.noVal[i]
+          obj.remark = data.remarkVal[i]
+          this.goodsAttrAndOptParams.push(obj)
+        }
       }
     },
-    beforeCreate () {
-      this.form = this.$form.createForm(this);
-      this.form.getFieldDecorator('keys', {
-        initialValue: [],
-        preserve: true
-      });
+
+    handleCancel () {
+      this.visible = false
     },
-    methods: {
-      add (item) {
-        this.visible = true
-        this.form.resetFields()
-        this.formData ={}
-      },
 
-      selectSuccess(value){
-        this.formData.storeyName = value.name
-        this.formData.storeyId = value.value
-        this.formData.roomNum = value.roomNum
-        this.form.setFieldsValue({ storeyName: value.name});
-      },
+    addBuildingAttr() {
+      const attrOptArr = []
 
-      handleSubmit () {
-        if(this.formData.roomNum <1){
-          this.$notification.error({
-            message: '提示',
-            description: '该楼层房间数量已添加完，请选择其他楼层！'
-          })
-          return false
-        }
-        const { form: { validateFields } } = this
-        // this.confirmLoading = true
-        validateFields((errors, values) => {
+      this.attrOpt.push(attrOptArr)
 
-          if (!errors) {
-            if(values.keys.length>0){
-              this.handleAddData(values)
-            }
-            let parmas = {};
-            parmas.rooms = this.goodsAttrAndOptParams;
-            parmas.storeyId = this.formData.storeyId;
-            console.log(parmas)
+      const { form } = this
+      // can use data-binding to get
+      const keys = form.getFieldValue('keys')
+      var arr = [{
+        no: 0,
+        name: 0,
+        remark: 0
+      }]
+      arr[0].name = ++nameNum
+      arr[0].no = ++noNum
+      arr[0].remark = ++remarkNum
+      const nextKeys = keys.concat(arr)
+      form.setFieldsValue({
+        keys: nextKeys
+      })
+    },
 
-            this.$api.room.saveOrUpdate(parmas)
-              .then(res => {
-                this.$notification.success({
-                  message: '成功',
-                  description: '增加成功！'
-                })
-                this.visible = false
-                this.confirmLoading = false
-                this.form.resetFields()
-                this.$emit('ok', values)
-              }).finally(() => {
-                this.confirmLoading = false
-              })
-          } else {
-            this.confirmLoading = false
-          }
-        })
-      },
-      trimSpace(array){
-        for(var i = 0 ;i<array.length;i++)
-        {
-          if(array[i] == " " || array[i] == null || typeof(array[i]) == "undefined")
-          {
-            array.splice(i,1);
-            i= i-1;
-          }
-        }
-        return array;
-      },
-      handleAddData(data){
-        // data.nameVal = this.trimSpace(data.nameVal);
-        // data.noVal = this.trimSpace(data.noVal);
-        // data.remarkVal = this.trimSpace(data.remarkVal);
-        this.goodsAttrAndOptParams = [];
-        for(let i=0;i<data.nameVal.length;i++){
-          let obj ={};
-          if(data.nameVal[i]){
-            obj.name = data.nameVal[i];
-            obj.no = data.noVal[i];
-            obj.remark = data.remarkVal[i];
-            this.goodsAttrAndOptParams.push(obj)
-          }
-        }
-      },
+    remove(k, nowIndex, index, id) {
+      const { form } = this
+      // can use data-binding to get
+      const keys = form.getFieldValue('keys')
+      // We need at least one passenger
+      if (keys.length === 0) {
+        return
+      }
 
-      handleCancel () {
-        this.visible = false
-      },
-
-      addBuildingAttr(){
-
-        const attrOptArr = []
-
-        this.attrOpt.push(attrOptArr)
-
-        const { form } = this;
-        // can use data-binding to get
-        const keys = form.getFieldValue('keys');
-        var arr = [{
-          no:0,
-          name:0,
-          remark:0
-        }]
-        arr[0].name = ++nameNum
-        arr[0].no = ++noNum
-        arr[0].remark = ++remarkNum
-        const nextKeys = keys.concat(arr);
-        form.setFieldsValue({
-          keys: nextKeys,
-        });
-      },
-
-      remove(k,nowIndex,index,id) {
-        const { form } = this;
-        // can use data-binding to get
-        const keys = form.getFieldValue('keys');
-        // We need at least one passenger
-        if (keys.length === 0) {
-          return;
-        }
-
-        // can use data-binding to set
-        form.setFieldsValue({
-          keys: keys.filter(key => key !== k),
-        });
-
-      },
-
+      // can use data-binding to set
+      form.setFieldsValue({
+        keys: keys.filter(key => key !== k)
+      })
     }
+
   }
+}
 </script>

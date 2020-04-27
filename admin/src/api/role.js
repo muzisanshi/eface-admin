@@ -1,4 +1,4 @@
-import {axios} from '@/utils/request'
+import { axios } from '@/utils/request'
 
 const URI = {
   page: '/role/getPage',
@@ -7,7 +7,7 @@ const URI = {
   getAll: '/role/getAll',
   del: '/role/delete',
   authorize: '/role/authorize',
-  getPermissionsById: '/role/getPermissionsById',
+  getPermissionsById: '/role/getPermissionsById'
 }
 
 function getPage(parameter) {
@@ -58,7 +58,6 @@ function getPermissionsById(parameter) {
     params: parameter
   })
 }
-
 
 export default {
   getPage,

@@ -67,10 +67,10 @@
 <script>
 import { STable } from '@/components'
 import EditForm from './EditForm'
-import {mixin} from '@/mixins/mixin'
-import {mapState} from 'vuex';
+import { mixin } from '@/mixins/mixin'
+import { mapState } from 'vuex'
 export default {
-  mixins:[mixin],
+  mixins: [mixin],
   components: {
     STable,
     EditForm
@@ -109,7 +109,7 @@ export default {
         {
           title: '是否负载均衡',
           dataIndex: 'loadBalanced',
-          scopedSlots: {customRender: 'status'}
+          scopedSlots: { customRender: 'status' }
         },
         {
           title: '详细备注',
@@ -122,17 +122,17 @@ export default {
           scopedSlots: { customRender: 'action' }
         }
       ],
-      enableChecked:false,
+      enableChecked: false,
       loadData: parameter => {
         return this.$api.scheduleJob.getPage(Object.assign(parameter, this.queryParam))
           .then(res => {
             res.records.forEach(item => {
               item.scheduleStatus = this.constants.data.scheduleStatus ? this.constants.data.scheduleStatus[item.scheduleStatus]['name'] : ''
-              item.triggerState = item.triggerState === 'NONE' ? '无': item.triggerState === 'NORMAL' ? '正常' : item.triggerState === 'PAUSED' ? '暂停' :  item.triggerState === 'COMPLETE' ? '完成' : item.triggerState === 'ERROR' ? '错误' : item.triggerState === 'BLOCKED' ? '阻塞' :''
-            });
+              item.triggerState = item.triggerState === 'NONE' ? '无' : item.triggerState === 'NORMAL' ? '正常' : item.triggerState === 'PAUSED' ? '暂停' : item.triggerState === 'COMPLETE' ? '完成' : item.triggerState === 'ERROR' ? '错误' : item.triggerState === 'BLOCKED' ? '阻塞' : ''
+            })
             return res
           })
-      },
+      }
     }
   },
   computed: {
@@ -159,16 +159,16 @@ export default {
       })
     },
 
-    handleJob(){
+    handleJob() {
       const that = this
-        that.$api.scheduleJob.executeJob({ id: that.selectedRowKeys[0] })
-            .then(res => {
-              that.$notification.success({
-                message: '成功',
-                description: '成功！'
-              })
-              that.handleOk()
+      that.$api.scheduleJob.executeJob({ id: that.selectedRowKeys[0] })
+        .then(res => {
+          that.$notification.success({
+            message: '成功',
+            description: '成功！'
           })
+          that.handleOk()
+        })
     }
   }
 }

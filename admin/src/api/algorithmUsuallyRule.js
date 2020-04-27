@@ -48,5 +48,5 @@ export default {
   getPage,
   del,
   saveOrUpdate,
-  getAll,
+  getAll
 }

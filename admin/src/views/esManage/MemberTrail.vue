@@ -5,62 +5,62 @@
     <!-- 人员信息 -->
     <div class="member-info">
 
-       <div class="header">
+      <div class="header">
 
-         <img class="bg-img" src="../../assets/es/img_titlebg@2x.png"/>
+        <img class="bg-img" src="../../assets/es/img_titlebg@2x.png"/>
 
-         <div class="left">
-           <img @click="back" class="back" src="../../assets/es/btn_back.png"/>
-           <span class="title">东方天呈点位体温实时状态</span>
-           <!-- <span class="late">（近14天）</span> -->
-         </div>
+        <div class="left">
+          <img @click="back" class="back" src="../../assets/es/btn_back.png"/>
+          <span class="title">东方天呈点位体温实时状态</span>
+          <!-- <span class="late">（近14天）</span> -->
+        </div>
 
-         <div class="right">
-           <span class="time">{{curDate}}</span>
-           <img @click="togglefullScreen" class="full-screen" src="../../assets/es/btn_fullscreen@2x.png"/>
-         </div>
+        <div class="right">
+          <span class="time">{{ curDate }}</span>
+          <img @click="togglefullScreen" class="full-screen" src="../../assets/es/btn_fullscreen@2x.png"/>
+        </div>
 
-       </div>
+      </div>
 
-       <div class="body">
+      <div class="body">
 
         <div class="excep-member">
 
-           <!-- 三角形 -->
-           <img class="angle" src="../../assets/es/img_angle.png"/>
+          <!-- 三角形 -->
+          <img class="angle" src="../../assets/es/img_angle.png"/>
 
-           <div style="padding: 25px;">
-             <div class="status" :style="{color: memberData.temperature > 37.3 ? '#FA4F65':'#7CCB27'}">
-              {{memberData.temperature > 37.3 ? '异常人员' : '正常人员'}}
-             </div>
-             <div class="pic">
-               <img :src="memberData.headImageRemoteUrl"/>
-             </div>
-             <div class="member-temp">
-               <span class="name">{{memberData.userRealName || '陌生人'}}</span>
-               <span class="temp" :style="{color: memberData.temperature > 37.3 ? '#FA4F65':'#7CCB27'}">
-               {{(memberData.temperature ? memberData.temperature : 0).toFixed(1)}}℃</span>
-             </div>
-           </div>
+          <div style="padding: 25px;">
+            <div class="status" :style="{color: memberData.temperature > 37.3 ? '#FA4F65':'#7CCB27'}">
+              {{ memberData.temperature > 37.3 ? '异常人员' : '正常人员' }}
+            </div>
+            <div class="pic">
+              <img :src="memberData.headImageRemoteUrl"/>
+            </div>
+            <div class="member-temp">
+              <span class="name">{{ memberData.userRealName || '陌生人' }}</span>
+              <span class="temp" :style="{color: memberData.temperature > 37.3 ? '#FA4F65':'#7CCB27'}">
+                {{ (memberData.temperature ? memberData.temperature : 0).toFixed(1) }}℃</span>
+            </div>
+          </div>
 
-           <div class="member-detail">
-             <div class="title">识别记录</div>
-             <div style="padding: 25px;">
-               <div class="detail-item">
-                 <span class="n">名称：</span>
-                 <span class="v">{{memberData.estateName}}</span>
-               </div>
-               <div class="detail-item">
-                 <span class="n">时间：</span>
-                 <span class="v">{{memberData.recDatetime}}</span>
-               </div>
-               <div class="detail-item">
-                 <span class="n">位置：</span>
-                 <span class="v">{{memberData.fullAddress}}</span>
-               </div>
-             </div>
+          <div class="member-detail">
+            <div class="title">识别记录</div>
+            <div style="padding: 25px;">
+              <div class="detail-item">
+                <span class="n">名称：</span>
+                <span class="v">{{ memberData.estateName }}</span>
+              </div>
+              <div class="detail-item">
+                <span class="n">时间：</span>
+                <span class="v">{{ memberData.recDatetime }}</span>
+              </div>
+              <div class="detail-item">
+                <span class="n">位置：</span>
+                <span class="v">{{ memberData.fullAddress }}</span>
+              </div>
+            </div>
 
-           </div>
+          </div>
         </div>
 
         <!-- 地图 -->
@@ -82,48 +82,48 @@
                 <div class="t">
                   <div class="l">
                     <img class="pos" src="../../assets/es/icon_map@2x.png"/>
-                    <span>{{it.name}}</span>
+                    <span>{{ it.name }}</span>
                   </div>
                   <div class="r">
                     <span>在此出现过的人：</span>
-                    <span>{{it.temperatureAbnormalNum}}人正常</span>
-                    <span>{{it.temperatureNormalNum}}人异常</span>
+                    <span>{{ it.temperatureAbnormalNum }}人正常</span>
+                    <span>{{ it.temperatureNormalNum }}人异常</span>
                   </div>
                 </div>
 
                 <div class="main">
-                    <div class="list">
-                      <div class="before" @click="before(it,id)">
-                        <img class="b" src="../../assets/es/btn_enter@2x.png"/>
-                      </div>
-                      <div class="list-main" :id="'listmain'+id">
+                  <div class="list">
+                    <div class="before" @click="before(it,id)">
+                      <img class="b" src="../../assets/es/btn_enter@2x.png"/>
+                    </div>
+                    <div class="list-main" :id="'listmain'+id">
 
-                        <!-- <div class="page" v-for="(t,i) in it.pages" :key="i"> -->
-                        <div class="page">
+                      <!-- <div class="page" v-for="(t,i) in it.pages" :key="i"> -->
+                      <div class="page">
 
-                          <!-- <div class="item" v-for="(tt,ii) in it.pages[i]" :key="ii"> -->
-                          <div class="item" v-for="(tt,ii) in it.recRecordPageData.records" :key="ii">
-                            <div class="member" :class="tt.isHot ? 'excep' : 'ok'">
-                              <div class="top">
-                                <img class="av" :src="tt.headImageRemoteUrl"/>
-                                <span class="temp">{{tt.temperature.toFixed(1)}}°C</span>
-                              </div>
-                              <div class="name">
-                                {{tt.userRealName || '陌生人'}}
-                              </div>
-                              <div class="date">
-                                {{tt.recDatetime}}
-                              </div>
+                        <!-- <div class="item" v-for="(tt,ii) in it.pages[i]" :key="ii"> -->
+                        <div class="item" v-for="(tt,ii) in it.recRecordPageData.records" :key="ii">
+                          <div class="member" :class="tt.isHot ? 'excep' : 'ok'">
+                            <div class="top">
+                              <img class="av" :src="tt.headImageRemoteUrl"/>
+                              <span class="temp">{{ tt.temperature.toFixed(1) }}°C</span>
+                            </div>
+                            <div class="name">
+                              {{ tt.userRealName || '陌生人' }}
+                            </div>
+                            <div class="date">
+                              {{ tt.recDatetime }}
                             </div>
                           </div>
-
                         </div>
 
                       </div>
-                      <div class="next" @click="next(it,id)">
-                        <img class="n" src="../../assets/es/btn_enter@2x.png"/>
-                      </div>
+
                     </div>
+                    <div class="next" @click="next(it,id)">
+                      <img class="n" src="../../assets/es/btn_enter@2x.png"/>
+                    </div>
+                  </div>
 
                 </div>
 
@@ -134,7 +134,7 @@
           </div>
         </div>
 
-       </div>
+      </div>
 
     </div>
 
@@ -142,188 +142,181 @@
 </template>
 
 <script>
-  export default {
-    data(){
-      return {
-        timerId:'',
-        curDate:'',
-        memberData:{
-          id:'',
-          userRealName:'',
-          temperature:'',
-          recDatetime:'',
-          lastRecDatetime:'',
-          fullAddress:'',
-          headImageRemoteUrl:'',
-          estateId:'',
-          estateName:''
+export default {
+  data() {
+    return {
+      timerId: '',
+      curDate: '',
+      memberData: {
+        id: '',
+        userRealName: '',
+        temperature: '',
+        recDatetime: '',
+        lastRecDatetime: '',
+        fullAddress: '',
+        headImageRemoteUrl: '',
+        estateId: '',
+        estateName: ''
+      },
+      districtLoading: 0,
+      pageWidth: 0,
+      blocks: [
+        {
+          curPage: 1,
+          totalWidth: 0,
+          pages: [
+            {
+              items: [1, 2, 3, 4, 5, 6, 7, 8]
+            },
+            {
+              items: [1, 2, 3, 4, 5, 6, 7, 8]
+            }
+          ]
         },
-        districtLoading:0,
-        pageWidth:0,
-        blocks:[
-          {
-            curPage:1,
-            totalWidth:0,
-            pages:[
-              {
-                items:[1,2,3,4,5,6,7,8]
-              },
-              {
-                items:[1,2,3,4,5,6,7,8]
-              }
-            ]
-          },
-          {
-            curPage:1,
-            totalWidth:0,
-            pages:[
-              {
-                items:[1,2,3,4,5,6,7,8]
-              },
-              {
-                items:[1,2,3,4,5,6,7,8]
-              }
-            ]
-          }
-        ],
-        map:null,
+        {
+          curPage: 1,
+          totalWidth: 0,
+          pages: [
+            {
+              items: [1, 2, 3, 4, 5, 6, 7, 8]
+            },
+            {
+              items: [1, 2, 3, 4, 5, 6, 7, 8]
+            }
+          ]
+        }
+      ],
+      map: null,
 
-        mapData:[],
-        trailData:[],
+      mapData: [],
+      trailData: [],
 
-        isFullScreen:false,
+      isFullScreen: false
+    }
+  },
+  computed: {
+
+  },
+  methods: {
+
+    togglefullScreen() {
+      const e = document.documentElement
+
+      if (!this.isFullScreen) {
+        if (e.requestFullscreen) {
+          e.requestFullscreen()
+        } else if (e.mozRequestFullScreen) {	// 兼容火狐
+          e.mozRequestFullScreen()
+        } else if (e.webkitRequestFullscreen) {	// 兼容谷歌
+          e.webkitRequestFullscreen()
+        } else if (e.msRequestFullscreen) {	// 兼容IE
+          e.msRequestFullscreen()
+        }
+        this.isFullScreen = true
+      } else {
+        //	退出全屏
+        if (document.exitFullscreen) {
+          document.exitFullscreen()
+        } else if (document.mozCancelFullScreen) {
+          document.mozCancelFullScreen()
+        } else if (document.webkitCancelFullScreen) {
+          document.webkitCancelFullScreen()
+        } else if (document.msExitFullscreen) {
+          document.msExitFullscreen()
+        }
+        this.isFullScreen = false
       }
     },
-    computed:{
 
+    getDateStr() {
+      const date = new Date()
+      const y = date.getFullYear()
+      let m = date.getMonth() + 1
+      m = m < 10 ? ('0' + m) : m
+      let d = date.getDate()
+      d = d < 10 ? ('0' + d) : d
+
+      let h = date.getHours()
+      h = h < 10 ? ('0' + h) : h
+      let f = date.getMinutes()
+      f = f < 10 ? ('0' + f) : f
+      let s = date.getSeconds()
+      s = s < 10 ? ('0' + s) : s
+
+      return y + '-' + m + '-' + d + ' ' + h + ':' + f + ':' + s
     },
-    methods:{
 
-      togglefullScreen(){
+    refresh() {
+      this.timerId2 = setInterval(() => {
+        this.getEstates({
+          recDatetime: this.memberData.recDatetime,
+          recRecordId: this.memberData.id
+        })
 
-        let e = document.documentElement;
+        this.getBehaviorTracks({
+          page: {
+            pageNumber: 1,
+            pageSize: 8
+          },
+          recDatetime: this.memberData.recDatetime,
+          recRecordId: this.memberData.id
+        })
+      }, 1000)
+    },
 
-        if(!this.isFullScreen){
-          if(e.requestFullscreen) {
-            e.requestFullscreen();
-          } else if (e.mozRequestFullScreen){	// 兼容火狐
-            e.mozRequestFullScreen();
-          } else if(e.webkitRequestFullscreen) {	// 兼容谷歌
-            e.webkitRequestFullscreen();
-          } else if (e.msRequestFullscreen) {	// 兼容IE
-            e.msRequestFullscreen();
-          }
-          this.isFullScreen = true;
-        }else{
-          //	退出全屏
-          if(document.exitFullscreen) {
-            document.exitFullscreen();
-          } else if (document.mozCancelFullScreen) {
-            document.mozCancelFullScreen();
-          } else if (document.webkitCancelFullScreen) {
-            document.webkitCancelFullScreen();
-          } else if (document.msExitFullscreen) {
-            document.msExitFullscreen();
-          }
-          this.isFullScreen = false;
-        }
+    // 定时器
+    startTimer() {
+      this.curDate = this.getDateStr()
+      this.timerId = setInterval(() => {
+        this.curDate = this.getDateStr()
+      }, 1000)
+    },
+    closeTimer() {
+      clearInterval(this.timerId)
+      clearInterval(this.timerId2)
+    },
 
-      },
+    back() {
+      this.$router.go(-1)
+    },
 
-      getDateStr(){
-        let date = new Date();
-        let y = date.getFullYear();
-        let m = date.getMonth() + 1;
-        m = m < 10 ? ('0'+m) : m;
-        let d = date.getDate();
-        d = d < 10 ? ('0'+d) : d;
-
-        let h = date.getHours();
-        h = h < 10 ? ('0'+h) : h;
-        let f = date.getMinutes();
-        f = f < 10 ? ('0'+f) : f;
-        let s = date.getSeconds();
-        s = s < 10 ? ('0'+s) : s;
-
-        return y + '-' + m + '-' + d + ' ' + h + ':' + f + ':' + s;
-      },
-
-      refresh(){
-        this.timerId2 = setInterval(() => {
-
-          this.getEstates({
-            recDatetime:this.memberData.recDatetime,
-            recRecordId:this.memberData.id,
-          });
-
-          this.getBehaviorTracks({
-            page:{
-              pageNumber:1,
-              pageSize:8,
-            },
-            recDatetime:this.memberData.recDatetime,
-            recRecordId:this.memberData.id,
-          });
-
-        },1000);
-      },
-
-      // 定时器
-      startTimer(){
-        this.curDate = this.getDateStr();
-        this.timerId = setInterval(() => {
-          this.curDate = this.getDateStr();
-        },1000);
-      },
-      closeTimer(){
-        clearInterval(this.timerId);
-        clearInterval(this.timerId2);
-      },
-
-      back(){
-        this.$router.go(-1);
-      },
-
-      // 加载小区数据
-      getEstates(data){
-        this.$api.trail.getEstates(data)
+    // 加载小区数据
+    getEstates(data) {
+      this.$api.trail.getEstates(data)
         .then((r) => {
-          if(r && r.length > 0){
+          if (r && r.length > 0) {
             // 在地图上渲染数据
-            let md = [];
+            const md = []
             r.map((it) => {
               md.push({
-                x:it.lng,
-                y:it.lat,
-                name:it.name,
-                isHot:it.temperatureAbnormalNum > 0,
-                num:it.temperatureAbnormalNum,
-                date:it.recDatetime,
+                x: it.lng,
+                y: it.lat,
+                name: it.name,
+                isHot: it.temperatureAbnormalNum > 0,
+                num: it.temperatureAbnormalNum,
+                date: it.recDatetime
               })
             })
-            this.mapData = md;
+            this.mapData = md
 
-            this.addPoint(this.mapData,this.map);
-
+            this.addPoint(this.mapData, this.map)
           }
-        });
-      },
+        })
+    },
 
-      // 加载行为轨迹
-      getBehaviorTracks(data){
-        this.$api.trail.getBehaviorTracks(data)
+    // 加载行为轨迹
+    getBehaviorTracks(data) {
+      this.$api.trail.getBehaviorTracks(data)
         .then(r => {
-
-          if(r && r.trackItems.length > 0){
+          if (r && r.trackItems.length > 0) {
             // 处理数据
-            r.trackItems.map((it,id) => {
-
+            r.trackItems.map((it, id) => {
               // it.curPage = 1;
 
-              it.recRecordPageData.records.map((tt,ii) => {
-                  if(tt.temperature > 37.3){
-                    tt.isHot = true;
-                  }
+              it.recRecordPageData.records.map((tt, ii) => {
+                if (tt.temperature > 37.3) {
+                  tt.isHot = true
+                }
               })
 
               // it.totalWidth = 0;
@@ -345,243 +338,232 @@
               // })
 
               // it.pages = d;
-
             })
 
-            this.trailData = r.trackItems;
-
+            this.trailData = r.trackItems
           }
         })
-      },
-      // 加载小区分页数据
-      getRecRecordPage(data,id){
-        this.$api.trail.getRecRecordPage(data)
+    },
+    // 加载小区分页数据
+    getRecRecordPage(data, id) {
+      this.$api.trail.getRecRecordPage(data)
         .then(r => {
-          if(r){
-            this.trailData[id].recRecordPageData = r;
+          if (r) {
+            this.trailData[id].recRecordPageData = r
           }
         })
-      },
-      before(block,id){
-        // if(block.curPage > 1){
+    },
+    before(block, id) {
+      // if(block.curPage > 1){
 
-        if(block.recRecordPageData.hasPrevious){
+      if (block.recRecordPageData.hasPrevious) {
+        // 加载对应小区的分页数据
+        this.getRecRecordPage({
+          areaId: '510100',
+          estateId: this.memberData.estateId,
+          page: {
+            pageSize: 8,
+            pageNumber: (block.recRecordPageData.pageNumber - 1)
+          },
+          recDatetime: this.memberData.recDatetime
+        }, id)
 
-          // 加载对应小区的分页数据
-          this.getRecRecordPage({
-            areaId:'510100',
-            estateId:this.memberData.estateId,
-            page:{
-              pageSize:8,
-              pageNumber:(block.recRecordPageData.pageNumber - 1),
-            },
-            recDatetime:this.memberData.recDatetime,
-          },id);
+        // block.curPage --;
+        // $('#listmain'+id).animate({
+        //   scrollLeft:((block.curPage - 1) * this.pageWidth) + 'px'
+        // },300);
+      }
+    },
+    next(block, id) {
+      // if(block.curPage < block.pages.length){
 
-          // block.curPage --;
-          // $('#listmain'+id).animate({
-          //   scrollLeft:((block.curPage - 1) * this.pageWidth) + 'px'
-          // },300);
+      if (block.recRecordPageData.hasNext) {
+        this.getRecRecordPage({
+          areaId: '510100',
+          estateId: this.memberData.estateId,
+          page: {
+            pageSize: 8,
+            pageNumber: (block.recRecordPageData.pageNumber + 1)
+          },
+          recDatetime: this.memberData.recDatetime
+        }, id)
 
+        // $('#listmain'+id).animate({
+        //   scrollLeft:(block.curPage * this.pageWidth) + 'px'
+        // },300);
+        // block.curPage ++;
+      }
+    },
+
+    createMap() {
+      const that = this
+      that.map = null
+      that.map = new BMap.Map('allmap') // 初始化map, 绑定id=allmap
+      var point = new BMap.Point(104.321768, 30.88748) // 初始化point, 给定一个默认x,y值
+      that.map.centerAndZoom(point, 10) // 将point点放入map中，展示在页面中心展示，10=缩放程度
+      that.map.enableScrollWheelZoom() // 开启滚动鼠标滑轮
+
+      var mapStyle = {
+        features: ['road', 'building', 'water', 'land'], // 隐藏地图上的"poi",
+        style: 'dark'
+      }
+
+      that.map.setMapStyle(mapStyle)
+
+      that.addDistrict(that.map)
+    },
+
+    addPoint(data, map) {
+      const that = this
+      // 如有多个point去展示，可根据后端接口传入为主
+      data.forEach((e, i) => {
+        // 创建point, 将x,y值传入
+        const pointNumber = new BMap.Point(e.x, e.y)
+        let icon = null
+        if (e.isHot) {
+          icon = new BMap.Icon(require('@/assets/es/img_mapred.png'), new BMap.Size(73, 73))
+        } else {
+          icon = new BMap.Icon(require('@/assets/es/img_mapgreen.png'), new BMap.Size(73, 73))
         }
-      },
-      next(block,id){
-        // if(block.curPage < block.pages.length){
 
-        if(block.recRecordPageData.hasNext){
+        // var content = "<table>";
+        // content = content + "<tr><td> 编号：001</td></tr>";
+        // content = content + "<tr><td> 地点："+e.name+"</td></tr>";
+        // content = content + "<tr><td> 时间：2018-1-3</td></tr>";
+        // content += "</table>";
 
-          this.getRecRecordPage({
-            areaId:'510100',
-            estateId:this.memberData.estateId,
-            page:{
-              pageSize:8,
-              pageNumber:(block.recRecordPageData.pageNumber + 1),
-            },
-            recDatetime:this.memberData.recDatetime,
-          },id);
+        // 创建信息窗口对象
+        // let infoWindow = new BMap.InfoWindow(content);
 
-          // $('#listmain'+id).animate({
-          //   scrollLeft:(block.curPage * this.pageWidth) + 'px'
-          // },300);
-          // block.curPage ++;
-
-        }
-      },
-
-      createMap(){
-        let that = this;
-        that.map = null;
-        that.map = new BMap.Map("allmap");   //初始化map, 绑定id=allmap
-        var point = new BMap.Point(104.321768, 30.88748);   // 初始化point, 给定一个默认x,y值
-        that.map.centerAndZoom(point, 10);        // 将point点放入map中，展示在页面中心展示，10=缩放程度
-        that.map.enableScrollWheelZoom();         // 开启滚动鼠标滑轮
-
-        var mapStyle ={
-          features: ["road","building","water","land"],//隐藏地图上的"poi",
-          style : 'dark',
-        };
-
-        that.map.setMapStyle(mapStyle);
-
-        that.addDistrict(that.map);
-      },
-
-      addPoint(data,map){
-        let that = this;
-        // 如有多个point去展示，可根据后端接口传入为主
-        data.forEach((e, i) => {
-          // 创建point, 将x,y值传入
-          let pointNumber = new BMap.Point(e.x, e.y)
-          let icon = null;
-          if(e.isHot){
-            icon = new BMap.Icon(require("@/assets/es/img_mapred.png"),new BMap.Size(73,73));
-          }else{
-            icon = new BMap.Icon(require("@/assets/es/img_mapgreen.png"),new BMap.Size(73,73));
-          }
-
-          // var content = "<table>";
-          // content = content + "<tr><td> 编号：001</td></tr>";
-          // content = content + "<tr><td> 地点："+e.name+"</td></tr>";
-          // content = content + "<tr><td> 时间：2018-1-3</td></tr>";
-          // content += "</table>";
-
-          // 创建信息窗口对象
-          // let infoWindow = new BMap.InfoWindow(content);
-
-          // 将data中的name加入地图中
-          let number = '<span style="position:absolute;color:white;left:-55px;top:12px;display:inline-block;width:73px;text-align:center;">'+
-                          (e.num)
-                      +'</span>';
-          let angle = '<img style="width:12px;position:absolute;top:0px;right:0px;z-index:999;" src="' + require('../../assets/es/img_angle.png') + '"/>';
-          var label = new BMap.Label(e.name + number + '<br>' + e.date, {
-            offset: new BMap.Size(54,14)
-          });
-
-          label.setStyle({
-            padding:'5px 8px',
-            backgroundColor:'rgba(216,216,216,0.2)',
-            border:'1px solid rgba(45,127,206,1)',
-            color:'rgba(236,236,244,1)',
-            lineHeight:'20px',
-          });
-
-          that.markerFun(pointNumber, null, label, icon, map);
-
+        // 将data中的name加入地图中
+        const number = '<span style="position:absolute;color:white;left:-55px;top:12px;display:inline-block;width:73px;text-align:center;">' +
+                          (e.num) +
+                      '</span>'
+        const angle = '<img style="width:12px;position:absolute;top:0px;right:0px;z-index:999;" src="' + require('../../assets/es/img_angle.png') + '"/>'
+        var label = new BMap.Label(e.name + number + '<br>' + e.date, {
+          offset: new BMap.Size(54, 14)
         })
 
-        // 获取当前地理位置
-        var geolocation = new BMap.Geolocation();
-        geolocation.getCurrentPosition(function (r) {
-          if (this.getStatus() == BMAP_STATUS_SUCCESS) {
-            var mk = new BMap.Marker(r.point);
-            // map.addOverlay(mk);
-            map.panTo(r.point);
-          }
-        });
-      },
+        label.setStyle({
+          padding: '5px 8px',
+          backgroundColor: 'rgba(216,216,216,0.2)',
+          border: '1px solid rgba(45,127,206,1)',
+          color: 'rgba(236,236,244,1)',
+          lineHeight: '20px'
+        })
 
-      markerFun(points, infoWindows, label,icon,map){
-        let markers = new BMap.Marker(points,{icon:icon});
-        map.clearOverlays();
-        map.addOverlay(markers);  // 将标注添加到地图中
-        markers.setLabel(label);  // 将data中的name添加到地图中
-        // 标注的点击事件
-        markers.addEventListener("click", function (event) {
-          if(infoWindows){
-            map.openInfoWindow(infoWindows, points);//参数：窗口、点  根据点击的点出现对应的窗口
-          }
-        });
-      },
+        that.markerFun(pointNumber, null, label, icon, map)
+      })
 
-      addDistrict(map){
-        let that = this;
-        var bdary = new BMap.Boundary();
-        bdary.get("成都市", function(rs){       //获取行政区域
-          map.clearOverlays();        //清除地图覆盖物
-          var count = rs.boundaries.length; //行政区域的点有多少个`
-          if (count === 0) {
-            alert('未能获取当前输入行政区域');
-            return ;
-          }
-          var pointArray = [];
-          for (var i = 0; i < count; i++) {
-            var ply = new BMap.Polygon(rs.boundaries[i], {strokeWeight: 2, strokeColor: "rgba(3,20,47,1)",fillColor: 'rgba(3,20,47,1)'}); //建立多边形覆盖物
-            map.addOverlay(ply);  //添加覆盖物
-            pointArray = pointArray.concat(ply.getPath());
-          }
-          if (that.districtLoading == 0) {
-            //全加载完成后加载数据渲染
-            // that.addPoint(mapData,map)
-
-            // 加载数据
-            that.getEstates({
-              recDatetime:that.memberData.recDatetime,
-              recRecordId:that.memberData.id,
-            });
-
-          }
-          that.districtLoading++;
-          map.setViewport(pointArray);    //调整视野
-
-        });
-      },
-
-      calcMap(){
-        // 计算地图高度
-        let conHeight = $('.member-trail').height();
-        let headHeight = $('.header').outerHeight(true);
-        let mapHeight = conHeight - headHeight - 30;
-        $('.map').height(mapHeight);
-      },
-
-    },
-    mounted(){
-
-      // 处理params参数
-      let localData = localStorage.getItem('memberData');
-      localData = localData ? JSON.parse(localData) : {};
-
-      this.memberData = this.$route.params.id ? this.$route.params : localData;
-
-      // 备份数据到本地
-      localStorage.setItem('memberData',JSON.stringify(this.memberData));
-
-      window.onresize = () => {
-        this.calcMap();
-      }
-
-      if($){
-        let pw = $('.list-main').width();
-        if(pw){
-          this.pageWidth = pw;
+      // 获取当前地理位置
+      var geolocation = new BMap.Geolocation()
+      geolocation.getCurrentPosition(function (r) {
+        if (this.getStatus() == BMAP_STATUS_SUCCESS) {
+          var mk = new BMap.Marker(r.point)
+          // map.addOverlay(mk);
+          map.panTo(r.point)
         }
-        this.createMap();
-        setTimeout(() => {
-          this.calcMap();
-        },500)
-      }
-
-      // 启动定时器
-      this.startTimer();
-
-      // 加载轨迹数据
-      this.getBehaviorTracks({
-        page:{
-          pageNumber:1,
-          pageSize:8,
-        },
-        recDatetime:this.memberData.recDatetime,
-        recRecordId:this.memberData.id,
-      });
-
-      // 定时刷新数据
-      this.refresh();
-
+      })
     },
-    beforeDestroy(){
-      this.closeTimer();
+
+    markerFun(points, infoWindows, label, icon, map) {
+      const markers = new BMap.Marker(points, { icon: icon })
+      map.clearOverlays()
+      map.addOverlay(markers) // 将标注添加到地图中
+      markers.setLabel(label) // 将data中的name添加到地图中
+      // 标注的点击事件
+      markers.addEventListener('click', function (event) {
+        if (infoWindows) {
+          map.openInfoWindow(infoWindows, points)// 参数：窗口、点  根据点击的点出现对应的窗口
+        }
+      })
+    },
+
+    addDistrict(map) {
+      const that = this
+      var bdary = new BMap.Boundary()
+      bdary.get('成都市', function(rs) { // 获取行政区域
+        map.clearOverlays() // 清除地图覆盖物
+        var count = rs.boundaries.length // 行政区域的点有多少个`
+        if (count === 0) {
+          alert('未能获取当前输入行政区域')
+          return
+        }
+        var pointArray = []
+        for (var i = 0; i < count; i++) {
+          var ply = new BMap.Polygon(rs.boundaries[i], { strokeWeight: 2, strokeColor: 'rgba(3,20,47,1)', fillColor: 'rgba(3,20,47,1)' }) // 建立多边形覆盖物
+          map.addOverlay(ply) // 添加覆盖物
+          pointArray = pointArray.concat(ply.getPath())
+        }
+        if (that.districtLoading == 0) {
+          // 全加载完成后加载数据渲染
+          // that.addPoint(mapData,map)
+
+          // 加载数据
+          that.getEstates({
+            recDatetime: that.memberData.recDatetime,
+            recRecordId: that.memberData.id
+          })
+        }
+        that.districtLoading++
+        map.setViewport(pointArray) // 调整视野
+      })
+    },
+
+    calcMap() {
+      // 计算地图高度
+      const conHeight = $('.member-trail').height()
+      const headHeight = $('.header').outerHeight(true)
+      const mapHeight = conHeight - headHeight - 30
+      $('.map').height(mapHeight)
     }
+
+  },
+  mounted() {
+    // 处理params参数
+    let localData = localStorage.getItem('memberData')
+    localData = localData ? JSON.parse(localData) : {}
+
+    this.memberData = this.$route.params.id ? this.$route.params : localData
+
+    // 备份数据到本地
+    localStorage.setItem('memberData', JSON.stringify(this.memberData))
+
+    window.onresize = () => {
+      this.calcMap()
+    }
+
+    if ($) {
+      const pw = $('.list-main').width()
+      if (pw) {
+        this.pageWidth = pw
+      }
+      this.createMap()
+      setTimeout(() => {
+        this.calcMap()
+      }, 500)
+    }
+
+    // 启动定时器
+    this.startTimer()
+
+    // 加载轨迹数据
+    this.getBehaviorTracks({
+      page: {
+        pageNumber: 1,
+        pageSize: 8
+      },
+      recDatetime: this.memberData.recDatetime,
+      recRecordId: this.memberData.id
+    })
+
+    // 定时刷新数据
+    this.refresh()
+  },
+  beforeDestroy() {
+    this.closeTimer()
   }
+}
 </script>
 
 <style lang="less" scoped>
@@ -845,7 +827,6 @@
                     overflow-y: hidden;
                     white-space: nowrap;
                     height: 100%;
-
 
                     .page{
                       display: inline-block;

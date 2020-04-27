@@ -265,7 +265,7 @@ export default {
     }
   },
   methods: {
-    /*重置list传参*/
+    /* 重置list传参 */
     resetUserSearchForm() {
       this.queryParam = {}
       this.initCascader = []

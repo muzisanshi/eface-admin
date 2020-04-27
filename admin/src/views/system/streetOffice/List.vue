@@ -18,8 +18,10 @@
 
           <a-col :md="4" :sm="24">
             <a-form-item label="地区">
-              <select-area ref="selectAreaAll" :initArea="initCascader"
-                           @selectedArea="selectedArea($event)"></select-area>
+              <select-area
+                ref="selectAreaAll"
+                :initArea="initCascader"
+                @selectedArea="selectedArea($event)"></select-area>
             </a-form-item>
           </a-col>
 
@@ -34,7 +36,7 @@
     </div>
 
     <div class="table-operator">
-      <a-button type="primary" icon="plus"  @click="handleEdit(null)">新增</a-button>
+      <a-button type="primary" icon="plus" @click="handleEdit(null)">新增</a-button>
 
       <a-button type="danger" icon="delete" @click="handleDelete" :disabled="selectedRowKeys.length < 1">删除</a-button>
 
@@ -72,18 +74,18 @@
 <script>
 import { STable } from '@/components'
 import EditForm from './modules/EditForm'
-import {mapState} from 'vuex';
-import {mixin} from '@/mixins/mixin'
+import { mapState } from 'vuex'
+import { mixin } from '@/mixins/mixin'
 import selectArea from '@/components/Common/SelectArea'
 export default {
-  mixins:[mixin],
+  mixins: [mixin],
   components: {
     STable,
     EditForm,
     selectArea
   },
   computed: {
-    ...mapState(['constants']),
+    ...mapState(['constants'])
   },
   data () {
     return {
@@ -107,20 +109,20 @@ export default {
           scopedSlots: { customRender: 'action' }
         }
       ],
-      initCascader:[],
-      initArea:[],
+      initCascader: [],
+      initArea: [],
       loadData: parameter => {
         return this.$api.streetOffice.getPage(Object.assign(parameter, this.queryParam))
           .then(res => {
             return res
           })
-      },
+      }
     }
   },
   methods: {
 
     selectedArea(area) {
-      this.queryParam.areaId = area.value[area.value.length-1];
+      this.queryParam.areaId = area.value[area.value.length - 1]
     },
 
     handleDelete () {
@@ -141,7 +143,7 @@ export default {
         onCancel () {
         }
       })
-    },
+    }
   }
 }
 </script>

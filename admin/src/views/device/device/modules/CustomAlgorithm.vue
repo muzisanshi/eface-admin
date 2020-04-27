@@ -11,7 +11,8 @@
     :visible="visible"
     :confirmLoading="confirmLoading"
     @ok="handleSubmit"
-    :maskClosable="false" :keyboard="false"
+    :maskClosable="false"
+    :keyboard="false"
     @cancel="handleCancel"
   >
     <a-spin :spinning="confirmLoading">
@@ -51,7 +52,8 @@
             <a-form-item
               style="width: 300px;"
             >
-              <a-input :maxLength="9"
+              <a-input
+                :maxLength="9"
                 :disabled="isEdit"
                 v-decorator="['algorithm.recThreshold', {initialValue: this.formData.algorithm.recThreshold, rules: [{required: true,pattern: new RegExp(this.REG_EXPS.POSITIVE_INTEGER, 'g'), message: '请输入0-100的阀值！'}]}]"/>
             </a-form-item>
@@ -61,7 +63,8 @@
             <a-form-item
               style="width: 300px;"
             >
-              <a-input :maxLength="9"
+              <a-input
+                :maxLength="9"
                 :disabled="isEdit"
                 v-decorator="['algorithm.minFaceCheckSize', {initialValue: this.formData.algorithm.minFaceCheckSize, rules: [{required: true,pattern: new RegExp(this.REG_EXPS.POSITIVE_INTEGER, 'g'), message: '请输入检测尺寸！'}]}]"/>
             </a-form-item>
@@ -75,7 +78,8 @@
             <a-form-item
               style="width: 300px;"
             >
-              <a-input :maxLength="9"
+              <a-input
+                :maxLength="9"
                 :disabled="isEdit"
                 v-decorator="['algorithm.videoOutputSize', {initialValue: this.formData.algorithm.videoOutputSize, rules: [{required: true,pattern: new RegExp(this.REG_EXPS.POSITIVE_INTEGER, 'g'), message: '请输入输出尺寸！'}]}]"/>
             </a-form-item>
@@ -86,7 +90,8 @@
             <a-form-item
               style="width: 300px;"
             >
-              <a-input :maxLength="9"
+              <a-input
+                :maxLength="9"
                 :disabled="isEdit"
                 v-decorator="['algorithm.strangerTimeoutWarnSeconds', {initialValue: this.formData.algorithm.strangerTimeoutWarnSeconds, rules: [{required: true, message: '请输入警告时间！'}]}]"/>
             </a-form-item>
@@ -111,7 +116,6 @@
                 <a-select-option value="false">否</a-select-option>
               </a-select>
             </a-form-item>
-
 
           </a-col>
           <a-col :span="12">
@@ -140,10 +144,11 @@
             <a-form-item
               style="width: 300px;"
             >
-              <a-input :maxLength="9"
+              <a-input
+                :maxLength="9"
                 :disabled="isEdit"
                 v-decorator="['algorithm.showLevel',
-            {initialValue: this.formData.algorithm.showLevel, rules: [{required: true, message: '请输入提示信息！'}]}]"/>
+                              {initialValue: this.formData.algorithm.showLevel, rules: [{required: true, message: '请输入提示信息！'}]}]"/>
             </a-form-item>
 
           </a-col>
@@ -152,10 +157,11 @@
             <a-form-item
               style="width: 300px;"
             >
-              <a-input :maxLength="9"
+              <a-input
+                :maxLength="9"
                 :disabled="isEdit"
                 v-decorator="['algorithm.recNum',
-            {initialValue: this.formData.algorithm.recNum, rules: [{required: true, message: '请输入人数！'}]}]"/>
+                              {initialValue: this.formData.algorithm.recNum, rules: [{required: true, message: '请输入人数！'}]}]"/>
             </a-form-item>
 
           </a-col>
@@ -168,9 +174,9 @@
               style="width: 300px;"
             >
               <!--<a-input :maxLength="9"-->
-                <!--:disabled="isEdit"-->
-                <!--v-decorator="['algorithm.videoRotate',-->
-            <!--{initialValue: this.formData.algorithm.videoRotate, rules: [{required: true, message: '请输入旋转角度！'}]}]"/>-->
+              <!--:disabled="isEdit"-->
+              <!--v-decorator="['algorithm.videoRotate',-->
+              <!--{initialValue: this.formData.algorithm.videoRotate, rules: [{required: true, message: '请输入旋转角度！'}]}]"/>-->
 
               <a-select
                 size="default"
@@ -188,7 +194,6 @@
 
             </a-form-item>
 
-
           </a-col>
           <a-col :span="12">
             <p>视频翻转，1：水平翻转，-1：垂直翻转</p>
@@ -196,9 +201,9 @@
               style="width: 300px;"
             >
               <!--<a-input :maxLength="9"-->
-                <!--:disabled="isEdit"-->
-                <!--v-decorator="['algorithm.videoFlip',-->
-            <!--{initialValue: this.formData.algorithm.videoFlip, rules: [{required: true, message: '请输入视频镜像！'}]}]"/>-->
+              <!--:disabled="isEdit"-->
+              <!--v-decorator="['algorithm.videoFlip',-->
+              <!--{initialValue: this.formData.algorithm.videoFlip, rules: [{required: true, message: '请输入视频镜像！'}]}]"/>-->
 
               <a-select
                 size="default"
@@ -213,7 +218,6 @@
                 <a-select-option value="-1">垂直翻转</a-select-option>
               </a-select>
 
-
             </a-form-item>
           </a-col>
         </a-row>
@@ -225,9 +229,9 @@
               style="width: 300px;"
             >
               <!--<a-input :maxLength="9"-->
-                <!--:disabled="isEdit"-->
-                <!--v-decorator="['algorithm.captureLevel',-->
-            <!--{initialValue: this.formData.algorithm.captureLevel, rules: [{required: true, message: '请输入抓拍等级！'}]}]"/>-->
+              <!--:disabled="isEdit"-->
+              <!--v-decorator="['algorithm.captureLevel',-->
+              <!--{initialValue: this.formData.algorithm.captureLevel, rules: [{required: true, message: '请输入抓拍等级！'}]}]"/>-->
 
               <a-select
                 size="default"
@@ -250,10 +254,11 @@
             <a-form-item
               style="width: 300px;"
             >
-              <a-input :maxLength="9"
+              <a-input
+                :maxLength="9"
                 :disabled="isEdit"
                 v-decorator="['algorithm.graphicCardIndexNum',
-            {initialValue: this.formData.algorithm.graphicCardIndexNum, rules: [{required: true, message: '请输入显卡序号！'}]}]"/>
+                              {initialValue: this.formData.algorithm.graphicCardIndexNum, rules: [{required: true, message: '请输入显卡序号！'}]}]"/>
             </a-form-item>
           </a-col>
         </a-row>
@@ -265,7 +270,8 @@
               <a-row :gutter="24">
                 <a-col :span="12">
                   <a-form-item label="X1" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                    <a-input :maxLength="9"
+                    <a-input
+                      :maxLength="9"
                       :disabled="isEdit"
                       v-decorator="['algorithm.roiX1', {initialValue: this.formData.algorithm.roiX1, rules: [{required: true, message: '请输入X1！'}]}]"/>
                   </a-form-item>
@@ -273,7 +279,8 @@
 
                 <a-col :span="12">
                   <a-form-item label="X2" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                    <a-input :maxLength="9"
+                    <a-input
+                      :maxLength="9"
                       :disabled="isEdit"
                       v-decorator="['algorithm.roiX2', {initialValue: this.formData.algorithm.roiX2, rules: [{required: true, message: '请输入X2！'}]}]"/>
                   </a-form-item>
@@ -283,7 +290,8 @@
               <a-row :gutter="24">
                 <a-col :span="12">
                   <a-form-item label="Y1" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                    <a-input :maxLength="9"
+                    <a-input
+                      :maxLength="9"
                       :disabled="isEdit"
                       v-decorator="['algorithm.roiY1', {initialValue: this.formData.algorithm.roiY1, rules: [{required: true, message: '请输入Y1！'}]}]"/>
                   </a-form-item>
@@ -291,7 +299,8 @@
 
                 <a-col :span="12">
                   <a-form-item label="Y2" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                    <a-input :maxLength="9"
+                    <a-input
+                      :maxLength="9"
                       :disabled="isEdit"
                       v-decorator="['algorithm.roiY2', {initialValue: this.formData.algorithm.roiY2, rules: [{required: true, message: '请输入Y2！'}]}]"/>
                   </a-form-item>
@@ -306,7 +315,8 @@
               <a-row :gutter="24">
                 <a-col :span="8">
                   <a-form-item label="R" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                    <a-input :maxLength="9"
+                    <a-input
+                      :maxLength="9"
                       :disabled="isEdit"
                       v-decorator="['algorithm.strangerR', {initialValue: this.formData.algorithm.strangerR, rules: [{required: true, message: '请输入R！'}]}]"/>
                   </a-form-item>
@@ -314,14 +324,16 @@
 
                 <a-col :span="8">
                   <a-form-item label="G" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                    <a-input :maxLength="9"
+                    <a-input
+                      :maxLength="9"
                       :disabled="isEdit"
                       v-decorator="['algorithm.strangerG', {initialValue: this.formData.algorithm.strangerG, rules: [{required: true, message: '请输入G！'}]}]"/>
                   </a-form-item>
                 </a-col>
                 <a-col :span="8">
                   <a-form-item label="B" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                    <a-input :maxLength="9"
+                    <a-input
+                      :maxLength="9"
                       :disabled="isEdit"
                       v-decorator="['algorithm.strangerB', {initialValue: this.formData.algorithm.strangerB, rules: [{required: true, message: '请输入B！'}]}]"/>
                   </a-form-item>
@@ -338,216 +350,215 @@
 </template>
 
 <script>
-  import {mixin} from '@/mixins/mixin'
-  export default {
-    mixins:[mixin],
-    data () {
-      return {
-        goodsGroups:[],
-        labelCol: {
-          xs: { span: 24 },
-          sm: { span: 10 },
-        },
-        wrapperCol: {
-          xs: { span: 24 },
-          sm: { span: 14 },
-        },
-        labelCol1: {
-          xs: { span: 24 },
-          sm: { span: 4 },
-        },
-        wrapperCol1: {
-          xs: { span: 24 },
-          sm: { span: 14 },
-        },
-        labelCo1: {
-          xs: { span: 24 },
-          sm: { span: 7 },
-        },
-        wrapperCo1: {
-          xs: { span: 24 },
-          sm: { span: 17 },
-        },
-        formTailLayout:{
-          labelCol: { span: 4 },
-          wrapperCol: { span: 8,},
-        },
-        visible: false,
-        confirmLoading: false,
-        formData: {
-          algorithm:{
-            captureLevel:2,
-            checkAlive:false,
-            checkSexualAge:false,
-            graphicCardIndexNum:0,
-            id:"",
-            minFaceCheckSize:50,
-            recNum:10,
-            recThreshold:50,
-            roiX1:0,
-            roiX2:1,
-            roiY1:0,
-            roiY2:1,
-            showLevel:63,
-            strangerB:0,
-            strangerG:0,
-            strangerR:255,
-            strangerTimeoutWarnSeconds:3,
-            videoFlip:0,
-            videoOutputSize:1280,
-            videoRotate:0,
-          }
-        },
-        title: '',
-        initAlgList:[],
-        isEdit:false,
-        customAlg:true,
-        itemIndex:0
+import { mixin } from '@/mixins/mixin'
+export default {
+  mixins: [mixin],
+  data () {
+    return {
+      goodsGroups: [],
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 10 }
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 14 }
+      },
+      labelCol1: {
+        xs: { span: 24 },
+        sm: { span: 4 }
+      },
+      wrapperCol1: {
+        xs: { span: 24 },
+        sm: { span: 14 }
+      },
+      labelCo1: {
+        xs: { span: 24 },
+        sm: { span: 7 }
+      },
+      wrapperCo1: {
+        xs: { span: 24 },
+        sm: { span: 17 }
+      },
+      formTailLayout: {
+        labelCol: { span: 4 },
+        wrapperCol: { span: 8 }
+      },
+      visible: false,
+      confirmLoading: false,
+      formData: {
+        algorithm: {
+          captureLevel: 2,
+          checkAlive: false,
+          checkSexualAge: false,
+          graphicCardIndexNum: 0,
+          id: '',
+          minFaceCheckSize: 50,
+          recNum: 10,
+          recThreshold: 50,
+          roiX1: 0,
+          roiX2: 1,
+          roiY1: 0,
+          roiY2: 1,
+          showLevel: 63,
+          strangerB: 0,
+          strangerG: 0,
+          strangerR: 255,
+          strangerTimeoutWarnSeconds: 3,
+          videoFlip: 0,
+          videoOutputSize: 1280,
+          videoRotate: 0
+        }
+      },
+      title: '',
+      initAlgList: [],
+      isEdit: false,
+      customAlg: true,
+      itemIndex: 0
+    }
+  },
+  beforeCreate () {
+    this.form = this.$form.createForm(this)
+  },
+  methods: {
+    add (item, index) {
+      const that = this
+      this.visible = true
+      this.itemIndex = index
+      this.form.resetFields()
+      that.isEdit = false
+      that.customAlg = true
+      this.formData = {
+        algorithm: {
+          captureLevel: 2,
+          checkAlive: true,
+          checkSexualAge: true,
+          graphicCardIndexNum: 0,
+          id: '',
+          cloneId: '',
+          minFaceCheckSize: 50,
+          recNum: 10,
+          recThreshold: 50,
+          roiX1: 0,
+          roiX2: 1,
+          roiY1: 0,
+          roiY2: 1,
+          showLevel: 63,
+          strangerB: 0,
+          strangerG: 0,
+          strangerR: 255,
+          strangerTimeoutWarnSeconds: 3,
+          videoFlip: 0,
+          videoOutputSize: 1280,
+          videoRotate: 0
+        }
       }
-    },
-    beforeCreate () {
-      this.form = this.$form.createForm(this);
-    },
-    methods: {
-      add (item,index) {
-        let that = this
-        this.visible = true
-        this.itemIndex = index
-        this.form.resetFields()
-        that.isEdit = false
-        that.customAlg = true
-        this.formData ={
-          algorithm:{
-            captureLevel:2,
-            checkAlive:true,
-            checkSexualAge:true,
-            graphicCardIndexNum:0,
-            id:"",
-            cloneId:'',
-            minFaceCheckSize:50,
-            recNum:10,
-            recThreshold:50,
-            roiX1:0,
-            roiX2:1,
-            roiY1:0,
-            roiY2:1,
-            showLevel:63,
-            strangerB:0,
-            strangerG:0,
-            strangerR:255,
-            strangerTimeoutWarnSeconds:3,
-            videoFlip:0,
-            videoOutputSize:1280,
-            videoRotate:0,
-          }
-        }
-        if(item.algorithm){
-          this.formData = item
-        }
-        this.$api.algorithmUsuallyRule.getAll()
-          .then(res => {
-            const l = []
-            for (let i = 0, j = res.length; i < j; i++) {
-              l.push({
-                value: res[i].algorithmId,
-                label: res[i].name
-              })
-            }
-            this.initAlgList = l
-            this.initAlgList.unshift({
-              value: '',
-              label: '请选择'
+      if (item.algorithm) {
+        this.formData = item
+      }
+      this.$api.algorithmUsuallyRule.getAll()
+        .then(res => {
+          const l = []
+          for (let i = 0, j = res.length; i < j; i++) {
+            l.push({
+              value: res[i].algorithmId,
+              label: res[i].name
             })
-            if(item.algorithm && item.algorithm.id){
-              this.initAlgList.map((values) =>{
-                if(values.value == item.algorithm.id){
-                  that.isEdit = true
-                  that.customAlg = false
-                  that.formData.algorithm.cloneId = values.value
-                  return
-                }else{
-                  that.formData.algorithm.cloneId = ''
-                }
-              })
-            }
+          }
+          this.initAlgList = l
+          this.initAlgList.unshift({
+            value: '',
+            label: '请选择'
           })
-      },
-
-      algChange(value){
-        if(value){
-          this.$api.algorithm.getById({id: value})
-            .then(res => {
-              this.formData.algorithm = res
-              this.isEdit = true;
-              this.customAlg = false;
+          if (item.algorithm && item.algorithm.id) {
+            this.initAlgList.map((values) => {
+              if (values.value == item.algorithm.id) {
+                that.isEdit = true
+                that.customAlg = false
+                that.formData.algorithm.cloneId = values.value
+              } else {
+                that.formData.algorithm.cloneId = ''
+              }
             })
-        }else{
-          this.form.resetFields()
-          this.formData ={
-            algorithm:{
-              captureLevel:2,
-              checkAlive:true,
-              checkSexualAge:true,
-              graphicCardIndexNum:0,
-              id:"",
-              cloneId:'',
-              minFaceCheckSize:50,
-              recNum:10,
-              recThreshold:50,
-              roiX1:0,
-              roiX2:1,
-              roiY1:0,
-              roiY2:1,
-              showLevel:63,
-              strangerB:0,
-              strangerG:0,
-              strangerR:255,
-              strangerTimeoutWarnSeconds:3,
-              videoFlip:0,
-              videoOutputSize:1280,
-              videoRotate:0,
-            }
-          }
-          this.isEdit = false;
-          this.customAlg = true;
-        }
-      },
-
-      handleCheckChange(e){
-        this.customAlg = e.target.checked;
-        this.$nextTick(() => {
-          this.isEdit = !this.customAlg;
-        });
-        if(this.customAlg){
-          this.algChange('')
-        }
-      },
-
-      handleSubmit () {
-        const { form: { validateFields } } = this
-        validateFields((errors, values) => {
-          if (!errors) {
-            if(this.customAlg){
-              values.algorithm.id = this.formData.algorithm.id?this.formData.algorithm.id:''
-            }else{
-              values.algorithm.id = values.algorithm.cloneId
-            }
-            values.itemIndex = this.itemIndex
-            if(!values.algorithm.cloneId && !this.customAlg){
-              this.$notification.error({
-                message: '提示',
-                description: `请选择常用规则或者选择自定义算法！`
-              })
-              return
-            }
-            this.visible = false
-            this.form.resetFields()
-            this.$emit('customSuccess', values)
           }
         })
-      },
+    },
+
+    algChange(value) {
+      if (value) {
+        this.$api.algorithm.getById({ id: value })
+          .then(res => {
+            this.formData.algorithm = res
+            this.isEdit = true
+            this.customAlg = false
+          })
+      } else {
+        this.form.resetFields()
+        this.formData = {
+          algorithm: {
+            captureLevel: 2,
+            checkAlive: true,
+            checkSexualAge: true,
+            graphicCardIndexNum: 0,
+            id: '',
+            cloneId: '',
+            minFaceCheckSize: 50,
+            recNum: 10,
+            recThreshold: 50,
+            roiX1: 0,
+            roiX2: 1,
+            roiY1: 0,
+            roiY2: 1,
+            showLevel: 63,
+            strangerB: 0,
+            strangerG: 0,
+            strangerR: 255,
+            strangerTimeoutWarnSeconds: 3,
+            videoFlip: 0,
+            videoOutputSize: 1280,
+            videoRotate: 0
+          }
+        }
+        this.isEdit = false
+        this.customAlg = true
+      }
+    },
+
+    handleCheckChange(e) {
+      this.customAlg = e.target.checked
+      this.$nextTick(() => {
+        this.isEdit = !this.customAlg
+      })
+      if (this.customAlg) {
+        this.algChange('')
+      }
+    },
+
+    handleSubmit () {
+      const { form: { validateFields } } = this
+      validateFields((errors, values) => {
+        if (!errors) {
+          if (this.customAlg) {
+            values.algorithm.id = this.formData.algorithm.id ? this.formData.algorithm.id : ''
+          } else {
+            values.algorithm.id = values.algorithm.cloneId
+          }
+          values.itemIndex = this.itemIndex
+          if (!values.algorithm.cloneId && !this.customAlg) {
+            this.$notification.error({
+              message: '提示',
+              description: `请选择常用规则或者选择自定义算法！`
+            })
+            return
+          }
+          this.visible = false
+          this.form.resetFields()
+          this.$emit('customSuccess', values)
+        }
+      })
     }
   }
+}
 </script>
 <style scoped>
   .form-group p{

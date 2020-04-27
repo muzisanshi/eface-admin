@@ -148,7 +148,7 @@ export default {
   },
   methods: {
     add(item, addChild) {
-      let that = this
+      const that = this
       that.visible = true
       that.addChild = false
       that.disabledSelectParent = false
@@ -196,7 +196,6 @@ export default {
                   that.initCascader.push(item.id)
                 }
                 that.getChildArea()
-                return
               }
             } else {
               if (addChild == 'addChild') {
@@ -225,7 +224,7 @@ export default {
     },
 
     handleAreaId(res) {
-      let that = this
+      const that = this
       if (res.areas && res.areas.length) {
         for (let i = res.areas.length - 1; i >= 0; i--) {
           that.initCascader.push(res.areas[i].id)
@@ -235,7 +234,7 @@ export default {
 
     handleAreaArr() {
       this.arr.unshift(this.options)
-      let cacheData = [...this.arr]
+      const cacheData = [...this.arr]
       for (let i = this.initCascader.length - 1; i >= 0; i--) {
         for (let j = this.arr[i].length - 1; j >= 0; j--) {
           if (this.initCascader[i] === this.arr[i][j].id) {
@@ -249,7 +248,7 @@ export default {
     },
 
     getChildArea() {
-      let that = this
+      const that = this
       for (let i = 0; i < that.initCascader.length; i++) {
         this.$api.area
           .getAll({
@@ -291,7 +290,7 @@ export default {
     },
 
     loadData(selectedOptions) {
-      let that = this
+      const that = this
       const targetOption = selectedOptions[selectedOptions.length - 1]
       if (targetOption.level < 2) {
         targetOption.loading = true

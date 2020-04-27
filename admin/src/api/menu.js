@@ -1,4 +1,4 @@
-import {axios} from '@/utils/request'
+import { axios } from '@/utils/request'
 
 const URI = {
   page: '/menu/getPage',
@@ -42,7 +42,6 @@ function getMenuTree(parameter) {
     params: parameter
   })
 }
-
 
 export default {
   getPage,
