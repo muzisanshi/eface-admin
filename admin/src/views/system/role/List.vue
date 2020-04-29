@@ -16,6 +16,19 @@
               <a-input :maxLength="64" placeholder="请输入名称查询" v-model="queryParam.name"></a-input>
             </a-form-item>
           </a-col>
+          <a-col :md="6" :sm="8">
+            <a-form-item label="主控单位">
+              <a-select
+                showSearch
+                allowClear
+                placeholder="选择主控单位"
+                v-model="queryParam.orgId"
+                optionFilterProp="children"
+                :filterOption="filterCommonOption"
+                :options="orgList"
+              ></a-select>
+            </a-form-item>
+          </a-col>
           <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
             <a-col :md="6" :sm="24">
               <a-button type="primary" @click="tableRefresh">查询</a-button>
@@ -29,8 +42,12 @@
     <!-- 操作按钮区域 -->
     <div class="table-operator" style="margin-top: 5px">
       <a-button @click="handleEdit(null)" type="primary" icon="plus">新增</a-button>
-      <a-button type="danger" icon="delete" @click="handleDelete('')" :disabled="selectedRowKeys.length < 1">删除
-      </a-button>
+      <a-button
+        type="danger"
+        icon="delete"
+        @click="handleDelete('')"
+        :disabled="selectedRowKeys.length < 1"
+      >删除</a-button>
     </div>
 
     <!-- table区域-begin -->
@@ -44,14 +61,14 @@
         :loading="loading"
         :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
       >
-
         <span slot="action" slot-scope="text, record">
           <a @click="handleEdit(record)">编辑</a>
 
-          <a-divider type="vertical"/>
+          <a-divider type="vertical" />
           <a-dropdown>
             <a class="ant-dropdown-link">
-              更多 <a-icon type="down"/>
+              更多
+              <a-icon type="down" />
             </a>
             <a-menu slot="overlay">
               <a-menu-item>
@@ -75,7 +92,8 @@
       ref="modalUserRole"
       @checkedMenu="checkedMenu"
       :selectType="selectMenu"
-      :initChecked="initCheckedKeys"></user-role-modal>
+      :initChecked="initCheckedKeys"
+    ></user-role-modal>
   </a-card>
 </template>
 
@@ -85,6 +103,7 @@ import RoleModal from './modules/RoleModal'
 import UserRoleModal from './modules/UserRoleModal'
 import { mixin } from '@/mixins/mixin'
 import JDate from '@/components/Date/selectDate'
+import { mapState } from 'vuex'
 
 export default {
   name: 'RoleList',
@@ -95,9 +114,11 @@ export default {
     JDate,
     STable
   },
+  computed: {
+    ...mapState(['constants'])
+  },
   data() {
     return {
-
       description: '角色管理页面',
       data: [],
       // 查询条件
@@ -108,6 +129,11 @@ export default {
           title: '角色名称',
           align: 'center',
           dataIndex: 'name'
+        },
+        {
+          title: '主控单位',
+          align: 'center',
+          dataIndex: 'orgName'
         },
         {
           title: '备注',
@@ -134,19 +160,24 @@ export default {
       selectMenu: 'MENU_BUTTON',
       initCheckedKeys: [],
       loadData: parameter => {
-        return this.$api.role.getPage(Object.assign(parameter, this.queryParam))
-          .then(res => {
-            return res
-          })
-      }
+        return this.$api.role.getPage(Object.assign(parameter, this.queryParam)).then(res => {
+          return res
+        })
+      },
+
+      orgList: []
     }
+  },
+  created() {
+    this.getOrgPage()
   },
   methods: {
     handlePerssion(roleId) {
       const that = this
-      that.$api.role.getPermissionsById({
-        id: roleId
-      })
+      that.$api.role
+        .getPermissionsById({
+          id: roleId
+        })
         .then(res => {
           that.initCheckedKeys = res
           that.$refs.modalUserRole.show()
@@ -166,26 +197,25 @@ export default {
         title: '删除',
         content: '确定删除勾选的记录？',
         onOk() {
-          that.$api.role.del({ ids: ids })
-            .then(res => {
-              that.$notification.success({
-                message: '成功',
-                description: `删除成功！`
-              })
-              that.handleOk()
+          that.$api.role.del({ ids: ids }).then(res => {
+            that.$notification.success({
+              message: '成功',
+              description: `删除成功！`
             })
+            that.handleOk()
+          })
         },
-        onCancel() {
-        }
+        onCancel() {}
       })
     },
     checkedMenu(selectList) {
       const that = this
       if (selectList.length > 0) {
-        that.$api.role.authorize({
-          id: that.itemId,
-          permissionIds: selectList
-        })
+        that.$api.role
+          .authorize({
+            id: that.itemId,
+            permissionIds: selectList
+          })
           .then(res => {
             that.$notification.success({
               message: '成功',
@@ -198,6 +228,22 @@ export default {
           description: `请选择菜单或按钮授权！`
         })
       }
+    },
+
+    getOrgPage() {
+      this.$api.org.getAll().then(res => {
+        const l = [{
+          value: '',
+          label: '请选择'
+        }]
+        for (let i = 0, j = res.length; i < j; i++) {
+          l.push({
+            value: res[i].id,
+            label: res[i].name
+          })
+        }
+        this.orgList = l
+      })
     }
   }
 }

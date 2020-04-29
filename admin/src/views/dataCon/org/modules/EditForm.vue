@@ -265,7 +265,7 @@ export default {
     },
 
     add(item) {
-      this.zIndex = 2000
+      this.zIndex = 10
       const that = this
       this.visible = true
       this.form.resetFields()
@@ -532,7 +532,7 @@ export default {
     }
   },
   mounted() {
-    this.zIndex = -2000
+    this.zIndex = -10
     this.createMap()
     this.visible = false
   }
