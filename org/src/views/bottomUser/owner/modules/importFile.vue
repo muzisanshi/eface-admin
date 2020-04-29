@@ -22,7 +22,38 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
         >
-          <a-input @click="selectDataCon(1)" :read-only="true" v-decorator="['estateName', {initialValue: this.formData.estateName,rules: [{required: true, message: '请选择地产！'}]}]"/>
+          <!-- <a-input @click="selectDataCon(1)" :read-only="true" v-decorator="['estateName', {initialValue: this.formData.estateName,rules: [{required: true, message: '请选择地产！'}]}]"/> -->
+          <a-select
+            allowClear
+            mode="combobox"
+            @change="onSelectEstate"
+            v-decorator="['estate', {rules: [{required: true, message: '请选择地产！'}]}]">
+            
+            <a-select-option 
+              v-for="(t) in totalEstates" 
+              :key="t.value"
+              :value="t.label">
+                {{t.label}}
+            </a-select-option>
+            
+          </a-select>
+          
+        </a-form-item>
+        
+        <a-form-item 
+          label="类型"
+          :labelCol="labelCol"
+          :wrapperCol="wrapperCol">
+          <a-select
+            showSearch
+            allowClear
+            placeholder=""
+            v-model="curUserType"
+            optionFilterProp="children"
+            :filterOption="filterCommonOption"
+            :options="userTypeCode"
+            v-decorator="['userType', {rules: [{required: true, message: '请选择用户类型！'}]}]">
+          </a-select>
         </a-form-item>
 
         <a-form-item
@@ -114,16 +145,60 @@
             label:'zip格式',
             value:'zip'
           }
-        ]
+        ],
+        totalEstates:[],
+        userTypeCode:[
+          { label: '业主', value: 'OWNER' },
+          { label: '访客', value: 'VISITOR' },
+          { label: '租客', value: 'RENTER' }
+        ],
+        curUserType:'',
+        
       }
     },
     computed: {
-      ...mapState(['constants', 'system'])
+      ...mapState(['constants', 'system']),
     },
     beforeCreate () {
       this.form = this.$form.createForm(this);
     },
+    mounted(){
+      this.getEstates();
+    },
     methods: {
+      onSelectEstate(e){
+        let f = this.totalEstates.find(it => it.label === e) || {};
+        if(f){
+          this.formData.estateName = f.label
+          this.formData.estateId = f.value
+        }
+      },
+      getEstates(name,areaId,key){
+        this.$api.estate.getLimitPage({
+          name:name,
+          areaId:areaId
+        })
+        .then(res => {
+          const l = []
+          for (let i = 0, j = res.length; i < j; i++) {
+            l.push({
+              value: res[i].id,
+              label: res[i].name
+            })
+          }
+          
+          if(key){
+            this.panes.map( it => {
+              if(it.key === key){
+                it.estateList = l;
+              }
+            })
+          }else{
+            this.totalEstates = l;
+          }
+          
+        })
+      },
       add (item) {
         this.visible = true
         this.code = item
@@ -187,7 +262,7 @@
             }
             const formData = new FormData();
             formData.append('file', this.file);
-            formData.append('code', this.code);
+            formData.append('code', this.curUserType);
             formData.append('estateId', this.formData.estateId);
             this.$api.user.importUser(formData)
               .then(res => {

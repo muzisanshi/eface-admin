@@ -61,7 +61,8 @@
                         :filterOption="filterCommonOption"
                         @change="manageTypeChange"
                         :options="newTypes"
-                        v-decorator="['manager.managerType', {initialValue: this.formData.managerType?this.formData.managerType:constants.list.managerType[0].value,rules: [{required: true, message: '请选择类型！'}]}]">
+                        disabled="disabled"
+                        v-decorator="['manager.managerType', {initialValue: newTypes[0].value,rules: [{required: true, message: '请选择类型！'}]}]">
               </a-select>
 
             </a-form-item>
@@ -358,7 +359,7 @@
     mounted(){
       (this.constants.list.managerType || [])
       .map(it => {
-        if( it.label.indexOf('运维管理员') === -1 ) this.newTypes.push(it)
+        if( it.value === 'ORG' ) this.newTypes.push(it)
       })
     }
   }
