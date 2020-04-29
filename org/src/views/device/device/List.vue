@@ -9,11 +9,12 @@
     <div class="table-page-search-wrapper">
       <a-form layout="inline">
         <a-row :gutter="48">
-          <a-col :md="5" :sm="24">
+          
+          <!-- <a-col :md="5" :sm="24">
             <a-form-item label="地产位置">
               <a-input @click="selectRoom()"  v-model="roomName" :read-only="true" />
             </a-form-item>
-          </a-col>
+          </a-col> -->
 
           <a-col :md="5" :sm="24">
             <a-form-item label="SN">
@@ -31,14 +32,16 @@
               <a-input :maxLength="32" v-model="queryParam.name" placeholder=""/>
             </a-form-item>
           </a-col>
-        </a-row>
-        <a-row :gutter="48">
+          
           <a-col :md="5" :sm="24">
             <a-form-item label="位置名称">
               <a-input :maxLength="64" v-model="queryParam.locationName" placeholder=""/>
             </a-form-item>
           </a-col>
-
+          
+        </a-row>
+        <a-row :gutter="48">
+          
           <a-col :md="4" :sm="24">
             <a-form-item label="是否启用">
               <a-select
@@ -65,7 +68,7 @@
     </div>
 
     <div class="table-operator" v-if="!selectDeviceStatus">
-      <a-button type="primary" icon="plus"  @click="handleEditInit(null)">新增</a-button>
+      <!-- <a-button type="primary" icon="plus"  @click="handleEditInit(null)">新增</a-button> -->
 
       <!--<a-upload-->
         <!--name="file"-->
@@ -82,17 +85,17 @@
 
 <!--      <a-button type="primary" @click="recoverDevice" v-if="selectedRows.length === 1 && selectedRows[0].deviceStatus === '离线'">上线</a-button>-->
 
-      <a-button type="primary" @click="resetDevice" v-if="selectedRows.length === 1 && selectedRows[0].deviceStatus === '在线'">重置</a-button>
+      <!-- <a-button type="primary" @click="resetDevice" v-if="selectedRows.length === 1 && selectedRows[0].deviceStatus === '在线'">重置</a-button>
 
       <a-button type="primary" @click="openGateBrake" v-if="selectedRows.length === 1 && selectedRows[0].deviceStatus === '在线'">开启闸机</a-button>
 
       <a-button type="primary" @click="lowerHairUser(selectedRows[0].id)" v-if="selectedRows.length === 1 && selectedRows[0].deviceStatus === '在线'">同步底库用户</a-button>
 
-      <a-button type="primary" @click="rejectDevice" v-if="selectedRows.length === 1 && selectedRows[0].deviceStatus === '在线'">下线</a-button>
+      <a-button type="primary" @click="rejectDevice" v-if="selectedRows.length === 1 && selectedRows[0].deviceStatus === '在线'">下线</a-button> -->
 
 
 
-      <a-button type="danger" icon="delete" @click="handleDelete" :disabled="selectedRowKeys.length < 1">删除</a-button>
+      <!-- <a-button type="danger" icon="delete" @click="handleDelete" :disabled="selectedRowKeys.length < 1">删除</a-button> -->
 
     </div>
 
@@ -104,7 +107,6 @@
       :columns="columns"
       :scroll="{ x: 1800 }"
       :dataSource="data"
-      :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectDeviceChange}"
       @expand="handleExpand"
     >
       <span slot="serial" slot-scope="text, record, index">
@@ -312,7 +314,7 @@
                   @change="onChange" @showSizeChange="onShowSizeChange" :total="pageElements"
                   v-model="queryParam.page.pageNumber"/>
     <edit-form v-if="!selectDeviceStatus" ref="editModal" @ok="handleLoadOk"/>
-    <select-room ref="selectRoom" @selectRoom="selectRoomSuccess"></select-room>
+    <!-- <select-room ref="selectRoom" @selectRoom="selectRoomSuccess"></select-room> -->
   </a-card>
 </template>
 
@@ -362,7 +364,7 @@ export default {
         sm: { span: 14 },
       },
       columns: [],
-      importUrl:process.env.VUE_APP_ADMIN_SERVICE_BASE_URL+'/device/importExcel',
+      importUrl:process.env.VUE_APP_ORG_SERVICE_BASE_URL + '/device/importExcel',
       data: [],
       pageElements: 0,
       itemData:{
@@ -371,7 +373,7 @@ export default {
         },
         cameras:[]
       },
-      roomName:''
+      // roomName:''
     }
   },
   created() {
@@ -487,12 +489,12 @@ export default {
           title: '备注',
           dataIndex: 'remark'
         },
-        {
-          title: '操作',
-          dataIndex: 'action',
-          width: '180px',
-          scopedSlots: { customRender: 'action' }
-        }
+        // {
+        //   title: '操作',
+        //   dataIndex: 'action',
+        //   width: '180px',
+        //   scopedSlots: { customRender: 'action' }
+        // }
       ]
     }
     this.loadData()
@@ -504,7 +506,7 @@ export default {
         page: { pageNumber: 1, pageSize: 10 }
       }
       this.initCascader = [];
-      this.roomName = ''
+      // this.roomName = ''
     },
 
     selectRoom(){
@@ -555,11 +557,11 @@ export default {
         })
     },
 
-    selectRoomSuccess(value){
-      this.roomName = value.roomName
-      this.queryParam = Object.assign(this.queryParam,value)
+    // selectRoomSuccess(value){
+      // this.roomName = value.roomName
+      // this.queryParam = Object.assign(this.queryParam,value)
       // this.form.setFieldsValue({ roomName: value.roomName});
-    },
+    // },
 
     loadData() {
       this.data = []

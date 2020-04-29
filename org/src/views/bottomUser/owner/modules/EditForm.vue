@@ -193,12 +193,32 @@
               <a-row :gutter="24">
                 <a-col :span="8">
                   <a-form-item label="地产" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                    <a-input
+                    <!-- <a-input
                       @click="selectDataCon(1,index)"
                       :disabled="!pane.isEditEstate"
                       :read-only="true"
                       v-decorator="['estateName', {initialValue: pane.content.estateName,rules: [{required: true, message: '请选择地产！'}]}]"
-                    />
+                    /> -->
+                    <!-- showSearch
+                      :showArrow="false"
+                      :filterOption="true" -->
+                    <a-select 
+                      allowClear
+                      mode="combobox"
+                      :defaultValue="setDefaultValue(pane)"
+                      @change="onSelectEstate($event,pane)"
+                      :disabled="pane.disableEstate !== 'no'"
+                      v-decorator="pane.disableEstate !== 'no' ? null : ['estate', {rules: [{required: true, message: '请选择地产！'}]}]">
+                      
+                      <a-select-option 
+                        v-for="(t) in totalEstates" 
+                        :key="t.value"
+                        :value="t.label">
+                          {{t.label}}
+                      </a-select-option>
+                      
+                    </a-select>
+                    
                   </a-form-item>
                 </a-col>
 
@@ -447,7 +467,7 @@ export default {
           content: {
             estateId: '',
             relieve: false,
-            gateBrakeLimits: []
+            gateBrakeLimits: [],
           },
           key: '2',
           remark: '',
@@ -455,7 +475,8 @@ export default {
           isEditEstate: true
         }
       ],
-      isStartDate: false
+      isStartDate: false,
+      totalEstates:[]
     }
   },
   beforeCreate() {
@@ -483,11 +504,51 @@ export default {
     }
   },
   computed: {
-    ...mapState(['constants', 'system'])
+    ...mapState(['constants', 'system']),
+    setDefaultValue(pane){
+      return (pane) => {
+         let f = this.totalEstates.find(it => it.value === pane.content.estateId);
+         return f ? f.label : null;
+      }
+    },
+  },
+  mounted(){
+    this.getEstates();
   },
   methods: {
     moment,
-
+    
+    onSelectEstate(e,pane){
+      let f = this.totalEstates.find(it => it.label === e) || {};
+      pane.content.estateId = f.value || '';
+    },
+    getEstates(name,areaId,key){
+      this.$api.estate.getLimitPage({
+        name:name,
+        areaId:areaId
+      })
+      .then(res => {
+        const l = []
+        for (let i = 0, j = res.length; i < j; i++) {
+          l.push({
+            value: res[i].id,
+            label: res[i].name
+          })
+        }
+        
+        if(key){
+          this.panes.map( it => {
+            if(it.key === key){
+              it.estateList = l;
+            }
+          })
+        }else{
+          this.totalEstates = l;
+        }
+        
+      })
+    },
+    
     addEdit(item, userType) {
       let that = this
       that.visible = true
@@ -508,7 +569,7 @@ export default {
           content: {
             estateId: '',
             relieve: false,
-            gateBrakeLimits: []
+            gateBrakeLimits: [],
           },
           key: '2',
           remark: '',
@@ -526,19 +587,19 @@ export default {
       that.fileList = []
       that.headImageAttId = null
       that.topImg = null
-      that.$api.dictValue.getRelationship().then(res => {
-        const l = []
-        for (let i = 0; i < res.length; i++) {
-          l.push({
-            value: res[i].value,
-            label: res[i].name
-          })
-        }
-        that.dictValueList = l
-        if (!item) {
-          that.formData.relationship = that.dictValueList[0].value
-        }
-      })
+      // that.$api.dictValue.getRelationship().then(res => {
+      //   const l = []
+      //   for (let i = 0; i < res.length; i++) {
+      //     l.push({
+      //       value: res[i].value,
+      //       label: res[i].name
+      //     })
+      //   }
+      //   that.dictValueList = l
+      //   if (!item) {
+      //     that.formData.relationship = that.dictValueList[0].value
+      //   }
+      // })
       this.$api.nationalAreaCode.getAll().then(res => {
         const l = []
         for (let i = 0, j = res.length; i < j; i++) {
@@ -912,11 +973,12 @@ export default {
               estateId: '',
               relieve: false,
               id: '',
-              gateBrakeLimits: []
+              gateBrakeLimits: [],
             },
             key: activeKey + '',
             remark: '',
-            isEditEstate: true
+            isEditEstate: true,
+            disableEstate:'no',
           })
           that.panes = panes
           that.activeKey = activeKey + ''

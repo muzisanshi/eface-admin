@@ -364,7 +364,7 @@ export default {
 
       bindVisible: false,
 
-      importUrl: process.env.VUE_APP_ADMIN_SERVICE_BASE_URL + '/device/importDeviceBindExcel',
+      importUrl: process.env.VUE_APP_ORG_SERVICE_BASE_URL + '/device/importDeviceBindExcel',
 
       level: 0,
       orgLoading: false,

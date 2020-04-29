@@ -155,7 +155,7 @@ export default {
       allBrand: [],
       uploadFileId: '',
       initCascader:[],
-      importUrl:process.env.VUE_APP_ADMIN_SERVICE_BASE_URL+'/unit/importExcel'
+      importUrl:process.env.VUE_APP_ORG_SERVICE_BASE_URL + '/unit/importExcel'
     }
   },
   methods: {

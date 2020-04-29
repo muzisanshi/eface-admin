@@ -50,8 +50,7 @@ router.beforeEach((to, from, next) => {
                   ]
                 }
               ]
-              // const menuData = [...initMenu, ...res.menus]
-              const menuData = [...initMenu]
+              const menuData = [...initMenu, ...res.menus]
               if (menuData === null || menuData === '' || menuData === undefined) {
                 return
               }
