@@ -201,14 +201,15 @@
                     /> -->
                     <!-- showSearch
                       :showArrow="false"
-                      :filterOption="true" -->
+                      :filterOption="true"
+                       -->
                     <a-select 
                       allowClear
                       mode="combobox"
                       :defaultValue="setDefaultValue(pane)"
                       @change="onSelectEstate($event,pane)"
                       :disabled="pane.disableEstate !== 'no'"
-                      v-decorator="pane.disableEstate !== 'no' ? null : ['estate', {rules: [{required: true, message: '请选择地产！'}]}]">
+                      v-decorator="['estateName',{initialValue: pane.content.estateName,rules: [{required: true, message: '请选择地产！'}]}]">
                       
                       <a-select-option 
                         v-for="(t) in totalEstates" 
@@ -574,7 +575,8 @@ export default {
           key: '2',
           remark: '',
           closable: false,
-          isEditEstate: true
+          isEditEstate: true,
+          disableEstate:'no'
         }
       ]
       that.panes[0].form.getFieldDecorator('keys', {
