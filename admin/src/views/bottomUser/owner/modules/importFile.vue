@@ -17,20 +17,27 @@
   >
     <a-spin :spinning="confirmLoading">
       <a-form :form="form">
-
-        <a-form-item
-          label="地产"
-          :labelCol="labelCol"
-          :wrapperCol="wrapperCol"
-        >
-          <a-input @click="selectDataCon(1)" :read-only="true" v-decorator="['estateName', {initialValue: this.formData.estateName,rules: [{required: true, message: '请选择地产！'}]}]"/>
+        <a-form-item label="地产" :labelCol="labelCol" :wrapperCol="wrapperCol">
+          <a-input
+            @click="selectDataCon(1)"
+            :read-only="true"
+            v-decorator="['estateName', {initialValue: this.formData.estateName,rules: [{required: true, message: '请选择地产！'}]}]"
+          />
         </a-form-item>
 
-        <a-form-item
-          label="文件类型"
-          :labelCol="labelCol"
-          :wrapperCol="wrapperCol"
-        >
+        <a-form-item label="类型" :labelCol="labelCol" :wrapperCol="wrapperCol">
+          <a-select
+            showSearch
+            allowClear
+            placeholder="选择类型"
+            optionFilterProp="children"
+            :filterOption="filterCommonOption"
+            :options="userTypeCode"
+            v-decorator="['code', {initialValue: this.formData.code,rules: [{required: true, message: '请选择类型！'}]}]"
+          ></a-select>
+        </a-form-item>
+
+        <a-form-item label="文件类型" :labelCol="labelCol" :wrapperCol="wrapperCol">
           <a-select
             showSearch
             allowClear
@@ -39,15 +46,11 @@
             optionFilterProp="children"
             :filterOption="filterCommonOption"
             :options="fileTypeList"
-            v-decorator="['fileType', {initialValue: this.formData.fileType,rules: [{required: true, message: '请选择文件类型！'}]}]">
-          </a-select>
+            v-decorator="['fileType', {initialValue: this.formData.fileType,rules: [{required: true, message: '请选择文件类型！'}]}]"
+          ></a-select>
         </a-form-item>
 
-        <a-form-item
-          label="选择文件"
-          :labelCol="labelCol"
-          :wrapperCol="wrapperCol"
-        >
+        <a-form-item label="选择文件" :labelCol="labelCol" :wrapperCol="wrapperCol">
           <a-upload
             :showUploadList="false"
             :accept="selectFileType"
@@ -58,11 +61,12 @@
           >
             <a v-if="fileImgName" style="width: 150px;">{{ fileImgName }}</a>
             <div v-else>
-              <a-button> <a-icon type="upload" /> 选择文件 </a-button>
+              <a-button>
+                <a-icon type="upload" />选择文件
+              </a-button>
             </div>
           </a-upload>
         </a-form-item>
-
       </a-form>
     </a-spin>
     <select-data-Con ref="selectSuccess" @selectSuccess="selectSuccess"></select-data-Con>
@@ -78,13 +82,19 @@ const SIGN = {
   clientId: 'admin',
   key: 'da74588912504563e464ffe8956de784'
 }
+const userTypeCode = [
+  { label: '业主', value: 'OWNER' },
+  { label: '访客', value: 'VISITOR' },
+  { label: '租客', value: 'RENTER' }
+]
 export default {
   mixins: [mixin],
   components: {
     selectDataCon
   },
-  data () {
+  data() {
     return {
+      userTypeCode: userTypeCode,
       labelCol: {
         xs: { span: 24 },
         sm: { span: 5 }
@@ -120,11 +130,11 @@ export default {
   computed: {
     ...mapState(['constants', 'system'])
   },
-  beforeCreate () {
+  beforeCreate() {
     this.form = this.$form.createForm(this)
   },
   methods: {
-    add (item) {
+    add(item) {
       this.visible = true
       this.code = item
       this.form.resetFields()
@@ -170,8 +180,10 @@ export default {
       return false
     },
 
-    handleSubmit () {
-      const { form: { validateFields } } = this
+    handleSubmit() {
+      const {
+        form: { validateFields }
+      } = this
       this.confirmLoading = true
       validateFields((errors, values) => {
         if (!errors) {
@@ -189,7 +201,8 @@ export default {
           formData.append('file', this.file)
           formData.append('code', this.code)
           formData.append('estateId', this.formData.estateId)
-          this.$api.user.importUser(formData)
+          this.$api.user
+            .importUser(formData)
             .then(res => {
               this.$notification.success({
                 message: '成功',
@@ -199,7 +212,8 @@ export default {
               this.confirmLoading = false
               this.form.resetFields()
               this.$emit('ok', values)
-            }).finally(() => {
+            })
+            .finally(() => {
               this.confirmLoading = false
             })
         } else {

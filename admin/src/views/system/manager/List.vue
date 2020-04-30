@@ -234,10 +234,11 @@ export default {
     bindOrg() {
       // console.log(this.id)
       // console.log(this.selectedOrg)
+      // console.log(this.selectedId)
       this.$api.manager
         .bindOrg({
           id: this.id,
-          orgId: this.selectedOrg[0].id
+          orgId: this.selectedOrg[0] && this.selectedOrg[0].id || this.selectedId[0]
         })
         .then(res => {
           this.orgVisible = false
