@@ -288,6 +288,7 @@ export default {
 
           this.$api.webPageSetting.saveOrUpdate(values)
             .then(res => {
+              this.add()
               this.$notification.success({
                 message: '成功',
                 description: this.title + '成功！'
