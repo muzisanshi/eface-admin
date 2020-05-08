@@ -54,6 +54,7 @@
               ></a-select>
             </a-form-item>
           </a-col>
+
           <a-col :md="6" :sm="24">
             <a-form-item label="性别">
               <a-select
@@ -82,6 +83,20 @@
             </a-form-item>
           </a-col>
 
+          <a-col :md="6" :sm="24">
+            <a-form-item label="审核状态">
+              <a-select
+                showSearch
+                allowClear
+                placeholder="选择审核状态"
+                v-model="queryParam.auditStatus"
+                optionFilterProp="children"
+                :filterOption="filterCommonOption"
+                :options="constants.list.auditStatus"
+              ></a-select>
+            </a-form-item>
+          </a-col>
+
           <a-col :md="4" :sm="24">
             <span class="table-page-search-submitButtons">
               <a-button type="primary" @click="tableRefresh">查询</a-button>
@@ -103,6 +118,18 @@
         @click="handleDelete"
         :disabled="selectedRowKeys.length < 1"
       >删除</a-button>
+
+      <a-button
+        v-if="selectedRowKeys.length >= 1"
+        type="primary"
+        @click="auditUser(null, 'AUDIT_PASS')"
+      >通过</a-button>
+
+      <a-button
+        v-if="selectedRowKeys.length >= 1"
+        type="danger"
+        @click="auditUser(null, 'AUDIT_NOT_PASS')"
+      >不通过</a-button>
     </div>
 
     <s-table
@@ -138,6 +165,16 @@
       <span slot="action" slot-scope="text, record">
         <template v-if="!selectUserStatus">
           <a @click="handleEditUser(record)">修改</a>
+
+          <template v-if="record.auditStatus === '等待审核'">
+            <a-divider type="vertical" />
+
+            <a @click="auditUser(record, 'AUDIT_PASS')">通过</a>
+
+            <a-divider type="vertical" />
+
+            <a @click="auditUser(record, 'AUDIT_NOT_PASS')">不通过</a>
+          </template>
         </template>
       </span>
     </s-table>
@@ -230,9 +267,13 @@ export default {
         //   dataIndex: 'relationship'
         // },
         {
+          title: '审核状态',
+          dataIndex: 'auditStatus'
+        },
+        {
           title: '操作',
           dataIndex: 'action',
-          width: '150px',
+          width: '200px',
           scopedSlots: { customRender: 'action' }
         }
       ],
@@ -249,13 +290,20 @@ export default {
                 item.ageLevelName = this.constants.data.ageLevel
                   ? this.constants.data.ageLevel[item.ageLevel]['name']
                   : ''
+
                 item.sexualName = this.constants.data.sexual ? this.constants.data.sexual[item.sexual]['name'] : ''
+
                 if (item.faces && item.faces.length) {
                   item.faceFullAddress = item.faces[0].resourceFullAddress
                 }
 
-                const index = userTypeCode.findIndex(i => i.value === item.code)
-                item.code = userTypeCode ? userTypeCode[index]['label'] : ''
+                const codeIndex = userTypeCode.findIndex(i => i.value === item.code)
+                item.code = userTypeCode ? userTypeCode[codeIndex]['label'] : ''
+
+                const auditStatusIndex = this.constants.list.auditStatus.findIndex(i => i.value === item.auditStatus)
+                item.auditStatus = this.constants.list.auditStatus
+                  ? this.constants.list.auditStatus[auditStatusIndex]['label']
+                  : ''
               })
               return res
             }
@@ -265,7 +313,7 @@ export default {
     }
   },
   methods: {
-    /*重置list传参*/
+    /* 重置list传参 */
     resetUserSearchForm() {
       this.queryParam = {}
       this.initCascader = []
@@ -303,6 +351,32 @@ export default {
             })
             that.handleOk()
           })
+        },
+        onCancel() {}
+      })
+    },
+
+    auditUser(record, auditStatus) {
+      // console.log(record)
+      // console.log(this.selectedRowKeys)
+      const that = this
+      this.$confirm({
+        title: auditStatus === 'AUDIT_PASS' ? '是否审核通过？' : '是否审核不通过？',
+        okText: '确认',
+        cancelText: '取消',
+        onOk() {
+          that.$api.user
+            .auditUser({
+              auditStatus: auditStatus,
+              ids: record ? [record.id] : that.selectedRowKeys
+            })
+            .then(res => {
+              that.handleOk()
+              that.$notification.success({
+                message: '成功',
+                description: auditStatus === 'AUDIT_PASS' ? '审核通过成功！' : '审核不通过成功！'
+              })
+            })
         },
         onCancel() {}
       })
