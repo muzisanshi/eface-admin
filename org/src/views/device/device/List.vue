@@ -291,6 +291,15 @@
                 </a-form-item>
               </a-col>
             </a-row>
+            
+            <a-row :gutter="24">
+              <a-col :span="6">
+                <a-form-item label="是否启用" :labelCol="labelCol" :wrapperCol="wrapperCol">
+                  <span>{{item.enable?'是':'否'}}</span>
+                </a-form-item>
+              </a-col>
+            </a-row>
+            
           </div>
         </div>
 
@@ -303,8 +312,8 @@
       <span slot="action" slot-scope="text, record">
         <template v-if="!selectDeviceStatus">
           <a @click="handleEditInit(record)">修改</a>
-          <a-divider type="vertical"/>
-          <a @click="lowerHairUser(record.id)">同步底库用户</a>
+          <!-- <a-divider type="vertical"/> -->
+          <!-- <a @click="lowerHairUser(record.id)">同步底库用户</a> -->
         </template>
       </span>
 
@@ -489,12 +498,12 @@ export default {
           title: '备注',
           dataIndex: 'remark'
         },
-        // {
-        //   title: '操作',
-        //   dataIndex: 'action',
-        //   width: '180px',
-        //   scopedSlots: { customRender: 'action' }
-        // }
+        {
+          title: '操作',
+          dataIndex: 'action',
+          width: '180px',
+          scopedSlots: { customRender: 'action' }
+        }
       ]
     }
     this.loadData()
