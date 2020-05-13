@@ -9,16 +9,15 @@
     <div class="table-page-search-wrapper">
       <a-form layout="inline">
         <a-row :gutter="48">
-
           <a-col :md="4" :sm="24">
             <a-form-item label="名称">
-              <a-input :maxLength="64" v-model="queryParam.name" placeholder=""/>
+              <a-input :maxLength="64" v-model="queryParam.name" placeholder />
             </a-form-item>
           </a-col>
 
           <a-col :md="4" :sm="24">
             <a-form-item label="广告编号">
-              <a-input :maxLength="32" v-model="queryParam.no" placeholder=""/>
+              <a-input :maxLength="32" v-model="queryParam.no" placeholder />
             </a-form-item>
           </a-col>
 
@@ -30,7 +29,7 @@
                 optionFilterProp="children"
                 v-model="queryParam.enable"
               >
-                <a-select-option value="">请选择</a-select-option>
+                <a-select-option value>请选择</a-select-option>
                 <a-select-option value="true">是</a-select-option>
                 <a-select-option value="false">否</a-select-option>
               </a-select>
@@ -50,8 +49,12 @@
     <div class="table-operator" v-if="!selectAdStatus">
       <a-button type="primary" icon="plus" @click="handleEdit(null)">新增</a-button>
 
-      <a-button type="danger" icon="delete" @click="handleDelete" :disabled="selectedRowKeys.length < 1">删除</a-button>
-
+      <a-button
+        type="danger"
+        icon="delete"
+        @click="handleDelete"
+        :disabled="selectedRowKeys.length < 1"
+      >删除</a-button>
     </div>
 
     <s-table
@@ -62,12 +65,15 @@
       :data="loadData"
       :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectAdChange}"
     >
-      <span slot="serial" slot-scope="text, record, index">
+      <span slot="serial" slot-scope="text, record, index">{{ index + 1 }}</span>
 
-        {{ index + 1 }}
-      </span>
-
-      <a-avatar size="large" shape="square" :src="record | resourceFullAddressFilter" slot="resourceFullAddress" slot-scope="record"/>
+      <a-avatar
+        size="large"
+        shape="square"
+        :src="record | resourceFullAddressFilter"
+        slot="resourceFullAddress"
+        slot-scope="record"
+      />
       <span slot="status" slot-scope="text">
         <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />
       </span>
@@ -75,11 +81,18 @@
       <span slot="action" slot-scope="text, record">
         <template v-if="!selectAdStatus">
           <a @click="handleEdit(record)">修改</a>
+          <a-divider type="vertical" />
+          <a @click="openDevice(record)">查看播放设备</a>
         </template>
       </span>
-
     </s-table>
-    <edit-form v-if="!selectAdStatus" ref="editModal" @ok="handleOk"/>
+    <edit-form v-if="!selectAdStatus" ref="editModal" @ok="handleOk" />
+
+    <a-modal v-model="deviceVisible" title="查看播放设备" :width="1080" @ok="deviceVisible = false">
+      <!-- <a-spin :spinning="!deviceVisible"> -->
+      <a-table rowKey="id" :columns="deviceColumns" :data-source="deviceData"></a-table>
+      <!-- </a-spin> -->
+    </a-modal>
   </a-card>
 </template>
 
@@ -93,7 +106,6 @@ export default {
   components: {
     STable,
     EditForm
-
   },
   props: {
     selectAdStatus: {
@@ -113,7 +125,7 @@ export default {
       }
     }
   },
-  data () {
+  data() {
     return {
       queryParam: {
         enable: 'true'
@@ -198,81 +210,127 @@ export default {
             {
               title: '操作',
               dataIndex: 'action',
-              width: '150px',
+              width: '180px',
               scopedSlots: { customRender: 'action' }
             }
           ]
         }
-        return this.$api.ad.getPage(Object.assign(parameter, this.queryParam, {
-          playType: this.playType
-        }))
+        return this.$api.ad
+          .getPage(
+            Object.assign(parameter, this.queryParam, {
+              playType: this.playType
+            })
+          )
           .then(res => {
             return res
           })
-      }
+      },
+
+      deviceVisible: false,
+      deviceColumns: [
+        {
+          title: 'SN',
+          dataIndex: 'sn'
+        },
+        {
+          title: '名称',
+          dataIndex: 'name'
+        },
+        {
+          title: '设备型号',
+          dataIndex: 'deviceModelName'
+        },
+        {
+          title: '位置信息',
+          dataIndex: 'locationName'
+        },
+        {
+          title: '屏幕名称',
+          dataIndex: 'screenWindowName'
+        }
+      ],
+      deviceData: []
     }
   },
   methods: {
-
-    onSelectAdChange (selectedRowKeys, selectedRows) {
+    onSelectAdChange(selectedRowKeys, selectedRows) {
+      // console.log('selectedRowKeys', selectedRowKeys)
+      // console.log('selectedRows', selectedRows)
       this.selectedRowKeys = selectedRowKeys
+      this.selectedRows = selectedRows
 
-      const that = this
-      const hash = {}; let rowsIds = []; let defferentId = ''
-      that.selectedRows = [...this.selectedRows, ...selectedRows]
-      that.selectedRows = that.selectedRows.reduce(function(item, next) {
-        hash[next.id] ? '' : hash[next.id] = true && item.push(next)
-        return item
-      }, [])
+      // const that = this
+      // const hash = {}
+      // let rowsIds = []
+      // let defferentId = ''
+      // that.selectedRows = [...this.selectedRows, ...selectedRows]
+      // that.selectedRows = that.selectedRows.reduce(function(item, next) {
+      //   hash[next.id] ? '' : (hash[next.id] = true && item.push(next))
+      //   return item
+      // }, [])
 
-      if (selectedRowKeys.length < that.selectedRows.length) {
-        let newRows = []
-        rowsIds = []
-        that.selectedRows.map((item) => {
-          rowsIds.push(item.id)
-        })
-        defferentId = this.selectedRowKeys.concat(rowsIds).filter(function(v, i, arr) {
-          return arr.indexOf(v) === arr.lastIndexOf(v)
-        })
-        newRows = that.selectedRows.filter(pane => pane.id !== defferentId[0])
-        that.selectedRows = [...newRows]
-      }
+      // if (selectedRowKeys.length < that.selectedRows.length) {
+      //   let newRows = []
+      //   rowsIds = []
+      //   that.selectedRows.map(item => {
+      //     rowsIds.push(item.id)
+      //   })
+      //   defferentId = this.selectedRowKeys.concat(rowsIds).filter(function(v, i, arr) {
+      //     return arr.indexOf(v) === arr.lastIndexOf(v)
+      //   })
+      //   newRows = that.selectedRows.filter(pane => pane.id !== defferentId[0])
+      //   that.selectedRows = [...newRows]
+      // }
+
+      // console.log('this.selectedRowKeys', this.selectedRowKeys)
+      // console.log('this.selectedRows', this.selectedRows)
 
       if (this.selectAdStatus) {
-        this.$emit('selectedAd', that.selectedRows)
+        this.$emit('selectedAd', this.selectedRows)
       }
     },
 
-    handleDelete () {
+    handleDelete() {
       const that = this
       that.$confirm({
         title: '删除',
         content: '确定删除勾选的记录？',
-        onOk () {
-          that.$api.ad.del({ ids: that.selectedRowKeys })
-            .then(res => {
-              that.$notification.success({
-                message: '成功',
-                description: `删除成功！`
-              })
-              that.handleOk()
+        onOk() {
+          that.$api.ad.del({ ids: that.selectedRowKeys }).then(res => {
+            that.$notification.success({
+              message: '成功',
+              description: `删除成功！`
             })
+            that.handleOk()
+          })
         },
-        onCancel () {
-        }
+        onCancel() {}
       })
+    },
+
+    openDevice(record) {
+      this.deviceVisible = true
+
+      this.$api.ad
+        .getDevices({
+          id: record.id
+        })
+        .then(res => {
+          console.log(res)
+          this.deviceData = res
+        })
     }
   }
 }
 </script>
 <style scoped>
-.hasBack{
-  background-color:#b75757;
+.hasBack {
+  background-color: #b75757;
 }
 .hasBack td {
-  color:#fff;
+  color: #fff;
 }
-.table-page-search-wrapper .ant-col-sm-24{
-  padding: 0 10px!important;
+.table-page-search-wrapper .ant-col-sm-24 {
+  padding: 0 10px !important;
 }
 </style>

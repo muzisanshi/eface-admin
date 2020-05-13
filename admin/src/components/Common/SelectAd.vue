@@ -11,7 +11,8 @@
     :visible="visibleSelect"
     :confirmLoading="confirmLoadingSelect"
     @ok="handleSubmitSelect"
-    @cancel="handleCancelSelect">
+    @cancel="handleCancelSelect"
+  >
     <a-spin :spinning="confirmLoadingSelect">
       <ad-list @selectedAd="selectedAd" :playType="playType" :selectAdStatus="selectAdStatus"></ad-list>
     </a-spin>
@@ -57,6 +58,7 @@ export default {
       } else {
         this.visibleSelect = false
         this.confirmLoadingSelect = false
+
         this.$emit('selectAdSuccess', {
           adItem: this.adList,
           key: this._index

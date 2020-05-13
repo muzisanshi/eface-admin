@@ -14,7 +14,8 @@ const URI = {
   syncUser: '/device/syncUser',
   exportExcel: '/device/exportExcel',
   bindOrg: '/device/bindOrg',
-  unBindOrg: '/device/unBindOrg'
+  unBindOrg: '/device/unBindOrg',
+  distAd: '/device/distAd'
 }
 
 function getPage (parameter) {
@@ -115,6 +116,13 @@ function unBindOrg (parameter) {
   })
 }
 
+function distAd (parameter) {
+  return axios({
+    url: URI.distAd,
+    params: parameter
+  })
+}
+
 export default {
   getById,
   getPage,
@@ -129,5 +137,6 @@ export default {
   resetDevice,
   syncUser,
   bindOrg,
-  unBindOrg
+  unBindOrg,
+  distAd
 }

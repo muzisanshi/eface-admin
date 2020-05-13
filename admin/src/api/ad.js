@@ -5,7 +5,8 @@ const URI = {
   page: '/ad/getPage',
   getAdItemByIds: '/ad/getAdItemByIds',
   saveOrUpdate: '/ad/saveOrUpdate',
-  del: '/ad/delete'
+  del: '/ad/delete',
+  getDevices: '/ad/getDevices'
 }
 
 function getPage (parameter) {
@@ -43,10 +44,18 @@ function getAdItemByIds (parameter) {
   })
 }
 
+function getDevices (parameter) {
+  return axios({
+    url: URI.getDevices,
+    params: parameter
+  })
+}
+
 export default {
   getById,
   getPage,
   del,
   saveOrUpdate,
-  getAdItemByIds
+  getAdItemByIds,
+  getDevices
 }

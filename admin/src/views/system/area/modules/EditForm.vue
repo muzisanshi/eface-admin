@@ -19,7 +19,7 @@
       <a-form :form="form">
         <a-form-item label="行政区划代码" :labelCol="labelCol" :wrapperCol="wrapperCol">
           <a-input
-            :maxLength="9"
+            :maxLength="16"
             :disabled="hasAdd === 'UPDATE'"
             v-decorator="['id', {initialValue: this.formData.id,rules: [{required: true,pattern: new RegExp(this.REG_EXPS.POSITIVE_INTEGER, 'g'), message: '请输入有效的行政区划代码！'}]}]"
           />
@@ -68,7 +68,7 @@
         <a-form-item label="邮政编码" :labelCol="labelCol" :wrapperCol="wrapperCol">
           <a-input
             :maxLength="16"
-            v-decorator="['postCode', {initialValue: this.formData.postCode,rules: [{required: true, message: '请输入邮政编码！'}]}]"
+            v-decorator="['postCode', {initialValue: this.formData.postCode,rules: [{required: false, message: '请输入邮政编码！'}]}]"
           />
         </a-form-item>
 

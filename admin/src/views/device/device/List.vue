@@ -106,6 +106,8 @@
         v-if="selectedRows.length === 1 && selectedRows[0].deviceStatus === '在线'"
       >下线</a-button>
 
+      <a-button type="primary" @click="distAd" v-if="selectedRows.length >= 1">下发广告</a-button>
+
       <a-button
         type="danger"
         icon="delete"
@@ -632,32 +634,33 @@ export default {
 
     onSelectDeviceChange(selectedRowKeys, selectedRows) {
       this.selectedRowKeys = selectedRowKeys
+      this.selectedRows = selectedRows
 
-      const that = this
-      const hash = {}
-      let rowsIds = []
-      let defferentId = ''
-      that.selectedRows = [...this.selectedRows, ...selectedRows]
-      that.selectedRows = that.selectedRows.reduce(function(item, next) {
-        hash[next.id] ? '' : (hash[next.id] = true && item.push(next))
-        return item
-      }, [])
+      // const that = this
+      // const hash = {}
+      // let rowsIds = []
+      // let defferentId = ''
+      // that.selectedRows = [...this.selectedRows, ...selectedRows]
+      // that.selectedRows = that.selectedRows.reduce(function(item, next) {
+      //   hash[next.id] ? '' : (hash[next.id] = true && item.push(next))
+      //   return item
+      // }, [])
 
-      if (selectedRowKeys.length < that.selectedRows.length) {
-        let newRows = []
-        rowsIds = []
-        that.selectedRows.map(item => {
-          rowsIds.push(item.id)
-        })
-        defferentId = this.selectedRowKeys.concat(rowsIds).filter(function(v, i, arr) {
-          return arr.indexOf(v) === arr.lastIndexOf(v)
-        })
-        newRows = that.selectedRows.filter(pane => pane.id !== defferentId[0])
-        that.selectedRows = [...newRows]
-      }
+      // if (selectedRowKeys.length < that.selectedRows.length) {
+      //   let newRows = []
+      //   rowsIds = []
+      //   that.selectedRows.map(item => {
+      //     rowsIds.push(item.id)
+      //   })
+      //   defferentId = this.selectedRowKeys.concat(rowsIds).filter(function(v, i, arr) {
+      //     return arr.indexOf(v) === arr.lastIndexOf(v)
+      //   })
+      //   newRows = that.selectedRows.filter(pane => pane.id !== defferentId[0])
+      //   that.selectedRows = [...newRows]
+      // }
 
       if (this.selectDeviceStatus) {
-        this.$emit('selectedDevice', that.selectedRows)
+        this.$emit('selectedDevice', this.selectedRows)
         this.selectAdStatus = false
       }
     },
@@ -682,6 +685,19 @@ export default {
 
     handleEditInit(record) {
       this.$refs.editModal.addEdit(record)
+    },
+
+    distAd() {
+      const deviceSns = []
+      this.selectedRows.forEach(item => {
+        deviceSns.push(item.sn)
+      })
+      this.$api.device.distAd({ deviceSns: deviceSns }).then(res => {
+        this.$notification.success({
+          message: '成功',
+          description: `下发广告成功！`
+        })
+      })
     }
   }
 }

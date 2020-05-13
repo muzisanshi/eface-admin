@@ -21,7 +21,7 @@ export default {
   props: {
     initArea: {
       type: Array,
-      default: []
+      default: () => []
     },
     isSelectArea: {
       type: Boolean,
@@ -53,7 +53,7 @@ export default {
       this.initCascader = newVal
     },
     num(newVal) {
-      if (newVal == this.initCascader.length - 1) {
+      if (newVal === this.initCascader.length - 1) {
         this.handleAreaArr()
       }
     }
@@ -125,26 +125,35 @@ export default {
         .then(res => {
           const l = []
           if (res.length) {
-            if (!res[0].hasChildren) {
-              for (let k = 0, j = res.length; k < j; k++) {
-                l.push({
-                  value: res[k].id,
-                  id: res[k].id,
-                  label: res[k].name,
-                  level: res[k].level,
-                  isLeaf: true
-                })
-              }
-            } else {
-              for (let k = 0, j = res.length; k < j; k++) {
-                l.push({
-                  value: res[k].id,
-                  id: res[k].id,
-                  label: res[k].name,
-                  level: res[k].level,
-                  isLeaf: false
-                })
-              }
+            // if (!res[0].hasChildren) {
+            //   for (let k = 0, j = res.length; k < j; k++) {
+            //     l.push({
+            //       value: res[k].id,
+            //       id: res[k].id,
+            //       label: res[k].name,
+            //       level: res[k].level,
+            //       isLeaf: true
+            //     })
+            //   }
+            // } else {
+            //   for (let k = 0, j = res.length; k < j; k++) {
+            //     l.push({
+            //       value: res[k].id,
+            //       id: res[k].id,
+            //       label: res[k].name,
+            //       level: res[k].level,
+            //       isLeaf: false
+            //     })
+            //   }
+            // }
+            for (let k = 0, j = res.length; k < j; k++) {
+              l.push({
+                value: res[k].id,
+                id: res[k].id,
+                label: res[k].name,
+                level: res[k].level,
+                isLeaf: !res[k].hasChildren
+              })
             }
           }
           that.arr[index] = l
@@ -167,24 +176,32 @@ export default {
           targetOption.loading = false
           const l = []
           if (res.length > 0) {
-            if (!res[0].hasChildren) {
-              for (let i = 0; i < res.length; i++) {
-                l.push({
-                  value: res[i].id,
-                  label: res[i].name,
-                  level: res[i].level,
-                  isLeaf: true
-                })
-              }
-            } else {
-              for (let i = 0; i < res.length; i++) {
-                l.push({
-                  value: res[i].id,
-                  label: res[i].name,
-                  level: res[i].level,
-                  isLeaf: false
-                })
-              }
+            // if (!res[0].hasChildren) {
+            //   for (let i = 0; i < res.length; i++) {
+            //     l.push({
+            //       value: res[i].id,
+            //       label: res[i].name,
+            //       level: res[i].level,
+            //       isLeaf: true
+            //     })
+            //   }
+            // } else {
+            //   for (let i = 0; i < res.length; i++) {
+            //     l.push({
+            //       value: res[i].id,
+            //       label: res[i].name,
+            //       level: res[i].level,
+            //       isLeaf: false
+            //     })
+            //   }
+            // }
+            for (let i = 0; i < res.length; i++) {
+              l.push({
+                value: res[i].id,
+                label: res[i].name,
+                level: res[i].level,
+                isLeaf: !res[i].hasChildren
+              })
             }
             targetOption.children = l
             that.options = [...that.options]
