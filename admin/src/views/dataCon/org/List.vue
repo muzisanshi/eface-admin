@@ -568,13 +568,13 @@ export default {
       }
       this.$api.area.getPage({ page: { pageNumber: 1, pageSize: 50 }, parentId: this.currentParentId }).then(res => {
         // console.log(level)
-        console.log(
-          this.provinceParentId,
-          this.cityParentId,
-          this.countyParentId,
-          this.strreetParentId,
-          this.currentParentId
-        )
+        // console.log(
+        //   this.provinceParentId,
+        //   this.cityParentId,
+        //   this.countyParentId,
+        //   this.strreetParentId,
+        //   this.currentParentId
+        // )
         const areaData = res.records
         areaData.unshift({
           id: '请选择',

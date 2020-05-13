@@ -10,7 +10,8 @@ const URI = {
   getVisitorPage: '/user/getVisitorPage',
   saveOrUpdate: '/user/saveOrUpdate',
   importUser: '/user/importUser',
-  del: '/user/delete'
+  del: '/user/delete',
+  auditUser: '/user/auditUser'
 }
 
 function login (parameter) {
@@ -83,6 +84,13 @@ function del (parameter) {
   })
 }
 
+function auditUser (parameter) {
+  return axios({
+    url: URI.auditUser,
+    params: parameter
+  })
+}
+
 export default {
   login,
   getUserInfo,
@@ -93,5 +101,6 @@ export default {
   getVisitorPage,
   del,
   saveOrUpdate,
-  importUser
+  importUser,
+  auditUser
 }
