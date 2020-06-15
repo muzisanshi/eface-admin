@@ -45,6 +45,7 @@ import cityCheck from './cityCheck'
 import localtionCheck from './localtionCheck'
 
 import trail from './trail'
+import userDanger from './userDanger'
 
 export default {
   constants,
@@ -91,5 +92,6 @@ export default {
   trail,
   provinceCheck,
   cityCheck,
-  localtionCheck
+  localtionCheck,
+  userDanger
 }

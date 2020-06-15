@@ -47,13 +47,14 @@
           :wrapperCol="wrapperCol"
         >
           <a-select
+            mode="multiple"
             showSearch
             placeholder="选择地产"
             optionFilterProp="children"
             @change="estateChange"
             :filterOption="filterCommonOption"
             :options="estateList"
-            v-decorator="['estateId', {initialValue: this.formData.estateId?this.formData.estateId:'',rules: [{required: true, message: '请选择地产！'}]}]"
+            v-decorator="['estateId', {initialValue: this.formData.estateId?this.formData.estateId:undefined,rules: [{required: true, message: '请选择地产！'}]}]"
           >
           </a-select>
         </a-form-item>
@@ -219,8 +220,11 @@ export default {
     },
 
     estateChange(value, option) {
+      console.log(value)
+      console.log(option)
       this.currentData = value
-      this.currentDataName = option.componentOptions.children[0].text
+      // this.currentDataName = option.componentOptions.children[0].text
+      this.currentDataName = option.map(item => item.componentOptions.children[0].text)
       this.buildList = []
       this.unitList = []
       this.storeyList = []
@@ -267,7 +271,8 @@ export default {
 
     unitChange(value, option) {
       this.currentData = value
-      this.currentDataName = option.componentOptions.children[0].text
+      // this.currentDataName = option.componentOptions.children[0].text
+      this.currentDataName = option.map(item => item.componentOptions.children[0].text)
       this.storeyList = []
       this.roomNum = 0
       this.form.resetFields(['storeyList'])
@@ -293,7 +298,8 @@ export default {
       this.currentData = value
       this.roomNum = 0
       this.getUnAddRoomList(value)
-      this.currentDataName = option.componentOptions.children[0].text
+      // this.currentDataName = option.componentOptions.children[0].text
+      this.currentDataName = option.map(item => item.componentOptions.children[0].text)
     },
 
     getUnAddRoomList(id) {
@@ -310,8 +316,8 @@ export default {
       validateFields((errors, values) => {
         if (!errors) {
           this.$emit('selectSuccess', {
-            value: this.currentData,
-            name: this.currentDataName,
+            value: typeof this.currentData === 'string' ? this.currentData : this.currentData.join(','),
+            name: typeof this.currentDataName === 'string' ? this.currentDataName : this.currentDataName.join(','),
             roomNum: this.roomNum
           })
           this.visible = false

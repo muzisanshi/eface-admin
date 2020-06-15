@@ -11,7 +11,8 @@ const URI = {
   saveOrUpdate: '/user/saveOrUpdate',
   importUser: '/user/importUser',
   del: '/user/delete',
-  auditUser: '/user/auditUser'
+  auditUser: '/user/auditUser',
+  getDangerPage: '/user/getDangerPage'
 }
 
 function login (parameter) {
@@ -91,6 +92,13 @@ function auditUser (parameter) {
   })
 }
 
+function getDangerPage (parameter) {
+  return axios({
+    url: URI.getDangerPage,
+    params: parameter
+  })
+}
+
 export default {
   login,
   getUserInfo,
@@ -102,5 +110,6 @@ export default {
   del,
   saveOrUpdate,
   importUser,
-  auditUser
+  auditUser,
+  getDangerPage
 }
