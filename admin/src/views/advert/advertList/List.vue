@@ -254,38 +254,35 @@ export default {
   },
   methods: {
     onSelectAdChange(selectedRowKeys, selectedRows) {
-      // console.log('selectedRowKeys', selectedRowKeys)
-      // console.log('selectedRows', selectedRows)
       this.selectedRowKeys = selectedRowKeys
-      this.selectedRows = selectedRows
 
-      // const that = this
-      // const hash = {}
-      // let rowsIds = []
-      // let defferentId = ''
-      // that.selectedRows = [...this.selectedRows, ...selectedRows]
-      // that.selectedRows = that.selectedRows.reduce(function(item, next) {
-      //   hash[next.id] ? '' : (hash[next.id] = true && item.push(next))
-      //   return item
-      // }, [])
+      const hash = {}
+      let rowsIds = []
+      let defferentId = ''
+      this.selectedRows = [...this.selectedRows, ...selectedRows]
+      this.selectedRows = this.selectedRows.reduce(function(item, next) {
+        hash[next.id] ? '' : (hash[next.id] = true && item.push(next))
+        return item
+      }, [])
 
-      // if (selectedRowKeys.length < that.selectedRows.length) {
-      //   let newRows = []
-      //   rowsIds = []
-      //   that.selectedRows.map(item => {
-      //     rowsIds.push(item.id)
-      //   })
-      //   defferentId = this.selectedRowKeys.concat(rowsIds).filter(function(v, i, arr) {
-      //     return arr.indexOf(v) === arr.lastIndexOf(v)
-      //   })
-      //   newRows = that.selectedRows.filter(pane => pane.id !== defferentId[0])
-      //   that.selectedRows = [...newRows]
-      // }
+      if (selectedRowKeys.length < this.selectedRows.length) {
+        let newRows = []
+        rowsIds = []
+        this.selectedRows.map(item => {
+          rowsIds.push(item.id)
+        })
 
-      // console.log('this.selectedRowKeys', this.selectedRowKeys)
-      // console.log('this.selectedRows', this.selectedRows)
+        defferentId = this.selectedRowKeys.concat(rowsIds).filter(function(v, i, arr) {
+          return arr.indexOf(v) === arr.lastIndexOf(v)
+        })
+
+        newRows = this.selectedRows.filter(item => !defferentId.some(ele => ele === item.id))
+
+        this.selectedRows = [...newRows]
+      }
 
       if (this.selectAdStatus) {
+        console.log('最终', this.selectedRows)
         this.$emit('selectedAd', this.selectedRows)
       }
     },
