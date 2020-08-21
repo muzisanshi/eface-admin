@@ -440,7 +440,7 @@ export default {
           {
             form: that.$form.createForm(this),
             title: '窗口1',
-            screenWindowIndex: 0,
+            screenWindowIndex: 1,
             imageShowSeconds: that.playTime[4].value,
             adNames: '',
             deviceNames: '',
